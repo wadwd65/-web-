@@ -33,4 +33,4 @@ v0.24被用户指出雾化、无明显透视、CD像图标、播放器与档案�
 
 42项检查、TypeScript与生产构建通过。独立开发页检查键盘/Esc/外部收起、暂停/继续及合同合成文字保留；完整播放器保持曲目880337和同一audio。保存版5214五曲逐一选播均readyState4、paused=false、#/home未变、music仍closed、单audio；截图/逐曲证据在outputs/v026-review，控制台无warn/error。本轮没有重做整个美术或重测旧全场景帧率，用户审美仍待实际反馈。
 
-新保存点first-step-首页快捷选歌-v0.26，旧v0.25保留。仓库推送结果待实际Git回执补录，不把本地提交当线上更新。
+新保存点first-step-首页快捷选歌-v0.26，旧v0.25保留。源码提交0058607e3c6b32ae2971efed56331b4c8b18b41d已正常推送main，远端HEAD逐字一致；保留c4791cf历史。首轮Git未选账号，随后复用已保存的wadwd65授权成功，无需新建/索取密钥。默认5186已切v0.26且index哈希一致。最终文档回执另存outputs/v026-review/git-publication.json，不把源码同步称公网部署。

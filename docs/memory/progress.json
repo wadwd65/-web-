@@ -82,7 +82,7 @@
     },
     {
       "id": "repository",
-      "status": "reviewing_for_push",
+      "status": "completed",
       "acceptance": "核对原远端、保留Git历史、审核当前源码后推送并核验远端提交"
     }
   ],
@@ -94,7 +94,7 @@
     "manual": "首页实际切歌不跳页、键盘选择、暂停/继续、重复点击/Esc/外部收起；合同合成文字保留；完整播放器进入后同曲/单audio，控制台无warn/error。",
     "performance": "快捷菜单无RAF/新audio或三维预热；本轮未重测v0.25全场景帧率。",
     "scope": "desktop_only; no online business AI",
-    "savedPreview": "保存版5214已逐一选播五曲，均readyState4/paused=false、地址#/home、music closed、单audio；五曲证据与实际弹层截图已保存，控制台无warn/error。"
+    "savedPreview": "保存版5214已逐一选播五曲，均readyState4/paused=false、地址#/home、music closed、单audio；五曲证据与实际弹层截图已保存，控制台无warn/error。 主5186已更新0.26，默认快照与生产index哈希一致。"
   },
   "nextActions": [
     "按用户反馈微调新选曲菜单；不恢复旧的切歌必进子页行为",
@@ -124,6 +124,8 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "ready_for_push"
+    "pushStatus": "published",
+    "sourceCommit": "0058607e3c6b32ae2971efed56331b4c8b18b41d",
+    "verifiedAt": "2026-10-30T10:24:05.248553+00:00"
   }
 }

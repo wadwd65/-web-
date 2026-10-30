@@ -21,4 +21,4 @@
 
 视觉已查看1280×720桌面截图：菜单锚定“切歌”下方、宽330px，五曲与底部状态完整显示，首页主体仍可见，文字与选中态清楚。本次内部审核只覆盖新菜单与入口回归，不宣称重新验收了全部旧三维性能或获得用户对整套美术的认可。
 
-保存版5214逐一选播五曲均readyState=4、paused=false，地址始终#/home，完整音乐模式保持closed，始终单audio，控制台无warn/error。五曲JSON与实际弹层截图保存在outputs/v026-review；原始v0.25保存点保留。推送回执另按实际Git结果补录。
+保存版5214逐一选播五曲均readyState=4、paused=false，地址始终#/home，完整音乐模式保持closed，始终单audio，控制台无warn/error。五曲JSON与实际弹层截图保存在outputs/v026-review；原始v0.25保存点保留。源码提交`0058607e3c6b32ae2971efed56331b4c8b18b41d`已正常推送原仓库main，远端HEAD一致；默认5186已经更新到v0.26，index与保存版生产构建哈希一致。后续文档同步提交与最终远端HEAD记录在outputs/v026-review/git-publication.json。
