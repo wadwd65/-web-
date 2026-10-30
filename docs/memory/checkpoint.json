@@ -1,0 +1,387 @@
+{
+  "version": "0.26.0",
+  "recordedAt": "2026-10-30T10:20:32.119Z",
+  "workState": "reviewed_internally",
+  "validationVersion": "0.26.0",
+  "textNormalisation": "LF",
+  "sourceDigest": "6897bd5dc22c440a74ebfeabe5865e13d14f429245afc34bef95f541671d79fa",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "8c32ff7c6faaaf41d690a8ce9a4b06055ee561ad0c81fdd847493371892493f5"
+    },
+    {
+      "path": "docs/memory/ARCHITECTURE.md",
+      "sha256": "d97864c787d428108d853e96150b56d1f7fcaa476381dbf064671fe02105039b"
+    },
+    {
+      "path": "docs/memory/BACKLOG.md",
+      "sha256": "1f8e50847de301305bc69ae98d95a7d031f79f49235240e86ec56cd2d4d37267"
+    },
+    {
+      "path": "docs/memory/DECISIONS.md",
+      "sha256": "7a973e649485632d85f899a21c2fe3593d990efe301808babef3f97cbe2a13e9"
+    },
+    {
+      "path": "docs/memory/SESSIONS.md",
+      "sha256": "43f6255301e589d00313f6b3eb26282b51b0e16af70e45e5a82731b19e57d074"
+    },
+    {
+      "path": "docs/memory/progress.json",
+      "sha256": "b3f2ecc61dc3198650643525d556b28bc1c201257ee6c4ae120e2f8b45ca8e7c"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "8f95ca30c48bb09c1b3a5b71d85ac7916da589b02ea0495176c2a0d33f0c2c82"
+    },
+    {
+      "path": "package.json",
+      "sha256": "54f043bb7a6627ca4e911927b7e0316ed53c6a48ec2eb41737c985962e559614"
+    },
+    {
+      "path": "public/artwork/rhine-ascent.png",
+      "sha256": "1661e230eecfcd2e0264441c51336b9b349119c7f26d70ae4958cdb8a563227f"
+    },
+    {
+      "path": "public/artwork/rhine-corridor.png",
+      "sha256": "d273c3067e0b9c0acbbd621d34d9837696af60b993b3ca03a7dcdc4cc3d9826a"
+    },
+    {
+      "path": "public/artwork/rhine-ecolab.png",
+      "sha256": "b6dc3559dd42e329a6a1aa5adeb4ca2328d44b67b46c50d6029107c65ca6170e"
+    },
+    {
+      "path": "public/artwork/rhine-energy.png",
+      "sha256": "608307c6dbbd3d237fb4fdc273caf3fd890232f1132c94143dbde7644fbda79c"
+    },
+    {
+      "path": "public/artwork/rhine-sky.png",
+      "sha256": "725e89d65a768d748a31238d5e7c96dbdc9e3ed2c4450a6c01e1f393f3c20846"
+    },
+    {
+      "path": "public/audio/125074-51ce1c5a61.mp3",
+      "sha256": "51ce1c5a61f69905026cdf645b93fe696931f322e3cc1883e0b6c1f64f694a78"
+    },
+    {
+      "path": "public/audio/232265-7f214bc96f.mp3",
+      "sha256": "7f214bc96fb160db69b1cde1eed4ad6c384f7286cbf205b3dd09beb008214c45"
+    },
+    {
+      "path": "public/audio/461158-839cde2a29.mp3",
+      "sha256": "839cde2a29b1d2a5883c5d859b5ce79e1a8c8491bd4fd9fa056d2c9c02b499bd"
+    },
+    {
+      "path": "public/audio/779491-49f868165d.mp3",
+      "sha256": "49f868165d242c22a31192826afbe230009173de65bf89500695df2273b979f6"
+    },
+    {
+      "path": "public/audio/880337-4f3857214f.mp3",
+      "sha256": "4f3857214f0a00952d93021a8f7609d205648d0bbb5c2189352e2bb8ed7d80ca"
+    },
+    {
+      "path": "public/audio/NOTICE.md",
+      "sha256": "64ba63cfbcb912eac5cbc1a8845bab91a0ca4cd0b201b6d181d6b68002f50fa5"
+    },
+    {
+      "path": "public/audio/catalog.json",
+      "sha256": "e6668eb6ea07db13a5059c6c921a09edf8d4d0129acfef3408b69d25f2c32bac"
+    },
+    {
+      "path": "public/audio/peaks/125074.json",
+      "sha256": "fd9aa51f3804dee68e9148f7994a1f431bf1118003902528600778d918cb7a01"
+    },
+    {
+      "path": "public/audio/peaks/232265.json",
+      "sha256": "3b0295a8ec5b4db0925610ef20d7927c2be676490d96f08e4322abab0502fbb9"
+    },
+    {
+      "path": "public/audio/peaks/461158.json",
+      "sha256": "60775fd23cee2864dc4fcd8cf59f6a9306b5e043f8d3f83761c766c83bb02f05"
+    },
+    {
+      "path": "public/audio/peaks/779491.json",
+      "sha256": "8efb4c7626717e6bb7ccaf6d9e8a86aa258b65fc824b5fa2c7b6f5c0a4bb038d"
+    },
+    {
+      "path": "public/audio/peaks/880337.json",
+      "sha256": "427ffa8d4832b7fdc75a8ce4df4469ea383a502ea3436dc1e272b210dd6ecc14"
+    },
+    {
+      "path": "public/credits/RhineLabUI-MIT.txt",
+      "sha256": "b42f104f4b3687773c76efbf990c1ab7b306a8c59035958c0b886dfbbcf2cd91"
+    },
+    {
+      "path": "public/credits/artwork-source.json",
+      "sha256": "6738808ea4336f0ed8ef823cdc2d1d7e3b2e8688ae8de1d073ac7ac150f5ad7f"
+    },
+    {
+      "path": "public/credits/model-source.json",
+      "sha256": "d38224cbb70ef59c7dd73ebc65cd78e776449341308d4949cd48b46abb27c025"
+    },
+    {
+      "path": "public/credits/models.html",
+      "sha256": "0a3071f60043f955923ea24e02154964915fa83a1d976f0fb93beebb330ffe1f"
+    },
+    {
+      "path": "public/favicon.svg",
+      "sha256": "dec66f0d6926d4ed716ac65031986b7763dc22aa5fe1ebf9e5d38d063fcefe0a"
+    },
+    {
+      "path": "public/fonts/OFL-NotoSansSC.txt",
+      "sha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9"
+    },
+    {
+      "path": "public/fonts/README.md",
+      "sha256": "fa7be597f2daf273013e95d405d96789c66e92adf2a6597f63564aa4086f9bc4"
+    },
+    {
+      "path": "public/fonts/first-step-ui.woff2",
+      "sha256": "9e2f56a12d26c3aaed32875137f5681dfecc811635768f45c1e0ff71fa4db30a"
+    },
+    {
+      "path": "public/models/rhine-archive-cassette.glb",
+      "sha256": "dda42b9b3b471d11c69820a64084d254a64b27761287ab0e35dd8387ec0a0bed"
+    },
+    {
+      "path": "src/App.tsx",
+      "sha256": "8b32da780adc4289a7cb0a3c2f226da082420ff7a60559c12dc40de8adc15974"
+    },
+    {
+      "path": "src/ExhibitScene.tsx",
+      "sha256": "92fb70d9f65920fd9e7cbea01929899eb64c2045413e7537adc1079527aee59f"
+    },
+    {
+      "path": "src/ExperienceEntry.tsx",
+      "sha256": "59392f27ad81424d2d80ef3df3f4f49d66397712e3a5f9fbd93afa3e9a3671c2"
+    },
+    {
+      "path": "src/ExperienceWorkspace.tsx",
+      "sha256": "110c84550925705a42b33cdd1d95bda4f42afeb583d076abf356575f9d3fbf8a"
+    },
+    {
+      "path": "src/MusicArchiveScene.tsx",
+      "sha256": "3b918e3592f3321e665e5f4b7ec45d1270f322931913c14a019755734b99687b"
+    },
+    {
+      "path": "src/MusicPlayer.tsx",
+      "sha256": "3fbca3e630a81dd33d50883602831ce01255702b48634d805053483bfdd531fe"
+    },
+    {
+      "path": "src/MusicQuickPicker.tsx",
+      "sha256": "b9ef19556d85f5d131193dd43a17c9f829d1ff86faec68e5a31159a8f2931626"
+    },
+    {
+      "path": "src/MusicSpectrum.tsx",
+      "sha256": "bcaa4e101c8a1ae367eac81cf46f3b8181f2258eed316524a0cabf3298327e2d"
+    },
+    {
+      "path": "src/NewModules.tsx",
+      "sha256": "ac003357efdbfc1da50bb45828903c917a0d1c7e95bd17e3b41b8952b6725930"
+    },
+    {
+      "path": "src/PointerFeedback.tsx",
+      "sha256": "99bce03c29465cfd3271cb0e15da40b105194b373d57beba6e499c4b9429302c"
+    },
+    {
+      "path": "src/RhineMark.tsx",
+      "sha256": "06c8c26cd62d6955acedcfd7e86fdbfd702fb098c47aa1ab27d2e1a49db407fd"
+    },
+    {
+      "path": "src/Salary.tsx",
+      "sha256": "04ee700313d9019e3582ec8273a3f8ada6bc6ebc4ce2e654a6ebc8c49654b466"
+    },
+    {
+      "path": "src/Soundtrack.tsx",
+      "sha256": "99a695846dd97466ad449534934110586e1c05c2bfdb2422f46fbfc6f1975418"
+    },
+    {
+      "path": "src/TaskArrayScene.tsx",
+      "sha256": "1ec7340695533ed20fb20cd21a57487c63b13f82a3a8171a9f68dbca10dffa8e"
+    },
+    {
+      "path": "src/archive-motion.ts",
+      "sha256": "f95eb46c3dd0654d3d6084f9492291bfc22aff2392ce076688d2e2e7cbd520ae"
+    },
+    {
+      "path": "src/audio-visual.ts",
+      "sha256": "4bfea7897b319a4c55c4dc540c64ed5f5e2f75f4c068a21d04893a3b861665b5"
+    },
+    {
+      "path": "src/base.css",
+      "sha256": "797e78a4043e1e8bb40d94b6f443f6e666b4d4a9bd6d10659e292eaa6b8fce68"
+    },
+    {
+      "path": "src/cd-material.ts",
+      "sha256": "4461d8dabf08dd10e8264c463cf9d40ad252da0dc08aa95bb33b0a3815e2241e"
+    },
+    {
+      "path": "src/experience-modules.ts",
+      "sha256": "fefc7974a5ae1c3aa5a2afc2b0ff79e8a8d3b8bc515c02e26e9c216f6f8b100b"
+    },
+    {
+      "path": "src/experience-workbench.css",
+      "sha256": "f43b4ed3cfb37bbcf7bcfe59bca3dec22f6f6735717962c14847fdd9bed104d3"
+    },
+    {
+      "path": "src/experience.css",
+      "sha256": "f07943763f0d8fcddcf024f279b7e432284eb789b55ebad4558b118c38409228"
+    },
+    {
+      "path": "src/lib/contracts.ts",
+      "sha256": "3e65dd002f2ad0dfb9d5d6cadb53077972d78e9887dc3ee80c74f8c52f2fe2e8"
+    },
+    {
+      "path": "src/lib/download.ts",
+      "sha256": "7492b659010261760c37fc5e644c3705218d246c77ba8fad57c3b133247a7093"
+    },
+    {
+      "path": "src/lib/eight-tools.ts",
+      "sha256": "a98289f20386639ad0fd334c1070c2dd2d8e283a7d06b644396d4d17fe7213c1"
+    },
+    {
+      "path": "src/lib/policies.ts",
+      "sha256": "7f61e659cbbd3a087374018fd6a2f4c8e0ef9dea01171ac9183acfabb6c41fe6"
+    },
+    {
+      "path": "src/lib/wages.ts",
+      "sha256": "21e75cb6ae943d257495c9bd6286bb9e391a448f19f32ca5944b324f7e8282b0"
+    },
+    {
+      "path": "src/main.tsx",
+      "sha256": "b8e36a013562faaea435e4e68aa39be8ab6cbc3881e7640b0f108d96caf66302"
+    },
+    {
+      "path": "src/module-guides.ts",
+      "sha256": "3b3f4f8e63dc9c08c41f29f1e5944986fbdaaa039ae9a99b787576a4058faf4e"
+    },
+    {
+      "path": "src/motion-terminal.css",
+      "sha256": "683a8bac7be983e13c4395aff2f0571c635e0109700b765aadb5451477147247"
+    },
+    {
+      "path": "src/music-artwork.ts",
+      "sha256": "140b3d567008d572ebf12d0dd61d6ef126d4b7ff56e51fa1fe26c86e44119d8d"
+    },
+    {
+      "path": "src/music-atmosphere.ts",
+      "sha256": "13130573a4a216314c7700f01b4a9f8b26a630ca793a2482cf2dbe6dfe7103d9"
+    },
+    {
+      "path": "src/music-mode.ts",
+      "sha256": "334c003bc1a481fbf1f9e38b0e2b0ddad3c6f95addcf950b40d7015365803554"
+    },
+    {
+      "path": "src/music-player.css",
+      "sha256": "ba1c2d72797298ccb197c14e4d02448b14e225d973ebd93031105f237e42a283"
+    },
+    {
+      "path": "src/music-scene-loader.ts",
+      "sha256": "2c85fb2f387a5b4250904b0fdd7f19dddebced3075261846240eb7005a310b12"
+    },
+    {
+      "path": "src/performance-audit.ts",
+      "sha256": "9cd67c9d6afd35eb85b335e0d7763c104f3654c2b64f9ff0197da62fe1da4a66"
+    },
+    {
+      "path": "src/scene-actions.ts",
+      "sha256": "ed7eda897a4a2488281f4d980c3def898f816f905fee00e79daba0d3c1bf537c"
+    },
+    {
+      "path": "src/scene-clearance.ts",
+      "sha256": "95eb5242722a894133051c5948702f7c8908f8039f42d9006783ac6145613447"
+    },
+    {
+      "path": "src/scene-interactions.css",
+      "sha256": "9c932c74d9050666c39537b64bf82faa6c43a34323462f05825b54a8c2df58af"
+    },
+    {
+      "path": "src/scene/architecture.ts",
+      "sha256": "875220bd0c479827e355639eb5d923ecb9bab3e6d1a8731f74247022abf87ef2"
+    },
+    {
+      "path": "src/scene/context.ts",
+      "sha256": "80f8868eb713ddd7489438410d5d9ad54fccab12119a8e198dc0e486c761e985"
+    },
+    {
+      "path": "src/scene/surface.ts",
+      "sha256": "4639befc3faa5f72d6480ee2ef0e9d5a7df74276c7534c95177123ee6d9dda64"
+    },
+    {
+      "path": "src/terminal-state.ts",
+      "sha256": "7030051a604200258d2230eb4ddf89dd6959508c9d366abfc0e9c215a3623f97"
+    },
+    {
+      "path": "src/tool-details.css",
+      "sha256": "876e4ba268c880bcc1598a2c79f7921aed91151f48961f39b162c1193a823ab6"
+    },
+    {
+      "path": "src/useMusicMode.ts",
+      "sha256": "b0e97f4867ac60e8a3ba18babcfc13bc86694bd7e7ce81f001e4bf10ca47f913"
+    },
+    {
+      "path": "src/vite-env.d.ts",
+      "sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5"
+    },
+    {
+      "path": "tests/archive-model.test.ts",
+      "sha256": "e15ae21eaf3fb34b83a9c412afcef497063074a2edafb080502c784d4f392a4b"
+    },
+    {
+      "path": "tests/archive-motion.test.ts",
+      "sha256": "f896c4d01b9ca8d31e058ccc8f3e9bbe4fdb34befe509a43f42d6b190e468d2b"
+    },
+    {
+      "path": "tests/domain.test.ts",
+      "sha256": "ce444c799fc107948bd4a328e1fe7e7deb9eca381b72407b9053f2442f17684f"
+    },
+    {
+      "path": "tests/eight-tools.test.ts",
+      "sha256": "53771f2f5c1d16a576154828e123bdebb44872329c67113eb38559fb783b9c9c"
+    },
+    {
+      "path": "tests/music-mode.test.ts",
+      "sha256": "b81db4a8f620022ba9ae05b17de780fed671b9497ccb25c3fafc8ccf0c56e531"
+    },
+    {
+      "path": "tests/music-player.test.ts",
+      "sha256": "3af60ab8d122ea94be06604faa5ad1f275097b070abe24d280b28c3b53079017"
+    },
+    {
+      "path": "tests/performance-audio.test.ts",
+      "sha256": "407b53cf1945f6b7fbadd50160d3e4162dc8f0de287b05c822bfa0a0b15e17ca"
+    },
+    {
+      "path": "tests/scene-actions.test.ts",
+      "sha256": "70df9b80917ca97de679691894d81b8ad25a02a699407e2faaa28cbe922281c7"
+    },
+    {
+      "path": "tests/scene.test.ts",
+      "sha256": "f9a4ec550de90116140ec396949b3bb27ed3b0f3d8d21988a1fa4319545d62a9"
+    },
+    {
+      "path": "tools/audio-static.mjs",
+      "sha256": "6143d0bdc7ab6939336cad1fc228cf9b5b7dfba22d8fd77bd5217008edaa83e4"
+    },
+    {
+      "path": "tools/build-audio-peaks.py",
+      "sha256": "e1113c0c4859cd093552e6637d7cd65de5ef0f6467dd82c5f6642c2eabe62a27"
+    },
+    {
+      "path": "tools/music-source.mjs",
+      "sha256": "f764fa0bbe43630ec5c2593c572b3bdc9311fc25900778d1f82f60d070019cef"
+    },
+    {
+      "path": "tools/project-memory.mjs",
+      "sha256": "86fc1194f5238598cb6ff9976c84aa78fa1afc37d1ade88696a5d370ac623283"
+    },
+    {
+      "path": "tools/review-desktop.html",
+      "sha256": "cde08481c1a15d19c6354cfcda8514ebdf8c420a29199505c2e6d802d4c48863"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "63197f41c794e7e3e45364b1bb07687f4748823b1f78a20bf8d30ca4cbb81fdc"
+    }
+  ],
+  "note": "A source fingerprint, not an assertion that visual or functional QA passed."
+}

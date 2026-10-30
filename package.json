@@ -1,25 +1,32 @@
 {
   "name": "rhine-first-step",
-  "version": "0.1.0",
+  "version": "0.26.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "test": "node --experimental-strip-types --test tests/domain.test.ts"
+    "test": "node --experimental-strip-types --test tests/domain.test.ts tests/scene.test.ts tests/scene-actions.test.ts tests/eight-tools.test.ts tests/performance-audio.test.ts tests/music-player.test.ts tests/music-mode.test.ts tests/archive-model.test.ts tests/archive-motion.test.ts",
+    "resume": "node tools/project-memory.mjs",
+    "memory:check": "node tools/project-memory.mjs --check",
+    "memory:stamp": "node tools/project-memory.mjs --stamp"
   },
   "dependencies": {
     "lucide-react": "1.61.0",
     "react": "19.3.1",
-    "react-dom": "19.3.1"
+    "react-dom": "19.3.1",
+    "three": "0.183.0"
   },
   "devDependencies": {
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "@types/three": "0.183.0",
     "@vitejs/plugin-react": "^6.1.0",
     "typescript": "^6.0.0",
     "vite": "8.3.5"
   },
-  "engines": { "node": ">=24.21.0" }
+  "engines": {
+    "node": ">=24.21.0"
+  }
 }

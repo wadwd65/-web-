@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-30",
+  "workingVersion": "0.26.0",
+  "releasedVersion": "0.26.0",
+  "workState": "reviewed_internally",
+  "objective": "初程八事务工具；当前完成首页快捷选歌与完整播放器入口分离，并按用户授权同步原GitHub仓库。",
+  "latestUserRequest": "把当前项目推送原线上仓库；首页切歌打开小选曲菜单，点选播放且不进入子页面，播放器入口保留进入完整界面。",
+  "platform": "desktop_only",
+  "canonicalSource": "work/first-step-experience",
+  "release": {
+    "url": "http://127.0.0.1:5186/?v=0.26#/home",
+    "snapshot": "first-step-首页快捷选歌-v0.26",
+    "state": "ready_for_user_review"
+  },
+  "implemented": {
+    "business": "8项限定范围本地工具；详情见modules",
+    "music": "五曲/单audio；首页切歌弹小菜单点选即播不跳页，播放器进入完整三维声音档案并接续曲目/进度；v0.25抽取、旋转及逐曲环境保留。",
+    "visual": "冷蓝暗环境+银色原档案几何，五张非角色场景与封面/编号/情绪对应，五种逐曲环境和全音乐界面鼠标粒子响应。内部自检，待用户审美。"
+  },
+  "modules": [
+    {
+      "id": "offer",
+      "scope": "2–3份Offer已知金额与预算同口径对比",
+      "status": "local_tool"
+    },
+    {
+      "id": "contract",
+      "scope": "TXT/MD或粘贴文字的规则核对、原文定位、询问清单；照片/PDF不做OCR",
+      "status": "local_tool"
+    },
+    {
+      "id": "salary",
+      "scope": "已确认金额的应发/个人扣款/实发按分核对；不推测地方费率",
+      "status": "local_tool"
+    },
+    {
+      "id": "tax",
+      "scope": "仅工资薪金年度限定试算；非完整个税申报/退税保证",
+      "status": "local_tool"
+    },
+    {
+      "id": "social",
+      "scope": "情形分支导航与个人路线记录；不是官方办理进度",
+      "status": "local_tool"
+    },
+    {
+      "id": "rent",
+      "scope": "租房文字规则定位与确认费用试算",
+      "status": "local_tool"
+    },
+    {
+      "id": "subsidy",
+      "scope": "仅一条广州补贴政策样例，未知条件保留",
+      "status": "local_tool"
+    },
+    {
+      "id": "leaving",
+      "scope": "限定解除情形的个人交接台账、备注及导出",
+      "status": "local_tool"
+    }
+  ],
+  "missingCapabilities": [
+    "在线LLM业务调用",
+    "OCR",
+    "有引用与版本的RAG知识库",
+    "可追踪的Agent编排",
+    "业务后端与授权数据存储",
+    "全国政策维护",
+    "用户可控草稿保存"
+  ],
+  "currentPlan": [
+    {
+      "id": "quick_picker",
+      "status": "implemented",
+      "acceptance": "首页就地选歌并播放，路由/填写保留，只有播放器按钮进入音乐界面"
+    },
+    {
+      "id": "review",
+      "status": "passed",
+      "acceptance": "桌面弹层视觉、键盘/关闭、真实切歌、完整播放器入口及单audio检查"
+    },
+    {
+      "id": "repository",
+      "status": "reviewing_for_push",
+      "acceptance": "核对原远端、保留Git历史、审核当前源码后推送并核验远端提交"
+    }
+  ],
+  "validation": {
+    "version": "0.26.0",
+    "automated": "42 tests passed; TypeScript and production build passed",
+    "evidence": "outputs/v026-review",
+    "visualAcceptance": "quick-picker internally reviewed; overall v0.25 art still awaiting user feedback",
+    "manual": "首页实际切歌不跳页、键盘选择、暂停/继续、重复点击/Esc/外部收起；合同合成文字保留；完整播放器进入后同曲/单audio，控制台无warn/error。",
+    "performance": "快捷菜单无RAF/新audio或三维预热；本轮未重测v0.25全场景帧率。",
+    "scope": "desktop_only; no online business AI",
+    "savedPreview": "保存版5214已逐一选播五曲，均readyState4/paused=false、地址#/home、music closed、单audio；五曲证据与实际弹层截图已保存，控制台无warn/error。"
+  },
+  "nextActions": [
+    "按用户反馈微调新选曲菜单；不恢复旧的切歌必进子页行为",
+    "音乐仍为辅助，保留v0.25构图/动态，业务AI按BACKLOG后续推进",
+    "后续更新继续保留原Git历史；源码推送和公网部署分别记录"
+  ],
+  "visualSources": [
+    {
+      "author": "LBEILC / RhineLabUI",
+      "obtainedFrom": "MikeQu223/Rhine-Music-Database",
+      "asset": "public/models/rhine-archive-cassette.glb",
+      "commit": "15139d4b3562edcf3d9b24b50ca502bd42f784d7",
+      "license": "MIT",
+      "authorisedByUser": "仅原始模型；其余独立设计并署名",
+      "record": "public/credits/model-source.json"
+    },
+    {
+      "asset": "public/artwork/rhine-*.png",
+      "source": "PRTS / Arknights non-character environments",
+      "rights": "Hypergryph and respective rights holders; not MIT; original PNG unchanged",
+      "authorisedByUser": "本轮明确要求非角色场景印到盘面并做主题重排",
+      "record": "public/credits/artwork-source.json"
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/wadwd65/-web-",
+    "branch": "main",
+    "sourceRoot": ".",
+    "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
+    "pushStatus": "ready_for_push"
+  }
+}

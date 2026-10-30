@@ -1,0 +1,72 @@
+[
+  {
+    "cid": "779491",
+    "name": "Rhine Lab.LLC",
+    "note": "莱茵生命主题",
+    "page": "https://monster-siren.hypergryph.com/music/779491",
+    "file": "/audio/779491-49f868165d.mp3",
+    "duration": 77.678594,
+    "bytes": 1243890,
+    "sha256": "49f868165d242c22a31192826afbe230009173de65bf89500695df2273b979f6",
+    "artist": "塞壬唱片-MSR",
+    "sourceHost": "res01.hycdn.cn",
+    "downloaded": "2026-10-29",
+    "originalBytes": 22371476
+  },
+  {
+    "cid": "232265",
+    "name": "A World Above",
+    "note": "孤星 · 探索与远方",
+    "page": "https://monster-siren.hypergryph.com/music/232265",
+    "file": "/audio/232265-7f214bc96f.mp3",
+    "duration": 226.190476,
+    "bytes": 3620224,
+    "sha256": "7f214bc96fb160db69b1cde1eed4ad6c384f7286cbf205b3dd09beb008214c45",
+    "artist": "塞壬唱片-MSR",
+    "sourceHost": "res01.hycdn.cn",
+    "downloaded": "2026-10-29",
+    "originalBytes": 65579442
+  },
+  {
+    "cid": "125074",
+    "name": "Ad astra",
+    "note": "向着星辰",
+    "page": "https://monster-siren.hypergryph.com/music/125074",
+    "file": "/audio/125074-51ce1c5a61.mp3",
+    "duration": 163.831179,
+    "bytes": 2622522,
+    "sha256": "51ce1c5a61f69905026cdf645b93fe696931f322e3cc1883e0b6c1f64f694a78",
+    "artist": "塞壬唱片-MSR",
+    "sourceHost": "res01.hycdn.cn",
+    "downloaded": "2026-10-29",
+    "originalBytes": 47434898
+  },
+  {
+    "cid": "880337",
+    "name": "Control's Wishes",
+    "note": "探索的愿望",
+    "page": "https://monster-siren.hypergryph.com/music/880337",
+    "file": "/audio/880337-4f3857214f.mp3",
+    "duration": 192.676054,
+    "bytes": 3083981,
+    "sha256": "4f3857214f0a00952d93021a8f7609d205648d0bbb5c2189352e2bb8ed7d80ca",
+    "artist": "塞壬唱片-MSR",
+    "sourceHost": "res01.hycdn.cn",
+    "downloaded": "2026-10-29",
+    "originalBytes": 55492088
+  },
+  {
+    "cid": "461158",
+    "name": "The Coming of the Future",
+    "note": "未来将至",
+    "page": "https://monster-siren.hypergryph.com/music/461158",
+    "file": "/audio/461158-839cde2a29.mp3",
+    "duration": 199.992494,
+    "bytes": 3200983,
+    "sha256": "839cde2a29b1d2a5883c5d859b5ce79e1a8c8491bd4fd9fa056d2c9c02b499bd",
+    "artist": "塞壬唱片-MSR",
+    "sourceHost": "res01.hycdn.cn",
+    "downloaded": "2026-10-29",
+    "originalBytes": 57904444
+  }
+]

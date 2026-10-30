@@ -1,0 +1,81 @@
+{
+  "checkedAt": "2026-10-30",
+  "scope": "user-requested non-commercial local theme preview; no claim that minor modification grants copyright",
+  "assets": [
+    {
+      "file": "/artwork/rhine-corridor.png",
+      "originalFile": "Avg_bg_38_g3_rhinelab_corridor.png",
+      "source": "https://prts.wiki/w/%E6%96%87%E4%BB%B6:Avg_bg_38_g3_rhinelab_corridor.png",
+      "download": "https://media.prts.wiki/2/26/Avg_bg_38_g3_rhinelab_corridor.png",
+      "sha256": "d273c3067e0b9c0acbbd621d34d9837696af60b993b3ca03a7dcdc4cc3d9826a",
+      "bytes": 699832,
+      "dimensions": [
+        1024,
+        576
+      ],
+      "review": "visually inspected: non-character environment; no character cutouts",
+      "copyright": "Arknights / Hypergryph and respective rights holders; not covered by the model MIT licence",
+      "runtimeAdaptation": "circular crop, mild cool overlay, independent typography; original PNG unchanged"
+    },
+    {
+      "file": "/artwork/rhine-sky.png",
+      "originalFile": "Avg_bg_38_g20_skyblue_L1.png",
+      "source": "https://prts.wiki/w/%E6%96%87%E4%BB%B6:Avg_bg_38_g20_skyblue_L1.png",
+      "download": "https://media.prts.wiki/3/34/Avg_bg_38_g20_skyblue_L1.png",
+      "sha256": "725e89d65a768d748a31238d5e7c96dbdc9e3ed2c4450a6c01e1f393f3c20846",
+      "bytes": 146437,
+      "dimensions": [
+        1024,
+        576
+      ],
+      "review": "visually inspected: non-character environment; no character cutouts",
+      "copyright": "Arknights / Hypergryph and respective rights holders; not covered by the model MIT licence",
+      "runtimeAdaptation": "circular crop, mild cool overlay, independent typography; original PNG unchanged"
+    },
+    {
+      "file": "/artwork/rhine-ascent.png",
+      "originalFile": "Avg_38_i10.png",
+      "source": "https://prts.wiki/w/%E6%96%87%E4%BB%B6:Avg_38_i10.png",
+      "download": "https://prts.wiki/w/%E6%96%87%E4%BB%B6:Avg_38_i10.png",
+      "sha256": "1661e230eecfcd2e0264441c51336b9b349119c7f26d70ae4958cdb8a563227f",
+      "bytes": 1322665,
+      "dimensions": [
+        1600,
+        900
+      ],
+      "review": "visually inspected: non-character environment; no character cutouts",
+      "copyright": "Arknights / Hypergryph and respective rights holders; not covered by the model MIT licence",
+      "runtimeAdaptation": "circular crop, mild cool overlay, independent typography; original PNG unchanged"
+    },
+    {
+      "file": "/artwork/rhine-energy.png",
+      "originalFile": "Avg_bg_38_g15_energywell_glowed.png",
+      "source": "https://prts.wiki/w/%E6%96%87%E4%BB%B6:Avg_bg_38_g15_energywell_glowed.png",
+      "download": "https://media.prts.wiki/e/e3/Avg_bg_38_g15_energywell_glowed.png",
+      "sha256": "608307c6dbbd3d237fb4fdc273caf3fd890232f1132c94143dbde7644fbda79c",
+      "bytes": 535490,
+      "dimensions": [
+        1024,
+        576
+      ],
+      "review": "visually inspected: non-character environment; no character cutouts",
+      "copyright": "Arknights / Hypergryph and respective rights holders; not covered by the model MIT licence",
+      "runtimeAdaptation": "circular crop, mild cool overlay, independent typography; original PNG unchanged"
+    },
+    {
+      "file": "/artwork/rhine-ecolab.png",
+      "originalFile": "Avg_bg_38_g10_ecolab.png",
+      "source": "https://prts.wiki/w/%E6%96%87%E4%BB%B6:Avg_bg_38_g10_ecolab.png",
+      "download": "https://media.prts.wiki/7/73/Avg_bg_38_g10_ecolab.png",
+      "sha256": "b6dc3559dd42e329a6a1aa5adeb4ca2328d44b67b46c50d6029107c65ca6170e",
+      "bytes": 441848,
+      "dimensions": [
+        1024,
+        576
+      ],
+      "review": "visually inspected: non-character environment; no character cutouts",
+      "copyright": "Arknights / Hypergryph and respective rights holders; not covered by the model MIT licence",
+      "runtimeAdaptation": "circular crop, mild cool overlay, independent typography; original PNG unchanged"
+    }
+  ]
+}

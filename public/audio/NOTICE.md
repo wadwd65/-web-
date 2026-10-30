@@ -1,0 +1,5 @@
+# 本地试听资源来源
+
+The optional music player includes five locally compressed MP3 recordings downloaded from the official public MSR sources at the user's request on 2026-10-29. Normal playback uses these local files; the same-origin resolver is only an online fallback, restricted to the five catalogued official CIDs. It does not proxy audio. Recordings and related rights remain with their respective owners; this notice does not assert a commercial redistribution license. Track provenance, sizes and SHA-256 checksums are in public/audio/catalog.json. Tracks: Rhine Lab.LLC (https://monster-siren.hypergryph.com/music/779491); A World Above (https://monster-siren.hypergryph.com/music/232265); Ad astra (https://monster-siren.hypergryph.com/music/125074); Control's Wishes (https://monster-siren.hypergryph.com/music/880337); The Coming of the Future (https://monster-siren.hypergryph.com/music/461158).
+
+These files are optional personal local-preview resources, not original project compositions. Audio was converted to 128kbps MP3 from official public listening sources. No reference-project audio file or nuer self — Dusk recording is included.

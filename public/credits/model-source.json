@@ -1,0 +1,28 @@
+{
+  "repository": "https://github.com/MikeQu223/Rhine-Music-Database",
+  "commit": "15139d4b3562edcf3d9b24b50ca502bd42f784d7",
+  "upstream": "https://github.com/LBEILC/RhineLabUI",
+  "files": [
+    {
+      "path": "Assets/models/archive-cassette.glb",
+      "bytes": 3565116,
+      "sha256": "dda42b9b3b471d11c69820a64084d254a64b27761287ab0e35dd8387ec0a0bed"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1063,
+      "sha256": "b42f104f4b3687773c76efbf990c1ab7b306a8c59035958c0b886dfbbcf2cd91"
+    },
+    {
+      "path": "NOTICE",
+      "bytes": 12414,
+      "sha256": "138c1b964f29529b287f6909d091f2714a9e9d259ed1eb5c26d5c807f99de7e2"
+    },
+    {
+      "path": "licenses/source-manifest.json",
+      "bytes": 18394,
+      "sha256": "f343516329f69ebaeb400c14301d6e60f728357ba137cff4ed45b8a33dc9ad97"
+    }
+  ],
+  "use": "User approved reuse of original model only, with attribution; UI, artwork and motions are independently designed."
+}
