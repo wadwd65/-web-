@@ -1,18 +1,18 @@
 {
-  "version": "0.26.0",
-  "recordedAt": "2026-10-30T10:24:05.657Z",
+  "version": "0.27.0",
+  "recordedAt": "2026-10-30T11:16:41.062Z",
   "workState": "reviewed_internally",
-  "validationVersion": "0.26.0",
+  "validationVersion": "0.27.0",
   "textNormalisation": "LF",
-  "sourceDigest": "924dc13538559b818ec67556a6c5d8faedb9bac70e43d8b236e453bc3b7515d9",
+  "sourceDigest": "48a264ee01f8df0ace21829ec9ad2117fa28cf3146a44c8ce32a729f1afb5e8e",
   "files": [
     {
       "path": "AGENTS.md",
-      "sha256": "8c32ff7c6faaaf41d690a8ce9a4b06055ee561ad0c81fdd847493371892493f5"
+      "sha256": "b53ba50b534f79f7a45ccb1801e4ac7c243356412bbe81a207aec5e406693a9f"
     },
     {
       "path": "docs/memory/ARCHITECTURE.md",
-      "sha256": "d97864c787d428108d853e96150b56d1f7fcaa476381dbf064671fe02105039b"
+      "sha256": "4379fed980264fa0a00d2ddb5e3d1f1f56ce1cf285657c71289bf346fb97ad37"
     },
     {
       "path": "docs/memory/BACKLOG.md",
@@ -20,23 +20,23 @@
     },
     {
       "path": "docs/memory/DECISIONS.md",
-      "sha256": "7a973e649485632d85f899a21c2fe3593d990efe301808babef3f97cbe2a13e9"
+      "sha256": "86a53409f162eb413738667966dd4b685f5655375b98da761f8519ab3460fcee"
     },
     {
       "path": "docs/memory/SESSIONS.md",
-      "sha256": "d7992230fb942f3bc2bf41a47e83f466f0480e519654aa5bc63eb0a79f59fd32"
+      "sha256": "177d30e140885dcf1902fe837cb1c79f819db413e17dd08085d4fd0d2ad89130"
     },
     {
       "path": "docs/memory/progress.json",
-      "sha256": "c5a9190f1eb56c6935bdfb32cb85f2c555aeedcb7df93a290aad19319f2b603b"
+      "sha256": "cd645174cc35c708272764dde5f91ce7f5d926f4e7779bdd543ff81953e0af2f"
     },
     {
       "path": "package-lock.json",
-      "sha256": "8f95ca30c48bb09c1b3a5b71d85ac7916da589b02ea0495176c2a0d33f0c2c82"
+      "sha256": "eef21a1e3796e4159b7e4ca5fa662815da0572965e8ae25cf167900fd56de7b7"
     },
     {
       "path": "package.json",
-      "sha256": "54f043bb7a6627ca4e911927b7e0316ed53c6a48ec2eb41737c985962e559614"
+      "sha256": "3bbcab0365b6008356c66fae9f35d95de9cec0b342be9bedf2c7c5c92ee9733b"
     },
     {
       "path": "public/artwork/rhine-ascent.png",
@@ -156,7 +156,11 @@
     },
     {
       "path": "src/ExperienceWorkspace.tsx",
-      "sha256": "110c84550925705a42b33cdd1d95bda4f42afeb583d076abf356575f9d3fbf8a"
+      "sha256": "cd88d78e0cf71ea1f9ba4773f89b0739ac96919ba1b051d7ea27be38a45a980f"
+    },
+    {
+      "path": "src/HomeTaskDirectory.tsx",
+      "sha256": "564e509fe4c6d2a5541d301672e280c7f65a11f7a647050653ae3f098cd9d947"
     },
     {
       "path": "src/MusicArchiveScene.tsx",
@@ -227,6 +231,10 @@
       "sha256": "f07943763f0d8fcddcf024f279b7e432284eb789b55ebad4558b118c38409228"
     },
     {
+      "path": "src/home-overview.css",
+      "sha256": "793ae43200f6496ffe3559ee62f1906590ced3de9b4957ec7503e86afe3d9dc1"
+    },
+    {
       "path": "src/lib/contracts.ts",
       "sha256": "3e65dd002f2ad0dfb9d5d6cadb53077972d78e9887dc3ee80c74f8c52f2fe2e8"
     },
@@ -248,7 +256,7 @@
     },
     {
       "path": "src/main.tsx",
-      "sha256": "b8e36a013562faaea435e4e68aa39be8ab6cbc3881e7640b0f108d96caf66302"
+      "sha256": "98d1d2ae5dd9d19c1e9a87d073da77b9a6d9ba2aad629a8e470bce026cbe18be"
     },
     {
       "path": "src/module-guides.ts",

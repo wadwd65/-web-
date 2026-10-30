@@ -32,3 +32,7 @@
 ## v0.26 入口分离
 
 MusicQuickPicker仅管理原生popover与键盘/焦点，调用Soundtrack现有playTrack/toggle，不持有audio或动画循环。MusicEntry只在完整播放器按钮hover/focus时预热三维；ExperienceWorkspace传入路由/模式键以收起快捷菜单，八业务组件及唯一audio保持常驻。
+
+## v0.27 首页展示职责
+
+HomeTaskDirectory只负责八项名称/用途与原onOpen、onPreview回调；HomeBackdrop为静态SVG/CSS装饰。home-overview.css集中管理首页层级与桌面尺寸适应，工作区仍使用原布局。ExperienceWorkspace继续持有业务/音频状态，场景设置只改为原生details并在模式切换时收起。原TaskArrayScene与MusicArchiveScene代码未替换；背景没有额外RAF。

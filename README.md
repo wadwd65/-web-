@@ -1,8 +1,8 @@
-# 初程 FIRST STEP · 首页快捷选歌 v0.26
+# 初程 FIRST STEP · 桌面首页信息优化 v0.27
 
-面向初入职场毕业生的八事务工具原型，含独立的三维声音档案。本轮把“切歌”与“播放器”分开：首页点击“切歌”弹出五曲菜单，点选即播并停留原页面；点击“播放器”进入完整三维界面，继续当前曲目与进度。保留v0.25的音乐场景与原八事务，业务功能后续处理。
+面向初入职场毕业生的八事务工具原型，含独立的三维声音档案。本轮强化首页的产品用途、当前任务和主要操作，将八项工具整理成带用途说明的两行直接入口，补充背景光场、空间测绘线与使用提醒；保留原有三维、八业务、快捷选曲及完整播放器。仅电脑端，用户已明确暂缓手机。
 
-先读[本轮入口与检查记录](docs/23-quick-music-picker-review.md)。恢复进度运行`npm run resume`，长期记忆入口为[docs/memory](docs/memory/README.md)；旧交接是历史。源码仓库：[wadwd65/-web-](https://github.com/wadwd65/-web-)。
+先读[本轮首页与检查记录](docs/24-home-information-review.md)。恢复进度运行`npm run resume`，长期记忆入口为[docs/memory](docs/memory/README.md)；旧交接是历史。源码仓库：[wadwd65/-web-](https://github.com/wadwd65/-web-)。
 
 ## 本地运行
 
@@ -18,7 +18,7 @@ npm run memory:check
 npm run memory:stamp
 ```
 
-参赛包“开始预览.cmd”固定5186，首页`http://127.0.0.1:5186/?v=0.26#/home`，音乐页`#/music`，版本查`/__first-step-version`。五首本地音频、原始模型与五张场景图随包；在线音源仅失效备用。仅电脑端。GitHub保存源码，不代表已部署公网网站；自行启动时使用上述Vite命令。
+参赛包“开始预览.cmd”固定5186，首页`http://127.0.0.1:5186/?v=0.27#/home`，音乐页`#/music`，版本查`/__first-step-version`。五首本地音频、原始模型与五张场景图随包；在线音源仅失效备用。仅电脑端。GitHub保存源码，不代表已部署公网网站；自行启动时使用上述Vite命令。
 
 ## 当前范围
 
