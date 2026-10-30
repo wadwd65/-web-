@@ -84,7 +84,7 @@
     },
     {
       "id": "save",
-      "status": "saved_pending_repository_sync",
+      "status": "completed",
       "acceptance": "桌面自检、构建、独立保存点与长期记忆一致，下一轮动态背景需求明确"
     }
   ],
@@ -127,10 +127,10 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "v028_ready_for_sync",
-    "sourceCommit": "0bd79b21e1625f4773306c7d2d1fe96298c2d2ed",
-    "verifiedAt": "2026-10-30T11:18:36.275841+00:00",
+    "pushStatus": "published",
+    "sourceCommit": "681f4c7c6345567d86b131d40e3602b901451eba",
+    "verifiedAt": "2026-10-30T12:08:33.678095+00:00",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "e41c7c83f3318c957a68f882e39751adb602f6ca"
+    "previousPublishedHead": "9a8ca901221f05c258132b9cf92bb6bcf7cdbc4b"
   }
 }
