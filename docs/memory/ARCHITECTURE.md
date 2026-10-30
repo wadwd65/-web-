@@ -36,3 +36,7 @@ MusicQuickPicker仅管理原生popover与键盘/焦点，调用Soundtrack现有p
 ## v0.27 首页展示职责
 
 HomeTaskDirectory只负责八项名称/用途与原onOpen、onPreview回调；HomeBackdrop为静态SVG/CSS装饰。home-overview.css集中管理首页层级与桌面尺寸适应，工作区仍使用原布局。ExperienceWorkspace继续持有业务/音频状态，场景设置只改为原生details并在模式切换时收起。原TaskArrayScene与MusicArchiveScene代码未替换；背景没有额外RAF。
+
+## v0.28 交互与服务边界
+
+PointerFeedback使用一个稳定portal宿主，按事件目标移动到body/原生dialog/popover，React管理其11个池化子节点，清理事件/动画/宿主；没有常驻空闲循环。Checklist仍由App持有问题，新增表单与搜索不改八事务计算。services/api-client为可注入fetch的独立适配层，services/index只读取公开base URL，未连接业务按钮；实际服务、权限与上传确认仍待实现。

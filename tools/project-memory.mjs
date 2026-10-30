@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const memory=resolve(root,'docs/memory');
-const textExtensions=new Set(['.ts','.tsx','.mjs','.py','.json','.md','.html','.css','.svg','.txt']);
+const textExtensions=new Set(['.ts','.tsx','.mjs','.py','.json','.md','.html','.css','.svg','.txt','.example']);
 function digest(path){const bytes=readFileSync(path);return createHash('sha256').update(textExtensions.has(extname(path))?bytes.toString('utf8').replaceAll('\r\n','\n'):bytes).digest('hex');}
 const state=JSON.parse(readFileSync(resolve(memory,'progress.json'),'utf8'));
 const pkg=JSON.parse(readFileSync(resolve(root,'package.json'),'utf8'));
@@ -29,7 +29,7 @@ if(process.argv.includes('--stamp')){
  const files=[];
  function walk(directory){for(const item of readdirSync(directory,{withFileTypes:true})){const path=resolve(directory,item.name);if(item.isDirectory())walk(path);else if(item.name!=='checkpoint.json')files.push(path);}}
  for(const name of ['src','tools','tests','public'])walk(resolve(root,name));
- for(const name of ['package.json','package-lock.json','tsconfig.json','AGENTS.md'])files.push(resolve(root,name));
+ for(const name of ['package.json','package-lock.json','tsconfig.json','AGENTS.md','.env.example'])files.push(resolve(root,name));
  for(const name of ['progress.json','DECISIONS.md','BACKLOG.md','ARCHITECTURE.md','SESSIONS.md'])files.push(resolve(memory,name));
  const records=files.sort().map(path=>({path:relative(root,path).replaceAll('\\','/'),sha256:digest(path)}));
  const checkpoint={version:pkg.version,recordedAt:new Date().toISOString(),workState:state.workState,validationVersion:state.validation.version,textNormalisation:'LF',sourceDigest:createHash('sha256').update(JSON.stringify(records)).digest('hex'),files:records,note:'A source fingerprint, not an assertion that visual or functional QA passed.'};

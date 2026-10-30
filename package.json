@@ -1,13 +1,13 @@
 {
   "name": "rhine-first-step",
-  "version": "0.27.0",
+  "version": "0.28.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "test": "node --experimental-strip-types --test tests/domain.test.ts tests/scene.test.ts tests/scene-actions.test.ts tests/eight-tools.test.ts tests/performance-audio.test.ts tests/music-player.test.ts tests/music-mode.test.ts tests/archive-model.test.ts tests/archive-motion.test.ts",
+    "test": "node --experimental-strip-types --test tests/domain.test.ts tests/scene.test.ts tests/scene-actions.test.ts tests/eight-tools.test.ts tests/performance-audio.test.ts tests/music-player.test.ts tests/music-mode.test.ts tests/archive-model.test.ts tests/archive-motion.test.ts tests/api-client.test.ts",
     "resume": "node tools/project-memory.mjs",
     "memory:check": "node tools/project-memory.mjs --check",
     "memory:stamp": "node tools/project-memory.mjs --stamp"

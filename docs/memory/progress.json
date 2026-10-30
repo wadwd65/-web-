@@ -1,22 +1,24 @@
 {
   "schemaVersion": 1,
   "updatedAt": "2026-10-30",
-  "workingVersion": "0.27.0",
-  "releasedVersion": "0.27.0",
+  "workingVersion": "0.28.0",
+  "releasedVersion": "0.28.0",
   "workState": "reviewed_internally",
-  "objective": "初程八事务工具；本轮仅优化桌面首页的信息识别、八项入口和空间背景，保留全部现有功能。",
-  "latestUserRequest": "提炼首页关键信息、增强层级和功能入口、补充背景视觉。用户随后明确取消本轮移动端，只做桌面。",
+  "objective": "桌面端增强询问清单、恢复全界面鼠标反馈及明显的入场回放，预留业务API客户端。",
+  "latestUserRequest": "增强功能并预留API，恢复悬停/点击反馈及入场回放；下一轮重点让背景更生动灵动、有持续动态。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5186/?v=0.27#/home",
-    "snapshot": "first-step-首页信息层级-v0.27",
+    "url": "http://127.0.0.1:5186/?v=0.28#/home",
+    "snapshot": "first-step-交互与API预留-v0.28",
     "state": "ready_for_user_review"
   },
   "implemented": {
-    "business": "8项限定范围本地工具；详情见modules",
+    "business": "8项限定本地工具；询问清单新增手动添加/内容及事务搜索，原状态/编辑/导出/撤销保留。",
     "music": "五曲/单audio；首页切歌弹小菜单点选即播不跳页，播放器进入完整三维声音档案并接续曲目/进度；v0.25抽取、旋转及逐曲环境保留。",
-    "visual": "桌面首页明确产品用途、当前任务、主操作，八项两行直接入口各附用途；原银蓝三维与跨事务动态保留，补静态光场/弧线/细纹理，技术选项收纳为场景设置。音乐仍沿用v0.25。"
+    "visual": "桌面首页明确产品用途、当前任务、主操作，八项两行直接入口各附用途；原银蓝三维与跨事务动态保留，补静态光场/弧线/细纹理，技术选项收纳为场景设置。音乐仍沿用v0.25。",
+    "interaction": "页首完整入场回放；普通界面/三维/选曲弹层/音乐页单层悬停短尾与点击扩散；输入及减少动态抑制。",
+    "api": "默认空配置、不自动发请求的类型化API客户端：能力查询与合同/租房核对，带上传确认/原文引用校验/超时取消；没有服务端或真实在线AI。"
   },
   "modules": [
     {
@@ -71,42 +73,36 @@
   ],
   "currentPlan": [
     {
-      "id": "home_hierarchy",
-      "status": "implemented",
-      "acceptance": "首页产品范围、当前任务、主操作、八项带用途的直接入口与使用提醒清晰可辨"
+      "id": "interaction",
+      "status": "verified",
+      "acceptance": "界面/弹窗悬停和点击反馈正常；明显的页首回放能重复完整播放且保留填写与音乐"
     },
     {
-      "id": "visual_review",
-      "status": "passed",
-      "acceptance": "桌面整体与短屏自检；三维/动效保留，内容不被遮挡，旧填写/选曲/工作区回归"
+      "id": "checklist_api",
+      "status": "verified",
+      "acceptance": "手动问题/搜索与旧清单兼容；API默认不发请求、参数/引用校验、错误与取消有验证"
     },
     {
       "id": "save",
-      "status": "completed",
-      "acceptance": "源码/构建/长期记忆/独立v0.27保存点一致；旧v0.26保留"
+      "status": "saved_pending_repository_sync",
+      "acceptance": "桌面自检、构建、独立保存点与长期记忆一致，下一轮动态背景需求明确"
     }
   ],
   "validation": {
-    "version": "0.27.0",
-    "automated": "42 tests passed; TypeScript and production build passed",
-    "evidence": "outputs/v027-review",
-    "visualAcceptance": "desktop home internally reviewed; awaiting user feedback",
-    "manual": "八项首页直达/返回、八项预览与目录高亮、主操作/资料、四项场景选项、三维实体点击；合成合同跨事务保留；快捷选曲实际播放不跳页，完整播放器同曲/单audio进出。",
-    "desktopSizes": [
-      "1280×720",
-      "1024×768",
-      "1440×900",
-      "normal window ~834px wide",
-      "1024×650 with vertical scroll"
-    ],
-    "performance": "新增静态SVG/CSS，无新RAF；旧场景代码未改，未重新做全场景帧率测量。",
-    "scope": "desktop_only; mobile explicitly deferred; no online business AI",
-    "savedPreview": "保存版5214八入口/原生三维/单audio/Offer直达返回通过；最终5186为0.27且index哈希一致，八入口、完整保存提示、单audio、稳定三维可见，控制台无warn/error。最后小屏保存提示可见样式已核对并重新生产构建。"
+    "version": "0.28.0",
+    "automated": "50 tests passed; API input guard follow-up 8/8 passed; TypeScript and production build passed",
+    "evidence": "outputs/v028-review",
+    "visualAcceptance": "interaction and function changes internally reviewed; background explicitly awaiting next round",
+    "manual": "清单手工新增/搜索/确认/撤销/防重复/实际TXT；普通页、选曲弹层、音乐页点击环实测；多次完整回放保留合同原文/路由/音乐与单audio；835px页首回放可见。",
+    "performance": "固定6粒子/4点击环，无新全屏canvas或空闲RAF；未重测旧3D场景帧率。",
+    "scope": "desktop_only; API client reserved, no actual backend or online business AI",
+    "savedPreview": "最终主5186为0.28且index哈希一致。保存版实际页首回放开启完整入场后正常结束，单回放按钮/鼠标层/audio、八项首页入口保留，页首无溢出，浏览器控制台无warn/error。"
   },
   "nextActions": [
-    "收取用户对首页入口清晰度和背景的反馈，再定是否继续优化首页",
-    "保持桌面优先与八业务/单audio；手机暂停，业务AI按BACKLOG另行推进",
-    "当前初程只同步wadwd65/-web-，不得改动另一个campus-insight仓库"
+    "下一轮首要：按27号让背景持续动态、生动灵动，改善白膜感；现有静态装饰不是验收结果",
+    "保持八入口清楚、文字可读，环境联动事务并在工作区退弱；不换无关世界",
+    "后续接真实后端再将25号API绑定明确上传操作，不把客户端预留当AI完成",
+    "只同步wadwd65/-web-，另一个campus-insight不动"
   ],
   "visualSources": [
     {
@@ -131,7 +127,7 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "published",
+    "pushStatus": "v028_ready_for_sync",
     "sourceCommit": "0bd79b21e1625f4773306c7d2d1fe96298c2d2ed",
     "verifiedAt": "2026-10-30T11:18:36.275841+00:00",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",

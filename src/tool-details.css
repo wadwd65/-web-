@@ -33,8 +33,11 @@
 /* Compositor-only cursor feedback; particles are pooled and stop when the pointer stops. */
 .pointer-feedback{position:fixed;inset:0;pointer-events:none!important;z-index:1500;overflow:hidden;contain:strict}
 .pointer-feedback>i{position:absolute;display:block;opacity:0;pointer-events:none;border-radius:50%;will-change:transform,opacity}
-.pointer-reticle{left:0;top:0;width:24px;height:24px;border:1px solid #287fb1;transition:opacity .14s}
-.pointer-spark{width:2px;height:2px;background:#3c8ab7}
-.pointer-echo{width:16px;height:16px;border:1px solid #287fb1}
+.pointer-feedback{--pointer-color:#247dab}
+.pointer-feedback[data-surface=music]{--pointer-color:#b5eaff}
+.pointer-feedback[data-surface=popup],.pointer-feedback[data-surface=music]{position:absolute;width:100%;height:100%}
+.pointer-reticle{left:0;top:0;width:24px;height:24px;border:1px solid var(--pointer-color);transition:opacity .14s}
+.pointer-spark{width:3px;height:3px;background:var(--pointer-color)}
+.pointer-echo{width:28px;height:28px;border:1.3px solid var(--pointer-color);box-shadow:0 0 0 4px #51a9d00b}
 .experience-shell.is-covered .experience-world::before,.experience-shell.is-covered .experience-world::after{animation-play-state:paused}
 @media(prefers-reduced-motion:reduce){.pointer-feedback{display:none}}
