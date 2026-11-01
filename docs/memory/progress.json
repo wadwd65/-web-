@@ -5,7 +5,7 @@
   "releasedVersion": "0.32.0",
   "workState": "reviewed_internally",
   "objective": "完成33号第1/2项：共享简易/完整工作区、有效低帧自动降级与恢复、真实AI必要补问/纠正/多事项选择；保留完整浅色三维。",
-  "latestUserRequest": "先做改进表1、2项，完成必须自检，不满意打回重做。",
+  "latestUserRequest": "上传当前v0.32完整源码/资源到正确仓库；旧版本仅补说明；在桌面参赛包建立持续总日志。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
@@ -21,7 +21,7 @@
     "api": "真实同源Node助手网关与DeepSeek function calling；四项白名单工具，共用工资/合同规则；取消、超时、限额、Origin/Host与输入证据校验。旧文档review客户端仍仅协议预留。",
     "copy": "首页、工具目录与对话采用直接自然用语，能力说明区分本地规则、真实助手与未完成OCR/RAG。",
     "ai": "真实DeepSeek先plan_tasks识别意图/事项（最多3候选）、必要补问（最多3项）/先选一件/纠正/未知/超范围；原4项执行工具仍共用规则，非ready不执行。补问与选择的固定安全提示标记guide，解释/工具后的模型文字标记model。金额分次原话逐段校验、最新更正/撤回校验；新用户消息后旧应用停用，仅最新结果可显式填入工具/清单。无OCR/RAG，材料不自动发。",
-    "performance": "v0.31缓存实际CSS赋值、同形几何复用、静态局部矩阵固定/世界矩阵单次更新、拾取数组复用及可见过滤、脉冲实例化；播放器悬停只预取字节，实际打开才解析/建场景。未降低DPR/粒子/阴影/动画，未实现自动简易。 v0.32简易卸载事务/音乐三维，首访简易不请求Three场景/GLB/盘面。有效RAF采样窗口、预热和排除项、自动降级/手动恢复生产控制器已实现；阈值仅帧序列模拟验证，低配实机待校准。"
+    "performance": "v0.31缓存实际CSS赋值、同形几何复用、静态局部矩阵固定/世界矩阵单次更新、拾取数组复用及可见过滤、脉冲实例化；播放器悬停只预取字节，实际打开才解析/建场景。未降低DPR/粒子/阴影/动画；v0.31时自动简易未实现。 v0.32简易卸载事务/音乐三维，首访简易不请求Three场景/GLB/盘面。有效RAF采样窗口、预热和排除项、自动降级/手动恢复生产控制器已实现；阈值仅帧序列模拟验证，低配实机待校准。"
   },
   "modules": [
     {
@@ -98,16 +98,16 @@
     "visualAcceptance": "internally reviewed only; user feedback pending",
     "manual": "独立5232桌面：冷简易0canvas；简易选曲→完整→简易，audio=1/ready4同src，进度约0.1→17.4s。工资三项→补个税66/其他0，请求中切完整再简易仍busy→6534；更正社保900→旧按钮disabled/新结果6434→原工资工具；工作区来回切模式保险900、结果/清单保持。多事项两选项，点租房仅聚焦租房；纠正按钮预填输入框。无console warn/error。",
     "performance": "简易真实资源请求/0canvas隔离已验；自动降级/手动覆盖/暂停排除由实际生产控制器输入10/24/60/120FPS帧序列模拟验证，不是低配CPU/GPU实测。完整画质不降，未用高配FPS证明低配已通过。",
-    "scope": "desktop only; real DeepSeek plus four bounded tools via local Node service; no OCR/RAG/full multimodal workflow or dual modes",
+    "scope": "desktop only; real DeepSeek plus four bounded tools via local Node service; no OCR/RAG/full multimodal workflow ; dual modes implemented, low-end hardware verification pending",
     "savedPreview": "独立保存版5234实际0.32，index与源dist字节相同，AI配置可用，音频Range206/64字节；实发合成工资问题生成两项补问，最终并排/提交按钮可见；无warn/error。 默认5186也通过版本/index/AI配置/Range206核验。 默认完整835宽桌面：mode=full、事务canvas=1/audio=1，页首760/760无溢出，控制台无warn/error；另存补问并排画面。",
     "secretHandling": "沿用工程外私有配置；评测只发合成文字，不保存真实用户材料或密钥。分发清单不含.env.local。 发布源153文本文件凭据模式扫描0匹配；不含.env.local；实际凭据仍仅工程外私有配置。"
   },
   "nextActions": [
-    "从33号第3项开始：单张合同图→抽取→用户校对，保留文字路径；再做小范围官方RAG与证据/清单主线，不扩多页PDF或全国政策。",
-    "收集用户低配设备前台帧表现，校准当前30FPS×5窗/15FPS×2窗与1.5秒预热；当前模拟通过不代替实机验收。",
-    "保留21例合成集并补真实脱敏纠正/未知/失败案例；规则金额不由模型散文决定，用户材料显式发送。",
-    "11/12–14新人任务测试、用户可控草稿/清除；11/14冻结、11/17材料、11/18提交。",
-    "仅同步wadwd65/-web-，campus-insight不动；本轮不追加音乐美术/手机/动态背景。"
+    "按36号下一轮先做v0.33：长任务事实/更正续接、真实等待与停止恢复，入口和补问主次调整，5–7小时。当前未实施。",
+    "再做单张合同图校对（先核验实际图像接口）→小范围官方RAG→合同核对/依据/清单闭环；范围不扩全国政策、多页PDF或八套Agent。",
+    "低配实机与2–3名新人验证、主动草稿/清除；保留上轮合成集并增加必要失败/纠正回归。",
+    "11/14冻结、11/15–17交付材料、11/18提交。计划执行34–46小时+6小时缓冲，按每日3–4小时推进；详见36号。",
+    "保持浅色完整三维/防误触/八工具/单audio；只同步wadwd65/-web-，不动campus-insight。"
   ],
   "visualSources": [
     {
@@ -132,11 +132,12 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "published",
+    "pushStatus": "documentation_sync_prepared",
     "sourceCommit": "ab374f12f0725e838b941e59d4d81bb4eae10b06",
     "verifiedAt": "2026-11-01",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "60b98c838ea1b5708c7bbb2799aa9a8f9d89c39a"
+    "previousPublishedHead": "60b98c838ea1b5708c7bbb2799aa9a8f9d89c39a",
+    "publicationReceipt": "outputs/v032-publication/repository-upload-receipt.json"
   },
   "sideDeliverables": [
     {
@@ -224,5 +225,45 @@
       53
     ],
     "futureContingencyHours": 6
+  },
+  "latestAudit": {
+    "date": "2026-11-01",
+    "document": "docs/35-v032-independent-review.md",
+    "scope": "code, saved screenshots and prior evidence; no new browser or online tests; no application changes",
+    "internalEstimate": 68,
+    "range": [
+      65,
+      72
+    ],
+    "meaning": "product maturity estimate, not official score or award prediction",
+    "nextRecommendation": "Next development is v0.33; dated execution plan in docs/36-next-execution-plan.md; currently planning only."
+  },
+  "executionPlan": {
+    "date": "2026-11-01",
+    "document": "docs/36-next-execution-plan.md",
+    "state": "planned_not_implemented",
+    "nextMilestone": "v0.33 long-task continuity and focused entry UI",
+    "executionHours": [
+      34,
+      46
+    ],
+    "bufferHours": 6,
+    "availableHoursNov2To17": [
+      48,
+      64
+    ],
+    "freeze": "2026-11-14",
+    "packageReady": "2026-11-17",
+    "deadline": "2026-11-18",
+    "mainline": "single contract image or text -> user correction -> bounded retrieval -> shared rules -> evidence -> editable questions/export",
+    "dependencies": "Verify actual vision API before choosing extraction; no assumed DeepSeek image support; keep evidence and capacity limits for conversation continuity.",
+    "review": "Visual/theme/process review on independent QA; candidate rollback if worse; no new runtime changes this turn."
+  },
+  "logbook": {
+    "source": "docs/DEVELOPMENT_LOG.md",
+    "desktopCopy": "开发总日志.md",
+    "history": "docs/VERSION_HISTORY.md",
+    "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
+    "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved."
   }
 }

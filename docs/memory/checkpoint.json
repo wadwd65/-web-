@@ -1,10 +1,10 @@
 {
   "version": "0.32.0",
-  "recordedAt": "2026-11-01T11:57:59.230Z",
+  "recordedAt": "2026-11-01T12:20:19.022Z",
   "workState": "reviewed_internally",
   "validationVersion": "0.32.0",
   "textNormalisation": "LF",
-  "sourceDigest": "e65bda53350b04c8d4b5ddcd7595e81f9a9fdcbcf96f60022694a922c3b847e0",
+  "sourceDigest": "ba5a29cbd17daa9b98d831b31aa5876f9933460cde6983f14c696166f25c6fd0",
   "files": [
     {
       "path": ".env.example",
@@ -12,7 +12,7 @@
     },
     {
       "path": "AGENTS.md",
-      "sha256": "a0aef2e6cdedbff3e9c4c395ef9b6c5a49bd5529e3580d37a45f5b02682da5d6"
+      "sha256": "59a3fba0dabe737c950c93714dc1c3956ff71c3bca6500a50cea838766d4d7a9"
     },
     {
       "path": "docs/memory/ARCHITECTURE.md",
@@ -20,19 +20,19 @@
     },
     {
       "path": "docs/memory/BACKLOG.md",
-      "sha256": "7e52413c5ddd33d665adf71faa7f5aa80ff841163be97392945c24c59a2be985"
+      "sha256": "c2cdc29cd0c4ed6d10fa86858360fcbfccb69ef747edca948ddcf831ca1c62a5"
     },
     {
       "path": "docs/memory/DECISIONS.md",
-      "sha256": "b26065f6a92dfbcd174ec3da921e9a2c8956e5c52dab39954b5fc44a6245f7a8"
+      "sha256": "507f27dc1736e006dd74d3ddecb9730d9703ed7818e93e849f194f185851ec1b"
     },
     {
       "path": "docs/memory/SESSIONS.md",
-      "sha256": "2a217dba9c7cd06af3056a9882a3b5b8c2e8d6d8b32aed9e91ed378ed8407203"
+      "sha256": "5211766b6d60ba8657c29124ebd5252390ce9358f062c252db5af239eda569dc"
     },
     {
       "path": "docs/memory/progress.json",
-      "sha256": "a557c120f0ae66079fe4e417510dea5d39a4b244a9f929656c1d6aa0e776efb8"
+      "sha256": "736a4d4546afa3b96b8b31f93758d73e55f5c38761a335b965d74805ca3ee7b7"
     },
     {
       "path": "package-lock.json",
@@ -40,7 +40,7 @@
     },
     {
       "path": "package.json",
-      "sha256": "6af379894d689f110f3b1c72418db9160164c6c0931c3052ca253c731514f48a"
+      "sha256": "81867dabb2740412cb5e355cd25576e5d5c8913f9f44c5419142dfac984dad47"
     },
     {
       "path": "public/artwork/rhine-ascent.png",
@@ -521,6 +521,10 @@
     {
       "path": "tools/serve.mjs",
       "sha256": "ddebb54dc2c5ff033b0f940dbbcdd5039ac981f91e7557a736990f01c7da2a6d"
+    },
+    {
+      "path": "tools/sync-development-log.mjs",
+      "sha256": "13f90721867f140b3a117b7412f7af3cae4c9d26292683b602e16be2c8f91dbd"
     },
     {
       "path": "tools/verify-assistant.mjs",

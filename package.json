@@ -12,7 +12,8 @@
     "resume": "node tools/project-memory.mjs",
     "memory:check": "node tools/project-memory.mjs --check",
     "memory:stamp": "node tools/project-memory.mjs --stamp",
-    "evaluate:assistant": "node --experimental-strip-types tools/evaluate-assistant.mjs"
+    "evaluate:assistant": "node --experimental-strip-types tools/evaluate-assistant.mjs",
+    "log:sync": "node tools/sync-development-log.mjs"
   },
   "dependencies": {
     "lucide-react": "1.61.0",
