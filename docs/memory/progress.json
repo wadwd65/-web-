@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "updatedAt": "2026-11-01",
   "workingVersion": "0.29.0",
-  "releasedVersion": "0.28.0",
+  "releasedVersion": "0.29.0",
   "workState": "reviewed_internally",
   "objective": "完成全站走查和11月18日分步排期；统一主体/播放器钢蓝冷银环境和自然文案，保留八工具、单audio及原交互。",
   "latestUserRequest": "全站检查并以内部85分为目标分步安排11/18交付，用户每日3–4小时；随后要求主体与播放器统一，可改双方配色、交互关联和自然文案。",
@@ -11,7 +11,7 @@
   "release": {
     "url": "http://127.0.0.1:5186/?v=0.29#/home",
     "snapshot": "first-step-主体与音乐统一-v0.29",
-    "state": "saving_reviewed_candidate"
+    "state": "ready_for_user_review"
   },
   "implemented": {
     "business": "8项限定本地工具；询问清单新增手动添加/内容及事务搜索，原状态/编辑/导出/撤销保留。",
@@ -88,8 +88,8 @@
     },
     {
       "id": "save",
-      "status": "in_progress",
-      "acceptance": "独立v0.29保存点与最终预览/仓库同步收尾，旧v0.28保留。"
+      "status": "completed",
+      "acceptance": "v0.29独立源码/dist保存176文件匹配，旧v0.28保留；默认5186实际版本/样式/八入口/单audio与无溢出检查通过，正确仓库源码已推送。"
     }
   ],
   "validation": {
@@ -100,7 +100,7 @@
     "manual": "合同277字示例7项/3待确认；音乐列表/详情/旋转和实际播放readyState4，返回原合同结果；完整入场回放保留原文/结果、音频暂停点；835px页首760/760。",
     "performance": "未新增渲染循环；少一层全屏/工作区模糊，但未测用户低配，自动降级尚未实现。旧诊断静止约1FPS来自按需绘制，不能直接作为卡顿判据。",
     "scope": "desktop only; visual/copy release; no real backend/LLM/OCR/RAG/Agent or dual modes implemented",
-    "savedPreview": "pending final saved-package check"
+    "savedPreview": "保存版5186为0.29、index哈希与dist一致、音频Range206；实际首页新配色与文案、八入口、单audio/鼠标层、无入场残留与无页首溢出；浏览器控制台无warn/error。"
   },
   "nextActions": [
     "按29号排期和28号细节先完成共享工作区/双模式，默认完整、持续低帧自动简易、手动可回，先核对API接入条件",
@@ -132,11 +132,11 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "pending_v029",
-    "sourceCommit": "681f4c7c6345567d86b131d40e3602b901451eba",
-    "verifiedAt": "2026-10-30T12:08:33.678095+00:00",
+    "pushStatus": "published",
+    "sourceCommit": "23583959e55301bde5c81bb9421d684457b84a8d",
+    "verifiedAt": "2026-11-01",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "9a8ca901221f05c258132b9cf92bb6bcf7cdbc4b"
+    "previousPublishedHead": "7dfd22303adb2e43635dae4ed38777f1baa2c39c"
   },
   "sideDeliverables": [
     {
