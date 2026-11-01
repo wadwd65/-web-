@@ -87,8 +87,8 @@
     },
     {
       "id": "save",
-      "status": "saved_pending_push",
-      "acceptance": "208文件源码/dist逐文件哈希匹配，旧v0.31保留；保存版5234版本/index/AI配置/Range206通过，真实工资补问与双字段并排、完整标志、按钮全可见，无warn/error。待默认5186与仓库推送收尾。"
+      "status": "completed",
+      "acceptance": "208文件独立源码/dist快照逐文件哈希匹配，旧v0.31保留；保存版5234真实AI补问/视觉复核，默认5186实际0.32/index一致/AI配置可用/Range206；正确仓库源码已正常推送。"
     }
   ],
   "validation": {
@@ -99,8 +99,8 @@
     "manual": "独立5232桌面：冷简易0canvas；简易选曲→完整→简易，audio=1/ready4同src，进度约0.1→17.4s。工资三项→补个税66/其他0，请求中切完整再简易仍busy→6534；更正社保900→旧按钮disabled/新结果6434→原工资工具；工作区来回切模式保险900、结果/清单保持。多事项两选项，点租房仅聚焦租房；纠正按钮预填输入框。无console warn/error。",
     "performance": "简易真实资源请求/0canvas隔离已验；自动降级/手动覆盖/暂停排除由实际生产控制器输入10/24/60/120FPS帧序列模拟验证，不是低配CPU/GPU实测。完整画质不降，未用高配FPS证明低配已通过。",
     "scope": "desktop only; real DeepSeek plus four bounded tools via local Node service; no OCR/RAG/full multimodal workflow or dual modes",
-    "savedPreview": "独立保存版5234实际0.32，index与源dist字节相同，AI配置可用，音频Range206/64字节；实发合成工资问题生成两项补问，最终并排/提交按钮可见；无warn/error。",
-    "secretHandling": "沿用工程外私有配置；评测只发合成文字，不保存真实用户材料或密钥。分发清单不含.env.local。"
+    "savedPreview": "独立保存版5234实际0.32，index与源dist字节相同，AI配置可用，音频Range206/64字节；实发合成工资问题生成两项补问，最终并排/提交按钮可见；无warn/error。 默认5186也通过版本/index/AI配置/Range206核验。 默认完整835宽桌面：mode=full、事务canvas=1/audio=1，页首760/760无溢出，控制台无warn/error；另存补问并排画面。",
+    "secretHandling": "沿用工程外私有配置；评测只发合成文字，不保存真实用户材料或密钥。分发清单不含.env.local。 发布源153文本文件凭据模式扫描0匹配；不含.env.local；实际凭据仍仅工程外私有配置。"
   },
   "nextActions": [
     "从33号第3项开始：单张合同图→抽取→用户校对，保留文字路径；再做小范围官方RAG与证据/清单主线，不扩多页PDF或全国政策。",
@@ -132,11 +132,11 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "pending_v032",
-    "sourceCommit": "51e6f6325d3bed89374c0ac66edcd328885e78e2",
+    "pushStatus": "published",
+    "sourceCommit": "ab374f12f0725e838b941e59d4d81bb4eae10b06",
     "verifiedAt": "2026-11-01",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "f692675818ce477b5d5bccb45d75bbef25063124"
+    "previousPublishedHead": "60b98c838ea1b5708c7bbb2799aa9a8f9d89c39a"
   },
   "sideDeliverables": [
     {
