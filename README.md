@@ -1,8 +1,8 @@
-# 初程 FIRST STEP · 功能与交互增强 v0.28
+# 初程 FIRST STEP · 主体与音乐统一 v0.29
 
-面向初入职场毕业生的八事务工具原型，含独立的三维声音档案。本轮新增清单手动添加/搜索，恢复普通界面和原生弹层的悬停/点击反馈，将完整入场回放移到页首；预留业务API客户端及接入文档。保留v0.27首页、三维、八业务、快捷选曲与完整播放器。仅电脑端，手机暂缓。
+面向初入职场毕业生的八事务工具原型，音乐为辅助。v0.29统一主站、工作区外层和播放器的钢蓝/冷银视觉，阅读区保留浅底；操作文案更直接，宽桌面显示正在播放的曲名。保留原模型、抽取、旋转、鼠标、入场与八工具，仅电脑端。
 
-先读[本轮功能与检查记录](docs/26-interactions-and-functions-review.md)。恢复进度运行`npm run resume`，长期记忆入口为[docs/memory](docs/memory/README.md)；旧交接是历史。源码仓库：[wadwd65/-web-](https://github.com/wadwd65/-web-)。
+先读[本轮视觉复核](docs/30-visual-unity-v029.md)与[全站检查/交付计划](docs/29-site-review-and-delivery-plan.md)。恢复进度运行`npm run resume`，长期记忆入口为[docs/memory](docs/memory/README.md)；旧交接是历史。源码仓库：[wadwd65/-web-](https://github.com/wadwd65/-web-)。
 
 ## 本地运行
 
@@ -18,7 +18,7 @@ npm run memory:check
 npm run memory:stamp
 ```
 
-参赛包“开始预览.cmd”固定5186，首页`http://127.0.0.1:5186/?v=0.28#/home`，音乐页`#/music`，版本查`/__first-step-version`。五首本地音频、原始模型与五张场景图随包；在线音源仅失效备用。仅电脑端。GitHub保存源码，不代表已部署公网网站；自行启动时使用上述Vite命令。
+参赛包“开始预览.cmd”固定5186，首页`http://127.0.0.1:5186/?v=0.29#/home`，音乐页`#/music`，版本查`/__first-step-version`。五首本地音频、原始模型与五张场景图随包；在线音源仅失效备用。仅电脑端。GitHub保存源码，不代表已部署公网网站；自行启动时使用上述Vite命令。
 
 ## 当前范围
 
@@ -34,4 +34,4 @@ Offer、合同、工资、个税、社保、租房、广州补贴样例、离职
 
 [API预留说明](docs/25-api-integration.md)：.env.example默认空地址，客户端只有能力查询与合同/租房核对协议，带参数/原文/来源校验和取消超时；尚无业务后端，也未绑定业务按钮，不会自动发送材料。模型密钥必须由后端保管。
 
-用户指定下一轮优先[持续动态背景](docs/27-next-dynamic-background.md)；当前静态弧线/纹理仍待进一步改善，不能当动态背景验收。
+下一步按[总排期](docs/29-site-review-and-delivery-plan.md)实施[简易/完整模式与低配自动降级](docs/28-next-two-modes.md)，默认完整、持续低帧转简易、可手动恢复；目前尚未实现。然后接真实AI主线。[持续动态背景](docs/27-next-dynamic-background.md)后置并控制性能负担。85为内部验收目标，不是赛事得分承诺。

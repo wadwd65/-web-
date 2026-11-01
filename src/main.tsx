@@ -10,6 +10,7 @@ import './tool-details.css';
 import './music-player.css';
 import './home-overview.css';
 import './interaction-enhancements.css';
+import './terminal-unity.css';
 
 window.history.scrollRestoration = 'manual';
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);

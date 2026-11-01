@@ -65,35 +65,35 @@ export default function MusicPlayer({state,open,onClose,returnLabel,returnPage,r
   <div className="ma-environment" aria-hidden="true"><div className="ma-horizon"/><div className="ma-light-column"/></div>
   <header className="mc-header">
    <a className="mc-brand" href={`#/${returnPage}`} onClick={event=>{event.preventDefault();exit();}} aria-label={`返回${returnLabel}`}><RhineMark/><span>初程<small>FIRST STEP</small></span></a>
-   <div className="ma-header-title"><h1 id="music-console-title" tabIndex={-1} ref={heading}>声音档案</h1><small>RHINE LAB / SOUND COLLECTION</small></div>
-   <nav className="ma-view-nav" aria-label="音乐视图"><button onClick={()=>setView('collection')} aria-current={view==='collection'?'page':undefined}><small>01</small>曲目阵列</button><span>/</span><button onClick={()=>reveal(candidate)} aria-current={view==='detail'?'page':undefined}><small>02</small>聆听唱片</button></nav>
+   <div className="ma-header-title"><h1 id="music-console-title" tabIndex={-1} ref={heading}>背景音乐</h1><small>FIRST STEP / BACKGROUND MUSIC</small></div>
+   <nav className="ma-view-nav" aria-label="音乐视图"><button onClick={()=>setView('collection')} aria-current={view==='collection'?'page':undefined}><small>01</small>曲目列表</button><span>/</span><button onClick={()=>reveal(candidate)} aria-current={view==='detail'?'page':undefined}><small>02</small>唱片详情</button></nav>
    <button className="mc-back" onClick={exit}><ArrowLeft size={15}/><span>返回{returnLabel}</span></button>
   </header>
   <main className="ma-world" inert={!mode.interactive}>
    <div className={`ma-spatial ${ready?'is-ready':''}`}>
     {sceneMounted&&!failed&&<Suspense fallback={null}><ArchiveScene selected={candidate} detail={view==='detail'} current={state.index} playing={state.playing} reduced={mode.reduced} enabled={mode.present} revealed={mode.phase==='entering'||mode.phase==='open'} preview={hovered} onPick={reveal} onHover={setHovered} onReady={()=>{setReady(true);mode.markReady();}} onFailure={()=>{setFailed(true);setReady(true);mode.markReady();}}/></Suspense>}
-    {!ready&&<div className="ma-loading" role="status"><i/><span>正在装载声音档案</span><small>LOADING COLLECTION</small></div>}
+    {!ready&&<div className="ma-loading" role="status"><i/><span>正在打开播放器</span><small>LOADING COLLECTION</small></div>}
     {failed&&<div className="ma-fallback"><Disc3 size={64}/><span>三维视图暂不可用</span><small>仍可通过曲目目录选歌与播放</small><button onClick={()=>{setFailed(false);setReady(false);}}>重试三维视图<ArrowUpRight size={13}/></button></div>}
     <div className="ma-scene-heading" aria-hidden="true"><i/><span>{view==='detail'?'OPTICAL RECORD / OPEN EDITION':'PHYSICAL COLLECTION / 05 EDITIONS'}</span><span>RHINE LAB</span></div>
     <div className="ma-scene-index" aria-hidden="true"><span>{String(previewIndex+1).padStart(2,'0')}<i> / 05</i></span><div><small>{musicEdition(previewIndex).word}</small><p>{previewTrack.name}</p></div></div>
-    <div className="ma-spatial-tools"><span><i/>{view==='detail'?'拖动查看光学反射 · 滚轮缩放':'悬停唤起 · 点击抽取'}</span><span className="ma-atmosphere-name">SCENE / {MUSIC_ATMOSPHERES[candidate]}</span></div>
+    <div className="ma-spatial-tools"><span><i/>{view==='detail'?'拖动查看唱片 · 滚轮缩放':'移到唱片上预览 · 点击打开'}</span><span className="ma-atmosphere-name">SCENE / {MUSIC_ATMOSPHERES[candidate]}</span></div>
    </div>
    <aside className="ma-information">
     <section className="ma-collection" aria-hidden={view!=='collection'} inert={view!=='collection'} aria-label="曲目目录">
      <div className="ma-eyebrow"><span>SOUND COLLECTION</span><span>VOL. 01</span></div>
-     <h2>让声音，<br/>有迹可循。</h2><p className="ma-collection-note">五张唱片，五种向远方的回响。</p>
-     <div className="ma-list-head"><span>选择一张档案</span><span>01—05</span></div>
-     <div className="ma-record-list">{SOUNDTRACKS.map((track,index)=><button key={track.cid} className="ma-record-row" aria-label={`展开曲目档案：${track.name}`} aria-pressed={candidate===index} data-hover={hovered===index} style={{'--row-accent':musicEdition(index).accent} as CSSProperties} onMouseEnter={()=>setHovered(index)} onMouseLeave={()=>setHovered(-1)} onFocus={()=>setHovered(index)} onBlur={()=>setHovered(-1)} onKeyDown={event=>listKey(event,index)} onClick={()=>reveal(index)}><span className="ma-row-number">{String(index+1).padStart(2,'0')}</span><img src={editionArtwork(index)} alt=""/><span className="ma-row-copy"><strong>{track.name}</strong><small>{track.note}</small></span>{state.index===index?<Headphones className="ma-playing-mark" size={13}/>:<ArrowUpRight className="ma-row-arrow" size={14}/>}<time>{time(track.duration)}</time></button>)}</div>
-     <p className="ma-help"><span>浏览档案</span>不会打断当前音乐<ArrowUpRight size={12}/></p>
+     <h2>想听哪一首？</h2><p className="ma-collection-note">选好就能听。返回办事页面，音乐也不会停。</p>
+     <div className="ma-list-head"><span>选一首音乐</span><span>01—05</span></div>
+     <div className="ma-record-list">{SOUNDTRACKS.map((track,index)=><button key={track.cid} className="ma-record-row" aria-label={`查看唱片：${track.name}`} aria-pressed={candidate===index} data-hover={hovered===index} style={{'--row-accent':musicEdition(index).accent} as CSSProperties} onMouseEnter={()=>setHovered(index)} onMouseLeave={()=>setHovered(-1)} onFocus={()=>setHovered(index)} onBlur={()=>setHovered(-1)} onKeyDown={event=>listKey(event,index)} onClick={()=>reveal(index)}><span className="ma-row-number">{String(index+1).padStart(2,'0')}</span><img src={editionArtwork(index)} alt=""/><span className="ma-row-copy"><strong>{track.name}</strong><small>{track.note}</small></span>{state.index===index?<Headphones className="ma-playing-mark" size={13}/>:<ArrowUpRight className="ma-row-arrow" size={14}/>}<time>{time(track.duration)}</time></button>)}</div>
+     <p className="ma-help"><span>先看看唱片</span>点播放才会切换音乐<ArrowUpRight size={12}/></p>
     </section>
     <section className="ma-detail" aria-hidden={view!=='detail'} inert={view!=='detail'} aria-label="所选唱片详情">
-     <button className="ma-return-library" onClick={()=>setView('collection')}><ArrowLeft size={14}/>收回曲目阵列<span>ESC</span></button>
+     <button className="ma-return-library" onClick={()=>setView('collection')}><ArrowLeft size={14}/>返回曲目列表<span>ESC</span></button>
      <div className="ma-detail-copy" key={selected.cid}>
       <div className="ma-edition-heading"><img className="ma-cover" src={editionArtwork(candidate)} alt={`${selected.name}的场景主题盘面`}/><div><small>R / {String(candidate+1).padStart(2,'0')} — {edition.word}</small><span>{edition.mood}</span><em>明日方舟场景 / 主题重排</em></div></div>
       <h2>{selected.name}</h2><p className="ma-detail-note">{selected.note}</p>
       <div className="ma-facts"><span>{selected.artist}</span><i/><span>{time(selected.duration)}</span><i/><span>MSR / {selected.cid}</span></div>
-      <p className="ma-mood-line">{edition.subtitle}</p>
-      <button className="ma-play-selected" onClick={playSelected}><span className="ma-play-circle">{!pending&&(state.playing||state.loading)?<Pause size={20}/>:<Play size={20}/>}</span><span>{pending?'播放这张唱片':state.loading?'取消加载':state.playing?'暂停聆听':'开始聆听'}<small>{pending?'LOAD THIS EDITION':state.playing?'PAUSE RECORD':'PLAY RECORD'}</small></span><ArrowUpRight size={17}/></button>
+      <p className="ma-mood-line">{pending?'点播放，就换成这首。':'回到办事页面，音乐会接着播放。'}</p>
+      <button className="ma-play-selected" onClick={playSelected}><span className="ma-play-circle">{!pending&&(state.playing||state.loading)?<Pause size={20}/>:<Play size={20}/>}</span><span>{pending?'播放这张唱片':state.loading?'取消加载':state.playing?'暂停播放':'播放这首'}<small>{pending?'LOAD THIS EDITION':state.playing?'PAUSE RECORD':'PLAY RECORD'}</small></span><ArrowUpRight size={17}/></button>
       <div className="ma-selection-status" role="status"><i className={!pending&&state.playing?'is-live':''}/><span>{pending?`正在浏览 · 当前${state.playing?'播放':'曲目'}：${state.track.name}`:status}</span></div>
       <a className="ma-source" href={selected.page} target="_blank" rel="noreferrer">官方曲目来源<ArrowUpRight size={12}/></a>
      </div>

@@ -40,3 +40,7 @@ HomeTaskDirectory只负责八项名称/用途与原onOpen、onPreview回调；Ho
 ## v0.28 交互与服务边界
 
 PointerFeedback使用一个稳定portal宿主，按事件目标移动到body/原生dialog/popover，React管理其11个池化子节点，清理事件/动画/宿主；没有常驻空闲循环。Checklist仍由App持有问题，新增表单与搜索不改八事务计算。services/api-client为可注入fetch的独立适配层，services/index只读取公开base URL，未连接业务按钮；实际服务、权限与上传确认仍待实现。
+
+## v0.29 共享视觉层
+
+terminal-unity.css最后导入，共享钢蓝背景、冷银线条与文本token；首页/工作区外层/音乐使用同一个环境变量，工作阅读层保持浅底。它不复制业务或渲染器，不新增循环。Soundtrack.MusicEntry只在播放时显示曲名，窄桌面隐藏副标题；原单audio与音乐模式状态机继续负责生命周期。原12万余字节CSS仍有历史重叠，后续做共享工作区时合并，不把本轮样式覆盖当架构解耦已完成。

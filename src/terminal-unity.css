@@ -1,0 +1,172 @@
+/* One environment for tasks and music; the reading surface stays light. */
+:root {
+  --terminal-deep: #173a55;
+  --terminal-middle: #315b78;
+  --terminal-light: #76b5d7;
+  --terminal-text: #edf6fc;
+  --terminal-secondary: #b4cfdf;
+  --terminal-line: #a5d6ed38;
+  --terminal-accent: #a0ddfa;
+  --terminal-environment: radial-gradient(ellipse at 77% 31%, #517e9a 0%, #315b7866 38%, transparent 66%), linear-gradient(118deg, #173a55, #264e6b 62%, #1d405d);
+}
+
+.experience-shell { color: var(--terminal-text); background: var(--terminal-deep); }
+.experience-shell .experience-world,
+.experience-shell:not(.is-working) .experience-world,
+.experience-shell:not(.is-working) .experience-world.is-dynamic { background: var(--terminal-environment); }
+.experience-shell .experience-shade,
+.experience-shell:not(.is-working) .experience-shade {
+  background: linear-gradient(90deg, #173a55e8, #173a55a0 24%, transparent 53%), linear-gradient(0deg, #173a55 1%, #173a55e8 23%, transparent 55%);
+}
+.experience-shell.is-working .experience-shade { background: #16395066; }
+.experience-shell.is-working .experience-world { filter: saturate(.8); opacity: .48; }
+.home-backdrop-light { background: radial-gradient(ellipse at 78% 19%, #afdffb28, transparent 44%); }
+.home-backdrop > svg { color: #9ed2ef; }
+.home-backdrop::after { opacity: .09; }
+.home-environment-caption { color: #b6d9ec; opacity: .5; }
+
+.experience-shell .experience-header,
+.music-console .mc-header { border-bottom: 1px solid var(--terminal-line); }
+.experience-shell .experience-header::after,
+.music-console .mc-header::after { width: 48px; height: 2px; background: var(--terminal-accent); }
+.experience-shell .experience-brand,
+.experience-shell .experience-brand > svg { color: var(--terminal-text); stroke: currentColor; }
+.experience-shell .experience-brand small,
+.experience-shell .experience-team > small { color: var(--terminal-secondary); }
+.experience-shell .experience-team { color: #d7eaf5; border-color: var(--terminal-line); }
+.experience-shell .experience-team > span { color: #c9e1f0; }
+.experience-shell .experience-header-actions > button,
+.experience-shell .experience-header-actions .experience-replay-entry,
+.experience-shell .music-entry > button,
+.experience-shell .music-quick-picker > button { color: #d5e8f4; }
+.experience-shell .experience-header-actions small { color: #accbdf; }
+.experience-shell .experience-header-actions > button::after,
+.experience-shell .music-entry > button::after,
+.experience-shell .music-quick-picker > button::after { background: var(--terminal-accent); }
+.experience-shell .music-entry-open > i { background: #a4c7dd; }
+.experience-shell .music-entry-open.is-playing > i { background: #b1e6ff; }
+.music-entry-open .music-entry-label { display: flex; flex-direction: column; gap: 3px; align-items: flex-start; }
+.music-entry-open .music-entry-label > small { font: 9px var(--font); color: #bddbea; max-width: 125px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.experience-shell .experience-header-actions { gap: clamp(16px, 2.2vw, 32px); }
+
+.experience-shell .experience-section-label { color: #e6f2f9; }
+.experience-shell .experience-section-label > i { background: var(--terminal-accent); }
+.experience-shell .experience-section-label > small { color: #bdd5e5; }
+.experience-shell:not(.is-working) .experience-kicker,
+.experience-shell:not(.is-working) .experience-kicker > small { color: #accfe5; }
+.experience-shell:not(.is-working) .experience-story h1 { color: #f4faff; text-shadow: 0 3px 25px #102e4233; }
+.experience-shell:not(.is-working) .experience-story h1 > small { color: #9dbed4; }
+.experience-shell:not(.is-working) .experience-story > p { color: #d0e1ed; font-size: 13px; }
+.experience-shell:not(.is-working) .experience-enter { color: #d9f2ff; border-bottom-color: #addbf04f; }
+.home-enter-symbol { background: #c1e7fa; color: #1d4865; box-shadow: none; }
+.experience-enter:hover .home-enter-symbol { background: #edfaff; }
+.home-enter-copy > small { color: #abcde3; font-size: 11px; }
+.experience-shell:not(.is-working) .experience-enter > svg { color: #bce4fa; }
+.experience-shell:not(.is-working) .experience-task-details,
+.experience-shell:not(.is-working) .experience-story-foot { color: #bdd5e6; }
+.experience-shell:not(.is-working) .experience-story-foot > span { color: #b4d3e8; }
+.experience-shell:not(.is-working) .experience-task-details small { color: #92b7d1; }
+.experience-shell:not(.is-working) .experience-example { color: #c0e5fa; }
+.experience-shell .experience-spatial-note { color: #b4d4e8; }
+.experience-shell .experience-spatial-note small,
+.experience-shell .experience-spatial-note div > span { color: #9dbcd1; }
+
+.experience-shell:not(.is-working) .experience-footer { border-top-color: var(--terminal-line); }
+.home-directory-heading h2 { color: #edf7fe; }
+.home-directory-heading p,
+.home-directory-heading .home-usage-tip { color: #bdd4e3; }
+.home-preview-control,
+.home-preview-control > small,
+.home-preview-control > span > small { color: #b6d2e5; }
+.home-task-link { color: #dcebf6; border-top-color: #a1c7dd32; }
+.home-task-copy > small { color: #afc9dc; font-size: 11px; }
+.home-task-icon,
+.home-task-arrow { color: #9ec7e0; }
+.home-task-number { color: #8eb2cc; }
+.home-task-link[aria-current=true],
+.home-task-link[aria-current=true] .home-task-icon { color: #c4ebff; }
+.home-task-link::after { background: #a2dcfa; }
+.home-task-link:hover { background: linear-gradient(90deg, #b0ddf417, transparent); }
+.experience-shell .home-task-link[data-hovered=true] { background-image: radial-gradient(100px circle at var(--mx) var(--my), #b2dff229, transparent 80%); }
+.experience-shell .experience-scene-tools > p,
+.experience-shell .home-scene-settings { color: #b6d0e2; }
+.home-scene-settings > div { border-color: #8bb7d24f; background: #244a64fa; color: #deedf6; box-shadow: 0 12px 35px #10283944; backdrop-filter: none; }
+.home-scene-settings > div > button { border-bottom-color: #9dc4da24; }
+.experience-shell .experience-systemline,
+.experience-shell .experience-systemline button,
+.experience-shell .experience-systemline > span > span { color: #a0c0d7; }
+.experience-shell .experience-systemline > span > i { background: #9ed5f4; }
+.experience-shell .experience-cinema-return,
+.experience-shell .experience-cinema-return > small { color: #d5eaf8; }
+
+.experience-shell .scene-label-title { color: #b6d8ed; text-shadow: 0 1px 9px #15364d; }
+.experience-shell .scene-label-title > small,
+.experience-shell .scene-label-title > span { color: #a8cfe8; }
+.experience-shell .scene-dossier-label[data-hot=true] .scene-label-title,
+.experience-shell .scene-dossier-label:focus-within .scene-label-title { color: #e0f5ff; border-color: #b4def6; }
+.experience-shell .scene-label-actions > button,
+.experience-shell .scene-label-actions > button > span,
+.experience-shell .scene-part-label,
+.experience-shell .scene-part-label > span { color: #daeffb; text-shadow: 0 1px 8px #16384f; }
+.experience-shell :is(.experience-header,.experience-overview,.experience-footer,.experience-scene-tools,.experience-work-context) :is(button,a):hover { color: #fff; }
+
+.experience-shell .experience-work-context { color: #edf6fc; }
+.experience-shell .experience-work-context > h2 { color: #edf6fc; }
+.experience-shell .experience-work-context > p,
+.experience-shell .experience-work-context .context-state,
+.experience-shell .experience-work-context ol,
+.experience-shell .experience-work-context ol span,
+.experience-shell .experience-work-context > button { color: #bcd5e6; }
+.experience-shell .context-id,
+.experience-shell .context-id > small { color: #a8cfe7; }
+.experience-shell .context-id > span { color: #a8ddf8; }
+.experience-shell.is-working .experience-footer { border-color: var(--terminal-line); }
+.experience-shell.is-working .experience-archive-label,
+.experience-shell.is-working .experience-archive-label > span,
+.experience-shell.is-working .experience-archive-label > div { color: #bad6e8; }
+.experience-shell.is-working .experience-footer > nav > button { color: #c1d8e8; }
+.experience-shell.is-working .experience-footer > nav > button > span > small { color: #94b8d0; }
+.experience-shell.is-working .experience-footer > nav > button[aria-pressed=true] { color: #d6f2ff; }
+.experience-shell.is-working .experience-footer > nav > button > b { background: #a9ddfa; }
+.experience-shell .experience-workspace { background: #edf4f9f5; border: 1px solid #bdd7e6; box-shadow: 0 18px 65px #102b3e25; backdrop-filter: none; }
+
+/* Shared light and horizon continue through the existing reversible music transition. */
+.music-console { --music-ink: var(--terminal-text); --music-secondary: var(--terminal-secondary); --music-line: var(--terminal-line); --music-accent: #b5e5fc; }
+.music-console .ma-environment { background: var(--terminal-environment); }
+.music-console .ma-environment::before { opacity: .08; }
+.music-console .ma-light-column { border-left-color: #bfdff419; background: linear-gradient(90deg, transparent, #b3e0fa10, transparent); }
+.music-console .mc-back { color: #d1e6f4 !important; }
+.music-console .mc-brand small,
+.music-console .ma-header-title small,
+.music-console .ma-view-nav { color: #b2d0e4; }
+.music-console .ma-collection h2 { font-size: clamp(29px, 3.1vw, 43px); line-height: 1.25; letter-spacing: -.6px; }
+.music-console .ma-collection-note { max-width: 290px; font-size: 12px; line-height: 1.8; color: #c1d7e7; }
+.music-console .ma-list-head { font-size: 10px; color: #b4cfdf; }
+.music-console .ma-row-copy > small,
+.music-console .ma-record-row > time { color: #a8c7dc; font-size: 10px; }
+.music-console .ma-record-row { color: #d4e6f1; }
+.music-console .ma-help,
+.music-console .ma-detail-note,
+.music-console .ma-facts,
+.music-console .ma-selection-status,
+.music-console .ma-mood-line,
+.music-console .ma-spatial-tools { color: #b3d0e2; }
+.music-console .mc-current-mini span,
+.music-console .mc-current-mini small,
+.music-console .mc-system { color: #a6c6dd; }
+.music-console .mc-buttons > button,
+.music-console .mc-volume,
+.music-console .ma-seek-row { color: #bdd9eb; }
+.music-console .mc-buttons > button:is(:first-child,:last-child),
+.music-console .mc-volume > span { color: #9fc4dc; }
+.music-picker { color: #254960; border-color: #90b6ce; box-shadow: 0 14px 45px #102a3f55; }
+
+@media (min-width: 820px) and (max-width: 1100px) {
+  .experience-shell .experience-header-actions { gap: 14px; }
+  .music-entry-open .music-entry-label > small { display: none; }
+  .home-task-copy > small { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .experience-shell .experience-world,
+  .music-console .ma-environment { transition: none; }
+}

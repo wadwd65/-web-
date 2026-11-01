@@ -1,24 +1,25 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-30",
-  "workingVersion": "0.28.0",
+  "updatedAt": "2026-11-01",
+  "workingVersion": "0.29.0",
   "releasedVersion": "0.28.0",
   "workState": "reviewed_internally",
-  "objective": "桌面端增强询问清单、恢复全界面鼠标反馈及明显的入场回放，预留业务API客户端。",
-  "latestUserRequest": "增强功能并预留API，恢复悬停/点击反馈及入场回放；下一轮重点让背景更生动灵动、有持续动态。",
+  "objective": "完成全站走查和11月18日分步排期；统一主体/播放器钢蓝冷银环境和自然文案，保留八工具、单audio及原交互。",
+  "latestUserRequest": "全站检查并以内部85分为目标分步安排11/18交付，用户每日3–4小时；随后要求主体与播放器统一，可改双方配色、交互关联和自然文案。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5186/?v=0.28#/home",
-    "snapshot": "first-step-交互与API预留-v0.28",
-    "state": "ready_for_user_review"
+    "url": "http://127.0.0.1:5186/?v=0.29#/home",
+    "snapshot": "first-step-主体与音乐统一-v0.29",
+    "state": "saving_reviewed_candidate"
   },
   "implemented": {
     "business": "8项限定本地工具；询问清单新增手动添加/内容及事务搜索，原状态/编辑/导出/撤销保留。",
     "music": "五曲/单audio；首页切歌弹小菜单点选即播不跳页，播放器进入完整三维声音档案并接续曲目/进度；v0.25抽取、旋转及逐曲环境保留。",
-    "visual": "桌面首页明确产品用途、当前任务、主操作，八项两行直接入口各附用途；原银蓝三维与跨事务动态保留，补静态光场/弧线/细纹理，技术选项收纳为场景设置。音乐仍沿用v0.25。",
-    "interaction": "页首完整入场回放；普通界面/三维/选曲弹层/音乐页单层悬停短尾与点击扩散；输入及减少动态抑制。",
-    "api": "默认空配置、不自动发请求的类型化API客户端：能力查询与合同/租房核对，带上传确认/原文引用校验/超时取消；没有服务端或真实在线AI。"
+    "visual": "v0.29主体/工作区外层/音乐共用钢蓝环境与冷银细线，工作阅读层浅底；保留原三维与音乐并提高外层文字对比。",
+    "interaction": "原鼠标/入场/抽取/旋转和单audio保留；宽桌面页首显示播放曲名，播放器返回原事务，填写/结果/播放进度不丢。",
+    "api": "默认空配置、不自动发请求的类型化API客户端：能力查询与合同/租房核对，带上传确认/原文引用校验/超时取消；没有服务端或真实在线AI。",
+    "copy": "43处操作文案替换，八事务描述和播放器标题更直接；能力缺口、仅广州样例、来源与材料边界仍如实标明。"
   },
   "modules": [
     {
@@ -69,40 +70,44 @@
     "可追踪的Agent编排",
     "业务后端与授权数据存储",
     "全国政策维护",
-    "用户可控草稿保存"
+    "用户可控草稿保存",
+    "简易/完整双模式",
+    "自然语言问题分流与补问服务",
+    "运行低帧检测与自动切简易"
   ],
   "currentPlan": [
     {
-      "id": "interaction",
+      "id": "site_review",
       "status": "verified",
-      "acceptance": "界面/弹窗悬停和点击反馈正常；明显的页首回放能重复完整播放且保留填写与音乐"
+      "acceptance": "八模块/清单/能力说明/音乐独立走查，官方权重重核；29号分步计划按每日3–4小时预算，不冒称官方评分。"
     },
     {
-      "id": "checklist_api",
+      "id": "visual_unity",
       "status": "verified",
-      "acceptance": "手动问题/搜索与旧清单兼容；API默认不发请求、参数/引用校验、错误与取消有验证"
+      "acceptance": "主体/音乐同环境、工作区浅底；50项检查和构建通过；835px页首无溢出，音乐返回与入场回放保留合成结果和单audio。"
     },
     {
       "id": "save",
-      "status": "completed",
-      "acceptance": "桌面自检、构建、独立保存点与长期记忆一致，下一轮动态背景需求明确"
+      "status": "in_progress",
+      "acceptance": "独立v0.29保存点与最终预览/仓库同步收尾，旧v0.28保留。"
     }
   ],
   "validation": {
-    "version": "0.28.0",
-    "automated": "50 tests passed; API input guard follow-up 8/8 passed; TypeScript and production build passed",
-    "evidence": "outputs/v028-review",
-    "visualAcceptance": "interaction and function changes internally reviewed; background explicitly awaiting next round",
-    "manual": "清单手工新增/搜索/确认/撤销/防重复/实际TXT；普通页、选曲弹层、音乐页点击环实测；多次完整回放保留合同原文/路由/音乐与单audio；835px页首回放可见。",
-    "performance": "固定6粒子/4点击环，无新全屏canvas或空闲RAF；未重测旧3D场景帧率。",
-    "scope": "desktop_only; API client reserved, no actual backend or online business AI",
-    "savedPreview": "最终主5186为0.28且index哈希一致。保存版实际页首回放开启完整入场后正常结束，单回放按钮/鼠标层/audio、八项首页入口保留，页首无溢出，浏览器控制台无warn/error。"
+    "version": "0.29.0",
+    "automated": "50 tests passed, TypeScript and production build passed; existing >500KB Three shared chunk warning remains",
+    "evidence": "outputs/v029-review; outputs/site-audit-2026-10-31",
+    "visualAcceptance": "internally reviewed only; user feedback pending",
+    "manual": "合同277字示例7项/3待确认；音乐列表/详情/旋转和实际播放readyState4，返回原合同结果；完整入场回放保留原文/结果、音频暂停点；835px页首760/760。",
+    "performance": "未新增渲染循环；少一层全屏/工作区模糊，但未测用户低配，自动降级尚未实现。旧诊断静止约1FPS来自按需绘制，不能直接作为卡顿判据。",
+    "scope": "desktop only; visual/copy release; no real backend/LLM/OCR/RAG/Agent or dual modes implemented",
+    "savedPreview": "pending final saved-package check"
   },
   "nextActions": [
-    "下一轮首要：按27号让背景持续动态、生动灵动，改善白膜感；现有静态装饰不是验收结果",
-    "保持八入口清楚、文字可读，环境联动事务并在工作区退弱；不换无关世界",
-    "后续接真实后端再将25号API绑定明确上传操作，不把客户端预留当AI完成",
-    "只同步wadwd65/-web-，另一个campus-insight不动"
+    "按29号排期和28号细节先完成共享工作区/双模式，默认完整、持续低帧自动简易、手动可回，先核对API接入条件",
+    "11/5–7接真实模型/分类与最薄后端；不把本地模板或接口类型称AI已完成",
+    "11/8–11做一条图文合同→确认→小RAG→规则工具→证据/询问清单主线，保留未知和引用",
+    "11/12–14新人测试/保存清除/专业字段减负；11/14冻结，11/15–17回归、视频PDF与运行包；11/18提交",
+    "27号背景后置且遵守完整模式性能预算；只做桌面，只同步wadwd65/-web-，不动campus-insight"
   ],
   "visualSources": [
     {
@@ -127,10 +132,83 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "published",
+    "pushStatus": "pending_v029",
     "sourceCommit": "681f4c7c6345567d86b131d40e3602b901451eba",
     "verifiedAt": "2026-10-30T12:08:33.678095+00:00",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
     "previousPublishedHead": "9a8ca901221f05c258132b9cf92bb6bcf7cdbc4b"
+  },
+  "sideDeliverables": [
+    {
+      "id": "xianyu-service-kit-2026-10-31",
+      "date": "2026-10-31",
+      "scope": "用户另行要求根据现有能力准备闲鱼接单文案与配图",
+      "path": "outputs/xianyu-service-kit-2026-10-31",
+      "state": "prepared_locally_not_published",
+      "content": "3份范围明确的发布文案、报价与沟通模板、1张生成封面和2张同项目实机图；工具数据为合成演示",
+      "applicationSourceChanged": false,
+      "developmentNextAction": "原v0.28下一轮持续动态背景任务保留，未在本轮实施"
+    }
+  ],
+  "userFeedback": {
+    "date": "2026-10-31",
+    "lowEndPerformance": "用户报告较差配置电脑卡顿，尚未在对应设备定位或复测。",
+    "usability": "用户反馈选项与操作复杂，提出问题输入和筛选分流的简易入口。",
+    "acceptance": "当前版本未因旧内部检查而获得新用户反馈问题的验收。",
+    "modePolicy": "默认完整，卡顿自动切简易，允许手动恢复；覆盖助手此前建议的默认简易。"
+  },
+  "nextIteration": {
+    "status": "planned_not_implemented",
+    "plan": "docs/28-next-two-modes.md",
+    "priorities": [
+      "简易/完整双模式与共享工作区",
+      "低配加载/渲染隔离与实测",
+      "问题提交、分类、补问、纠正和工具结果闭环"
+    ],
+    "shared": "同一套八工具、规则、填写、结果、清单及单audio",
+    "background": "27号持续动态背景保留，后移至完整模式且需符合性能预算。",
+    "onlineClassifier": "尚无后端或在线问题分流服务，不能把模拟或规则匹配称为真实AI。",
+    "initialMode": "full",
+    "initialModeSource": "explicit_user_instruction_2026-10-31",
+    "automaticFallback": {
+      "status": "planned_not_implemented",
+      "trigger": "持续低帧/卡顿",
+      "targetMode": "simple",
+      "manualRestore": "始终可手动切回完整；建议本次访问尊重选择，避免反复强切",
+      "sampling": "仅前台且应持续绘制的有效窗口；过滤预热、后台、主动暂停或低频",
+      "candidateThresholdsNotYetValidated": {
+        "slowFps": 30,
+        "slowSeconds": 5,
+        "severeFps": 15,
+        "severeSeconds": 2
+      },
+      "preserve": "当前事务、输入、结果、请求与单audio曲目/进度",
+      "futureDefault": "自动降级不写成下次默认简易"
+    }
+  },
+  "deliveryPlan": {
+    "document": "docs/29-site-review-and-delivery-plan.md",
+    "deadline": "2026-11-18",
+    "timezone": "Asia/Shanghai",
+    "dailyHours": [
+      3,
+      4
+    ],
+    "availableDates": [
+      "2026-11-01",
+      "2026-11-17"
+    ],
+    "calendarDays": 17,
+    "availableHours": [
+      51,
+      68
+    ],
+    "baselineExecutionHours": 52,
+    "contingencyHours": 8,
+    "featureFreeze": "2026-11-14",
+    "packageReady": "2026-11-17",
+    "scoreTarget": 85,
+    "scoreMeaning": "内部验收目标，非官方分数/获奖保证；当前按官方权重保守自评约40–50。",
+    "coreScope": "保留八工具，一条签约核对AI主线做深；不扩手机、全国政策、账号平台或音乐功能。"
   }
 }
