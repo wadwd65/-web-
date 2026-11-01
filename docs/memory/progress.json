@@ -132,12 +132,13 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "documentation_sync_prepared",
+    "pushStatus": "published",
     "sourceCommit": "ab374f12f0725e838b941e59d4d81bb4eae10b06",
     "verifiedAt": "2026-11-01",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "60b98c838ea1b5708c7bbb2799aa9a8f9d89c39a",
-    "publicationReceipt": "outputs/v032-publication/repository-upload-receipt.json"
+    "previousPublishedHead": "df015ffaeaecff26465ba4b93691d1446772790e",
+    "publicationReceipt": "outputs/v032-publication/repository-upload-receipt.json",
+    "historyAndLogCommit": "097d39904f1d3226c458255a3f0684a199854c57"
   },
   "sideDeliverables": [
     {
@@ -264,6 +265,7 @@
     "desktopCopy": "开发总日志.md",
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
-    "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved."
+    "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
+    "status": "desktop_mirror_verified_and_main_archive_commit_pushed"
   }
 }
