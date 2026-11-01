@@ -1,25 +1,26 @@
 {
   "schemaVersion": 1,
   "updatedAt": "2026-11-01",
-  "workingVersion": "0.29.0",
+  "workingVersion": "0.30.0",
   "releasedVersion": "0.29.0",
   "workState": "reviewed_internally",
-  "objective": "完成全站走查和11月18日分步排期；统一主体/播放器钢蓝冷银环境和自然文案，保留八工具、单audio及原交互。",
-  "latestUserRequest": "全站检查并以内部85分为目标分步安排11/18交付，用户每日3–4小时；随后要求主体与播放器统一，可改双方配色、交互关联和自然文案。",
+  "objective": "浅色主体/音乐；首页直接提问+工具列表+询问清单，八工具迁入子页；修复三维误触并接通DeepSeek及受限工具调用。",
+  "latestUserRequest": "继续美化首页与聊天：轻量消息反馈、突出精准信息、不要增加复杂度；澄清前景三维子选项必须可点，只屏蔽后排误触。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5186/?v=0.29#/home",
-    "snapshot": "first-step-主体与音乐统一-v0.29",
-    "state": "ready_for_user_review"
+    "url": "http://127.0.0.1:5186/?v=0.30#/home",
+    "snapshot": "first-step-浅色AI入口与工具目录-v0.30",
+    "state": "saving_and_verifying"
   },
   "implemented": {
-    "business": "8项限定本地工具；询问清单新增手动添加/内容及事务搜索，原状态/编辑/导出/撤销保留。",
+    "business": "保留八项限定本地工具及共享询问清单，八工具统一迁入#/tools，支持完全不经AI手动操作。",
     "music": "五曲/单audio；首页切歌弹小菜单点选即播不跳页，播放器进入完整三维声音档案并接续曲目/进度；v0.25抽取、旋转及逐曲环境保留。",
-    "visual": "v0.29主体/工作区外层/音乐共用钢蓝环境与冷银细线，工作阅读层浅底；保留原三维与音乐并提高外层文字对比。",
-    "interaction": "原鼠标/入场/抽取/旋转和单audio保留；宽桌面页首显示播放曲名，播放器返回原事务，填写/结果/播放进度不丢。",
-    "api": "默认空配置、不自动发请求的类型化API客户端：能力查询与合同/租房核对，带上传确认/原文引用校验/超时取消；没有服务端或真实在线AI。",
-    "copy": "43处操作文案替换，八事务描述和播放器标题更直接；能力缺口、仅广州样例、来源与材料边界仍如实标明。"
+    "visual": "按用户否定v0.29的反馈恢复浅蓝银色主体；播放器随主体配色；首页提问区+三个主要入口，保留原三维、动态与署名。 聊天完整主题标志、消息入场/发送反馈、真实等待与停止；新答复优先展示开头，减少复杂选项。",
+    "interaction": "前景模型的图内/文字子选项保留，要求手势开始和结束均为稳定前景、同pointer/物体/子区域、总位移≤6px且在画布内；后排只预览，无任意双击跳页。工作区/音乐/对话共享原业务与单audio。",
+    "api": "真实同源Node助手网关与DeepSeek function calling；四项白名单工具，共用工资/合同规则；取消、超时、限额、Origin/Host与输入证据校验。旧文档review客户端仍仅协议预留。",
+    "copy": "首页、工具目录与对话采用直接自然用语，能力说明区分本地规则、真实助手与未完成OCR/RAG。",
+    "ai": "deepseek-flash真实在线；推荐工具、核对已知工资、核对已确认全日制合同文字、整理问题。用户点击后应用到原工具/清单；聊天仅内存，表单不自动发送；密钥只在本机独立私有配置中，不分发。 新回复突出规则关键数字/待确认项，问题保存前逐条预览，依据折叠；复制包含实际结果与问题。"
   },
   "modules": [
     {
@@ -64,50 +65,48 @@
     }
   ],
   "missingCapabilities": [
-    "在线LLM业务调用",
-    "OCR",
-    "有引用与版本的RAG知识库",
-    "可追踪的Agent编排",
-    "业务后端与授权数据存储",
+    "OCR与页码/置信度校对",
+    "有地区/版本/引用的RAG知识库",
+    "完整多模态签约主线与更完整的多事项Agent流程",
+    "公网业务后端身份、额度隔离及授权数据存储",
     "全国政策维护",
     "用户可控草稿保存",
-    "简易/完整双模式",
-    "自然语言问题分流与补问服务",
+    "简易/完整双模式及低配资源隔离",
     "运行低帧检测与自动切简易"
   ],
   "currentPlan": [
     {
-      "id": "site_review",
+      "id": "home_and_pointer",
       "status": "verified",
-      "acceptance": "八模块/清单/能力说明/音乐独立走查，官方权重重核；29号分步计划按每日3–4小时预算，不冒称官方评分。"
+      "acceptance": "首页三入口、#/tools八项；前景图内材料文字实点打开合同，后排双击仍停留home；同区域/稳定前景保护有测试。"
     },
     {
-      "id": "visual_unity",
+      "id": "deepseek",
       "status": "verified",
-      "acceptance": "主体/音乐同环境、工作区浅底；50项检查和构建通过；835px页首无溢出，音乐返回与入场回放保留合成结果和单audio。"
+      "acceptance": "真实合成工资/合同/缺字段补问；UI工资应用与2条HR问题加入清单通过。无配置/越权参数/取消等单测覆盖。"
     },
     {
       "id": "save",
-      "status": "completed",
-      "acceptance": "v0.29独立源码/dist保存176文件匹配，旧v0.28保留；默认5186实际版本/样式/八入口/单audio与无溢出检查通过，正确仓库源码已推送。"
+      "status": "in_progress",
+      "acceptance": "保存独立v0.30源码/dist、核对5186与正确远程；旧v0.29保留，不包含密钥。"
     }
   ],
   "validation": {
-    "version": "0.29.0",
-    "automated": "50 tests passed, TypeScript and production build passed; existing >500KB Three shared chunk warning remains",
-    "evidence": "outputs/v029-review; outputs/site-audit-2026-10-31",
+    "version": "0.30.0",
+    "automated": "66 tests passed; TypeScript and production build passed. Existing 583KB Three shared chunk warning remains.",
+    "evidence": "outputs/v030-review (home/chat screenshots and final saved-server receipts)",
     "visualAcceptance": "internally reviewed only; user feedback pending",
-    "manual": "合同277字示例7项/3待确认；音乐列表/详情/旋转和实际播放readyState4，返回原合同结果；完整入场回放保留原文/结果、音频暂停点；835px页首760/760。",
-    "performance": "未新增渲染循环；少一层全屏/工作区模糊，但未测用户低配，自动降级尚未实现。旧诊断静止约1FPS来自按需绘制，不能直接作为卡顿判据。",
-    "scope": "desktop only; visual/copy release; no real backend/LLM/OCR/RAG/Agent or dual modes implemented",
-    "savedPreview": "保存版5186为0.29、index哈希与dist一致、音频Range206；实际首页新配色与文案、八入口、单audio/鼠标层、无入场残留与无页首溢出；浏览器控制台无warn/error。"
+    "manual": "独立1280x720 QA：后排双击停留home，工具目录8项；首页发合成工资→真实calculate_salary→6534→点击应用原工资工具；prepare_questions→点击加入2项清单；手动合同277字示例；浅色音乐抽取/实际播放/返回清单。audio=1, readyState=4, no console warn/error. 最终5224实点前景合同材料成功；后排双击不跳页。新聊天显示规则金额6534、复制含关键数、两条HR问题先预览；完整标志与消息反馈已审查。835宽桌面页首760/760，无横向溢出。",
+    "performance": "未增加三维渲染循环，打开AI弹层暂停事务场景；低配尚未复测，自动降级未实现。",
+    "scope": "desktop only; real DeepSeek plus four bounded tools via local Node service; no OCR/RAG/full multimodal workflow or dual modes",
+    "savedPreview": "pending final saved-server verification"
   },
   "nextActions": [
-    "按29号排期和28号细节先完成共享工作区/双模式，默认完整、持续低帧自动简易、手动可回，先核对API接入条件",
-    "11/5–7接真实模型/分类与最薄后端；不把本地模板或接口类型称AI已完成",
-    "11/8–11做一条图文合同→确认→小RAG→规则工具→证据/询问清单主线，保留未知和引用",
-    "11/12–14新人测试/保存清除/专业字段减负；11/14冻结，11/15–17回归、视频PDF与运行包；11/18提交",
-    "27号背景后置且遵守完整模式性能预算；只做桌面，只同步wadwd65/-web-，不动campus-insight"
+    "按28/29号计划实现简易/完整共享工作区与低配隔离，默认完整、持续低帧转简易、可手动回切；本轮提问入口不等于双模式已完成",
+    "补自然语言多事项纠正与必要补问，沿用已接通DeepSeek和受限规则工具；不扩大音乐或手机范围",
+    "11/8–11补图文合同→校对→小RAG→工具→原文/来源/询问清单主线，未知/过期不猜",
+    "11/12–14新人测试、草稿/清除与专业字段减负；11/14冻结、11/17材料就绪、11/18提交",
+    "只同步wadwd65/-web-；campus-insight不动；动态背景按27号在性能稳定后补"
   ],
   "visualSources": [
     {
@@ -132,11 +131,11 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "published",
+    "pushStatus": "pending_v030",
     "sourceCommit": "23583959e55301bde5c81bb9421d684457b84a8d",
     "verifiedAt": "2026-11-01",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "7dfd22303adb2e43635dae4ed38777f1baa2c39c"
+    "previousPublishedHead": "ccd2bbf50eb6964fa3147390ed73436f75baf2d3"
   },
   "sideDeliverables": [
     {
@@ -155,10 +154,11 @@
     "lowEndPerformance": "用户报告较差配置电脑卡顿，尚未在对应设备定位或复测。",
     "usability": "用户反馈选项与操作复杂，提出问题输入和筛选分流的简易入口。",
     "acceptance": "当前版本未因旧内部检查而获得新用户反馈问题的验收。",
-    "modePolicy": "默认完整，卡顿自动切简易，允许手动恢复；覆盖助手此前建议的默认简易。"
+    "modePolicy": "默认完整，卡顿自动切简易，允许手动恢复；覆盖助手此前建议的默认简易。",
+    "latestVisual": "用户明确否定v0.29，要求浅色主体及播放器，不再把深色统一版当认可结果。"
   },
   "nextIteration": {
-    "status": "planned_not_implemented",
+    "status": "partially_started_not_complete",
     "plan": "docs/28-next-two-modes.md",
     "priorities": [
       "简易/完整双模式与共享工作区",
@@ -167,7 +167,7 @@
     ],
     "shared": "同一套八工具、规则、填写、结果、清单及单audio",
     "background": "27号持续动态背景保留，后移至完整模式且需符合性能预算。",
-    "onlineClassifier": "尚无后端或在线问题分流服务，不能把模拟或规则匹配称为真实AI。",
+    "onlineClassifier": "真实DeepSeek助手与八事务入口推荐已接通；多事项纠正、共享简易工作区与低帧自动降级尚未实现。",
     "initialMode": "full",
     "initialModeSource": "explicit_user_instruction_2026-10-31",
     "automaticFallback": {

@@ -44,3 +44,15 @@ PointerFeedback使用一个稳定portal宿主，按事件目标移动到body/原
 ## v0.29 共享视觉层
 
 terminal-unity.css最后导入，共享钢蓝背景、冷银线条与文本token；首页/工作区外层/音乐使用同一个环境变量，工作阅读层保持浅底。它不复制业务或渲染器，不新增循环。Soundtrack.MusicEntry只在播放时显示曲名，窄桌面隐藏副标题；原单audio与音乐模式状态机继续负责生命周期。原12万余字节CSS仍有历史重叠，后续做共享工作区时合并，不把本轮样式覆盖当架构解耦已完成。
+
+## v0.30 实际结构
+
+首页由HomeTaskDirectory提供三条主入口，ToolDirectory在#/tools展示八工具；ExperienceWorkspace保留Three/工作区/单audio状态，新增独立AIAssistant原生dialog，覆盖时暂停事务渲染。工具目录/清单不再把find(page)=-1传给选中模型。
+
+scene-pointer分别判断预览与前景动作；TaskArrayScene仅在按下与释放均属于已稳定前景的同一子选项时调用onAction，后排只选预览，无任意模型双击打开。慢速拖动按总位移判定，前景图内与工作区part文字均保留点击。
+
+assistant-client只发用户对话与当前模块名，做结构白名单校验；assistant-gateway为Node中间件，服务端保管私有配置，固定DeepSeek端点，多轮工具调用经证据验证后使用现有wages/contracts规则。原表单无自动采集；App收到用户点击的action才向Salary/Contract传入一次apply请求或调用共享addQuestions。没有另一套业务计算或服务器对话数据库。
+
+vite开发/预览、tools/serve生产构建预览、参赛包helper复用同一网关。服务只监听本机；公网多用户身份/额度隔离未做。terminal-unity已撤销v0.29深色主体覆盖，仅统一浅色音乐；assistant.css负责本轮新入口、目录与对话，不重画三维。
+
+聊天由AIAssistant管理仅本次对话，AssistantEvidence memo化呈现实际规则重点和清单预览；不从模型散文提取数字。CSS消息动画只在新节点出现时运行，等待点仅请求中活动，无新Three或常驻JS循环。复制包含规则数字/问题；回复完成定位到最新答复开头。

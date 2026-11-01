@@ -1,37 +1,51 @@
-# 初程 FIRST STEP · 主体与音乐统一 v0.29
+# 初程 FIRST STEP · 浅色 AI 入口与工具目录 v0.30
 
-面向初入职场毕业生的八事务工具原型，音乐为辅助。v0.29统一主站、工作区外层和播放器的钢蓝/冷银视觉，阅读区保留浅底；操作文案更直接，宽桌面显示正在播放的曲名。保留原模型、抽取、旋转、鼠标、入场与八工具，仅电脑端。
+面向初入职场毕业生的八项办事工具，音乐为辅助。首页可以直接向 DeepSeek 说明问题，也可以进入工具列表自行操作。三维前景模型的文字与子选项保留点击；后排只能切换预览，拖动、跨区域和转场中的命中不会执行动作。主体和播放器回到浅蓝银色，保留抽取、旋转、单音频、鼠标反馈和入场回放。仅电脑端。
 
-先读[本轮视觉复核](docs/30-visual-unity-v029.md)与[全站检查/交付计划](docs/29-site-review-and-delivery-plan.md)。恢复进度运行`npm run resume`，长期记忆入口为[docs/memory](docs/memory/README.md)；旧交接是历史。源码仓库：[wadwd65/-web-](https://github.com/wadwd65/-web-)。
+先读[本轮说明](docs/31-light-ai-entry-and-tools-v030.md)。恢复开发运行 `npm run resume`，再读 `docs/memory/progress.json` 与 `DECISIONS.md`。源码只同步 [wadwd65/-web-](https://github.com/wadwd65/-web-)。
 
 ## 本地运行
 
-Node.js 24.21.0+，安装依赖后：
+需要 Node.js 24.21.0+。开发：
 
 ```sh
 npm ci
 npm run dev -- --port 5211
-npm run build
 npm test
-npm run resume
-npm run memory:check
-npm run memory:stamp
+npm run build
 ```
 
-参赛包“开始预览.cmd”固定5186，首页`http://127.0.0.1:5186/?v=0.29#/home`，音乐页`#/music`，版本查`/__first-step-version`。五首本地音频、原始模型与五张场景图随包；在线音源仅失效备用。仅电脑端。GitHub保存源码，不代表已部署公网网站；自行启动时使用上述Vite命令。
+运行已有构建（包含本机 AI 服务，不是只打开 HTML）：
 
-## 当前范围
+```sh
+npm start
+```
 
-Offer、合同、工资、个税、社保、租房、广州补贴样例、离职均为限定范围本地工具。在线大模型、OCR、RAG、Agent和业务后端未接入，不是全国政策库或代办服务；金额规则不由模型编造。材料仅本次操作保留，只有询问清单和音乐偏好保存到浏览器，刷新边界未改。
+默认 `http://127.0.0.1:5186/?v=0.30#/home`；工具列表 `#/tools`；音乐 `#/music`。`/__first-step-version` 可核对实际版本。参赛包仍双击“开始预览.cmd”。开发、Vite preview 与保存版都使用同一 AI 网关。
+
+## DeepSeek 配置
+
+密钥只由本机 Node 服务读取。可在项目根目录使用不提交的 `.env.local`，或使用当前用户的 `~/.config/first-step/.env.local`；也可用 `FIRST_STEP_AI_ENV_FILE` 指定私有配置位置。环境变量优先，项目文件优先于用户配置。配置字段见 `.env.example`，不要放进 `VITE_*`。
+
+```dotenv
+DEEPSEEK_API_KEY=你的服务端密钥
+FIRST_STEP_AI_MODEL=deepseek-flash
+```
+
+本机配置不随 Git、dist、截图或参赛快照分发。其他电脑需要单独配置；无密钥会明确提示，八项本地工具仍可用。`GET /api/v1/assistant/status` 只表示是否有配置，实际回复后界面才显示“已回应”。
+
+助手通过真实模型调用四项白名单工具：推荐站内入口、已知工资金额核对、已确认全日制合同文字核对、整理询问清单。结果复用原工具与规则；点击操作按钮后才填入目标工具或加入清单。已有表单和文件不会自动发送；点击发送的对话文字会交给 DeepSeek。对话只在页面内存中保留，无服务器会话存储。
+
+本地接口仅监听回环地址，带同源/Host 检查、请求大小限制、并发/频次上限、超时和取消。它不是已部署的公网多用户后端；公网接入的身份、额度隔离与滥用控制仍需补齐。
+
+## 当前范围与缺口
+
+八项限定工具：Offer、合同、工资、个税、社保、租房、广州补贴样例、离职。数额仍按可测试规则计算，未知不补造；合同保留原文、依据与适用边界。没有 OCR、RAG、全国政策库或官方代办权限。已接入小范围多步工具调用，不代表完整多模态签约主线完成。原来的[文档 API 协议](docs/25-api-integration.md)仍仅预留，与本轮真实助手接口分别记录。
+
+默认完整、持续低帧自动转简易、手动切回的双模式方案仍待实现，见[28号计划](docs/28-next-two-modes.md)。低配置电脑尚未复测，不能以本机结果保证流畅。[总排期](docs/29-site-review-and-delivery-plan.md)：11/14 功能冻结、11/17 材料完成、11/18 提交；85 是内部目标。
 
 ## 音乐与署名
 
-五首对应五匣，悬停邻近联动，整匣抽取后显露盘芯；完整播放器中先浏览后播放，底部控制持续。保留旋转、进度、静音/音量、循环、前后曲、拖动和缩放。首页快捷菜单点选即播，重复点当前曲目保留进度；支持Esc、外部点击收起和方向键选曲，不预热完整三维播放器。完整模式准备好再进入，退出后保留场景并暂停渲染，原事务暂停渲染，保持一个audio。
+首页“切歌”就地选曲，不跳页；“播放器”打开三维声音档案，返回原工具保留填写和播放。五首本地音频、模型及五张非角色场景随包，音乐仍只有一个 audio。
 
-模型：LBEILC / RhineLabUI，经MikeQu223/Rhine-Music-Database取得。固定版本、哈希与完整许可见[来源说明](THIRD_PARTY_NOTICES.md)及public/credits。运行时隐藏原内芯与固定编号、重配材质，安装独立唱片；未复制整套UI、源码或第三方运行时。五张场景来自PRTS，完整清单在public/credits/artwork-source.json；图片版权归原权利方，不纳入模型MIT许可。内部自检不等于用户审美认可，旧v0.24及更早版保留。
-
-## API与下一轮
-
-[API预留说明](docs/25-api-integration.md)：.env.example默认空地址，客户端只有能力查询与合同/租房核对协议，带参数/原文/来源校验和取消超时；尚无业务后端，也未绑定业务按钮，不会自动发送材料。模型密钥必须由后端保管。
-
-下一步按[总排期](docs/29-site-review-and-delivery-plan.md)实施[简易/完整模式与低配自动降级](docs/28-next-two-modes.md)，默认完整、持续低帧转简易、可手动恢复；目前尚未实现。然后接真实AI主线。[持续动态背景](docs/27-next-dynamic-background.md)后置并控制性能负担。85为内部验收目标，不是赛事得分承诺。
+模型作者 LBEILC / RhineLabUI，经 MikeQu223/Rhine-Music-Database 取得。固定版本、哈希及 MIT 见 [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES.md) 和 `public/credits`。运行时材质、盘芯、布局与交互独立改造；五张 PRTS 场景不属于模型 MIT 许可。旧保存点保留，内部审美检查不等于用户认可。

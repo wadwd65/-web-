@@ -152,7 +152,7 @@ export function analyzeContract(input: ContractInput): Finding[] {
   const text = typeof input.text === 'string' ? input.text.trim() : '';
   const scope = finding({
     id: 'scope', category: '核对范围', status: 'noted', title: '本次结果来自本地文本规则',
-    summary: '尚未接入在线模型。仅定位已提供文字中的部分条款，并对用户确认的固定期限月份做区间对照；无法核实签署背景、附件、实际履行或条款整体效力。依据为中国大陆《劳动合同法》2012年修正全文，核验日期2026-10-26。',
+    summary: '这份结果使用本地文本规则：定位已提供文字中的部分条款，并对已确认的固定期限月份做区间对照；无法核实签署背景、附件、实际履行或条款整体效力。依据为中国大陆《劳动合同法》2012年修正全文，核验日期2026-10-26。',
     quote: '', article: '第十七条、第十九条、第二十二条、第二十三条、第二十五条',
     question: '提供的是完整的劳动合同吗？是否还有附件、补充协议或其他约定需要一并核对？',
   });

@@ -1,46 +1,46 @@
 {
-  "version": "0.29.0",
-  "recordedAt": "2026-11-01T05:26:25.417Z",
+  "version": "0.30.0",
+  "recordedAt": "2026-11-01T06:20:01.055Z",
   "workState": "reviewed_internally",
-  "validationVersion": "0.29.0",
+  "validationVersion": "0.30.0",
   "textNormalisation": "LF",
-  "sourceDigest": "ec1e4c22d1647936f5853e557dcffc1aac9e1f7adf0411f26a6e953ea050c333",
+  "sourceDigest": "cc9d4f72cc9c806030daa9051e14c80ceb0a18d4d14b77726c7f72ac25587a4b",
   "files": [
     {
       "path": ".env.example",
-      "sha256": "a43cade00e7e7621bc7424225b25941eeecbe45c57a36ff7678b34b082003adc"
+      "sha256": "8af553b7d2242be2bb3f9ec1b88607f86cac73ebb979b0f7b7f8ba84b3c2fd2e"
     },
     {
       "path": "AGENTS.md",
-      "sha256": "e22ade590d65cd22e671bbed0ff7d5bf24f3084abb24cacd803fdc4c24c9df29"
+      "sha256": "6b7bdaa09c27ff24f4820c3206fa9c38233a68c581c5139ae75332e086c76447"
     },
     {
       "path": "docs/memory/ARCHITECTURE.md",
-      "sha256": "9656ba4b97ca3b3f4eb8bc1155d954d0c5ee3c2e2f6ae9a3308489b627c6033e"
+      "sha256": "521e26a5764d494d4b786b47f16a6b3668d6408b8309030e8426ee1f5a359838"
     },
     {
       "path": "docs/memory/BACKLOG.md",
-      "sha256": "48c75a074cefb2d4f91054845f41271c1db09a0b656211acda0f07add94be4a1"
+      "sha256": "82e6c2113e32e69e8e1968166f4f1b9687a0717883e20f1e7fa41be754943e0a"
     },
     {
       "path": "docs/memory/DECISIONS.md",
-      "sha256": "b86a2c3c8a3d65dc4c1198881834bdaac700aabd26fdd1f6f4de069d87ed81e5"
+      "sha256": "05b840d2e10219c4a25e456ca86300a9efb243279daea106de8578f209cc52f7"
     },
     {
       "path": "docs/memory/SESSIONS.md",
-      "sha256": "8b05932c14ea79726c23aa83627c6d675d5739b4cbb5ac37c6bb4344bd53b370"
+      "sha256": "a2ddeb0e7bd5a8d60354ba2f8b490290ba7215ee99c0390cdc435e4bd544ae6c"
     },
     {
       "path": "docs/memory/progress.json",
-      "sha256": "06c89f8d7c51ddac8771974469efa2aabf7036c47a59c703670a51d6a9a997cb"
+      "sha256": "f256926bfec5b0d9efa5ca8da4aae9012100fbbab1278976d3dd6fd009ffc153"
     },
     {
       "path": "package-lock.json",
-      "sha256": "36cf62301dd9878c1aef0a6dcf4c368a1bc5540055029919608d76b63c19f6bd"
+      "sha256": "3d9b673fad50dd8add7685389fc91b082778af5790fecb9cee2df21d79917318"
     },
     {
       "path": "package.json",
-      "sha256": "fea2d10fc660038eb927ab3d70185deed69990661031a74a96043d0b16abc4cf"
+      "sha256": "a1ed70b9c18186f7a76d92b4bab13312ae1037ede05d1b518494be6e6dca9e34"
     },
     {
       "path": "public/artwork/rhine-ascent.png",
@@ -147,8 +147,16 @@
       "sha256": "dda42b9b3b471d11c69820a64084d254a64b27761287ab0e35dd8387ec0a0bed"
     },
     {
+      "path": "src/AIAssistant.tsx",
+      "sha256": "9bd376c00256ef426b0626df69f9077e0e3b00ad0d5d6c60093df87ef7b21f72"
+    },
+    {
       "path": "src/App.tsx",
-      "sha256": "cb0df9e058694e787d40c5cd53712fc6b58d049dcefd406d0d27cede501ab28a"
+      "sha256": "8a760d26c6183ea1c9b6b2ca1015e5f9fe9ce71f76e7571e5846167f801685f3"
+    },
+    {
+      "path": "src/AssistantEvidence.tsx",
+      "sha256": "dfe0674396dc30f9fec2124d4efb4ac79c845808cdd5e0b494a9dd606ad42de7"
     },
     {
       "path": "src/ExhibitScene.tsx",
@@ -160,11 +168,11 @@
     },
     {
       "path": "src/ExperienceWorkspace.tsx",
-      "sha256": "40ed35c941836050947dc07058d30c057c51f68d2f06407ae57e5b15a259c111"
+      "sha256": "9bbf8ee01f618043e33353ee52bc39d79fa4fe4341a7a0fd517ce99bdc6d2425"
     },
     {
       "path": "src/HomeTaskDirectory.tsx",
-      "sha256": "12728081367a9eb6bf91706e3a7f572db539a752f8a763ad260d12312e292e40"
+      "sha256": "5827eca9e674096de45f00701ace5520b3ff89f2afb9f4c98f9f34703d66e070"
     },
     {
       "path": "src/MusicArchiveScene.tsx",
@@ -180,7 +188,7 @@
     },
     {
       "path": "src/MusicSpectrum.tsx",
-      "sha256": "bcaa4e101c8a1ae367eac81cf46f3b8181f2258eed316524a0cabf3298327e2d"
+      "sha256": "0ae2141f4150b133d2301ed98ea076ea2f48abbb06d3f2f1a67d54c23a0e08f0"
     },
     {
       "path": "src/NewModules.tsx",
@@ -196,7 +204,7 @@
     },
     {
       "path": "src/Salary.tsx",
-      "sha256": "04ee700313d9019e3582ec8273a3f8ada6bc6ebc4ce2e654a6ebc8c49654b466"
+      "sha256": "ad1ccad1a9841b3aa51a2b308927fa9d773361f30219be4dbf012ee42708a0e4"
     },
     {
       "path": "src/Soundtrack.tsx",
@@ -204,11 +212,19 @@
     },
     {
       "path": "src/TaskArrayScene.tsx",
-      "sha256": "1ec7340695533ed20fb20cd21a57487c63b13f82a3a8171a9f68dbca10dffa8e"
+      "sha256": "5e7b3b7d34be7ac136edaa1ced4a625161812ec76382682f75db1b1d0a335be5"
+    },
+    {
+      "path": "src/ToolDirectory.tsx",
+      "sha256": "e673ee67c5585eea7e28a146a9f3d4ed9c8b7341b99caa312485be7c02c248be"
     },
     {
       "path": "src/archive-motion.ts",
       "sha256": "f95eb46c3dd0654d3d6084f9492291bfc22aff2392ce076688d2e2e7cbd520ae"
+    },
+    {
+      "path": "src/assistant.css",
+      "sha256": "85456fe8d8a467c6bc7674572d19c439227c06422e610756b6dc55274294f1d4"
     },
     {
       "path": "src/audio-visual.ts",
@@ -224,7 +240,7 @@
     },
     {
       "path": "src/experience-modules.ts",
-      "sha256": "02a9ac4606436584d49eb059a983b856ebd77a9c7ab47851068c6e5c8dc37f81"
+      "sha256": "d576f9c1345c4075ba4b958e8ab774284ac27745309485a0fd71b18fdc431746"
     },
     {
       "path": "src/experience-workbench.css",
@@ -244,7 +260,7 @@
     },
     {
       "path": "src/lib/contracts.ts",
-      "sha256": "3e65dd002f2ad0dfb9d5d6cadb53077972d78e9887dc3ee80c74f8c52f2fe2e8"
+      "sha256": "a57250a84fd43fe0a2d0667adaa3fcfedbe9dfdeb7a61943dd43d95b9e9a0072"
     },
     {
       "path": "src/lib/download.ts",
@@ -264,7 +280,7 @@
     },
     {
       "path": "src/main.tsx",
-      "sha256": "ee5753280f8b2223058a5ee1169ee49e9a4a7997ad58151df745f43bd9a820fd"
+      "sha256": "f18dea02d478e9609a7a6186f4501a07feaa88eb4fbe5b1af04551fe03f8265d"
     },
     {
       "path": "src/module-guides.ts",
@@ -311,6 +327,10 @@
       "sha256": "9c932c74d9050666c39537b64bf82faa6c43a34323462f05825b54a8c2df58af"
     },
     {
+      "path": "src/scene-pointer.ts",
+      "sha256": "deaad23cdd570226ad4a6267416a06a9dd9bf85aab9e4d053959e0ab7bb694af"
+    },
+    {
       "path": "src/scene/architecture.ts",
       "sha256": "875220bd0c479827e355639eb5d923ecb9bab3e6d1a8731f74247022abf87ef2"
     },
@@ -331,6 +351,14 @@
       "sha256": "215e297443a3c06e42f16d9f23206e21327cf988ea00ec0b15d8b8b2e7596583"
     },
     {
+      "path": "src/services/assistant-client.ts",
+      "sha256": "427dd5cd9ebb236422d7470604ef04137242a8294edbc142969dc32af3476728"
+    },
+    {
+      "path": "src/services/assistant-types.ts",
+      "sha256": "20411a0878db75cefb1b610f25f6352ad386aef0a55866c82bb15948dd0aae44"
+    },
+    {
       "path": "src/services/index.ts",
       "sha256": "9e2ba5b9351ad26fc72d2ad26f5ced0ea0af26856c2c5d740ae19d3c94013a61"
     },
@@ -340,7 +368,7 @@
     },
     {
       "path": "src/terminal-unity.css",
-      "sha256": "e82f0db30e363cbe2e3502a089a3647c2ea7bae8d6344eedb14d89f6a8c66c4b"
+      "sha256": "05b478217f210ecfbcabaa3039a78160a8529942eab51e7231cd40662870ab2c"
     },
     {
       "path": "src/tool-details.css",
@@ -367,6 +395,14 @@
       "sha256": "f896c4d01b9ca8d31e058ccc8f3e9bbe4fdb34befe509a43f42d6b190e468d2b"
     },
     {
+      "path": "tests/assistant-client.test.ts",
+      "sha256": "8daa64286596f7cde6ebd5bc01ada117325efa898d74ab6dc3db4060887377f2"
+    },
+    {
+      "path": "tests/assistant.test.mjs",
+      "sha256": "e89565f42a0b40a23ab12e5b0a2e15deb2354bb8a213b62a452bf8c357ad3755"
+    },
+    {
       "path": "tests/domain.test.ts",
       "sha256": "ce444c799fc107948bd4a328e1fe7e7deb9eca381b72407b9053f2442f17684f"
     },
@@ -391,8 +427,16 @@
       "sha256": "70df9b80917ca97de679691894d81b8ad25a02a699407e2faaa28cbe922281c7"
     },
     {
+      "path": "tests/scene-pointer.test.ts",
+      "sha256": "06d53ab0cdae4cb5e6bc2fd89030b3cd29442ff595f6eb504e97853d129f5453"
+    },
+    {
       "path": "tests/scene.test.ts",
       "sha256": "f9a4ec550de90116140ec396949b3bb27ed3b0f3d8d21988a1fa4319545d62a9"
+    },
+    {
+      "path": "tools/assistant-gateway.mjs",
+      "sha256": "f81b0dd8ea954f57e700d24d5ca0f62ccf84e14b233ea3a1c0acf21d728d3a6a"
     },
     {
       "path": "tools/audio-static.mjs",
@@ -413,6 +457,14 @@
     {
       "path": "tools/review-desktop.html",
       "sha256": "cde08481c1a15d19c6354cfcda8514ebdf8c420a29199505c2e6d802d4c48863"
+    },
+    {
+      "path": "tools/serve.mjs",
+      "sha256": "ddebb54dc2c5ff033b0f940dbbcdd5039ac981f91e7557a736990f01c7da2a6d"
+    },
+    {
+      "path": "tools/verify-assistant.mjs",
+      "sha256": "48816d9cc94ef077a6aeae3f7c0d3a6c85946632c4b4b8a61745820fd4a16ddc"
     },
     {
       "path": "tsconfig.json",

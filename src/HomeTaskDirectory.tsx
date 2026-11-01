@@ -1,21 +1,13 @@
-import {ArrowRightLeft,ArrowUpRight,BriefcaseBusiness,Calculator,ChevronLeft,ChevronRight,FileCheck2,HandCoins,House,Info,ReceiptText,ShieldCheck} from 'lucide-react';
-import {EXPERIENCE_MODULES} from './experience-modules.ts';
+import {ArrowUpRight,FolderOpen,ListChecks,MessageCircle} from 'lucide-react';
 
-const entries=[
- {icon:BriefcaseBusiness,hint:'几个工作机会，放在一起比'},
- {icon:FileCheck2,hint:'签字之前，核对关键约定'},
- {icon:ReceiptText,hint:'应发、扣款、到账逐项对齐'},
- {icon:Calculator,hint:'按全年工资薪金试算税额'},
- {icon:ShieldCheck,hint:'参保、就医和转移的办理路线'},
- {icon:House,hint:'看清押金、费用与退租约定'},
- {icon:HandCoins,hint:'仅广州示例，先看申请条件'},
- {icon:ArrowRightLeft,hint:'交接、结算和社保转接'},
-] as const;
-
-export default function HomeTaskDirectory({selected,onOpen,onPreview}:{selected:number;onOpen:(index:number)=>void;onPreview:(index:number)=>void}){
+export default function HomeTaskDirectory({onAsk,onTools,onList,questionCount}:{onAsk:()=>void;onTools:()=>void;onList:()=>void;questionCount:number}){
  return <section className="home-directory" aria-labelledby="home-directory-title">
-  <header className="home-directory-heading"><div><h2 id="home-directory-title">你现在想办什么？</h2><p>8 项工具，点击直接进入</p></div><p className="home-usage-tip"><Info size={14}/><span>本机处理<span> · 刷新前请导出</span></span></p><div className="home-preview-control"><small>预览</small><button aria-label="上一个模块" onClick={()=>onPreview((selected+7)%8)}><ChevronLeft size={17}/></button><span>{EXPERIENCE_MODULES[selected]?.code??'01'}<small> / 08</small></span><button aria-label="下一个模块" onClick={()=>onPreview((selected+1)%8)}><ChevronRight size={17}/></button></div></header>
-  <nav className="home-task-navigation" aria-label="八个事务模块">{EXPERIENCE_MODULES.map((module,index)=>{const Icon=entries[index].icon;return <button key={module.id} className="home-task-link" onClick={()=>onOpen(index)} aria-label={`打开${module.label}`} aria-current={selected===index?'true':undefined}><span className="home-task-number">{module.code}</span><Icon className="home-task-icon" size={20}/><span className="home-task-copy"><strong>{module.label}</strong><small>{entries[index].hint}</small></span><ArrowUpRight className="home-task-arrow" size={17}/></button>;})}</nav>
+  <h2 id="home-directory-title" className="sr-only">选择使用方式</h2>
+  <nav className="home-primary-navigation" aria-label="主要入口">
+   <button onClick={onAsk}><span className="home-route-number">01</span><MessageCircle size={22}/><span><strong>直接问 AI</strong><small>说说遇到的事，一起找下一步</small></span><ArrowUpRight size={18}/></button>
+   <button onClick={onTools}><span className="home-route-number">02</span><FolderOpen size={22}/><span><strong>工具列表 <em>08</em></strong><small>不用 AI，也能自己核对和计算</small></span><ArrowUpRight size={18}/></button>
+   <button onClick={onList}><span className="home-route-number">03</span><ListChecks size={22}/><span><strong>询问清单 <em>{questionCount}</em></strong><small>留好要问的问题，带着清单去办</small></span><ArrowUpRight size={18}/></button>
+  </nav>
  </section>;
 }
 

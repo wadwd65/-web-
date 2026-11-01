@@ -9,6 +9,6 @@ export const EXPERIENCE_MODULES = [
   {id:'leaving',code:'08',label:'离职转接',english:'TRANSITION',phase:'走向下一站',headline:['告别一站，','接好下一程。'],description:'记下交接、工资结算和社保转接，办完一项记一项。',outputs:['交接台账','个人备注','转接导航'],input:'关系 / 试用期 / 日期与去向',ready:true},
 ] as const;
 export type ExperienceModule=(typeof EXPERIENCE_MODULES)[number];
-export type WorkspacePage=ExperienceModule['id']|'home'|'list';
+export type WorkspacePage=ExperienceModule['id']|'home'|'list'|'tools';
 export type ExperiencePage=WorkspacePage|'music';
-export function parseExperiencePage(hash:string):ExperiencePage{const route=hash.replace(/^#\/?/,'');return route==='music'||route==='home'||route==='list'||EXPERIENCE_MODULES.some(item=>item.id===route)?route as ExperiencePage:'home';}
+export function parseExperiencePage(hash:string):ExperiencePage{const route=hash.replace(/^#\/?/,'');return route==='music'||route==='home'||route==='list'||route==='tools'||EXPERIENCE_MODULES.some(item=>item.id===route)?route as ExperiencePage:'home';}

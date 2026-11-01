@@ -4,6 +4,8 @@ import { ArrowDown, ArrowRight, CheckCircle2, CircleHelp, Download, FileText, Pl
 import { calculatePayslip } from './lib/wages.ts';
 import type { SalarySignal } from './terminal-state.ts';
 import { saveText, recordTime } from './lib/download.ts';
+import type {PayslipInput} from './lib/wages.ts';
+import type {AssistantApply} from './services/assistant-types.ts';
 
 const EMPTY = { gross: '', insurance: '', fund: '', tax: '', other: '', received: '' };
 type PayForm = typeof EMPTY;
@@ -38,13 +40,14 @@ function PayDisplay({ result, gross }: { result: PayResult | null; gross: number
   </div>;
 }
 
-export default function Salary({ addQuestions, onSignal }: { addQuestions: (questions: { text: string; category: string }[]) => void; onSignal:(signal:SalarySignal)=>void }) {
+export default function Salary({ addQuestions, onSignal,applyRequest }: { addQuestions: (questions: { text: string; category: string }[]) => void; onSignal:(signal:SalarySignal)=>void;applyRequest:AssistantApply<PayslipInput>|null }) {
   const [form, setForm] = useState<PayForm>(EMPTY);
   const [result, setResult] = useState<PayResult | null>(null);
   const [error, setError] = useState('');
   const [demo, setDemo] = useState(false);
   const resultPanel = useRef<HTMLElement>(null);
   const amountInputs=useRef<Partial<Record<keyof PayForm,HTMLInputElement|null>>>({});
+  useEffect(()=>{if(!applyRequest)return;const values=Object.fromEntries(Object.entries(applyRequest.input).map(([key,value])=>[key,value===null?'':String(value)])) as PayForm;setForm(values);setDemo(false);calculate(values);},[applyRequest]);
   useEffect(()=>onSignal({gross:result?Number(form.gross):null,net:result?.net??null,deductions:result?.deductions??null}),[result,form.gross,onSignal]);
   useEffect(() => {
     if (result) resultPanel.current?.scrollIntoView({ block:'start', behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth' });

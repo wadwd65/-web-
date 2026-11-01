@@ -21,6 +21,8 @@ import { saveText, recordTime } from './lib/download.ts';
 import NewModules from './NewModules.tsx';
 import {SOURCES,VERIFIED} from './lib/eight-tools.ts';
 import type {ToolId,ToolSignal} from './terminal-state.ts';
+import type {AssistantAction,AssistantApply,ContractAssistantInput} from './services/assistant-types.ts';
+import type {PayslipInput} from './lib/wages.ts';
 
 type Page = ExperiencePage;
 type Question = { id: string; text: string; done: boolean; category: string };
@@ -29,7 +31,7 @@ const LAW = 'https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/bgt/art/2023/art_0abfdd2
 const SUBSIDY = 'https://rsj.gz.gov.cn/zmhd/cjwt/ldbz/content/post_10677608.html';
 const CHECKED = '2026.10.26';
 const NAV = [
-  { id: 'home', label: '工作台', english: 'OVERVIEW', icon: LayoutDashboard },
+  { id: 'home', label: '首页', english: 'OVERVIEW', icon: LayoutDashboard },
   { id: 'contract', label: '劳动合同核对', english: 'CONTRACT', icon: FileCheck2 },
   { id: 'salary', label: '工资条拆解', english: 'PAYSLIP', icon: Wallet },
   { id: 'subsidy', label: '补贴导航', english: 'SUPPORT', icon: Search },
@@ -62,7 +64,7 @@ function PageHeading({ number, english, title, description, right }: { number: s
 function ControlFace({ label, icon, code }: { label:ReactNode;icon:ReactNode;code:string }) {
   return <><span className="control-label">{label}</span><span className="control-action" aria-hidden="true"><small>{code}</small>{icon}</span></>;
 }
-function Contract({ demoSeed, addQuestions, notify, onSignal }: { demoSeed: number; addQuestions: (questions: { text: string; category: string }[]) => void; notify: (text: string) => void; onSignal:(signal:ContractSignal)=>void }) {
+function Contract({ demoSeed, addQuestions, notify, onSignal,applyRequest }: { demoSeed: number; addQuestions: (questions: { text: string; category: string }[]) => void; notify: (text: string) => void; onSignal:(signal:ContractSignal)=>void;applyRequest:AssistantApply<ContractAssistantInput>|null }) {
   const [text, setText] = useState('');
   const [months, setMonths] = useState('');
   const [probation, setProbation] = useState('');
@@ -80,6 +82,7 @@ function Contract({ demoSeed, addQuestions, notify, onSignal }: { demoSeed: numb
   const reviewRef = useRef<HTMLElement>(null);
   function loadDemo() { setText(DEMO_CONTRACT); setMonths('12'); setProbation('3'); setFindings(null); setError(''); setFilename('合成示例 · 劳动合同.txt'); setSample(true); setPreview(null); setScope('fulltime'); }
   useLayoutEffect(() => { if (demoSeed > 0) loadDemo(); }, [demoSeed]);
+  useEffect(()=>{if(!applyRequest)return;const input=applyRequest.input;try{const result=analyzeContract(input);setText(input.text);setMonths(input.contractMonths===null?'':String(input.contractMonths));setProbation(input.probationMonths===null?'':String(input.probationMonths));setScope('fulltime');setFilename('对话中提供的文字');setSample(false);setPreview(null);setError('');setFindings(result);setActive(result[0]?.id??'');}catch{setError('对话材料未能通过核对，请手动填写。');}},[applyRequest]);
   useEffect(() => () => { if (preview) URL.revokeObjectURL(preview.url); }, [preview]);
   useEffect(() => { if (findings) reviewRef.current?.scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'}); }, [findings]);
   function editText(value: string) { setText(value); setFindings(null); setSample(false); setError(''); setMonths(''); setProbation(''); setScope('unknown'); setFilename('手动输入的合同文字'); }
@@ -136,7 +139,7 @@ function Contract({ demoSeed, addQuestions, notify, onSignal }: { demoSeed: numb
           <textarea id="contract-text" ref={textRef} value={text} onChange={e => editText(e.target.value)} placeholder={'把需要核对的合同文字粘贴在这里。\n\n还没有材料？可先点击“载入合成示例”。'} className="contract-text" spellCheck={false} maxLength={60000} />
           <div className="text-count"><span>请确认内容完整、数字无误</span><span className="mono">{text.length.toLocaleString()} 字符</span></div>
           <div className="confirm-fields"><label className="field-label">用工类型<select ref={scopeRef} value={scope} onChange={e => { setScope(e.target.value); setFindings(null); }}><option value="fulltime">全日制劳动合同</option><option value="unknown">我还不能确认</option><option value="other">实习 / 劳务 / 非全日制</option></select></label><label className="field-label">确认合同期限（个月）<input type="number" min="0" max="1200" value={months} onChange={e => { setMonths(e.target.value); setFindings(null); }} placeholder="不明确可留空" /></label><label className="field-label">确认试用期（个月）<input type="number" min="0" max="120" value={probation} onChange={e => { setProbation(e.target.value); setFindings(null); }} placeholder="不明确可留空" /></label></div>
-          <p className="input-footnote">当前使用文本规则与确认值核对，尚未调用在线 AI。输入文件留在当前浏览器中。</p>
+          <p className="input-footnote">这里按本地规则核对文字与确认值。需要对话帮助时可点击页首“问 AI”，本工具的材料不会自动发送。</p>
         </div>
       </section>
       <section ref={reviewRef} className="panel review-panel"><div className="panel-heading"><div><ClipboardCheck size={17} /><h2>核对结果</h2></div>{findings ? <Tag tone="orange">{unresolved.length} 项待确认</Tag> : <span className="mono">REVIEW / 02</span>}</div>
@@ -214,7 +217,7 @@ function Checklist({ questions, change, add, go, notify }: { questions: Question
 function SourcesDialog({ open, close }: { open: boolean; close: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => { if (open && !ref.current?.open) ref.current?.showModal(); else if (!open && ref.current?.open) ref.current.close(); }, [open]);
-  return <dialog ref={ref} className="sources-dialog" onCancel={close} onClick={e => { if (e.target === e.currentTarget) close(); }} aria-labelledby="sources-title"><div className="dialog-inner"><div className="panel-heading"><div><ShieldCheck size={18} /><h2 id="sources-title">资料与当前能力</h2></div><button className="icon-button" onClick={close} aria-label="关闭资料说明"><X size={19} /></button></div><div className="dialog-body"><Tag tone="green">当前版本</Tag><h3>能帮你做什么，哪些还做不到</h3><p>当前有八项本地工具：条件对齐、文本规则核对、金额公式试算、办理路线和交接台账。补贴仍仅维护广州样例。在线大模型、图像文字识别、RAG 和 Agent 尚未接入。</p><div className="source-entry"><span>02 / 合同</span><a href={LAW} target="_blank" rel="noreferrer">《中华人民共和国劳动合同法》<ArrowUpRight size={14} /></a><p>本次关注第 17、19、22、23、25 条。规则只核对已提供文本与确认值，不代替对完整事实的法律判断。</p></div><div className="source-entry"><span>07 / 补贴</span><a href={SUBSIDY} target="_blank" rel="noreferrer">广州市求职创业补贴常见问题<ArrowUpRight size={14} /></a><p>发布于 2026-02-11，资料核验于 2026-10-26。这里只维护此条示例，不默认你身处广州。</p></div>{[SOURCES.tax,SOURCES.rates,SOURCES.rent,SOURCES.medical,SOURCES.transfer,SOURCES.card].map(source=><div className="source-entry" key={source.url}><span>扩展依据 · 核验 {VERIFIED}</span><a href={source.url} target="_blank" rel="noreferrer">{source.name}<ArrowUpRight size={14}/></a><p>{source.scope}</p></div>)}<div className="source-entry"><span>数据与保存</span><strong>文件在当前浏览器处理</strong><p>不会自动上传合同或工资信息。只有你加入的询问清单会保存在当前浏览器；可以逐项移除或导出。</p></div></div></div></dialog>;
+  return <dialog ref={ref} className="sources-dialog" onCancel={close} onClick={e => { if (e.target === e.currentTarget) close(); }} aria-labelledby="sources-title"><div className="dialog-inner"><div className="panel-heading"><div><ShieldCheck size={18} /><h2 id="sources-title">资料与当前能力</h2></div><button className="icon-button" onClick={close} aria-label="关闭资料说明"><X size={19} /></button></div><div className="dialog-body"><Tag tone="green">当前版本</Tag><h3>能帮你做什么，哪些还做不到</h3><p>当前有八项本地工具：条件对齐、文本规则核对、金额公式试算、办理路线和交接台账。补贴仍仅维护广州样例。AI 助手通过本机服务调用 DeepSeek，可推荐工具、核对已知工资金额、检查提供的合同文字并整理询问问题。图像文字识别与 RAG 尚未完成，AI 不会替你办理或提交申请。</p><div className="source-entry"><span>02 / 合同</span><a href={LAW} target="_blank" rel="noreferrer">《中华人民共和国劳动合同法》<ArrowUpRight size={14} /></a><p>本次关注第 17、19、22、23、25 条。规则只核对已提供文本与确认值，不代替对完整事实的法律判断。</p></div><div className="source-entry"><span>07 / 补贴</span><a href={SUBSIDY} target="_blank" rel="noreferrer">广州市求职创业补贴常见问题<ArrowUpRight size={14} /></a><p>发布于 2026-02-11，资料核验于 2026-10-26。这里只维护此条示例，不默认你身处广州。</p></div>{[SOURCES.tax,SOURCES.rates,SOURCES.rent,SOURCES.medical,SOURCES.transfer,SOURCES.card].map(source=><div className="source-entry" key={source.url}><span>扩展依据 · 核验 {VERIFIED}</span><a href={source.url} target="_blank" rel="noreferrer">{source.name}<ArrowUpRight size={14}/></a><p>{source.scope}</p></div>)}<div className="source-entry"><span>数据与保存</span><strong>文件在当前浏览器处理</strong><p>工具中的文件与表单不会自动上传。点击发送 AI 问题时，对话文字会经本机服务发送给 DeepSeek；对话不在本机持久保存。询问清单保存在当前浏览器，可移除或导出。</p></div></div></div></dialog>;
 }
 
 export default function App() {
@@ -228,10 +231,12 @@ export default function App() {
   const retainedPage=useRef<WorkspacePage>(page==='music'?(remembered==='music'?'home':remembered):page);if(page!=='music')retainedPage.current=page;const workspacePage=retainedPage.current;
   const [questions, setQuestions] = useState<Question[]>(initialQuestions);
   const [demoSeed, setDemoSeed] = useState(0);
+  const [salaryRequest,setSalaryRequest]=useState<AssistantApply<PayslipInput>|null>(null),[contractRequest,setContractRequest]=useState<AssistantApply<ContractAssistantInput>|null>(null);
+  const assistantApplyId=useRef(0);
   const [sourcesOpen, setSourcesOpen] = useState(false);
   const [toast, setToast] = useState('');
   useEffect(() => { const handler = () => { setPage(currentPage()); window.scrollTo({ top: 0, behavior: 'instant' }); }; window.addEventListener('hashchange', handler); return () => window.removeEventListener('hashchange', handler); }, []);
-  useEffect(() => { document.title = `${page==='music'?'音乐播放器':EXPERIENCE_MODULES.find(item => item.id === page)?.label ?? NAV.find(item => item.id === page)?.label ?? '工作台'} · 初程`; }, [page]);
+  useEffect(() => { document.title = `${page==='music'?'音乐播放器':page==='tools'?'工具列表':EXPERIENCE_MODULES.find(item => item.id === page)?.label ?? NAV.find(item => item.id === page)?.label ?? '首页'} · 初程`; }, [page]);
   useEffect(() => { if (!toast) return; const timer = setTimeout(() => setToast(''), 4200); return () => clearTimeout(timer); }, [toast]);
   function go(next: Page) { setPage(next); if (currentPage() !== next) window.location.hash = `/${next}`; else window.scrollTo({ top: 0, behavior: 'instant' }); }
   function openMusic(){
@@ -245,9 +250,15 @@ export default function App() {
   function changeQuestions(items: Question[]) { setQuestions(items); try { localStorage.setItem(STORE, JSON.stringify(items)); return true; } catch { setToast('浏览器暂时无法保存；清单仅本次可用，请导出留存。'); return false; } }
   function addQuestions(items: { text: string; category: string }[]) { const added = items.filter(item => item.text.trim() && !questions.some(q => q.text === item.text)); if (!added.length) { setToast('这些问题已经在询问清单里。'); return; } const room = 50 - questions.length; if (room <= 0) { setToast('当前最多保存 50 条问题，请先整理或导出已有清单。'); return; } const saved = changeQuestions([...questions, ...added.slice(0, room).map(item => ({ id: crypto.randomUUID(), text: item.text, category: item.category, done: false }))]); if (saved) setToast(`已加入 ${Math.min(room, added.length)} 个问题，可以到“我的询问清单”修改和导出。`); }
   function demo() { setDemoSeed(value => value + 1); go('contract'); }
-  return <><SpatialTerminal page={workspacePage} musicOpen={page==='music'} openMusic={openMusic} closeMusic={closeMusic} go={go} questionCount={questions.length} signals={signals} covered={sourcesOpen} openSources={() => setSourcesOpen(true)} demo={demo}>
-    <div className="business-module module-contract" hidden={workspacePage !== 'contract'}><Contract demoSeed={demoSeed} addQuestions={addQuestions} notify={setToast} onSignal={contractSignal} /></div>
-    <div className="business-module module-salary" hidden={workspacePage !== 'salary'}><Salary addQuestions={addQuestions} onSignal={salarySignal} /></div>
+  function applyAssistantAction(action:AssistantAction){
+    if(action.kind==='open-tool'){go(action.module);return;}
+    if(action.kind==='apply-salary'){setSalaryRequest({id:++assistantApplyId.current,input:action.input});go('salary');setToast('已把对话中确认的金额填入工资工具。');return;}
+    if(action.kind==='apply-contract'){setContractRequest({id:++assistantApplyId.current,input:action.input});go('contract');setToast('已把对话中提供的文字填入合同工具。');return;}
+    addQuestions(action.items);
+  }
+  return <><SpatialTerminal page={workspacePage} musicOpen={page==='music'} openMusic={openMusic} closeMusic={closeMusic} go={go} questionCount={questions.length} signals={signals} covered={sourcesOpen} openSources={() => setSourcesOpen(true)} demo={demo} onAssistantAction={applyAssistantAction}>
+    <div className="business-module module-contract" hidden={workspacePage !== 'contract'}><Contract demoSeed={demoSeed} addQuestions={addQuestions} notify={setToast} onSignal={contractSignal} applyRequest={contractRequest}/></div>
+    <div className="business-module module-salary" hidden={workspacePage !== 'salary'}><Salary addQuestions={addQuestions} onSignal={salarySignal} applyRequest={salaryRequest}/></div>
     <div className="business-module module-subsidy" hidden={workspacePage !== 'subsidy'}><Subsidy onSignal={subsidySignal} addQuestions={addQuestions}/></div>
     <NewModules page={workspacePage} onProgress={toolSignal} addQuestions={addQuestions} notify={setToast}/>
     <div className="business-module module-list" hidden={workspacePage !== 'list'}><Checklist questions={questions} change={changeQuestions} add={addQuestions} go={go} notify={setToast} /></div>
