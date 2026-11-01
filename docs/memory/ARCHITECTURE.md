@@ -56,3 +56,9 @@ assistant-client只发用户对话与当前模块名，做结构白名单校验�
 vite开发/预览、tools/serve生产构建预览、参赛包helper复用同一网关。服务只监听本机；公网多用户身份/额度隔离未做。terminal-unity已撤销v0.29深色主体覆盖，仅统一浅色音乐；assistant.css负责本轮新入口、目录与对话，不重画三维。
 
 聊天由AIAssistant管理仅本次对话，AssistantEvidence memo化呈现实际规则重点和清单预览；不从模型散文提取数字。CSS消息动画只在新节点出现时运行，等待点仅请求中活动，无新Three或常驻JS循环。复制包含规则数字/问题；回复完成定位到最新答复开头。
+
+## v0.31 渲染开销职责
+
+scene/style-writer以WeakMap保存实际赋值，规避CSSOM读回规范化；DOM样式仍仅由场景写入对应属性。TaskArrayScene按尺寸/分段共享几何，释放去重；固定静态局部矩阵但保留所有运动节点与镜头更新，每帧一次场景世界矩阵遍历。射线只排除不可见分支并复用数组，前景手势策略未放宽。15个脉冲共用InstancedMesh，轨迹/大小/颜色不变。
+
+scene/deferred-asset区分字节prefetch与parse/load；music-scene-loader仅预取，不再广播隐藏场景挂载。MusicPlayer在实际present时才创建，之后按旧状态机保留/暂停；实际GLB只解析一次并允许失败重试。未改业务、AI或单audio；未实现自动降级。

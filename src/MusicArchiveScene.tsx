@@ -9,9 +9,11 @@ import {drawEdition,musicEdition,warmArtworkAssets,MUSIC_ATMOSPHERES} from './mu
 import {createMusicAtmosphere} from './music-atmosphere.ts';
 import {cdMaterial} from './cd-material.ts';
 import {archiveEase,ARCHIVE_MOTION_MS} from './archive-motion.ts';
+import {deferredAsset} from './scene/deferred-asset.ts';
 
-let modelPromise:Promise<T.Group>|null=null;
-export function warmArchiveAsset(){return modelPromise??=(new GLTFLoader().loadAsync('/models/rhine-archive-cassette.glb').then(gltf=>gltf.scene).catch(error=>{modelPromise=null;throw error;}));}
+const archiveResource=deferredAsset(async()=>{const response=await fetch('/models/rhine-archive-cassette.glb');if(!response.ok)throw new Error('Archive asset unavailable');return response.arrayBuffer();},async bytes=>(await new GLTFLoader().parseAsync(bytes,'/models/')).scene);
+export const prefetchArchiveAsset=archiveResource.prefetch;
+export const warmArchiveAsset=archiveResource.load;
 function adaptedMaterial(source:T.MeshStandardMaterial){
  const m=source.clone() as T.MeshPhysicalMaterial,n=source.name;
  const palette:Record<string,string>={Frosted_Polymer:'#b3d4e3',Ivory_Edges:'#c4ced5',Optical_Diffuser:'#233c57',Printed_Label:'#d6e6ec',Optical_Edges:'#a6c8d5',Case_Engraving:'#648996',Case_Engraving_Highlight:'#cfecf3',Titanium_Fasteners:'#e0e4e8',Moulded_Lettering:'#94bdcf',Champagne_Index:'#a7ceda'};

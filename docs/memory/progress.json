@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "updatedAt": "2026-11-01",
-  "workingVersion": "0.30.0",
-  "releasedVersion": "0.30.0",
+  "workingVersion": "0.31.0",
+  "releasedVersion": "0.31.0",
   "workState": "reviewed_internally",
-  "objective": "浅色主体/音乐；首页直接提问+工具列表+询问清单，八工具迁入子页；修复三维误触并接通DeepSeek及受限工具调用。",
-  "latestUserRequest": "继续美化首页与聊天：轻量消息反馈、突出精准信息、不要增加复杂度；澄清前景三维子选项必须可点，只屏蔽后排误触。",
+  "objective": "保持浅色三维画面与前景交互，减少首页冗余渲染/预热开销；按真实能力自评并建立逐步改进表。",
+  "latestUserRequest": "继续优化，优化后自评目前分数，按需求提出改进表，后续逐步推进。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5186/?v=0.30#/home",
-    "snapshot": "first-step-浅色AI入口与工具目录-v0.30",
+    "url": "http://127.0.0.1:5186/?v=0.31#/home",
+    "snapshot": "first-step-首页性能优化-v0.31",
     "state": "ready_for_user_review"
   },
   "implemented": {
@@ -20,7 +20,8 @@
     "interaction": "前景模型的图内/文字子选项保留，要求手势开始和结束均为稳定前景、同pointer/物体/子区域、总位移≤6px且在画布内；后排只预览，无任意双击跳页。工作区/音乐/对话共享原业务与单audio。",
     "api": "真实同源Node助手网关与DeepSeek function calling；四项白名单工具，共用工资/合同规则；取消、超时、限额、Origin/Host与输入证据校验。旧文档review客户端仍仅协议预留。",
     "copy": "首页、工具目录与对话采用直接自然用语，能力说明区分本地规则、真实助手与未完成OCR/RAG。",
-    "ai": "deepseek-flash真实在线；推荐工具、核对已知工资、核对已确认全日制合同文字、整理问题。用户点击后应用到原工具/清单；聊天仅内存，表单不自动发送；密钥只在本机独立私有配置中，不分发。 新回复突出规则关键数字/待确认项，问题保存前逐条预览，依据折叠；复制包含实际结果与问题。"
+    "ai": "deepseek-flash真实在线；推荐工具、核对已知工资、核对已确认全日制合同文字、整理问题。用户点击后应用到原工具/清单；聊天仅内存，表单不自动发送；密钥只在本机独立私有配置中，不分发。 新回复突出规则关键数字/待确认项，问题保存前逐条预览，依据折叠；复制包含实际结果与问题。",
+    "performance": "v0.31缓存实际CSS赋值、同形几何复用、静态局部矩阵固定/世界矩阵单次更新、拾取数组复用及可见过滤、脉冲实例化；播放器悬停只预取字节，实际打开才解析/建场景。未降低DPR/粒子/阴影/动画，未实现自动简易。"
   },
   "modules": [
     {
@@ -76,38 +77,38 @@
   ],
   "currentPlan": [
     {
-      "id": "home_and_pointer",
+      "id": "same_visual_performance",
       "status": "verified",
-      "acceptance": "首页三入口、#/tools八项；前景图内材料文字实点打开合同，后排双击仍停留home；同区域/稳定前景保护有测试。"
+      "acceptance": "代表DOM写入1332→9/s、几何153→25、CPU帧p95 2.1→1.4ms；FPS约164→164.5接近本机上限；低配尚未验收。前景子项、点云重组与实际音乐旋转/返回回归。"
     },
     {
-      "id": "deepseek",
-      "status": "verified",
-      "acceptance": "真实合成工资/合同/缺字段补问；UI工资应用与2条HR问题加入清单通过。无配置/越权参数/取消等单测覆盖。"
+      "id": "score_and_plan",
+      "status": "completed",
+      "acceptance": "33号按本日官方权重自评约62/100（58–65），保留85内部目标；按模式/补问/图文/RAG/闭环/新人/材料列验收和工时。"
     },
     {
       "id": "save",
-      "status": "completed",
-      "acceptance": "独立v0.30源码/dist共190文件已保存，旧v0.29保留；5186版本/index/AI配置/Range206及保存版真实AI/UI通过；正确仓库源码已推送。"
+      "status": "saved_pending_push",
+      "acceptance": "195文件源码/dist已保存且初次逐文件哈希匹配，旧v0.30保留；5186实际0.31/index一致、AI配置可用、音频Range206；保存版独立首页视觉/单audio/入口预取/无warn-error已检查。待正确仓库推送收尾。"
     }
   ],
   "validation": {
-    "version": "0.30.0",
-    "automated": "66 tests passed; TypeScript and production build passed. Existing 583KB Three shared chunk warning remains.",
-    "evidence": "outputs/v030-review (home/chat screenshots and final saved-server receipts)",
+    "version": "0.31.0",
+    "automated": "70 tests passed; TypeScript and production build passed. Existing 583KB Three shared chunk warning remains.",
+    "evidence": "outputs/v031-perf (baseline/after metrics, screenshots, official response and release receipts)",
     "visualAcceptance": "internally reviewed only; user feedback pending",
-    "manual": "独立1280x720 QA：后排双击停留home，工具目录8项；首页发合成工资→真实calculate_salary→6534→点击应用原工资工具；prepare_questions→点击加入2项清单；手动合同277字示例；浅色音乐抽取/实际播放/返回清单。audio=1, readyState=4, no console warn/error. 最终5224实点前景合同材料成功；后排双击不跳页。新聊天显示规则金额6534、复制含关键数、两条HR问题先预览；完整标志与消息反馈已审查。835宽桌面页首760/760，无横向溢出。",
-    "performance": "未增加三维渲染循环，打开AI弹层暂停事务场景；低配尚未复测，自动降级未实现。",
+    "manual": "独立1280×720 QA：首页视觉与标志保持；合同/工资预览、几何点云/重组；实际打开唱片→抽取详情→播放，discAngle由-0.0080到-11.0353，audio=1/ready4；返回首页继续播放，无console warn/error。前景子项及后排/慢拖/跨区域策略测试通过。",
+    "performance": "同机DPR1.5，代表CPU帧p95 2.1→1.4ms（优化后其他窗口1.1–1.4）；DOM1332→9/s（其他约12–18）；draw146→139，几何153→25；hover时音乐canvas1→0。FPS164→164.5接近165Hz；非GPU完整计时/非低配保证。视觉参数不降。",
     "scope": "desktop only; real DeepSeek plus four bounded tools via local Node service; no OCR/RAG/full multimodal workflow or dual modes",
-    "savedPreview": "保存版5226实发工资问题→真实DeepSeek→规则6534与操作按钮；答复标题与关键数据完整可见，单audio，无warn/error。默认5186为0.30，index与dist一致，私有服务配置可用，音频Range206。",
-    "secretHandling": "分发源/构建186文件扫描，实际私有值匹配0；配置不随Git或快照分发。"
+    "savedPreview": "保存版5186实际0.31，index与canonical dist字节相同；AI配置状态true（本轮未调用模型），音频Range206/64字节。独立首页截图、单audio、仅入口聚焦后音乐canvas0、无console warn/error。",
+    "secretHandling": "本轮未改私有配置、AI协议或业务材料；私有配置仍在工程/快照之外，不随包或Git分发。"
   },
   "nextActions": [
-    "按28/29号计划实现简易/完整共享工作区与低配隔离，默认完整、持续低帧转简易、可手动回切；本轮提问入口不等于双模式已完成",
-    "补自然语言多事项纠正与必要补问，沿用已接通DeepSeek和受限规则工具；不扩大音乐或手机范围",
-    "11/8–11补图文合同→校对→小RAG→工具→原文/来源/询问清单主线，未知/过期不猜",
-    "11/12–14新人测试、草稿/清除与专业字段减负；11/14冻结、11/17材料就绪、11/18提交",
-    "只同步wadwd65/-web-；campus-insight不动；动态背景按27号在性能稳定后补"
+    "按33号表第1项实现简易/完整共享工作区和有效低帧检测；默认完整、可手动回切，简易不加载重三维，填写/结果/清单/单audio不丢。",
+    "第2项补多事项纠正与必要补问，至少20个合成/脱敏案例；沿用真实DeepSeek与受限规则工具，不增加另一套业务。",
+    "第3–5项做单张合同图→校对→小范围官方RAG→规则→原文/来源/询问清单，成功/缺信息/失败都要证据；未知不猜。",
+    "11/12–14新人任务测试、用户可控草稿及清除；11/14冻结、11/17材料完成、11/18提交。",
+    "仅同步wadwd65/-web-，campus-insight不动；手机、音乐扩展与全国政策后移，背景须在性能稳定后局部增强。"
   ],
   "visualSources": [
     {
@@ -132,7 +133,7 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "published",
+    "pushStatus": "pending_v031",
     "sourceCommit": "df0925ce5d2521209807ff7869888e232029c560",
     "verifiedAt": "2026-11-01",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
@@ -152,7 +153,7 @@
   ],
   "userFeedback": {
     "date": "2026-10-31",
-    "lowEndPerformance": "用户报告较差配置电脑卡顿，尚未在对应设备定位或复测。",
+    "lowEndPerformance": "用户仍报告首页偶有卡顿。本轮减少冗余开销，但尚无用户低配设备复测，不能称已全部修复。",
     "usability": "用户反馈选项与操作复杂，提出问题输入和筛选分流的简易入口。",
     "acceptance": "当前版本未因旧内部检查而获得新用户反馈问题的验收。",
     "modePolicy": "默认完整，卡顿自动切简易，允许手动恢复；覆盖助手此前建议的默认简易。",
@@ -209,7 +210,26 @@
     "featureFreeze": "2026-11-14",
     "packageReady": "2026-11-17",
     "scoreTarget": 85,
-    "scoreMeaning": "内部验收目标，非官方分数/获奖保证；当前按官方权重保守自评约40–50。",
-    "coreScope": "保留八工具，一条签约核对AI主线做深；不扩手机、全国政策、账号平台或音乐功能。"
+    "scoreMeaning": "v0.31按官方权重内部自评约62（58–65），85仍是目标，非正式得分/奖项预测。",
+    "coreScope": "保留八工具，一条签约核对AI主线做深；不扩手机、全国政策、账号平台或音乐功能。",
+    "currentReview": "docs/33-score-and-improvement-plan-v031.md",
+    "scoreCurrent": 62,
+    "scoreRange": [
+      58,
+      65
+    ],
+    "remainingDates": [
+      "2026-11-02",
+      "2026-11-17"
+    ],
+    "remainingHours": [
+      48,
+      64
+    ],
+    "futureWorkEstimate": [
+      39,
+      53
+    ],
+    "futureContingencyHours": 6
   }
 }

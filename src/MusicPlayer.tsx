@@ -32,7 +32,6 @@ export default function MusicPlayer({state,open,onClose,returnLabel,returnPage,r
  const [artReady,setArtReady]=useState(false);
  useEffect(()=>{let alive=true;if(mode.present)void warmArtworkAssets().then(()=>{if(alive)setArtReady(true);});return()=>{alive=false;};},[mode.present]);
  useEffect(()=>onModeChange(mode.phase),[mode.phase,onModeChange]);
- useEffect(()=>{const warm=()=>setSceneMounted(true);window.addEventListener('first-step:music-warm',warm);return()=>window.removeEventListener('first-step:music-warm',warm);},[]);
  useEffect(()=>{if(mode.present)setSceneMounted(true);if(mode.phase==='preparing'&&ready)mode.markReady();},[mode.present,mode.phase,ready,mode.markReady]);
  const status=state.error?'音源暂不可用':state.loading?'正在加载':state.playing?'正在播放':state.started?'已暂停':'等待播放';
  useLayoutEffect(()=>{const prior=previous.current;previous.current=state.index;setCandidate(value=>value===prior?state.index:value);},[state.index]);
