@@ -88,8 +88,8 @@
     },
     {
       "id": "save",
-      "status": "saved_pending_push",
-      "acceptance": "195文件源码/dist已保存且初次逐文件哈希匹配，旧v0.30保留；5186实际0.31/index一致、AI配置可用、音频Range206；保存版独立首页视觉/单audio/入口预取/无warn-error已检查。待正确仓库推送收尾。"
+      "status": "completed",
+      "acceptance": "独立v0.31源码/dist共195文件逐文件哈希匹配，旧v0.30保留；5186保存版/version/index/AI配置/Range206通过，独立首页审查无warn-error；正确仓库源码已正常推送。"
     }
   ],
   "validation": {
@@ -97,11 +97,11 @@
     "automated": "70 tests passed; TypeScript and production build passed. Existing 583KB Three shared chunk warning remains.",
     "evidence": "outputs/v031-perf (baseline/after metrics, screenshots, official response and release receipts)",
     "visualAcceptance": "internally reviewed only; user feedback pending",
-    "manual": "独立1280×720 QA：首页视觉与标志保持；合同/工资预览、几何点云/重组；实际打开唱片→抽取详情→播放，discAngle由-0.0080到-11.0353，audio=1/ready4；返回首页继续播放，无console warn/error。前景子项及后排/慢拖/跨区域策略测试通过。",
+    "manual": "独立1280×720 QA：首页视觉与标志保持；合同/工资预览、几何点云/重组；实际打开唱片→抽取详情→播放，discAngle由-0.0080到-11.0353，audio=1/ready4；返回首页继续播放，无console warn/error。前景子项及后排/慢拖/跨区域策略测试通过。 最终前景图内材料实点进入#/contract，镜头/拾取回归正常。",
     "performance": "同机DPR1.5，代表CPU帧p95 2.1→1.4ms（优化后其他窗口1.1–1.4）；DOM1332→9/s（其他约12–18）；draw146→139，几何153→25；hover时音乐canvas1→0。FPS164→164.5接近165Hz；非GPU完整计时/非低配保证。视觉参数不降。",
     "scope": "desktop only; real DeepSeek plus four bounded tools via local Node service; no OCR/RAG/full multimodal workflow or dual modes",
     "savedPreview": "保存版5186实际0.31，index与canonical dist字节相同；AI配置状态true（本轮未调用模型），音频Range206/64字节。独立首页截图、单audio、仅入口聚焦后音乐canvas0、无console warn/error。",
-    "secretHandling": "本轮未改私有配置、AI协议或业务材料；私有配置仍在工程/快照之外，不随包或Git分发。"
+    "secretHandling": "私有配置仍在源码/快照之外；显式分发清单不含.env.local，源发布文件凭据模式扫描0匹配。本轮未发送用户材料或再次调用模型。"
   },
   "nextActions": [
     "按33号表第1项实现简易/完整共享工作区和有效低帧检测；默认完整、可手动回切，简易不加载重三维，填写/结果/清单/单audio不丢。",
@@ -133,11 +133,11 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "pending_v031",
-    "sourceCommit": "df0925ce5d2521209807ff7869888e232029c560",
+    "pushStatus": "published",
+    "sourceCommit": "51e6f6325d3bed89374c0ac66edcd328885e78e2",
     "verifiedAt": "2026-11-01",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "ccd2bbf50eb6964fa3147390ed73436f75baf2d3"
+    "previousPublishedHead": "f692675818ce477b5d5bccb45d75bbef25063124"
   },
   "sideDeliverables": [
     {
