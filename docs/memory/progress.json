@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "updatedAt": "2026-11-01",
   "workingVersion": "0.30.0",
-  "releasedVersion": "0.29.0",
+  "releasedVersion": "0.30.0",
   "workState": "reviewed_internally",
   "objective": "浅色主体/音乐；首页直接提问+工具列表+询问清单，八工具迁入子页；修复三维误触并接通DeepSeek及受限工具调用。",
   "latestUserRequest": "继续美化首页与聊天：轻量消息反馈、突出精准信息、不要增加复杂度；澄清前景三维子选项必须可点，只屏蔽后排误触。",
@@ -11,7 +11,7 @@
   "release": {
     "url": "http://127.0.0.1:5186/?v=0.30#/home",
     "snapshot": "first-step-浅色AI入口与工具目录-v0.30",
-    "state": "saving_and_verifying"
+    "state": "ready_for_user_review"
   },
   "implemented": {
     "business": "保留八项限定本地工具及共享询问清单，八工具统一迁入#/tools，支持完全不经AI手动操作。",
@@ -87,8 +87,8 @@
     },
     {
       "id": "save",
-      "status": "in_progress",
-      "acceptance": "保存独立v0.30源码/dist、核对5186与正确远程；旧v0.29保留，不包含密钥。"
+      "status": "completed",
+      "acceptance": "独立v0.30源码/dist共190文件已保存，旧v0.29保留；5186版本/index/AI配置/Range206及保存版真实AI/UI通过；正确仓库源码已推送。"
     }
   ],
   "validation": {
@@ -99,7 +99,8 @@
     "manual": "独立1280x720 QA：后排双击停留home，工具目录8项；首页发合成工资→真实calculate_salary→6534→点击应用原工资工具；prepare_questions→点击加入2项清单；手动合同277字示例；浅色音乐抽取/实际播放/返回清单。audio=1, readyState=4, no console warn/error. 最终5224实点前景合同材料成功；后排双击不跳页。新聊天显示规则金额6534、复制含关键数、两条HR问题先预览；完整标志与消息反馈已审查。835宽桌面页首760/760，无横向溢出。",
     "performance": "未增加三维渲染循环，打开AI弹层暂停事务场景；低配尚未复测，自动降级未实现。",
     "scope": "desktop only; real DeepSeek plus four bounded tools via local Node service; no OCR/RAG/full multimodal workflow or dual modes",
-    "savedPreview": "pending final saved-server verification"
+    "savedPreview": "保存版5226实发工资问题→真实DeepSeek→规则6534与操作按钮；答复标题与关键数据完整可见，单audio，无warn/error。默认5186为0.30，index与dist一致，私有服务配置可用，音频Range206。",
+    "secretHandling": "分发源/构建186文件扫描，实际私有值匹配0；配置不随Git或快照分发。"
   },
   "nextActions": [
     "按28/29号计划实现简易/完整共享工作区与低配隔离，默认完整、持续低帧转简易、可手动回切；本轮提问入口不等于双模式已完成",
@@ -131,8 +132,8 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "pending_v030",
-    "sourceCommit": "23583959e55301bde5c81bb9421d684457b84a8d",
+    "pushStatus": "published",
+    "sourceCommit": "df0925ce5d2521209807ff7869888e232029c560",
     "verifiedAt": "2026-11-01",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
     "previousPublishedHead": "ccd2bbf50eb6964fa3147390ed73436f75baf2d3"
