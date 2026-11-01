@@ -4,6 +4,13 @@
  * Official text checked on 2026-10-26. Special contract types require review.
  */
 const LAW_SOURCE = 'https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/bgt/art/2023/art_0abfdd261c03417b949df19d869add8d.html';
+/** Curated local reference, not retrieval. Rechecked against the official text on 2026-11-01. */
+export const CONTRACT_REFERENCE={source:LAW_SOURCE,checked:'2026-11-01',scope:'中国内地劳动合同法；需先确认用工和合同类型',notes:[
+ '固定期限满3个月、不满12个月，试用期上限1个月；满12个月、不满36个月，上限2个月；满36个月的固定期限或无固定期限，上限6个月。',
+ '任务期限及不足3个月的合同不得约定试用期。同一单位与同一劳动者只能约定一次试用期。试用期包含在合同期限内。',
+ '不能从“试用期3个月”倒推合同期限；在用工类型或期限不明时只补问，不下合规结论。',
+ '合同一般需核对主体、期限、工作内容与地点、工时休假、报酬、社保及劳动保护等条款；本次没定位不等于完整合同没有。',
+]};
 
 export const DEMO_CONTRACT = `劳动合同示例（合成材料，仅供体验）
 甲方：示例科技有限公司

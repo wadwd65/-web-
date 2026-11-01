@@ -55,6 +55,6 @@ export function useSoundtrack({working}:{working:boolean;entering:boolean}){
 }
 export type SoundtrackState=ReturnType<typeof useSoundtrack>;
 /** Quick selection stays in the task; only the player entrance opens its route. */
-export function MusicEntry({state,onOpen,contextKey}:{state:SoundtrackState;onOpen:(detail:boolean)=>void;contextKey:string}){
- return <div className="music-entry"><MusicQuickPicker state={state} contextKey={contextKey}/><button className={`music-entry-open ${state.playing?'is-playing':''}`} onPointerEnter={warmMusicScene} onFocus={warmMusicScene} onClick={()=>onOpen(false)} aria-label="打开音乐播放器" title={state.track.name}><ListMusic size={17}/><span className="music-entry-label"><span>播放器</span>{state.playing&&<small>{state.track.name}</small>}</span><i/><i/><i/></button></div>;
+export function MusicEntry({state,onOpen,contextKey,lightweight=false}:{state:SoundtrackState;onOpen:(detail:boolean)=>void;contextKey:string;lightweight?:boolean}){
+ return <div className="music-entry"><MusicQuickPicker state={state} contextKey={contextKey}/><button className={`music-entry-open ${state.playing?'is-playing':''}`} onPointerEnter={lightweight?undefined:warmMusicScene} onFocus={lightweight?undefined:warmMusicScene} onClick={()=>onOpen(false)} aria-label="打开音乐播放器" title={state.track.name}><ListMusic size={17}/><span className="music-entry-label"><span>播放器</span>{state.playing&&<small>{state.track.name}</small>}</span><i/><i/><i/></button></div>;
 }

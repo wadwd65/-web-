@@ -7,6 +7,7 @@ const input={messages:[{role:'user',content:'帮我找工资工具'}],module:'ho
 const code=name=>error=>error instanceof AssistantError&&error.code===name;
 const reply=message=>new Response(JSON.stringify({choices:[{message,finish_reason:'stop'}]}),{headers:{'Content-Type':'application/json'}});
 const call=(name,args)=>({id:'call-1',type:'function',function:{name,arguments:JSON.stringify(args)}});
+const guide={status:'ready',tasks:[{module:'salary',reason:'合成工资核对'}],activeModule:'salary',questions:[]};
 const amounts={gross:8000,insurance:800,fund:600,tax:66,other:0,received:null};
 const evidence='应发工资8000元，个人社保800元，公积金600元，个税66元，其他扣款0元。';
 
@@ -40,13 +41,13 @@ test('only whitelisted site actions and bounded question lists can be generated'
 });
 test('provider tool calls execute actual rules and feed their result back before returning',async()=>{
  const requests=[];
- const result=await runAssistant({messages:[{role:'user',content:evidence}]},{config,fetcher:async(url,options)=>{assert.equal(url,'https://api.deepseek.com/chat/completions');const body=JSON.parse(options.body);requests.push(body);return requests.length===1?reply({content:null,tool_calls:[call('calculate_salary',{...amounts,evidence})]}):reply({content:'计算实发6534元。'});}});
- assert.equal(requests.length,2);assert.equal(JSON.parse(requests[1].messages.at(-1).content).net,6534);assert.deepEqual(requests[0].thinking,{type:'disabled'});assert.equal(result.actions[0].kind,'apply-salary');assert.equal(result.steps[0].ok,true);
+ const result=await runAssistant({messages:[{role:'user',content:evidence}]},{config,fetcher:async(url,options)=>{assert.equal(url,'https://api.deepseek.com/chat/completions');const body=JSON.parse(options.body);requests.push(body);return requests.length===1?reply({tool_calls:[call('plan_tasks',guide)]}):requests.length===2?reply({content:null,tool_calls:[call('calculate_salary',{...amounts,evidence})]}):reply({content:'计算实发6534元。'});}});
+ assert.equal(requests.length,3);assert.equal(JSON.parse(requests[2].messages.at(-1).content).net,6534);assert.equal(requests[0].tool_choice.function.name,'plan_tasks');assert.deepEqual(requests[0].thinking,{type:'disabled'});assert.equal(result.actions[0].kind,'apply-salary');assert.equal(result.steps[1].ok,true);
  assert.ok(!JSON.stringify(result).includes(config.apiKey));
 });
 test('invalid tool requests never become UI actions and are returned to the model as failed',async()=>{
- let requests=0;const result=await runAssistant(input,{config,fetcher:async()=>++requests===1?reply({tool_calls:[call('open_tool',{module:'unknown'})]}):reply({content:'请补充信息。'})});
- assert.equal(result.actions.length,0);assert.equal(result.steps[0].ok,false);
+ let requests=0;const result=await runAssistant(input,{config,fetcher:async()=>++requests===1?reply({tool_calls:[call('plan_tasks',guide)]}):requests===2?reply({tool_calls:[call('open_tool',{module:'unknown'})]}):reply({content:'请补充信息。'})});
+ assert.equal(result.actions.length,0);assert.equal(result.steps[1].ok,false);
 });
 test('upstream failures and timeout expose no raw provider or credential material',async()=>{
  await assert.rejects(runAssistant(input,{config,fetcher:async()=>new Response('private-provider-detail',{status:401})}),error=>code('upstream-auth')(error)&&!error.message.includes('private-provider-detail')&&!error.message.includes(config.apiKey));

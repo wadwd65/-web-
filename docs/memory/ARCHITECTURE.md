@@ -62,3 +62,9 @@ vite开发/预览、tools/serve生产构建预览、参赛包helper复用同一�
 scene/style-writer以WeakMap保存实际赋值，规避CSSOM读回规范化；DOM样式仍仅由场景写入对应属性。TaskArrayScene按尺寸/分段共享几何，释放去重；固定静态局部矩阵但保留所有运动节点与镜头更新，每帧一次场景世界矩阵遍历。射线只排除不可见分支并复用数组，前景手势策略未放宽。15个脉冲共用InstancedMesh，轨迹/大小/颜色不变。
 
 scene/deferred-asset区分字节prefetch与parse/load；music-scene-loader仅预取，不再广播隐藏场景挂载。MusicPlayer在实际present时才创建，之后按旧状态机保留/暂停；实际GLB只解析一次并允许失败重试。未改业务、AI或单audio；未实现自动降级。
+
+## v0.32 模式与受限AI流程
+
+App/八业务和ExperienceWorkspace继续常驻；mode只改变视觉层/布局，Scene与ArchiveScene在simple条件下不挂载。MusicEntry禁用预热，轻量播放器不创建盘面缩略图/频谱；唯一audio仍在同一父层。runtime-mode是可测试的有效帧检测和模式控制器，useExperienceMode只是React绑定；onFrame由原两渲染循环提供，无额外持续RAF。SceneBoundary拦截lazy场景失败，业务仍可达。减少动态与简易模式分别表达。
+
+assistant-guide共用结构验证和安全提示，plan_tasks为强制第一步；非ready返回guide提示且无执行动作，ready继续有限Function Calling。AssistantNextStep呈现最多3候选/补问、选择与纠正；只有最新assistant回复的动作可应用，所有表单仍需显式点击。money evidence数组逐段来自user原话，最新未知/撤回不复用旧值。合同只读参考属于本地核验，不是RAG。在线合成评测脚本独立，不发送真实材料。

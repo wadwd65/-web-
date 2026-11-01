@@ -1,27 +1,27 @@
 {
   "schemaVersion": 1,
   "updatedAt": "2026-11-01",
-  "workingVersion": "0.31.0",
-  "releasedVersion": "0.31.0",
+  "workingVersion": "0.32.0",
+  "releasedVersion": "0.32.0",
   "workState": "reviewed_internally",
-  "objective": "保持浅色三维画面与前景交互，减少首页冗余渲染/预热开销；按真实能力自评并建立逐步改进表。",
-  "latestUserRequest": "继续优化，优化后自评目前分数，按需求提出改进表，后续逐步推进。",
+  "objective": "完成33号第1/2项：共享简易/完整工作区、有效低帧自动降级与恢复、真实AI必要补问/纠正/多事项选择；保留完整浅色三维。",
+  "latestUserRequest": "先做改进表1、2项，完成必须自检，不满意打回重做。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5186/?v=0.31#/home",
-    "snapshot": "first-step-首页性能优化-v0.31",
+    "url": "http://127.0.0.1:5186/?v=0.32#/home",
+    "snapshot": "first-step-双模式与AI补问-v0.32",
     "state": "ready_for_user_review"
   },
   "implemented": {
     "business": "保留八项限定本地工具及共享询问清单，八工具统一迁入#/tools，支持完全不经AI手动操作。",
     "music": "五曲/单audio；首页切歌弹小菜单点选即播不跳页，播放器进入完整三维声音档案并接续曲目/进度；v0.25抽取、旋转及逐曲环境保留。",
-    "visual": "按用户否定v0.29的反馈恢复浅蓝银色主体；播放器随主体配色；首页提问区+三个主要入口，保留原三维、动态与署名。 聊天完整主题标志、消息入场/发送反馈、真实等待与停止；新答复优先展示开头，减少复杂选项。",
+    "visual": "保留浅蓝银色完整主体/音乐和原三维；新增同系统的轻量阅读布局、页首/聊天模式切换，简易播放器居中目录。完整模式模型/粒子/材质/抽取/播放旋转未重做。",
     "interaction": "前景模型的图内/文字子选项保留，要求手势开始和结束均为稳定前景、同pointer/物体/子区域、总位移≤6px且在画布内；后排只预览，无任意双击跳页。工作区/音乐/对话共享原业务与单audio。",
     "api": "真实同源Node助手网关与DeepSeek function calling；四项白名单工具，共用工资/合同规则；取消、超时、限额、Origin/Host与输入证据校验。旧文档review客户端仍仅协议预留。",
     "copy": "首页、工具目录与对话采用直接自然用语，能力说明区分本地规则、真实助手与未完成OCR/RAG。",
-    "ai": "deepseek-flash真实在线；推荐工具、核对已知工资、核对已确认全日制合同文字、整理问题。用户点击后应用到原工具/清单；聊天仅内存，表单不自动发送；密钥只在本机独立私有配置中，不分发。 新回复突出规则关键数字/待确认项，问题保存前逐条预览，依据折叠；复制包含实际结果与问题。",
-    "performance": "v0.31缓存实际CSS赋值、同形几何复用、静态局部矩阵固定/世界矩阵单次更新、拾取数组复用及可见过滤、脉冲实例化；播放器悬停只预取字节，实际打开才解析/建场景。未降低DPR/粒子/阴影/动画，未实现自动简易。"
+    "ai": "真实DeepSeek先plan_tasks识别意图/事项（最多3候选）、必要补问（最多3项）/先选一件/纠正/未知/超范围；原4项执行工具仍共用规则，非ready不执行。补问与选择的固定安全提示标记guide，解释/工具后的模型文字标记model。金额分次原话逐段校验、最新更正/撤回校验；新用户消息后旧应用停用，仅最新结果可显式填入工具/清单。无OCR/RAG，材料不自动发。",
+    "performance": "v0.31缓存实际CSS赋值、同形几何复用、静态局部矩阵固定/世界矩阵单次更新、拾取数组复用及可见过滤、脉冲实例化；播放器悬停只预取字节，实际打开才解析/建场景。未降低DPR/粒子/阴影/动画，未实现自动简易。 v0.32简易卸载事务/音乐三维，首访简易不请求Three场景/GLB/盘面。有效RAF采样窗口、预热和排除项、自动降级/手动恢复生产控制器已实现；阈值仅帧序列模拟验证，低配实机待校准。"
   },
   "modules": [
     {
@@ -72,43 +72,42 @@
     "公网业务后端身份、额度隔离及授权数据存储",
     "全国政策维护",
     "用户可控草稿保存",
-    "简易/完整双模式及低配资源隔离",
-    "运行低帧检测与自动切简易"
+    "低配实机采样及阈值校准（控制器帧序列模拟已通过）"
   ],
   "currentPlan": [
     {
-      "id": "same_visual_performance",
-      "status": "verified",
-      "acceptance": "代表DOM写入1332→9/s、几何153→25、CPU帧p95 2.1→1.4ms；FPS约164→164.5接近本机上限；低配尚未验收。前景子项、点云重组与实际音乐旋转/返回回归。"
+      "id": "1-two-modes",
+      "status": "verified_with_simulated_frame_sequences",
+      "acceptance": "默认完整；简易卸载重场景；首访简易首页/音乐无Three/GLB/盘面请求；实际播放跨模式单audio同音源/进度；工资填写/结果/清单保留。生产自动控制器模拟验证短暂掉帧、持续10/24FPS、后台/暂停、120FPS、手动恢复不反复强切。低配实机仍待。"
     },
     {
-      "id": "score_and_plan",
-      "status": "completed",
-      "acceptance": "33号按本日官方权重自评约62/100（58–65），保留85内部目标；按模式/补问/图文/RAG/闭环/新人/材料列验收和工时。"
+      "id": "2-guided-ai",
+      "status": "verified",
+      "acceptance": "最终21例在线合成评测与UI走查；三项工资→补两项→6534，更正→6434→原工具；请求中切模式仍busy。多事项先选、纠正入口可编辑；原用户材料不自动发送。"
     },
     {
       "id": "save",
-      "status": "completed",
-      "acceptance": "独立v0.31源码/dist共195文件逐文件哈希匹配，旧v0.30保留；5186保存版/version/index/AI配置/Range206通过，独立首页审查无warn-error；正确仓库源码已正常推送。"
+      "status": "saved_pending_push",
+      "acceptance": "208文件源码/dist逐文件哈希匹配，旧v0.31保留；保存版5234版本/index/AI配置/Range206通过，真实工资补问与双字段并排、完整标志、按钮全可见，无warn/error。待默认5186与仓库推送收尾。"
     }
   ],
   "validation": {
-    "version": "0.31.0",
-    "automated": "70 tests passed; TypeScript and production build passed. Existing 583KB Three shared chunk warning remains.",
-    "evidence": "outputs/v031-perf (baseline/after metrics, screenshots, official response and release receipts)",
+    "version": "0.32.0",
+    "automated": "85 tests passed; TypeScript and production build passed. Existing 583KB Three shared chunk warning remains.",
+    "evidence": "outputs/v032-review (online synthetic evaluations including initial failures, UI screenshots, resource paths, tests/build and release receipts)",
     "visualAcceptance": "internally reviewed only; user feedback pending",
-    "manual": "独立1280×720 QA：首页视觉与标志保持；合同/工资预览、几何点云/重组；实际打开唱片→抽取详情→播放，discAngle由-0.0080到-11.0353，audio=1/ready4；返回首页继续播放，无console warn/error。前景子项及后排/慢拖/跨区域策略测试通过。 最终前景图内材料实点进入#/contract，镜头/拾取回归正常。",
-    "performance": "同机DPR1.5，代表CPU帧p95 2.1→1.4ms（优化后其他窗口1.1–1.4）；DOM1332→9/s（其他约12–18）；draw146→139，几何153→25；hover时音乐canvas1→0。FPS164→164.5接近165Hz；非GPU完整计时/非低配保证。视觉参数不降。",
+    "manual": "独立5232桌面：冷简易0canvas；简易选曲→完整→简易，audio=1/ready4同src，进度约0.1→17.4s。工资三项→补个税66/其他0，请求中切完整再简易仍busy→6534；更正社保900→旧按钮disabled/新结果6434→原工资工具；工作区来回切模式保险900、结果/清单保持。多事项两选项，点租房仅聚焦租房；纠正按钮预填输入框。无console warn/error。",
+    "performance": "简易真实资源请求/0canvas隔离已验；自动降级/手动覆盖/暂停排除由实际生产控制器输入10/24/60/120FPS帧序列模拟验证，不是低配CPU/GPU实测。完整画质不降，未用高配FPS证明低配已通过。",
     "scope": "desktop only; real DeepSeek plus four bounded tools via local Node service; no OCR/RAG/full multimodal workflow or dual modes",
-    "savedPreview": "保存版5186实际0.31，index与canonical dist字节相同；AI配置状态true（本轮未调用模型），音频Range206/64字节。独立首页截图、单audio、仅入口聚焦后音乐canvas0、无console warn/error。",
-    "secretHandling": "私有配置仍在源码/快照之外；显式分发清单不含.env.local，源发布文件凭据模式扫描0匹配。本轮未发送用户材料或再次调用模型。"
+    "savedPreview": "独立保存版5234实际0.32，index与源dist字节相同，AI配置可用，音频Range206/64字节；实发合成工资问题生成两项补问，最终并排/提交按钮可见；无warn/error。",
+    "secretHandling": "沿用工程外私有配置；评测只发合成文字，不保存真实用户材料或密钥。分发清单不含.env.local。"
   },
   "nextActions": [
-    "按33号表第1项实现简易/完整共享工作区和有效低帧检测；默认完整、可手动回切，简易不加载重三维，填写/结果/清单/单audio不丢。",
-    "第2项补多事项纠正与必要补问，至少20个合成/脱敏案例；沿用真实DeepSeek与受限规则工具，不增加另一套业务。",
-    "第3–5项做单张合同图→校对→小范围官方RAG→规则→原文/来源/询问清单，成功/缺信息/失败都要证据；未知不猜。",
-    "11/12–14新人任务测试、用户可控草稿及清除；11/14冻结、11/17材料完成、11/18提交。",
-    "仅同步wadwd65/-web-，campus-insight不动；手机、音乐扩展与全国政策后移，背景须在性能稳定后局部增强。"
+    "从33号第3项开始：单张合同图→抽取→用户校对，保留文字路径；再做小范围官方RAG与证据/清单主线，不扩多页PDF或全国政策。",
+    "收集用户低配设备前台帧表现，校准当前30FPS×5窗/15FPS×2窗与1.5秒预热；当前模拟通过不代替实机验收。",
+    "保留21例合成集并补真实脱敏纠正/未知/失败案例；规则金额不由模型散文决定，用户材料显式发送。",
+    "11/12–14新人任务测试、用户可控草稿/清除；11/14冻结、11/17材料、11/18提交。",
+    "仅同步wadwd65/-web-，campus-insight不动；本轮不追加音乐美术/手机/动态背景。"
   ],
   "visualSources": [
     {
@@ -133,7 +132,7 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "published",
+    "pushStatus": "pending_v032",
     "sourceCommit": "51e6f6325d3bed89374c0ac66edcd328885e78e2",
     "verifiedAt": "2026-11-01",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
@@ -153,37 +152,31 @@
   ],
   "userFeedback": {
     "date": "2026-10-31",
-    "lowEndPerformance": "用户仍报告首页偶有卡顿。本轮减少冗余开销，但尚无用户低配设备复测，不能称已全部修复。",
+    "lowEndPerformance": "v0.32已实现资源隔离与有效低帧控制器，尚无用户低配CPU/GPU实机反馈，不称所有卡顿已消除。",
     "usability": "用户反馈选项与操作复杂，提出问题输入和筛选分流的简易入口。",
     "acceptance": "当前版本未因旧内部检查而获得新用户反馈问题的验收。",
     "modePolicy": "默认完整，卡顿自动切简易，允许手动恢复；覆盖助手此前建议的默认简易。",
     "latestVisual": "用户明确否定v0.29，要求浅色主体及播放器，不再把深色统一版当认可结果。"
   },
   "nextIteration": {
-    "status": "partially_started_not_complete",
-    "plan": "docs/28-next-two-modes.md",
+    "status": "core_modes_and_guided_ai_implemented",
+    "plan": "docs/34-two-modes-and-guided-ai-v032.md",
     "priorities": [
       "简易/完整双模式与共享工作区",
       "低配加载/渲染隔离与实测",
       "问题提交、分类、补问、纠正和工具结果闭环"
     ],
     "shared": "同一套八工具、规则、填写、结果、清单及单audio",
-    "background": "27号持续动态背景保留，后移至完整模式且需符合性能预算。",
-    "onlineClassifier": "真实DeepSeek助手与八事务入口推荐已接通；多事项纠正、共享简易工作区与低帧自动降级尚未实现。",
+    "background": "后置，不增加简易负担，不在本轮实现。",
+    "onlineClassifier": "真实DeepSeek plan_tasks识别事项/意图，最多3候选/补问；受限规则与显式应用；非ready不执行。",
     "initialMode": "full",
     "initialModeSource": "explicit_user_instruction_2026-10-31",
     "automaticFallback": {
-      "status": "planned_not_implemented",
-      "trigger": "持续低帧/卡顿",
+      "status": "implemented_simulation_verified_not_low_end_hardware_tested",
+      "trigger": "前台应连续绘制且稳定场景：约1秒有效窗，持续5窗<30FPS或2窗<15FPS",
       "targetMode": "simple",
-      "manualRestore": "始终可手动切回完整；建议本次访问尊重选择，避免反复强切",
-      "sampling": "仅前台且应持续绘制的有效窗口；过滤预热、后台、主动暂停或低频",
-      "candidateThresholdsNotYetValidated": {
-        "slowFps": 30,
-        "slowSeconds": 5,
-        "severeFps": 15,
-        "severeSeconds": 2
-      },
+      "manualRestore": "本次手动选择优先，不反复强切；正常下一次无参数访问仍默认完整。",
+      "sampling": "实际渲染回调采样；先1.5秒预热；过滤入场/覆盖/暂停/系统减少动态/事务或唱片转场；换场景清旧窗口。",
       "preserve": "当前事务、输入、结果、请求与单audio曲目/进度",
       "futureDefault": "自动降级不写成下次默认简易"
     }
@@ -210,9 +203,9 @@
     "featureFreeze": "2026-11-14",
     "packageReady": "2026-11-17",
     "scoreTarget": 85,
-    "scoreMeaning": "v0.31按官方权重内部自评约62（58–65），85仍是目标，非正式得分/奖项预测。",
+    "scoreMeaning": "62（58–65）是v0.31基线内部估分；v0.32完成1/2项，不按测试数自动涨分；85仍为目标，非奖项预测。",
     "coreScope": "保留八工具，一条签约核对AI主线做深；不扩手机、全国政策、账号平台或音乐功能。",
-    "currentReview": "docs/33-score-and-improvement-plan-v031.md",
+    "currentReview": "docs/34-two-modes-and-guided-ai-v032.md",
     "scoreCurrent": 62,
     "scoreRange": [
       58,

@@ -1,5 +1,6 @@
 import {calculatePayslip} from '../lib/wages.ts';
 import {ASSISTANT_MODULES} from './assistant-types.ts';
+import {validateAssistantGuide} from './assistant-guide.ts';
 import type {AssistantAction,AssistantMessage,AssistantReply,AssistantStatus} from './assistant-types.ts';
 
 const object=(value:unknown):value is Record<string,unknown>=>value!==null&&typeof value==='object'&&!Array.isArray(value);
@@ -24,6 +25,8 @@ function validAction(value:unknown):value is AssistantAction{
 }
 export function validateAssistantReply(value:unknown):AssistantReply{
  if(!object(value)||value.provider!=='DeepSeek'||!text(value.model,100)||!text(value.reply,16000)||!Array.isArray(value.actions)||value.actions.length>6||!value.actions.every(validAction)||!Array.isArray(value.steps)||value.steps.length>6||!value.steps.every(step=>object(step)&&text(step.id,30)&&text(step.name,100)&&text(step.label,100)&&typeof step.ok==='boolean'&&text(step.summary,300)))throw new AssistantClientError('invalid-response','回复格式不完整，请重试。');
+ if(value.replyOrigin!==undefined&&!['model','guide'].includes(String(value.replyOrigin)))throw new AssistantClientError('invalid-response','回复来源不完整，请重试。');
+ if(value.guide!==undefined){try{value.guide=validateAssistantGuide(value.guide);}catch{throw new AssistantClientError('invalid-response','事项与补问信息不完整，请重试。');}}
  return value as unknown as AssistantReply;
 }
 export function createAssistantClient(fetcher:typeof fetch=fetch){

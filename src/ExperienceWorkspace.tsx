@@ -18,6 +18,9 @@ import ToolDirectory from './ToolDirectory.tsx';
 import AIAssistant from './AIAssistant.tsx';
 import type {AssistantSeed} from './AIAssistant.tsx';
 import type {AssistantAction} from './services/assistant-types.ts';
+import ModeSwitch from './ModeSwitch.tsx';
+import SceneBoundary from './SceneBoundary.tsx';
+import {useExperienceMode} from './useExperienceMode.ts';
 const Scene=lazy(()=>import('./TaskArrayScene.tsx'));
 const find=(page:ExperiencePage)=>EXPERIENCE_MODULES.findIndex(item=>item.id===page);
 function firstEntry(){try{return sessionStorage.getItem('first-step-entry-v017')!=='seen';}catch{return true;}}
@@ -29,6 +32,7 @@ function statusFor(index:number,signals:TerminalSignals){
   return signals.tools[task.id as ToolId].summary;
 }
 export default function ExperienceWorkspace({page,go,questionCount,signals,openSources,covered=false,musicOpen,openMusic,closeMusic,onAssistantAction,children}:{page:WorkspacePage;musicOpen:boolean;openMusic:()=>void;closeMusic:()=>void;go:(page:ExperiencePage)=>void;questionCount:number;signals:TerminalSignals;openSources:()=>void;demo:()=>void;onAssistantAction:(action:AssistantAction)=>void;covered?:boolean;children:ReactNode}){
+  const modeState=useExperienceMode(),lightweight=modeState.mode==='simple';
   const [selected,setSelected]=useState(()=>(find(page)<0?1:find(page))),[working,setWorking]=useState(page!=='home');
   const [assistantOpen,setAssistantOpen]=useState(false),[assistantSeed,setAssistantSeed]=useState<AssistantSeed|null>(null),[homeQuestion,setHomeQuestion]=useState('');
   function ask(text=''){setCinema(false);setAssistantSeed(text?{id:Date.now(),text,send:true}:null);setAssistantOpen(true);if(text)setHomeQuestion('');}
@@ -39,7 +43,10 @@ export default function ExperienceWorkspace({page,go,questionCount,signals,openS
   const [musicDetail,setMusicDetail]=useState(false);
   const [musicPhase,setMusicPhase]=useState<MusicModePhase>('closed');
   const musicPresent=musicOpen||musicPhase!=='closed';
-  const [intro,setIntro]=useState(()=>!musicOpen&&firstEntry()),[introKey,setIntroKey]=useState(0),[ready,setReady]=useState(false),[failed,setFailed]=useState(false),[simple,setSimple]=useState(false),[particles,setParticles]=useState(false),[reset,setReset]=useState(0),[cinema,setCinema]=useState(false);
+  const [intro,setIntro]=useState(()=>!lightweight&&!musicOpen&&firstEntry()),[introKey,setIntroKey]=useState(0),[ready,setReady]=useState(false),[failed,setFailed]=useState(false),[simple,setSimple]=useState(false),[particles,setParticles]=useState(false),[reset,setReset]=useState(0),[cinema,setCinema]=useState(false);
+  function changeMode(next:'simple'|'full'){setCinema(false);setFailed(false);if(next==='full'&&lightweight)setReady(false);if(next==='simple')setIntro(false);modeState.change(next);}
+  useEffect(()=>{modeState.setActive(lightweight||intro||assistantOpen||covered?null:musicPresent?'music':'task');return()=>modeState.setActive(null);},[lightweight,intro,assistantOpen,covered,musicPresent,modeState.setActive]);
+  useEffect(()=>{if(lightweight)setCinema(false);},[lightweight]);
   const root=useRef<HTMLDivElement>(null),overview=useRef<HTMLElement>(null),workspace=useRef<HTMLElement>(null),previousPage=useRef(page);
   const soundtrack=useSoundtrack({working:working&&!musicOpen,entering:intro});
   const intent=useRef<{page:ExperiencePage;view:'material'|'result'}|null>(null);
@@ -77,14 +84,13 @@ export default function ExperienceWorkspace({page,go,questionCount,signals,openS
     const nextView=action==='result'&&available?'result':'material';intent.current=page===module.id?null:{page:module.id,view:nextView};setSelected(index);setParticles(false);setCinema(false);setWorking(true);setWorkView(nextView);go(module.id);
     setFocusRequest({page:module.id,view:nextView,detail,serial:Date.now()});if(action==='result'&&!available)setFeedback('先准备材料并完成核对，再查看结果。');
   }
-  useEffect(()=>{void import('./TaskArrayScene.tsx').catch(()=>{});},[]);
   useEffect(()=>{if(working||cinema||assistantOpen||musicPresent)root.current?.querySelector('details.home-scene-settings')?.removeAttribute('open');},[working,cinema,assistantOpen,musicPresent]);
   useLayoutEffect(()=>{if(page!==previousPage.current){if(page==='home')setWorking(false);else{setWorking(true);const index=find(page);if(index>=0)setSelected(index);}previousPage.current=page;}workspace.current?.scrollTo({top:0,behavior:'instant'});},[page]);
   useEffect(()=>{if(intro)return;const timer=window.setTimeout(()=>{if(document.querySelector('dialog[open]'))return;if(cinema){root.current?.querySelector<HTMLButtonElement>('.experience-cinema-return')?.focus({preventScroll:true});return;}const target=(working?workspace:overview).current;if(target&&!target.contains(document.activeElement))target.focus({preventScroll:true});},working?180:0);return()=>clearTimeout(timer);},[intro,working,page,cinema]);
   useEffect(()=>{
-    function key(event:KeyboardEvent){if(intro||assistantOpen||musicOpen||document.querySelector('dialog[open]')||(event.target as HTMLElement)?.closest('input,textarea,select'))return;if(cinema){if(event.key==='Escape'){event.preventDefault();setCinema(false);}return;}if(event.key==='Escape'){if(working){event.preventDefault();closeWork();}return;}if(working)return;if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();setSelected(value=>value<0?(event.key==='ArrowRight'?0:7):(value+(event.key==='ArrowRight'?1:7))%8);}}
+    function key(event:KeyboardEvent){if(intro||assistantOpen||musicOpen||document.querySelector('dialog[open]')||(event.target as HTMLElement)?.closest('input,textarea,select'))return;if(cinema){if(event.key==='Escape'){event.preventDefault();setCinema(false);}return;}if(event.key==='Escape'){if(working){event.preventDefault();closeWork();}return;}if(working||lightweight)return;if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();setSelected(value=>value<0?(event.key==='ArrowRight'?0:7):(value+(event.key==='ArrowRight'?1:7))%8);}}
     window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key);
-  },[intro,assistantOpen,musicOpen,working,cinema,task]);
+  },[intro,assistantOpen,musicOpen,working,cinema,task,lightweight]);
   useEffect(()=>{
     const target=root.current;if(!target)return;const events=new AbortController();let hot:HTMLElement|null=null,rect:DOMRect|null=null,frame=0,x=0,y=0;
     function clear(){if(hot)delete hot.dataset.hovered;hot=null;rect=null;cancelAnimationFrame(frame);frame=0;}
@@ -92,17 +98,17 @@ export default function ExperienceWorkspace({page,go,questionCount,signals,openS
     target.addEventListener('pointermove',event=>{const next=(event.target as HTMLElement).closest<HTMLElement>('button,a');if(next!==hot){clear();hot=next;if(hot)hot.dataset.hovered='true';}x=event.clientX;y=event.clientY;if(hot&&!frame)frame=requestAnimationFrame(paint);},{passive:true,signal:events.signal});target.addEventListener('pointerleave',clear,{signal:events.signal});window.addEventListener('resize',()=>{rect=null;},{signal:events.signal});target.addEventListener('scroll',()=>{rect=null;},{capture:true,passive:true,signal:events.signal});return()=>{events.abort();clear();};
   },[]);
   return <>
-    <div ref={root} className={`experience-shell ${musicPresent?'has-player':''} ${working?'is-working':''} ${cinema?'is-cinema':''} ${intro?'is-intro':''} ${assistantOpen||musicPresent||covered?'is-covered':''} ${simple?'is-reduced':''}`} data-music-phase={musicPhase} data-view={workView} data-stage={working?(utility?page:task?.ready?workView:'planned'):'overview'} data-module={utility?page:task?.id??'welcome'} inert={intro||musicPresent} aria-hidden={intro||musicPresent||undefined}>
+    <div ref={root} className={`experience-shell ${lightweight?'is-simple':''} ${musicPresent?'has-player':''} ${working?'is-working':''} ${cinema?'is-cinema':''} ${intro?'is-intro':''} ${assistantOpen||musicPresent||covered?'is-covered':''} ${simple||lightweight?'is-reduced':''}`} data-experience-mode={modeState.mode} data-music-phase={musicPhase} data-view={workView} data-stage={working?(utility?page:task?.ready?workView:'planned'):'overview'} data-module={utility?page:task?.id??'welcome'} inert={intro||musicPresent} aria-hidden={intro||musicPresent||undefined}>
       <a className="skip-link" href="#experience-content" onClick={event=>{event.preventDefault();(working?workspace:overview).current?.focus();}}>跳到主要内容</a>
       <div className={`experience-world ${failed||simple?'is-still':ready?'is-dynamic':''}`} aria-label="可以选择办事工具的三维界面">
         <HomeBackdrop/>
-        {!failed&&<Suspense fallback={null}><Scene key="task-space-v018-tool-details" entering={intro} onAction={sceneAction} selected={selected} signals={signals} view={workView} onSelect={choose} onOpen={openFromScene} working={working} particles={particles} reset={reset} paused={simple} suspended={assistantOpen||musicPresent||covered} cinema={cinema} onPhase={setPhase} onReady={()=>setReady(true)} onFailure={()=>{setFailed(true);setReady(true);}}/></Suspense>}
+        {!failed&&!lightweight&&<SceneBoundary onFailure={modeState.unavailable}><Suspense fallback={<div className="mode-scene-loading" role="status">正在准备三维界面…<button onClick={()=>changeMode('simple')}>先用简易模式</button></div>}><Scene key="task-space-v018-tool-details" entering={intro} onAction={sceneAction} selected={selected} signals={signals} view={workView} onSelect={choose} onOpen={openFromScene} working={working} particles={particles} reset={reset} paused={simple} suspended={assistantOpen||musicPresent||covered} cinema={cinema} onPhase={setPhase} onFrame={(now,eligible)=>modeState.frame('task',now,eligible)} onReady={()=>setReady(true)} onFailure={()=>{setFailed(true);setReady(true);modeState.unavailable();}}/></Suspense></SceneBoundary>}
       </div>
       <div className="experience-shade" aria-hidden="true"/><div className="experience-registration" aria-hidden="true"><i/><i/><i/><i/></div>
       <header className="experience-header" inert={cinema}>
         <a className="experience-brand" href="#/home" onClick={()=>{setSelected(1);setWorking(false);setCinema(false);}} aria-label="初程首页"><RhineMark/><span>初程<small>FIRST STEP</small></span></a>
         <div className="experience-team"><span>莱茵生命</span><small>THE NEXT CHAPTER</small></div>
-        <div className="experience-header-actions"><button className="assistant-header-entry" onClick={()=>ask()}><Sparkles size={15}/><span>问 AI</span></button><button onClick={openTools}><span className="experience-menu-mark" aria-hidden="true"><i/><i/></span><span>工具列表</span><small>08</small></button><MusicEntry state={soundtrack} contextKey={`${page}:${musicPresent}`} onOpen={detail=>{setMusicDetail(detail);setCinema(false);openMusic();}}/><button className="experience-replay-entry" onClick={()=>{setCinema(false);setIntroKey(value=>value+1);setIntro(true);}}><Play size={13}/><span>重播入场</span></button><button className="home-help-entry" onClick={openSources} aria-label="资料与当前能力" title="资料与当前能力"><CircleHelp size={17}/><span>使用说明</span></button></div>
+        <div className="experience-header-actions"><ModeSwitch mode={modeState.mode} onChange={changeMode}/><button className="assistant-header-entry" onClick={()=>ask()}><Sparkles size={15}/><span>问 AI</span></button><button onClick={openTools}><span className="experience-menu-mark" aria-hidden="true"><i/><i/></span><span>工具列表</span><small>08</small></button><MusicEntry state={soundtrack} contextKey={`${page}:${musicPresent}`} lightweight={lightweight} onOpen={detail=>{setMusicDetail(detail);setCinema(false);openMusic();}}/><button className="experience-replay-entry" hidden={lightweight} onClick={()=>{setCinema(false);setIntroKey(value=>value+1);setIntro(true);}}><Play size={13}/><span>重播入场</span></button><button className="home-help-entry" onClick={openSources} aria-label="资料与当前能力" title="资料与当前能力"><CircleHelp size={17}/><span>使用说明</span></button></div>
       </header>
       <main ref={overview} className="experience-overview" id={!working?'experience-content':'scene-content'} tabIndex={-1} inert={working||cinema} aria-hidden={working||cinema}>
         <div className="experience-section-label"><i/><span>初入职场，慢慢弄明白。</span></div>
@@ -114,6 +120,7 @@ export default function ExperienceWorkspace({page,go,questionCount,signals,openS
           <div className="home-question-examples"><small>也可以问</small>{['试用期怎么算？','第一笔工资怎么核对？'].map(example=><button key={example} onClick={()=>setHomeQuestion(example)}>{example}</button>)}</div>
           <button className="home-manual-link" onClick={openTools}>想自己操作？查看全部工具<ArrowRight size={15}/></button>
         </article>
+        {lightweight&&<aside className="simple-home-guide"><small>从问题到下一步</small><ol><li><span>01</span><div><strong>先说情况</strong><p>不用判断该选哪个工具。</p></div></li><li><span>02</span><div><strong>只补必要信息</strong><p>不确定的地方，可以直接说不知道。</p></div></li><li><span>03</span><div><strong>核对，再带走结果</strong><p>金额按规则算，要问的事留在清单里。</p></div></li></ol><button onClick={openTools}>也可以直接用八项工具<ArrowRight size={15}/></button></aside>}
         <aside className="experience-spatial-note" aria-hidden="true"><span>{task?.code}</span><div><small>{phase}</small><span>08 / CONNECTED TASKS</span></div><i/></aside>
       </main>
       <aside className="experience-work-context" aria-hidden={!working} inert={!working}>
@@ -131,14 +138,15 @@ export default function ExperienceWorkspace({page,go,questionCount,signals,openS
         {tools&&<ToolDirectory go={go} onAsk={()=>ask()}/>}
         <div className="experience-business-content">{children}</div>
       </section>
-      <div className="experience-scene-tools" hidden={working} inert={cinema}><p>{failed?'三维暂不可用 · 工具列表仍可使用':simple?'已减少动态 · 工具入口照常可用':'后排只预览 · 当前模型的文字与子选项可操作'}</p><details className="home-scene-settings" onKeyDown={event=>{if(event.key==='Escape'){event.preventDefault();event.stopPropagation();event.currentTarget.open=false;event.currentTarget.querySelector('summary')?.focus();}}}><summary><SlidersHorizontal size={14}/>场景设置<ChevronRight size={12}/></summary><div><button onClick={()=>setParticles(value=>!value)} aria-pressed={particles} disabled={simple||failed}><Sparkles size={14}/>{particles?'重组资料':'查看几何点云'}</button><button onClick={()=>setReset(value=>value+1)} aria-label="复位场景视角"><RotateCcw size={14}/>复位场景视角</button><button onClick={()=>setSimple(value=>!value)} aria-pressed={simple}>{simple?'开启动效':'减少动态'}</button><button onClick={()=>setCinema(value=>!value)} aria-pressed={cinema}><Maximize size={14}/>{cinema?'显示界面':'纯净观景'}</button></div></details></div>
+      <div className="experience-scene-tools" hidden={working||lightweight} inert={cinema}><p>{failed?'三维暂不可用 · 工具列表仍可使用':simple?'已减少动态 · 工具入口照常可用':'后排只预览 · 当前模型的文字与子选项可操作'}</p><details className="home-scene-settings" onKeyDown={event=>{if(event.key==='Escape'){event.preventDefault();event.stopPropagation();event.currentTarget.open=false;event.currentTarget.querySelector('summary')?.focus();}}}><summary><SlidersHorizontal size={14}/>场景设置<ChevronRight size={12}/></summary><div><button onClick={()=>setParticles(value=>!value)} aria-pressed={particles} disabled={simple||failed}><Sparkles size={14}/>{particles?'重组资料':'查看几何点云'}</button><button onClick={()=>setReset(value=>value+1)} aria-label="复位场景视角"><RotateCcw size={14}/>复位场景视角</button><button onClick={()=>setSimple(value=>!value)} aria-pressed={simple}>{simple?'开启动效':'减少动态'}</button><button onClick={()=>setCinema(value=>!value)} aria-pressed={cinema}><Maximize size={14}/>{cinema?'显示界面':'纯净观景'}</button></div></details></div>
       <footer className="experience-footer" inert={cinema}><HomeTaskDirectory onAsk={()=>ask()} onTools={openTools} onList={openList} questionCount={questionCount}/></footer>
-      <div className="experience-systemline" inert={cinema}><span><i/>FIRST STEP / 0.31<span>YOUR NEXT MOVE</span></span><div><button onClick={openSources}>使用范围 ↗</button></div></div>
+      <div className="experience-systemline" inert={cinema}><span><i/>FIRST STEP / 0.32<span>YOUR NEXT MOVE</span></span><div><button onClick={openSources}>使用范围 ↗</button></div></div>
       {cinema&&<button className="experience-cinema-return" onClick={()=>setCinema(false)}>返回界面<ArrowLeft size={15}/><small>ESC</small></button>}
     </div>
-    <MusicPlayer state={soundtrack} open={musicOpen} onClose={closeMusic} returnPage={page} returnLabel={page==='home'?'首页':tools?'工具列表':list?'询问清单':task.label} reduced={simple} entryDetail={musicDetail} onModeChange={setMusicPhase}/>
-    <AIAssistant open={assistantOpen} onClose={()=>setAssistantOpen(false)} module={page} seed={assistantSeed} onAction={onAssistantAction} onTools={openTools}/>
-    <PointerFeedback enabled={!intro&&!simple}/><audio ref={soundtrack.audio} crossOrigin="anonymous" loop={soundtrack.loop==='single'} preload="none" data-soundtrack={soundtrack.track.cid} aria-hidden="true"/>
+    {modeState.notice&&<div className="experience-mode-notice" role="status"><span>{modeState.notice}</span>{lightweight&&<button onClick={()=>changeMode('full')}>切回完整</button>}<button onClick={modeState.dismiss} aria-label="关闭模式提示"><X size={14}/></button></div>}
+    <MusicPlayer state={soundtrack} lightweight={lightweight} modeNotice={modeState.notice} onSimpleMode={()=>changeMode('simple')} onFullMode={()=>changeMode('full')} onFrame={(now,eligible)=>modeState.frame('music',now,eligible)} open={musicOpen} onClose={closeMusic} returnPage={page} returnLabel={page==='home'?'首页':tools?'工具列表':list?'询问清单':task.label} reduced={simple} entryDetail={musicDetail} onModeChange={setMusicPhase}/>
+    <AIAssistant modeSwitch={<ModeSwitch mode={modeState.mode} onChange={changeMode}/>} open={assistantOpen} onClose={()=>setAssistantOpen(false)} module={page} seed={assistantSeed} onAction={onAssistantAction} onTools={openTools}/>
+    <PointerFeedback enabled={!intro&&!simple&&!lightweight}/><audio ref={soundtrack.audio} crossOrigin="anonymous" loop={soundtrack.loop==='single'} preload="none" data-soundtrack={soundtrack.track.cid} aria-hidden="true"/>
     {intro&&<ExperienceEntry key={introKey} staticMode={simple} ready={ready||simple||failed} onComplete={completeIntro} onMusicToggle={soundtrack.toggle} musicPlaying={soundtrack.playing}/>}
   </>;
 }

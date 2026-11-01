@@ -13,7 +13,7 @@ import {previewFromPress,actionFromPress} from './scene-pointer.ts';
 import type {ScenePress} from './scene-pointer.ts';
 import {createStyleWriter} from './scene/style-writer.ts';
 
-type Props={selected:number;working:boolean;entering:boolean;particles:boolean;paused?:boolean;suspended?:boolean;cinema?:boolean;reset:number;signals:TerminalSignals;view:string;onSelect:(index:number)=>void;onOpen:(index:number)=>void;onAction:SceneInteraction;onReady:()=>void;onFailure:()=>void;onPhase?:(phase:string)=>void};
+type Props={selected:number;working:boolean;entering:boolean;particles:boolean;paused?:boolean;suspended?:boolean;cinema?:boolean;reset:number;signals:TerminalSignals;view:string;onSelect:(index:number)=>void;onOpen:(index:number)=>void;onAction:SceneInteraction;onReady:()=>void;onFailure:()=>void;onPhase?:(phase:string)=>void;onFrame?:(now:number,eligible:boolean)=>void};
 type Dossier={group:T.Group;texture:T.CanvasTexture;canvas:HTMLCanvasElement;key:string;signal:TerminalSignals|null;active:boolean;hot:SceneAction|null;cover:T.Mesh;layers:T.Group;index:number;samples:Float32Array;meshes:{mesh:T.Mesh;opacity:number}[];bars:T.Mesh[];solid:number;hover:number;outline:T.LineSegments};
 const COUNT=10000;
 const LABEL_OFFSETS=[[0,0],[42,0],[-42,0],[84,0],[-84,0],[126,0],[-126,0],[0,34],[60,34],[-60,34],[120,34],[-120,34],[0,68],[80,68],[-80,68],[160,0],[-160,0]];
@@ -230,6 +230,7 @@ export default function TaskArrayScene(props:Props){
    PART_LABELS.forEach((part,n)=>{const label=partRefs.current[n],d=dossiers[part.module],mesh=d.bars[part.part];if(!label||!mesh)return;const visible=s.working&&selected===part.module&&!s.entering&&!s.cinema&&hover===part.module&&lastPart===part.part&&shown(mesh);hide(label,!visible);if(!visible)return;tmp.set(0,part.module===2||part.module===3?(.5*mesh.scale.y+.2)/Math.max(.01,mesh.scale.y):.22,0).applyMatrix4(mesh.matrixWorld).project(camera);style(label,'transform',`translate3d(${quarter((tmp.x*.5+.5)*width)}px,${quarter(Math.max(315,(-tmp.y*.5+.5)*height-5))}px,0) translate(-50%,-100%)`);});
    style(renderer.domElement,'cursor',drag&&!s.working?'grabbing':hover===selected&&hotAction&&settled()?'pointer':s.working?'default':'grab');
    if(now-lastShadow>100||still){renderer.shadowMap.needsUpdate=true;lastShadow=now;countAudit('shadowRefreshes');}renderer.render(scene,camera);audit.frame({cpu:performance.now()-cpuStart,calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures});
+   latest.current.onFrame?.(now,!still&&!s.suspended&&!s.entering&&morph>=.999&&Math.abs(work-(s.working?1:0))<.02);
    const phase=morph<1?'事务迁移':s.working?(s.view==='result'?'结果展开':'材料展开'):'事务轨道';data(el!,'phase',phase);data(el!,'scene',String(selected));data(el!,'motion',still?'reduced':'dynamic');data(el!,'transition',morph.toFixed(3));data(el!,'hover',String(hover));data(el!,'hoverPart',String(lastPart));data(el!,'entry',boot.toFixed(3));if(previousPhase!==phase){previousPhase=phase;latest.current.onPhase?.(phase);}
    if(!still&&!s.suspended&&!s.entering)frame=requestAnimationFrame(draw);
   }
