@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
+import {AccountProvider} from './Account.tsx';
 import './base.css';
 import './experience.css';
 import './experience-workbench.css';
@@ -15,6 +16,7 @@ import './assistant.css';
 import './simple-mode.css';
 import './assistant-guidance.css';
 import './assistant-continuity.css';
+import './account.css';
 
 window.history.scrollRestoration = 'manual';
-ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);
+ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><AccountProvider><App /></AccountProvider></React.StrictMode>);

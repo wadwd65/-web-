@@ -1,10 +1,10 @@
-# 初程 FIRST STEP · 对话续接与入口整理 v0.33
+# 初程 FIRST STEP · 图片校对与可选个人空间 v0.34
 
 面向初入职场毕业生的八项办事工具，音乐为辅助。首页可以直接向 DeepSeek 说明问题，也可以进入工具列表自行操作。三维前景模型的文字与子选项保留点击；后排只能切换预览，拖动、跨区域和转场中的命中不会执行动作。主体和播放器回到浅蓝银色，保留抽取、旋转、单音频、鼠标反馈和入场回放。仅电脑端。
 
-版本入口：[历史版本说明](docs/VERSION_HISTORY.md)、[开发总日志](docs/DEVELOPMENT_LOG.md)、[当前自检](docs/35-v032-independent-review.md)、[后续执行计划](docs/36-next-execution-plan.md)。仓库根目录是当前v0.33完整源码、测试、锁文件与所需静态资源；旧版只记录沿革，不新增多套旧源码或构建快照。已有Git提交历史保留。v0.33已完成，v0.34–0.37仍为计划。桌面参赛包根“开发总日志.md”与本仓库日志同步维护。
+版本入口：[历史版本说明](docs/VERSION_HISTORY.md)、[开发总日志](docs/DEVELOPMENT_LOG.md)、[当前自检](docs/35-v032-independent-review.md)、[后续执行计划](docs/36-next-execution-plan.md)。仓库根目录是当前v0.34完整源码、测试、锁文件与所需静态资源；旧版只记录沿革，不新增多套旧源码或构建快照。已有Git提交历史保留。v0.34单图校对及可选账号已实现，v0.35–0.37仍待。桌面参赛包根“开发总日志.md”与本仓库日志同步维护。
 
-先读[本轮对话与UI说明](docs/37-conversation-continuity-v033.md)，双模式见[双模式与AI流程说明](docs/34-two-modes-and-guided-ai-v032.md)。前轮优化见[性能说明](docs/32-home-render-performance-v031.md)与[自评/逐步改进表](docs/33-score-and-improvement-plan-v031.md)；AI与工具范围见[31号](docs/31-light-ai-entry-and-tools-v030.md)。恢复开发运行 `npm run resume`，再读 `docs/memory/progress.json` 与 `DECISIONS.md`。源码只同步 [wadwd65/-web-](https://github.com/wadwd65/-web-)。
+先读[本轮图片与个人空间说明](docs/38-image-and-optional-account-v034.md)，双模式见[双模式与AI流程说明](docs/34-two-modes-and-guided-ai-v032.md)。前轮优化见[性能说明](docs/32-home-render-performance-v031.md)与[自评/逐步改进表](docs/33-score-and-improvement-plan-v031.md)；AI与工具范围见[31号](docs/31-light-ai-entry-and-tools-v030.md)。恢复开发运行 `npm run resume`，再读 `docs/memory/progress.json` 与 `DECISIONS.md`。源码只同步 [wadwd65/-web-](https://github.com/wadwd65/-web-)。
 
 ## 本地运行
 
@@ -23,7 +23,7 @@ npm run build
 npm start
 ```
 
-默认 `http://127.0.0.1:5186/?v=0.33#/home`；工具列表 `#/tools`；音乐 `#/music`。`/__first-step-version` 可核对实际版本。参赛包仍双击“开始预览.cmd”。开发、Vite preview 与保存版都使用同一 AI 网关。
+默认 `http://127.0.0.1:5186/?v=0.34#/home`；工具列表 `#/tools`；音乐 `#/music`。`/__first-step-version` 可核对实际版本。参赛包仍双击“开始预览.cmd”。开发、Vite preview 与保存版都使用同一 AI 网关。
 
 ## DeepSeek 配置
 
@@ -55,3 +55,9 @@ FIRST_STEP_AI_MODEL=deepseek-flash
 ## 本轮验证
 
 85项自动检查、TypeScript与生产构建通过；21例真实DeepSeek合成评测（保留初轮失败与修正记录）。`npm run evaluate:assistant`会使用服务端配置产生实际模型请求，评测材料全部合成。冷简易首页/播放器无Three/GLB/盘面请求，实际跨模式输入与播放保留。OCR/RAG/公网身份额度隔离仍未完成；只做桌面。
+
+## v0.34 图片与个人空间
+
+见[38号实现/自检](docs/38-image-and-optional-account-v034.md)。合同工具支持PNG/JPEG单张图片，点击发送后真实识别，校对确认才填入文字区。PDF仍仅预览。右上角可选登录，可主动保存地区/阶段/情况备注和清单；带入提问仍需自己发送。
+
+账号库默认在工程外 ~/.config/first-step/private-data/accounts.sqlite，进程环境变量FIRST_STEP_DATA_DIR可指定独立目录；别将数据库或真实资料放进源码/public/dist。密码scrypt、会话HttpOnly cookie；目前只用于本机服务，尚无公网部署、邮箱/短信/密码找回或所有表单/聊天自动同步。游客原清单保持本地，账号修改需主动保存，退出清除当前账号相关填写与对话。

@@ -1,3 +1,5 @@
+import {createAccountMiddleware} from './account-service.mjs';
+import {createImageMiddleware} from './contract-image.mjs';
 import http from 'node:http';
 import {createReadStream,readFileSync,statSync} from 'node:fs';
 import {resolve,relative,isAbsolute,extname,dirname} from 'node:path';
@@ -11,9 +13,9 @@ export function startPreview({directory=resolve(dirname(fileURLToPath(import.met
  if(!Number.isInteger(port)||port<1024||port>65535)throw new Error('Invalid local port.');
  const root=resolve(directory,'dist'),version=JSON.parse(readFileSync(resolve(directory,'package.json'),'utf8')).version;
  statSync(resolve(root,'index.html'));
- const assistant=createAssistantMiddleware({directory});
+ const assistant=createAssistantMiddleware({directory}),account=createAccountMiddleware(),image=createImageMiddleware({directory});
  const server=http.createServer((req,res)=>{
-  if(assistant(req,res)||audioMiddleware(root,req,res)||musicMiddleware(req,res))return;
+  if(account(req,res)||image(req,res)||assistant(req,res)||audioMiddleware(root,req,res)||musicMiddleware(req,res))return;
   if(!['GET','HEAD'].includes(req.method)){res.writeHead(405);res.end();return;}
   let pathname;try{pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);}catch{res.writeHead(400);res.end();return;}
   if(pathname==='/__first-step-version'){res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify({version,snapshot:snapshot||null,mode:'local preview with server-side assistant'}));return;}

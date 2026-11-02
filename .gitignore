@@ -9,3 +9,9 @@ work/
 *.log
 *.tsbuildinfo
 
+
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+private-data/

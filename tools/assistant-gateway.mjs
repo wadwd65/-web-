@@ -33,7 +33,7 @@ const SYSTEM=`你是“初程”的办事助手，面向刚毕业、第一次工
 回答先给直接有用的信息，不重述用户问题，不罗列八个模块。通常控制在2到3个短段落、约200字内；复杂风险可稍长，但详细原文和依据留给对应工具。缺材料时一次列清本次必需信息，不讲大段背景。工资关键数字和待加入清单的问题已由界面直接展示，你只需解释边界和下一步，不重复整张结果表。用户问具体字段就只回答该字段；不要把简单问题扩写成完整办事教程。
 用户转去处理新问题时，专注当前问题，不追问上一事项的可选字段，也不每次催问实际到账等非必填信息。
 工资金额必须调用calculate_salary；前五项缺一项就明确问还缺哪几项，不能默认为0，也不能只丢一个入口让用户自行找。只算用户明确提供的数据，不猜地方缴费率、到手工资或退税。合同在用户确认全日制及提供文字后可用review_contract；一年可按12个月理解，但未知仍传null。不可把“本次没定位”说成完整合同违法。
-合同工具返回的是已核验日期的本地规则与来源，不是在线检索。你现在没有网页搜索、RAG、OCR、图片识别或官方办理权限，不可声称已经联网查过、识图或提交申请。补贴只维护一条广州求职创业补贴样例；其他地区说明需核实，不虚构金额、资格、政策或官方链接。
+合同工具返回的是已核验日期的本地规则与来源，不是在线检索。这个聊天入口仅接收文字，不能声称你已读取照片；本站合同工具另有单张图片明确发送、识别和人工校对入口。用户问怎样上传照片时以guidance计划并用open_tool打开contract，不先要求粘贴整份原文。没有网页搜索、RAG或官方办理权限，不可声称已经联网查过或提交申请。补贴只维护一条广州求职创业补贴样例；其他地区说明需核实，不虚构金额、资格、政策或官方链接。
 用户已经有表单材料也不会自动发送给你；只根据这次聊天的用户文字和当前模块名处理。引用不得编造，工具结果不能修改。对没法确定的事项，说明还缺什么，给1到2个明确问题。准备提问用prepare_questions。
 你只能调用下列白名单工具，不执行代码、不访问文件、不操控音乐、账号、支付或外部服务。与毕业生活事项无关的请求简单说明服务范围。回复用短段落，不写Markdown加粗或大标题。只有prepare_questions成功后才有加入清单按钮；不要编造未生成的按钮，也不要声称用户已点击。给出结果后仅提到这次工具实际生成的操作。`;
 
@@ -180,6 +180,10 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
       if(guide&&guide.status!=='ready'){
         const prompts={choose:'你提到了几件事，先选一件处理。选好后，只补充这件事需要的信息。','needs-info':guide.activeModule==='salary'?'先补齐工资条上这几项。不确定就写“不知道”，不会把它当成0来算。':'先确认下面的信息。不清楚的地方可以写“不知道”，暂时不做确定性判断。',clarify:'先说说眼前最想弄清楚的事，不用先判断属于哪个工具。','out-of-scope':'这件事暂不在初程的范围内。这里主要帮你核对入职、工资、租房等事项，也可以直接查看工具列表。'};
         return {reply:prompts[guide.status],replyOrigin:'guide',actions:[],steps,guide,provider:'DeepSeek',model:config.model||'deepseek-flash'};
+      }
+      if(guide?.status==='ready'&&guide.activeModule==='contract'&&guide.intent==='guidance'&&/照片|图片|拍照/u.test(conversation.messages.at(-1).content)){
+        const entry=executeAssistantTool('open_tool',{module:'contract'},conversation.userText);
+        return {reply:'在合同工具顶部打开“从合同照片开始”。选图只会预览，点击发送识别后，再对照原图校对文字。校对完成后确认用工类型与期限，再进行规则核对。',replyOrigin:'guide',actions:[entry.action],steps:[...steps,{id:String(steps.length+1),name:'open_tool',label:'提供图片校对入口',ok:true,summary:'合同工具 · 单页图片'}],guide,provider:'DeepSeek',model:config.model||'deepseek-flash'};
       }
     }
     throw new AssistantError('tool-limit','AI这次没能完成处理，请换个问法，或直接打开对应工具。',502);
