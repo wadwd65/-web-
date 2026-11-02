@@ -87,8 +87,8 @@
     },
     {
       "id": "save",
-      "status": "saved_verified_git_pending",
-      "acceptance": "218文件独立源码/dist快照匹配，旧v0.32保留；保存版5238实际AI补问/焦点正确/无warn-error，完整三维正常；5186/index/配置/Range206已核验。"
+      "status": "completed",
+      "acceptance": "218文件独立源码/dist快照匹配，旧v0.32保留；保存版5238实际AI补问/焦点正确/无warn-error，完整三维正常；5186/index/配置/Range206已核验。 源码已正常推送正确仓库。"
     }
   ],
   "validation": {
@@ -131,12 +131,12 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "v033_pending",
-    "sourceCommit": "ab374f12f0725e838b941e59d4d81bb4eae10b06",
-    "verifiedAt": "2026-11-01",
+    "pushStatus": "published",
+    "sourceCommit": "1ca9ff6bfb4858f53db7f7faea00c96580b22783",
+    "verifiedAt": "2026-11-02",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "df015ffaeaecff26465ba4b93691d1446772790e",
-    "publicationReceipt": "outputs/v032-publication/repository-upload-receipt.json",
+    "previousPublishedHead": "96b08f44f8de68fcedfdf9500b403dfc6cee8a4f",
+    "publicationReceipt": "outputs/v033-review/git-publication.json",
     "historyAndLogCommit": "097d39904f1d3226c458255a3f0684a199854c57"
   },
   "sideDeliverables": [
@@ -241,7 +241,7 @@
   "executionPlan": {
     "date": "2026-11-01",
     "document": "docs/36-next-execution-plan.md",
-    "state": "v033_verified_save_pending",
+    "state": "v033_completed",
     "nextMilestone": "v0.34 verify image capability and single-image correction",
     "executionHours": [
       34,
@@ -265,6 +265,6 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "desktop_mirror_verified_and_main_archive_commit_pushed"
+    "status": "v033_updated_desktop_verified"
   }
 }
