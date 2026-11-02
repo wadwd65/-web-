@@ -1,10 +1,10 @@
 {
-  "version": "0.32.0",
-  "recordedAt": "2026-11-01T12:23:48.561Z",
+  "version": "0.33.0",
+  "recordedAt": "2026-11-02T05:26:35.389Z",
   "workState": "reviewed_internally",
-  "validationVersion": "0.32.0",
+  "validationVersion": "0.33.0",
   "textNormalisation": "LF",
-  "sourceDigest": "a34204543a3f598641a7256f1a22982f4b63fe7f42056679d9e138056de8def1",
+  "sourceDigest": "f18e355c34df06269853ec9bc0c2008e347120083b021e76bdeb0295f1002cbf",
   "files": [
     {
       "path": ".env.example",
@@ -12,7 +12,7 @@
     },
     {
       "path": "AGENTS.md",
-      "sha256": "59a3fba0dabe737c950c93714dc1c3956ff71c3bca6500a50cea838766d4d7a9"
+      "sha256": "681814769dc220b4005b545d8e20a59ec48438c1cd66b740bd175162eeefa067"
     },
     {
       "path": "docs/memory/ARCHITECTURE.md",
@@ -20,27 +20,27 @@
     },
     {
       "path": "docs/memory/BACKLOG.md",
-      "sha256": "c2cdc29cd0c4ed6d10fa86858360fcbfccb69ef747edca948ddcf831ca1c62a5"
+      "sha256": "bf77e152da1a97001f62150ed2e73b6093bbf7949b1b94a7e3caae9201eeeaa7"
     },
     {
       "path": "docs/memory/DECISIONS.md",
-      "sha256": "507f27dc1736e006dd74d3ddecb9730d9703ed7818e93e849f194f185851ec1b"
+      "sha256": "c3170d11d3cbd8aa244b506a49f2971f0ff64f1665bf77fbfee6437ea9682f66"
     },
     {
       "path": "docs/memory/SESSIONS.md",
-      "sha256": "83e3e7eed9d05edf95a78a43d6a4d72d4b3bcc72419ef4198d9824a82d31de4e"
+      "sha256": "2fc51f77e37598162158d1ca592df60758df2a103ec3745ccef7cdede61ca574"
     },
     {
       "path": "docs/memory/progress.json",
-      "sha256": "e42f9c0f2fba49c7a4440231018715bd7e5476dc7f474c1f68fa003fdf5b9793"
+      "sha256": "b321cb6daadfef42aceb381a3b7a592b667a2714cea45589da1ba43c4fd92057"
     },
     {
       "path": "package-lock.json",
-      "sha256": "e2142791fda3c407d987971b22913418a918bb3f36cf59945c76b56cc2831a83"
+      "sha256": "63de1315c41b7344a1d8ff671abfb036fb4ccd68708d76fd65b63933d64e08df"
     },
     {
       "path": "package.json",
-      "sha256": "81867dabb2740412cb5e355cd25576e5d5c8913f9f44c5419142dfac984dad47"
+      "sha256": "248e0695f49ab7eb1a6dc604d822b5d9ee9ca6e29d7b8db75a7e4bd47c2c89fd"
     },
     {
       "path": "public/artwork/rhine-ascent.png",
@@ -148,7 +148,7 @@
     },
     {
       "path": "src/AIAssistant.tsx",
-      "sha256": "5157405b1058e4402c62d91809308a2150c6a09b00a4e491e6abb96bf8c6ece3"
+      "sha256": "6e0d2b9ba955d2c9c672ea6bd6b0025bd973d1122fcc321c5c3186ee1d1e1ca8"
     },
     {
       "path": "src/App.tsx",
@@ -160,7 +160,7 @@
     },
     {
       "path": "src/AssistantNextStep.tsx",
-      "sha256": "6821e1b08542fae1960e6d12d66708509f0f8c9c457e029f138afe541f422d6f"
+      "sha256": "855a209bc593edf9818945ec4982f3945994e342c43a01a5d6e2b3ecbaea934f"
     },
     {
       "path": "src/ExhibitScene.tsx",
@@ -172,7 +172,7 @@
     },
     {
       "path": "src/ExperienceWorkspace.tsx",
-      "sha256": "03e993676e96fded928535bf96d58c987443aca0005eda8fbd786795cb40f17e"
+      "sha256": "d8df99acdf6a0669346cbd6ee748a9d0d2c9c6c23a669e21f9b63228ba157cf9"
     },
     {
       "path": "src/HomeTaskDirectory.tsx",
@@ -233,6 +233,10 @@
     {
       "path": "src/archive-motion.ts",
       "sha256": "f95eb46c3dd0654d3d6084f9492291bfc22aff2392ce076688d2e2e7cbd520ae"
+    },
+    {
+      "path": "src/assistant-continuity.css",
+      "sha256": "b78ec7b9a448adf29ce63d17ea316b30c17bcbc5d115af270c718732dac88db8"
     },
     {
       "path": "src/assistant-guidance.css",
@@ -296,7 +300,7 @@
     },
     {
       "path": "src/main.tsx",
-      "sha256": "16d86a28a5a17e8541db51311116c8d4407716016ab3a0d759fd4cabc08c406b"
+      "sha256": "617334cbc687f17f8d13d3b70322b6890f0bc5c7e57b2a4c3daec5d60c8e7f83"
     },
     {
       "path": "src/module-guides.ts",
@@ -380,7 +384,11 @@
     },
     {
       "path": "src/services/assistant-client.ts",
-      "sha256": "dc7454357b9135880fe6328a5f15a5b11ed4a624eb6a8deac5016c4de7a1ad27"
+      "sha256": "76162c7eff44043bd1ed55f5f659a57226939a4a206e57bc6c9c93f3a7d43423"
+    },
+    {
+      "path": "src/services/assistant-context.ts",
+      "sha256": "35648542810ec61a91806c591d60ee27a94e26391ae380cb5326a947bb62a977"
     },
     {
       "path": "src/services/assistant-guide.ts",
@@ -388,7 +396,7 @@
     },
     {
       "path": "src/services/assistant-types.ts",
-      "sha256": "a0ea324111a59c4d85b4742c1cecf77d96542cb14b84aaa04c6c8c7b4cd1ff76"
+      "sha256": "acb44d2c3e467a268059f1362af8d7e84db9f4f63792673d548203b92068099d"
     },
     {
       "path": "src/services/index.ts",
@@ -437,6 +445,10 @@
     {
       "path": "tests/assistant-client.test.ts",
       "sha256": "8daa64286596f7cde6ebd5bc01ada117325efa898d74ab6dc3db4060887377f2"
+    },
+    {
+      "path": "tests/assistant-continuity.test.ts",
+      "sha256": "1e29365c73bb632b1750bc2c9b95da7c72ecbc0aa072698b134c4a8ca3e9c633"
     },
     {
       "path": "tests/assistant-guidance.test.mjs",
@@ -492,7 +504,7 @@
     },
     {
       "path": "tools/assistant-gateway.mjs",
-      "sha256": "c77a2268231263fe289f393f7c871e94e14398b6892d2fd7854feb78b2ee4bf7"
+      "sha256": "1370b79f9ea283134acf5f38073b51d943b2d7b5f44f4112c0de6d2ad3615717"
     },
     {
       "path": "tools/audio-static.mjs",
@@ -504,7 +516,7 @@
     },
     {
       "path": "tools/evaluate-assistant.mjs",
-      "sha256": "52dbe5810be87f3370c9d07411dd9102dbad9ffb580eed45293b0bbb61201ddf"
+      "sha256": "0ce2a5ad2e22c0bc304682865b5f17f5bd49c44409f58051691a36b3cbca5383"
     },
     {
       "path": "tools/music-source.mjs",

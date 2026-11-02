@@ -124,7 +124,7 @@ export function executeAssistantTool(name,args,userText){
   throw new AssistantError('unknown-tool','这个操作不在可用工具范围内。');
 }
 
-export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=45000}={}){
+export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=45000,onProgress}={}){
   const conversation=validateConversation(input);
   if(!config?.apiKey)throw new AssistantError('not-configured','DeepSeek还没有连接。请配置服务端密钥，或先使用下方的办事工具。',503);
   if(signal?.aborted)throw new AssistantError('aborted','已停止这次回复。',499);
@@ -135,6 +135,7 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
   const actions=[],steps=[];let totalTools=0,guide=null;
   try{
     for(let round=0;round<4;round++){
+      onProgress?.(guide?'responding':'planning');
       let response;
       try{response=await fetcher(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${config.apiKey}`},body:JSON.stringify({model:config.model||'deepseek-flash',messages,tools:guide?(['choose','out-of-scope','clarify','needs-info'].includes(guide.status)?[]:tools):[planner],tool_choice:guide?(['choose','out-of-scope','clarify','needs-info'].includes(guide.status)?'none':'auto'):{type:'function',function:{name:'plan_tasks'}},thinking:{type:'disabled'},stream:false,max_tokens:1600,temperature:.3}),signal:controller.signal});}
       catch{if(controller.signal.aborted)throw new AssistantError(timedOut?'timeout':'aborted',timedOut?'DeepSeek这次回复较慢，请稍后重试。':'已停止这次回复。',timedOut?504:499);throw new AssistantError('upstream-network','暂时联系不上DeepSeek，请稍后再试。',502);}
@@ -162,6 +163,7 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
           const args=JSON.parse(call.function.arguments),name=call.function.name;
           if(!guide&&name!=='plan_tasks')throw new AssistantError('tool-input','先确认当前事项，不能跳过补问和用户选择。');
           if(name!=='plan_tasks'){
+            onProgress?.('checking');
             if(guide.status!=='ready')throw new AssistantError('tool-input','当前还需要用户选择或补充信息，这一步未执行。');
             const target=name==='calculate_salary'?'salary':name==='review_contract'?'contract':args.module;
             if(target!==guide.activeModule&&!(name==='open_tool'&&target==='list'))throw new AssistantError('tool-input','不能把其他事项的数据应用到当前事项。请先切换事项。');
@@ -192,7 +194,7 @@ export function createAssistantMiddleware({directory,config,fetcher,timeoutMs}={
     const path=new URL(req.url,'http://localhost').pathname;
     if(!path.startsWith('/api/v1/assistant/'))return false;
     const requestId=randomUUID();
-    const fail=error=>{if(res.destroyed||res.writableEnded)return;const e=error instanceof AssistantError?error:new AssistantError('internal','这次请求没有完成，请稍后重试。',500);json(res,e.status,{requestId,error:{code:e.code,message:e.message}});};
+    const fail=error=>{if(res.destroyed||res.writableEnded)return;const e=error instanceof AssistantError?error:new AssistantError('internal','这次请求没有完成，请稍后重试。',500);if(res.headersSent){res.end(JSON.stringify({type:'error',error:{code:e.code,message:e.message}})+'\n');}else json(res,e.status,{requestId,error:{code:e.code,message:e.message}});};
     try{
       const hostname=new URL(`http://${req.headers.host||''}`).hostname;
       if(!['127.0.0.1','localhost','[::1]'].includes(hostname))throw new AssistantError('host','AI助手目前只在本机服务中使用。',403);
@@ -207,7 +209,9 @@ export function createAssistantMiddleware({directory,config,fetcher,timeoutMs}={
       if(busy>=2||starts.length>=12)throw new AssistantError('rate','当前请求较多，请等这次回复完成。',429);
       starts.push(now);busy++;
       const abort=new AbortController();const disconnected=()=>{if(!res.writableEnded)abort.abort();};res.on('close',disconnected);
-      void readBody(req).then(input=>runAssistant(input,{config:current,fetcher,signal:abort.signal,timeoutMs})).then(data=>{if(!res.destroyed)json(res,200,{requestId,data});}).catch(fail).finally(()=>{busy--;res.removeListener('close',disconnected);});
+      const streaming=req.headers.accept?.includes('application/x-ndjson');
+      const progress=stage=>{if(!streaming||res.destroyed||res.writableEnded)return;if(!res.headersSent){res.writeHead(200,{'Content-Type':'application/x-ndjson; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.flushHeaders();}res.write(JSON.stringify({type:'progress',stage})+'\n');};
+      void readBody(req).then(input=>runAssistant(input,{config:current,fetcher,signal:abort.signal,timeoutMs,onProgress:progress})).then(data=>{if(res.destroyed)return;if(res.headersSent)res.end(JSON.stringify({type:'result',data})+'\n');else json(res,200,{requestId,data});}).catch(fail).finally(()=>{busy--;res.removeListener('close',disconnected);});
     }catch(error){fail(error);}
     return true;
   };

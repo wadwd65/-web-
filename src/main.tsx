@@ -14,6 +14,7 @@ import './terminal-unity.css';
 import './assistant.css';
 import './simple-mode.css';
 import './assistant-guidance.css';
+import './assistant-continuity.css';
 
 window.history.scrollRestoration = 'manual';
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);

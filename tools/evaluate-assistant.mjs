@@ -1,4 +1,4 @@
-import {mkdir,writeFile} from 'node:fs/promises';
+import {mkdir,writeFile,readFile} from 'node:fs/promises';
 import {resolve,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {readAssistantConfig,runAssistant} from './assistant-gateway.mjs';
@@ -6,7 +6,8 @@ import {assistantEvaluationCases,evaluateAssistantCase} from './assistant-evalua
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..'),config=readAssistantConfig(root);
 if(!config.apiKey)throw Error('Configure the server-side provider before running the online evaluation.');
 const flag=process.argv.find(a=>a.startsWith('--cases=')),ids=flag?.slice(8).split(','),cases=ids?assistantEvaluationCases.filter(c=>ids.includes(c.id)):assistantEvaluationCases;
-const directory=resolve(root,'outputs/v032-review');await mkdir(directory,{recursive:true});
+const version=JSON.parse(await readFile(resolve(root,'package.json'),'utf8')).version;
+const directory=resolve(root,`outputs/v${version.split('.').slice(0,2).join('')}-review`);await mkdir(directory,{recursive:true});
 const results=[];let next=0;
 async function worker(){while(next<cases.length){const item=cases[next++],start=performance.now();let record;try{const result=await runAssistant({messages:item.messages,module:'home'},{config});record={id:item.id,...evaluateAssistantCase(item,result),elapsedMs:Math.round(performance.now()-start),result};}catch(error){record={id:item.id,passed:false,failures:[error.code||'request failed'],elapsedMs:Math.round(performance.now()-start)};}results.push(record);console.log(`${record.id}: ${record.passed?'PASS':'FAIL '+record.failures.join(', ')} (${record.elapsedMs} ms)`);}}
 await Promise.all([worker(),worker()]);results.sort((a,b)=>a.id.localeCompare(b.id));

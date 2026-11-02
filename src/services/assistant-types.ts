@@ -9,6 +9,7 @@ export type AssistantAction=
  | {kind:'apply-contract';input:ContractAssistantInput;label:string}
  | {kind:'add-questions';items:{text:string;category:string}[];label:string};
 export type AssistantMessage={role:'user'|'assistant';content:string};
+export type AssistantProgress='planning'|'checking'|'responding';
 export type AssistantStep={id:string;name:string;label:string;ok:boolean;summary:string};
 export type AssistantGuide={intent?:'calculate'|'review'|'guidance'|'questions';status:'choose'|'needs-info'|'ready'|'clarify'|'out-of-scope';tasks:{module:Exclude<AssistantModule,'list'>;reason:string}[];activeModule:Exclude<AssistantModule,'list'>|null;questions:{label:string;hint:string}[]};
 export type AssistantReply={reply:string;actions:AssistantAction[];steps:AssistantStep[];provider:'DeepSeek';model:string;replyOrigin?:'model'|'guide';guide?:AssistantGuide};

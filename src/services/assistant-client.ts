@@ -1,7 +1,7 @@
 import {calculatePayslip} from '../lib/wages.ts';
 import {ASSISTANT_MODULES} from './assistant-types.ts';
 import {validateAssistantGuide} from './assistant-guide.ts';
-import type {AssistantAction,AssistantMessage,AssistantReply,AssistantStatus} from './assistant-types.ts';
+import type {AssistantAction,AssistantMessage,AssistantReply,AssistantStatus,AssistantProgress} from './assistant-types.ts';
 
 const object=(value:unknown):value is Record<string,unknown>=>value!==null&&typeof value==='object'&&!Array.isArray(value);
 const text=(value:unknown,max:number):value is string=>typeof value==='string'&&value.trim().length>0&&value.length<=max;
@@ -30,13 +30,28 @@ export function validateAssistantReply(value:unknown):AssistantReply{
  return value as unknown as AssistantReply;
 }
 export function createAssistantClient(fetcher:typeof fetch=fetch){
- async function request(path:string,body:unknown,signal?:AbortSignal){
+ async function request(path:string,body:unknown,signal?:AbortSignal,onProgress?:(stage:AssistantProgress)=>void){
   if(signal?.aborted)throw new AssistantClientError('aborted','已停止回复。');
   const controller=new AbortController(),cancel=()=>controller.abort();let timedOut=false;
   signal?.addEventListener('abort',cancel,{once:true});
   const timer=setTimeout(()=>{timedOut=true;controller.abort();},55000);
   try{
-   const response=await fetcher('/api/v1/assistant/'+path,{method:body===undefined?'GET':'POST',credentials:'same-origin',cache:'no-store',headers:body===undefined?undefined:{'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body),signal:controller.signal});
+   const response=await fetcher('/api/v1/assistant/'+path,{method:body===undefined?'GET':'POST',credentials:'same-origin',cache:'no-store',headers:body===undefined?undefined:{'Content-Type':'application/json',Accept:'application/x-ndjson'},body:body===undefined?undefined:JSON.stringify(body),signal:controller.signal});
+   if(response.ok&&response.headers.get('content-type')?.includes('application/x-ndjson')){
+    if(!response.body)throw new AssistantClientError('invalid-response','回复中断了，请重试。');
+    const reader=response.body.getReader(),decoder=new TextDecoder();let pending='',size=0,result:unknown,done=false;
+    try{while(!done){const chunk=await reader.read();done=chunk.done;pending+=decoder.decode(chunk.value,{stream:!done});size+=chunk.value?.byteLength??0;if(size>262144||pending.length>131072)throw new AssistantClientError('invalid-response','回复过长，请缩小问题范围。');
+     const lines=pending.split('\n');pending=lines.pop()??'';if(done&&pending.trim()){lines.push(pending);pending='';}
+     for(const line of lines){if(!line.trim())continue;let event:unknown;try{event=JSON.parse(line);}catch{throw new AssistantClientError('invalid-response','回复中断了，请重试。');}
+      if(!object(event))throw new AssistantClientError('invalid-response','回复格式不完整，请重试。');
+      if(event.type==='progress'&&['planning','checking','responding'].includes(String(event.stage)))onProgress?.(event.stage as AssistantProgress);
+      else if(event.type==='result'){if(result!==undefined)throw new AssistantClientError('invalid-response','回复重复，请重试。');result=event.data;}
+      else if(event.type==='error'&&object(event.error))throw new AssistantClientError(text(event.error.code,50)?event.error.code:'http',text(event.error.message,300)?event.error.message:'回复没有完成，请重试。');
+      else throw new AssistantClientError('invalid-response','回复格式不完整，请重试。');
+     }
+    }}finally{if(!done)await reader.cancel().catch(()=>{});reader.releaseLock();}
+    if(result===undefined)throw new AssistantClientError('invalid-response','回复中断了，可以重试原问题。');return result;
+   }
    let envelope:unknown;try{envelope=await response.json();}catch{throw new AssistantClientError('invalid-response','AI服务没有返回有效内容，请检查本地服务是否启动。');}
    if(!response.ok){const error=object(envelope)&&object(envelope.error)?envelope.error:null;throw new AssistantClientError(error&&text(error.code,50)?error.code:'http',error&&text(error.message,300)?error.message:'这次请求没有完成，请稍后重试。');}
    if(!object(envelope)||!object(envelope.data))throw new AssistantClientError('invalid-response','回复格式不完整，请重试。');
@@ -48,8 +63,8 @@ export function createAssistantClient(fetcher:typeof fetch=fetch){
   }finally{clearTimeout(timer);signal?.removeEventListener('abort',cancel);}
  }
  return {
-  async status(signal?:AbortSignal):Promise<AssistantStatus>{const data=await request('status',undefined,signal);if(typeof data.configured!=='boolean'||data.provider!=='DeepSeek'||!text(data.model,100))throw new AssistantClientError('invalid-response','AI连接状态暂不可用。');return data as unknown as AssistantStatus;},
-  async chat(messages:AssistantMessage[],module:string,signal?:AbortSignal){return validateAssistantReply(await request('chat',{messages,module},signal));},
+  async status(signal?:AbortSignal):Promise<AssistantStatus>{const data=await request('status',undefined,signal);if(!object(data)||typeof data.configured!=='boolean'||data.provider!=='DeepSeek'||!text(data.model,100))throw new AssistantClientError('invalid-response','AI连接状态暂不可用。');return data as unknown as AssistantStatus;},
+  async chat(messages:AssistantMessage[],module:string,signal?:AbortSignal,onProgress?:(stage:AssistantProgress)=>void){return validateAssistantReply(await request('chat',{messages,module},signal,onProgress));},
  };
 }
 export const assistantClient=createAssistantClient();
