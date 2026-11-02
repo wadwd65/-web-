@@ -11,7 +11,7 @@
   "release": {
     "url": "http://127.0.0.1:5186/?v=0.34#/home",
     "snapshot": "first-step-图片校对与可选账号-v0.34",
-    "state": "saved_and_default_preview_verified_ready_for_user_review"
+    "state": "ready_for_user_review"
   },
   "implemented": {
     "business": "保留八项限定本地工具及共享询问清单，八工具统一迁入#/tools，支持完全不经AI手动操作。",
@@ -88,7 +88,7 @@
     },
     {
       "id": "save",
-      "status": "saved_verified_git_pending",
+      "status": "completed",
       "acceptance": "225文件新v0.34源码/dist快照匹配，旧v0.33保留；5242账号恢复与照片校对到原规则、默认5186版本/index/匿名账号/Range206已核验；登录画面1041宽无横向溢出、单audio、无warn/error。"
     }
   ],
@@ -131,12 +131,12 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "v034_pending",
-    "sourceCommit": "1ca9ff6bfb4858f53db7f7faea00c96580b22783",
+    "pushStatus": "published",
+    "sourceCommit": "28909a3d1a695006764479dad67afff97452d5a8",
     "verifiedAt": "2026-11-02",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "96b08f44f8de68fcedfdf9500b403dfc6cee8a4f",
-    "publicationReceipt": "outputs/v033-review/git-publication.json",
+    "previousPublishedHead": "00fb534367aad9958fad65e5e2b03cab3fe47225",
+    "publicationReceipt": "outputs/v034-review/git-publication.json",
     "historyAndLogCommit": "097d39904f1d3226c458255a3f0684a199854c57"
   },
   "sideDeliverables": [
@@ -241,7 +241,7 @@
   "executionPlan": {
     "date": "2026-11-01",
     "document": "docs/36-next-execution-plan.md",
-    "state": "v034_verified_save_pending",
+    "state": "v034_completed",
     "nextMilestone": "v0.35 bounded official RAG",
     "executionHours": [
       34,
@@ -265,6 +265,6 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v033_updated_desktop_verified"
+    "status": "v034_updated_desktop_verified"
   }
 }
