@@ -89,8 +89,8 @@
     },
     {
       "id": "save",
-      "status": "saved_pending_publication",
-      "acceptance": "232文件源码/dist新快照，原0.35保留；保存版真实调用与完整模式界面已复核，Git收尾中。"
+      "status": "completed",
+      "acceptance": "232文件源码/dist新快照，原0.35保留；保存版真实调用与完整模式已复核、正确Git正常推送，最终HEAD/哈希见回执。"
     }
   ],
   "validation": {
@@ -101,7 +101,7 @@
     "scope": "Desktop usability patch. Amounts require confirmed data, limited corpus and account/public/low-end gaps remain explicit.",
     "manual": "独立5245真实补问时常驻可写输入、可选表单默认关闭、仅规划日志隐藏；输入租房草稿→可选提交社保800及其他未知→原草稿保留→直接发送换题。",
     "online": "7 saved-5186 synthetic calls checked planning/continuation, direct explanation, free-topic priority, unknown lookup and explicit navigation. Not sentence-level legal verification.",
-    "savedPreview": "5186实际0.35.1/index匹配；完整模式补问时输入常驻可写，1对话/1输入/1audio，可选字段默认关闭、无横向溢出；保存版自由发送租房问题。"
+    "savedPreview": "5186实际0.35.1/index匹配；完整模式补问时输入常驻可写，1对话/1输入/1audio，可选字段默认关闭、无横向溢出；保存版自由发送租房问题。 直接换题得到租房答复，ready无重复框/规划日志；新对话清空可输入，console无warn/error。"
   },
   "nextActions": [
     "按36号完成合同材料→依据→核对项→可编辑询问清单/导出的完整关联。",
@@ -132,13 +132,13 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "v0351_pending",
-    "sourceCommit": "e89a5eb0c1f27bd3d98243ccfa7ff36d372e55d0",
+    "pushStatus": "published",
+    "sourceCommit": "dfdb609ce267fb35ce821f83323fc4086ddd4778",
     "verifiedAt": "2026-11-03",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "4ce7ed3cdc2e3ad70d22e403f9d1a68caafe88a4",
+    "previousPublishedHead": "07d8fe90d83a571a96ed3738b9acac4c306b159a",
     "publicationReceipt": "outputs/v0351-review/git-publication.json",
-    "historyAndLogCommit": "e89a5eb0c1f27bd3d98243ccfa7ff36d372e55d0"
+    "historyAndLogCommit": "dfdb609ce267fb35ce821f83323fc4086ddd4778"
   },
   "sideDeliverables": [
     {
@@ -266,6 +266,6 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v0351_updated_desktop_pending_check"
+    "status": "v0351_updated_desktop_verified"
   }
 }
