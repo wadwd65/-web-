@@ -1,3 +1,4 @@
+import {isContractRetrieval} from '../lib/contract-knowledge.ts';
 import {calculatePayslip} from '../lib/wages.ts';
 import {ASSISTANT_MODULES} from './assistant-types.ts';
 import {validateAssistantGuide} from './assistant-guide.ts';
@@ -24,8 +25,9 @@ function validAction(value:unknown):value is AssistantAction{
  return false;
 }
 export function validateAssistantReply(value:unknown):AssistantReply{
- if(!object(value)||value.provider!=='DeepSeek'||!text(value.model,100)||!text(value.reply,16000)||!Array.isArray(value.actions)||value.actions.length>6||!value.actions.every(validAction)||!Array.isArray(value.steps)||value.steps.length>6||!value.steps.every(step=>object(step)&&text(step.id,30)&&text(step.name,100)&&text(step.label,100)&&typeof step.ok==='boolean'&&text(step.summary,300)))throw new AssistantClientError('invalid-response','回复格式不完整，请重试。');
+ if(!object(value)||value.provider!=='DeepSeek'||!text(value.model,100)||!text(value.reply,16000)||!Array.isArray(value.actions)||value.actions.length>6||!value.actions.every(validAction)||!Array.isArray(value.steps)||value.steps.length>8||!value.steps.every(step=>object(step)&&text(step.id,30)&&text(step.name,100)&&text(step.label,100)&&typeof step.ok==='boolean'&&text(step.summary,300)))throw new AssistantClientError('invalid-response','回复格式不完整，请重试。');
  if(value.replyOrigin!==undefined&&!['model','guide'].includes(String(value.replyOrigin)))throw new AssistantClientError('invalid-response','回复来源不完整，请重试。');
+ if(value.references!==undefined&&!isContractRetrieval(value.references))throw new AssistantClientError('invalid-response','检索依据无法与官方资料库对应，请重试。');
  if(value.guide!==undefined){try{value.guide=validateAssistantGuide(value.guide);}catch{throw new AssistantClientError('invalid-response','事项与补问信息不完整，请重试。');}}
  return value as unknown as AssistantReply;
 }
@@ -44,7 +46,7 @@ export function createAssistantClient(fetcher:typeof fetch=fetch){
      const lines=pending.split('\n');pending=lines.pop()??'';if(done&&pending.trim()){lines.push(pending);pending='';}
      for(const line of lines){if(!line.trim())continue;let event:unknown;try{event=JSON.parse(line);}catch{throw new AssistantClientError('invalid-response','回复中断了，请重试。');}
       if(!object(event))throw new AssistantClientError('invalid-response','回复格式不完整，请重试。');
-      if(event.type==='progress'&&['planning','checking','responding'].includes(String(event.stage)))onProgress?.(event.stage as AssistantProgress);
+      if(event.type==='progress'&&['planning','retrieving','checking','responding'].includes(String(event.stage)))onProgress?.(event.stage as AssistantProgress);
       else if(event.type==='result'){if(result!==undefined)throw new AssistantClientError('invalid-response','回复重复，请重试。');result=event.data;}
       else if(event.type==='error'&&object(event.error))throw new AssistantClientError(text(event.error.code,50)?event.error.code:'http',text(event.error.message,300)?event.error.message:'回复没有完成，请重试。');
       else throw new AssistantClientError('invalid-response','回复格式不完整，请重试。');

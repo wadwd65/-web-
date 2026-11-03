@@ -6,6 +6,7 @@ import {randomUUID} from 'node:crypto';
 import {validateAssistantGuide} from '../src/services/assistant-guide.ts';
 import {calculatePayslip} from '../src/lib/wages.ts';
 import {analyzeContract,CONTRACT_REFERENCE} from '../src/lib/contracts.ts';
+import {searchContractKnowledge,CONTRACT_KNOWLEDGE} from '../src/lib/contract-knowledge.ts';
 
 const ENDPOINT='https://api.deepseek.com/chat/completions';
 const MODULES={offer:'Offer对比',contract:'合同核对',salary:'工资明细',tax:'个税指引',social:'社保医保',rent:'租房核对',subsidy:'补贴匹配',leaving:'离职转接',list:'询问清单'};
@@ -33,7 +34,7 @@ const SYSTEM=`你是“初程”的办事助手，面向刚毕业、第一次工
 回答先给直接有用的信息，不重述用户问题，不罗列八个模块。通常控制在2到3个短段落、约200字内；复杂风险可稍长，但详细原文和依据留给对应工具。缺材料时一次列清本次必需信息，不讲大段背景。工资关键数字和待加入清单的问题已由界面直接展示，你只需解释边界和下一步，不重复整张结果表。用户问具体字段就只回答该字段；不要把简单问题扩写成完整办事教程。
 用户转去处理新问题时，专注当前问题，不追问上一事项的可选字段，也不每次催问实际到账等非必填信息。
 工资金额必须调用calculate_salary；前五项缺一项就明确问还缺哪几项，不能默认为0，也不能只丢一个入口让用户自行找。只算用户明确提供的数据，不猜地方缴费率、到手工资或退税。合同在用户确认全日制及提供文字后可用review_contract；一年可按12个月理解，但未知仍传null。不可把“本次没定位”说成完整合同违法。
-合同工具返回的是已核验日期的本地规则与来源，不是在线检索。这个聊天入口仅接收文字，不能声称你已读取照片；本站合同工具另有单张图片明确发送、识别和人工校对入口。用户问怎样上传照片时以guidance计划并用open_tool打开contract，不先要求粘贴整份原文。没有网页搜索、RAG或官方办理权限，不可声称已经联网查过或提交申请。补贴只维护一条广州求职创业补贴样例；其他地区说明需核实，不虚构金额、资格、政策或官方链接。
+合同工具返回本地规则。合同计划ready后，程序会检索已核验的官方资料，把contractKnowledge及source交给你；这是本地资料检索，不是实时网页搜索。只有status=matched的excerpts才是本次命中依据，用这些原文解释，不能靠旧referenceNotes冒充检索。引用的适用范围、区间含/不含边界和核验日必须准确。资料之外的金额、期限或法律结论不要凭记忆补充。只解释与当前问题直接相关的一点，不额外扩展未命中的其他规定。这个聊天入口仅接收文字，不能声称你已读取照片；本站合同工具另有单张图片明确发送、识别和人工校对入口。用户问怎样上传照片时以guidance计划并用open_tool打开contract，不先要求粘贴整份原文。资料库仅收录中国内地劳动合同法第17、19、22、23、25条，未覆盖的问题说明需另查。没有实时网页搜索或官方办理权限，不可声称刚刚查了官网或提交申请。检索依据由界面单独展示，不自行生成URL、虚构条文或声称逐句审核通过。补贴只维护一条广州求职创业补贴样例；其他地区说明需核实，不虚构金额、资格、政策或官方链接。
 用户已经有表单材料也不会自动发送给你；只根据这次聊天的用户文字和当前模块名处理。引用不得编造，工具结果不能修改。对没法确定的事项，说明还缺什么，给1到2个明确问题。准备提问用prepare_questions。
 你只能调用下列白名单工具，不执行代码、不访问文件、不操控音乐、账号、支付或外部服务。与毕业生活事项无关的请求简单说明服务范围。回复用短段落，不写Markdown加粗或大标题。只有prepare_questions成功后才有加入清单按钮；不要编造未生成的按钮，也不要声称用户已点击。给出结果后仅提到这次工具实际生成的操作。`;
 
@@ -47,7 +48,7 @@ const GUIDANCE=`
 - 现在足够给出有限说明或执行对应受限工具：status=ready，聚焦一个activeModule，questions=[]。需要工资计算仍必须实际调用calculate_salary；需要原文核对仍必须调用review_contract。计划本身不是计算或核对。
 - 看不出具体事项：status=clarify，tasks=[]，activeModule=null，最多2个具体问题。无关/超范围请求用out-of-scope，空tasks/activeModule/questions；不把每个问题硬归类。
 - 填写提示已由程序统一为确认值/不知道，不许建议未知填0或先填估计数。用户问去哪里查，至少给出工资条或向HR索取明细等直接方法，不要只返回工具入口。不要编造地方的申报/到账周期。
-- 合同数字只能依据本次工具返回的referenceNotes或核对结果。信息不明时不由试用期倒推合同期，不凭记忆编造上限。引用时区间的含/不含边界不能省略；未获得文本不宣称已核对。资料为本地核验，不是联网检索。
+- 合同数字只能依据本次工具返回的contractKnowledge.excerpts或实际核对结果。信息不明时不由试用期倒推合同期，不凭记忆编造上限。引用时区间的含/不含边界不能省略；未获得文本不宣称已核对。资料为本地核验，不是联网检索。
 - 不要从assistant旧回复获得金额、身份或期限。表单不存在隐式上下文。若用户否定了旧事实且没给新值，先问清楚，旧值不能继续使用。
 - 租房阶段不明确时先问是签约前、居住中、准备退租还是已经发生争议。用户只说“租房押金”不代表房东不退，不要预设争议、拒退或违约已经发生。
 - plan_tasks的questions会直接成为可填写补问，tasks会成为可选步骤，回复不重复整份表单。纠正事项不会自动执行操作；按钮需用户点击。不要输出没有生成的导航按钮。
@@ -124,6 +125,17 @@ export function executeAssistantTool(name,args,userText){
   throw new AssistantError('unknown-tool','这个操作不在可用工具范围内。');
 }
 
+/** Keep navigation in real controls. Fall back to exact excerpts if generated file capabilities conflict. */
+export function finalizeContractExplanation(content,references){
+  const reply=content.trim().split(/\n\s*\n/u).filter(paragraph=>!(/^(?:想|需要|如果你|你可以|也可以|有合同)/u.test(paragraph)&&/发我|发来|合同文字|照片|图片|PDF|工具|入口/iu.test(paragraph))).join('\n\n');
+  const unsupportedAdvice=/考核|考察|降薪|降低工资|培训期|培训安排/u.test(reply);
+  if(!reply||unsupportedAdvice||/PDF.{0,40}(?:识别|OCR)|(?:识别|OCR).{0,40}PDF/iu.test(reply)){
+    const first=references.excerpts[0];
+    return {reply:`本次检索到的相关原文如下。\n\n${first.article}\n${first.text}${first.id==='LC19-2'?'\n\n请先确认你在同一单位此前是否已约定过试用期，签过合同本身不能证明这一点。':''}`,replyOrigin:'guide'};
+  }
+  return {reply,replyOrigin:'model'};
+}
+
 export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=45000,onProgress}={}){
   const conversation=validateConversation(input);
   if(!config?.apiKey)throw new AssistantError('not-configured','DeepSeek还没有连接。请配置服务端密钥，或先使用下方的办事工具。',503);
@@ -132,12 +144,14 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
   const cancel=()=>controller.abort();if(signal?.aborted)cancel();else signal?.addEventListener('abort',cancel,{once:true});
   let timedOut=false;const timer=setTimeout(()=>{timedOut=true;controller.abort();},timeoutMs);
   const messages=[{role:'system',content:SYSTEM+GUIDANCE+`\n当前所在模块仅作导航背景，不能替代用户的新意图：${MODULES[conversation.currentModule]||'首页'}。`},...conversation.messages];
-  const actions=[],steps=[];let totalTools=0,guide=null;
+  const actions=[],steps=[];let totalTools=0,guide=null,references;
   try{
     for(let round=0;round<4;round++){
       onProgress?.(guide?'responding':'planning');
+      const explainingContract=guide?.activeModule==='contract'&&guide.intent==='guidance'&&references?.status==='matched';
+      const allowTools=guide?.status==='ready'&&!explainingContract;
       let response;
-      try{response=await fetcher(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${config.apiKey}`},body:JSON.stringify({model:config.model||'deepseek-flash',messages,tools:guide?(['choose','out-of-scope','clarify','needs-info'].includes(guide.status)?[]:tools):[planner],tool_choice:guide?(['choose','out-of-scope','clarify','needs-info'].includes(guide.status)?'none':'auto'):{type:'function',function:{name:'plan_tasks'}},thinking:{type:'disabled'},stream:false,max_tokens:1600,temperature:.3}),signal:controller.signal});}
+      try{response=await fetcher(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${config.apiKey}`},body:JSON.stringify({model:config.model||'deepseek-flash',messages,tools:guide?(allowTools?tools:[]):[planner],tool_choice:guide?(allowTools?'auto':'none'):{type:'function',function:{name:'plan_tasks'}},thinking:{type:'disabled'},stream:false,max_tokens:1600,temperature:.3}),signal:controller.signal});}
       catch{if(controller.signal.aborted)throw new AssistantError(timedOut?'timeout':'aborted',timedOut?'DeepSeek这次回复较慢，请稍后重试。':'已停止这次回复。',timedOut?504:499);throw new AssistantError('upstream-network','暂时联系不上DeepSeek，请稍后再试。',502);}
       if(!response.ok){
         if(response.status===401||response.status===403)throw new AssistantError('upstream-auth','DeepSeek密钥无效或没有访问权限，请检查本机配置。',503);
@@ -151,7 +165,13 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
       if(!message.tool_calls?.length){
         if(typeof message.content!=='string'||!message.content.trim()||message.content.length>16000)throw new AssistantError('invalid-response','AI没有给出可用回复，请重试。',502);
         if(!guide)throw new AssistantError('invalid-response','这次没有确认要处理的事项，请重试或自行选择工具。',502);
-        return {reply:message.content.trim(),replyOrigin:'model',actions,steps,guide,provider:'DeepSeek',model:config.model||'deepseek-flash'};
+        if(guide.activeModule==='contract'&&references?.status==='matched'&&guide.intent!=='questions'&&!actions.some(action=>action.kind==='apply-contract'||action.kind==='open-tool'&&action.module==='contract')){
+          const entry=executeAssistantTool('open_tool',{module:'contract'},conversation.userText);
+          actions.push(entry.action);
+          steps.push({id:'contract-entry',name:'open_tool',label:entry.label,ok:true,summary:entry.summary});
+        }
+        const explanation=explainingContract?finalizeContractExplanation(message.content,references):{reply:message.content.trim(),replyOrigin:'model'};
+        return {...explanation,actions,steps,guide,references,provider:'DeepSeek',model:config.model||'deepseek-flash'};
       }
       if(!Array.isArray(message.tool_calls)||message.tool_calls.length>3||totalTools+message.tool_calls.length>6)throw new AssistantError('tool-limit','这次问题涉及的步骤较多，请先选一件事处理。',502);
       const calls=message.tool_calls;
@@ -169,21 +189,43 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
             if(target!==guide.activeModule&&!(name==='open_tool'&&target==='list'))throw new AssistantError('tool-input','不能把其他事项的数据应用到当前事项。请先切换事项。');
           }
           execution=executeAssistantTool(name,args,conversation.userText);
-          if(execution.guide){guide=execution.guide;actions.length=0;}
+          if(execution.guide){guide=execution.guide;actions.length=0;references=undefined;}
         }
         catch(error){execution={result:{error:'not-executed',message:error instanceof AssistantError?error.message:'参数无法核对，请补充信息。'},label:'需要补充信息',summary:'这一步没有执行'};}
         const ok=Boolean(execution.action||execution.guide);
         steps.push({id:String(totalTools),name:call.function.name,label:execution.label,ok,summary:execution.summary});
+        const latestQuestion=conversation.messages.at(-1).content;
+        const asksContract=guide?.activeModule==='contract'||(!guide?.activeModule&&/合同|试用/u.test(latestQuestion));
+        const photoGuidance=guide?.intent==='guidance'&&/照片|图片|拍照|PDF/iu.test(latestQuestion);
+        if(execution.guide&&guide.status!=='choose'&&asksContract&&!photoGuidance){
+          const retrieved=searchContractKnowledge(latestQuestion,{context:conversation.userText});
+          if(retrieved.status==='out-of-scope'){
+            guide={...guide,status:'out-of-scope',tasks:[],activeModule:null,questions:[]};
+            execution.result.guide=guide;
+          }
+          if(guide.status==='ready'||retrieved.status==='out-of-scope'){
+            onProgress?.('retrieving');
+            references=retrieved;
+            delete execution.result.referenceNotes;
+            execution.result.contractKnowledge=references;
+            execution.result.source=CONTRACT_KNOWLEDGE;
+            execution.result.next='请直接用命中原文回答当前问题，先给简短解释。不要只让用户打开工具，也不要重复完整条文。本次最终解释不提材料上传、图片、PDF或工具入口，界面会单独展示原文和真实入口。不要提出条文之外的考核期、培训期或工资处理建议。只有用户明确经历过试用期，才可认定这次属于重复试用；单纯签过合同不等于已有试用期，可用条件句说明。';
+            steps.push({id:'references-'+totalTools,name:'search_contract_knowledge',label:'检索官方合同资料',ok:references.status==='matched',summary:references.status==='matched'?`命中 ${references.excerpts.length} 段 · ${CONTRACT_KNOWLEDGE.version}`:references.message});
+          }
+        }
         if(execution.action&&!actions.some(a=>JSON.stringify(a)===JSON.stringify(execution.action))){const old=actions.findIndex(a=>a.kind===execution.action.kind&&['apply-salary','apply-contract','open-tool'].includes(a.kind));if(old>=0)actions.splice(old,1);actions.push(execution.action);}
         messages.push({role:'tool',tool_call_id:call.id,content:JSON.stringify(execution.result)});
+      }
+      if(references&&references.status!=='matched'){
+        return {reply:references.message,replyOrigin:'guide',actions:[],steps,guide,references,provider:'DeepSeek',model:config.model||'deepseek-flash'};
       }
       if(guide&&guide.status!=='ready'){
         const prompts={choose:'你提到了几件事，先选一件处理。选好后，只补充这件事需要的信息。','needs-info':guide.activeModule==='salary'?'先补齐工资条上这几项。不确定就写“不知道”，不会把它当成0来算。':'先确认下面的信息。不清楚的地方可以写“不知道”，暂时不做确定性判断。',clarify:'先说说眼前最想弄清楚的事，不用先判断属于哪个工具。','out-of-scope':'这件事暂不在初程的范围内。这里主要帮你核对入职、工资、租房等事项，也可以直接查看工具列表。'};
         return {reply:prompts[guide.status],replyOrigin:'guide',actions:[],steps,guide,provider:'DeepSeek',model:config.model||'deepseek-flash'};
       }
-      if(guide?.status==='ready'&&guide.activeModule==='contract'&&guide.intent==='guidance'&&/照片|图片|拍照/u.test(conversation.messages.at(-1).content)){
+      if(guide?.status==='ready'&&guide.activeModule==='contract'&&guide.intent==='guidance'&&/照片|图片|拍照|PDF/iu.test(conversation.messages.at(-1).content)){
         const entry=executeAssistantTool('open_tool',{module:'contract'},conversation.userText);
-        return {reply:'在合同工具顶部打开“从合同照片开始”。选图只会预览，点击发送识别后，再对照原图校对文字。校对完成后确认用工类型与期限，再进行规则核对。',replyOrigin:'guide',actions:[entry.action],steps:[...steps,{id:String(steps.length+1),name:'open_tool',label:'提供图片校对入口',ok:true,summary:'合同工具 · 单页图片'}],guide,provider:'DeepSeek',model:config.model||'deepseek-flash'};
+        return {reply:/PDF/iu.test(conversation.messages.at(-1).content)?'PDF目前只能在合同工具里预览。请粘贴其中的文字，或把需要核对的一页另存为PNG/JPEG图片，再用“从合同照片开始”识别并人工校对。':'在合同工具顶部打开“从合同照片开始”。选图只会预览，点击发送识别后，再对照原图校对文字。校对完成后确认用工类型与期限，再进行规则核对。',replyOrigin:'guide',actions:[entry.action],steps:[...steps,{id:String(steps.length+1),name:'open_tool',label:'提供图片校对入口',ok:true,summary:'合同工具 · 单页图片'}],guide,provider:'DeepSeek',model:config.model||'deepseek-flash'};
       }
     }
     throw new AssistantError('tool-limit','AI这次没能完成处理，请换个问法，或直接打开对应工具。',502);

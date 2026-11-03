@@ -1,0 +1,25 @@
+.contract-sources { margin: 18px 0 12px; border-top: 1px solid #c9d9e4; border-bottom: 1px solid #c9d9e4; color: #304c62; }
+.contract-sources > summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; cursor: pointer; font-size: 12px; font-weight: 650; list-style: none; }
+.contract-sources > summary::-webkit-details-marker { display: none; }
+.contract-sources > summary > span { display: flex; align-items: center; gap: 9px; }
+.contract-sources > summary > svg { transition: transform .2s ease; }
+.contract-sources[open] > summary > svg { transform: rotate(180deg); }
+.contract-sources > summary:hover { color: #146abd; }
+.contract-sources > summary:focus-visible { outline: 2px solid #398dd5; outline-offset: 4px; }
+.contract-sources-content { max-width: 800px; padding: 0 0 16px; animation: source-reveal .22s ease-out; }
+.contract-sources .contract-sources-note { margin: 0 0 16px; font-size: 12px; line-height: 1.8; color: #536c80; }
+.contract-source-excerpt { margin: 0 0 18px; }
+.contract-source-excerpt header { display: flex; align-items: flex-start; gap: 12px; }
+.contract-source-excerpt header > span { padding-top: 2px; color: #5b83a1; font: 11px 'IBM Plex Mono', monospace; }
+.contract-source-excerpt header > div { display: grid; gap: 3px; }
+.contract-source-excerpt header strong { font-size: 12px; color: #214b6e; }
+.contract-source-excerpt header small { font-size: 11px; color: #597185; }
+.contract-sources .contract-source-excerpt blockquote { margin: 10px 0 8px 25px; padding: 0 0 0 12px; border-left: 2px solid #85b9df; background: transparent; color: #2e4557; font-size: 13px; line-height: 1.95; white-space: pre-line; }
+.contract-source-match { display: block; margin-left: 25px; color: #5d7587; font-size: 10px; }
+.contract-sources .contract-sources-content > footer { display: grid; gap: 6px; padding: 14px 0 0; border-top: 1px dashed #c9d9e4; background: transparent; }
+.contract-sources-content > footer strong { font-size: 11px; color: #365b78; }
+.contract-sources-content > footer > span { color: #5b7284; font-size: 10px; }
+.contract-sources .contract-sources-content > footer p { margin: 0; color: #607486; font-size: 10px; line-height: 1.7; }
+.contract-sources-content > footer a { display: inline-flex; align-items: center; justify-self: start; gap: 7px; padding: 4px 0; color: #196cb0; font-size: 11px; text-decoration: none; }
+@keyframes source-reveal { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .contract-sources-content { animation: none; } .contract-sources > summary > svg { transition: none; } }

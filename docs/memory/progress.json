@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-02",
-  "workingVersion": "0.34.0",
-  "releasedVersion": "0.34.0",
+  "updatedAt": "2026-11-03",
+  "workingVersion": "0.35.0",
+  "releasedVersion": "0.35.0",
   "workState": "reviewed_internally",
-  "objective": "完成单张合同图片校对，并加入用户追加的右上角可选账号与主动情况/清单记忆。",
-  "latestUserRequest": "继续开发，追加美观的可选登录与个人情况记忆。",
+  "objective": "优化合同信息的可追溯性，接入小范围官方资料检索与展开式来源阅读。",
+  "latestUserRequest": "继续优化，检查还能改进的地方。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5186/?v=0.34#/home",
-    "snapshot": "first-step-图片校对与可选账号-v0.34",
+    "url": "http://127.0.0.1:5186/?v=0.35#/home",
+    "snapshot": "first-step-官方合同依据-v0.35",
     "state": "ready_for_user_review"
   },
   "implemented": {
@@ -20,10 +20,11 @@
     "interaction": "前景模型的图内/文字子选项保留，要求手势开始和结束均为稳定前景、同pointer/物体/子区域、总位移≤6px且在画布内；后排只预览，无任意双击跳页。工作区/音乐/对话共享原业务与单audio。",
     "api": "真实同源Node助手网关与DeepSeek function calling；四项白名单工具，共用工资/合同规则；取消、超时、限额、Origin/Host与输入证据校验。旧文档review客户端仍仅协议预留。",
     "copy": "首页、工具目录与对话采用直接自然用语，能力说明区分本地规则、真实助手与未完成OCR/RAG。",
-    "ai": "真实DeepSeek先plan_tasks识别意图/事项（最多3候选）、必要补问（最多3项）/先选一件/纠正/未知/超范围；原4项执行工具仍共用规则，非ready不执行。补问与选择的固定安全提示标记guide，解释/工具后的模型文字标记model。金额分次原话逐段校验、最新更正/撤回校验；新用户消息后旧应用停用，仅最新结果可显式填入工具/清单。聊天入口仍只读文字，合同单图能力见image字段；无RAG，材料不自动发。 v0.33按序保留所有用户原话，仅折叠早期助手解释，约20k材料上限；不生成事实摘要。收起继续、停止可重试、旧动作停用；实际阶段NDJSON/JSON兼容。",
+    "ai": "真实DeepSeek先plan_tasks识别意图/事项（最多3候选）、必要补问（最多3项）/先选一件/纠正/未知/超范围；原4项执行工具仍共用规则，非ready不执行。补问与选择的固定安全提示标记guide，解释/工具后的模型文字标记model。金额分次原话逐段校验、最新更正/撤回校验；新用户消息后旧应用停用，仅最新结果可显式填入工具/清单。聊天入口仍只读文字，合同单图能力见image字段；v0.35有小范围官方合同RAG，材料不自动发。 v0.33按序保留所有用户原话，仅折叠早期助手解释，约20k材料上限；不生成事实摘要。收起继续、停止可重试、旧动作停用；实际阶段NDJSON/JSON兼容。",
     "performance": "v0.31缓存实际CSS赋值、同形几何复用、静态局部矩阵固定/世界矩阵单次更新、拾取数组复用及可见过滤、脉冲实例化；播放器悬停只预取字节，实际打开才解析/建场景。未降低DPR/粒子/阴影/动画；v0.31时自动简易未实现。 v0.32简易卸载事务/音乐三维，首访简易不请求Three场景/GLB/盘面。有效RAF采样窗口、预热和排除项、自动降级/手动恢复生产控制器已实现；阈值仅帧序列模拟验证，低配实机待校准。",
     "image": "单张PNG/JPEG明确发送DeepSeek，原图对照、编辑、校对确认后带入原文字规则；不自动确认关系/期限，不保存原图。",
-    "account": "右上角可选真实本机账号；密码scrypt、会话散列/HttpOnly cookie、SQLite工程外。主动保存地区/阶段/备注/清单，AI预填不自动发；退出清当前填写/对话并回游客清单。无公网部署/找回密码/全部草稿自动同步。"
+    "account": "右上角可选真实本机账号；密码scrypt、会话散列/HttpOnly cookie、SQLite工程外。主动保存地区/阶段/备注/清单，AI预填不自动发；退出清当前填写/对话并回游客清单。无公网部署/找回密码/全部草稿自动同步。",
+    "retrieval": "小范围官方法条关键词排序检索，八摘录覆盖17/19/22/23/25条；真实计划后命中原文入模型上下文，独立来源卡、范围/版本/核验日；未命中/不适用/旧版/待核验安全返回；手动核对和复制导出共用。"
   },
   "modules": [
     {
@@ -68,7 +69,7 @@
     }
   ],
   "missingCapabilities": [
-    "有地区/版本/引用的RAG知识库",
+    "检索库以外的法规/地区维护、指代召回与完整证据清单主线",
     "图像页码坐标框/真实材料准确率评测与完整多模态主线",
     "公网HTTPS、身份额度/滥用隔离及账号恢复",
     "全国政策维护",
@@ -77,36 +78,36 @@
   ],
   "currentPlan": [
     {
-      "id": "image",
+      "id": "bounded-retrieval",
       "status": "verified",
-      "acceptance": "real synthetic image and blank-page calls, editable confirmation, same contract rules."
+      "acceptance": "五条号八片，真实检索进入模型上下文；7例保存版实调及命中/范围/无结果/旧版/过期/来源篡改回归。"
     },
     {
-      "id": "optional-account",
-      "status": "verified_locally",
-      "acceptance": "password/session/persistence/isolation tests and UI save/reload/logout/restore; public deployment not done."
+      "id": "reading-and-entry",
+      "status": "verified",
+      "acceptance": "独立QA展开/复制/实际导航/原规则与带来源导出；入场与聊天key冲突修复，107测试/构建。"
     },
     {
       "id": "save",
-      "status": "completed",
-      "acceptance": "225文件新v0.34源码/dist快照匹配，旧v0.33保留；5242账号恢复与照片校对到原规则、默认5186版本/index/匿名账号/Range206已核验；登录画面1041宽无横向溢出、单audio、无warn/error。"
+      "status": "saved_pending_git_publication",
+      "acceptance": "230文件新0.35源码/dist快照，旧0.34保留；正确仓库发布收尾中。"
     }
   ],
   "validation": {
-    "version": "0.34.0",
-    "automated": "95 tests, TypeScript and production build passed; existing 583KB shared Three warning.",
-    "evidence": "outputs/v034-review",
+    "version": "0.35.0",
+    "automated": "107 tests, TypeScript and production build passed; existing 583KB shared Three warning.",
+    "evidence": "outputs/v035-review",
     "visualAcceptance": "internally reviewed, user feedback pending",
-    "manual": "独立5240真实账号保存/刷新/预填不发送/退出清草稿；照片明确发送→134字→确认12/3→6规则3待确认。账号清单4/游客3隔离，重新登录恢复4。均合成。",
-    "online": "DeepSeek clear synthetic contract recognized 8000/3months/role; blank page rejected. No real personal material. Photo-entry guidance first lacked action; fixed with plan-gated whitelisted entry and real recheck passed.",
-    "scope": "Desktop; optional local server accounts only; no public deployment/RAG/password recovery/all-draft sync/low-end real device verification.",
-    "savedPreview": "5242同一QA私有库重新登录恢复地区/阶段/备注和4项清单；游客图片识别134字、确认后收起原图、手工全日制/12/3到6规则3待确认；控制台无warn/error。 默认5186实际0.34/index匹配/匿名账号/Range206，1041桌面完整主页与可选登录无溢出、单audio、无warn/error；多场景验收中自动简易已观察，手动回完整，不称低配实机性能测试。"
+    "online": "7 synthetic real-model cases pass on saved 5186; 4 matched topic/rule cases, unsupported region, no-coverage topic and old version. Earlier failures preserved.",
+    "scope": "Desktop. Five law articles, eight reviewed excerpts, local lexical retrieval, no live web search. Model explanation is not sentence-level legal verification; unfamiliar phrasing/coverage still limited. No new low-end hardware benchmark.",
+    "manual": "5243来源展开、614字回复复制含法名/日期/官方URL，实际入口到空合同表单；合成示例7规则3待确认，导出包含准确依据。",
+    "savedPreview": "5186新保存版。首次入场曾产生4个聊天节点，修正同级key命名空间后首次/回放/双模式均保持1个，单audio。完整模式首页发送一次正常触发；旧v0.34保留。"
   },
   "nextActions": [
-    "按36号下一步小范围官方合同/试用期RAG，关联来源、材料和询问清单。",
-    "账号仅本机服务；公网部署需HTTPS、身份额度边界及恢复，不把登录当公网已完成。",
-    "主动保存完整工具/聊天草稿、新人/低配设备验证仍待。",
-    "11/14冻结、11/17材料、11/18提交；不扩手机/曲目/全国政策。"
+    "按36号完成合同材料→依据→核对项→可编辑询问清单/导出的完整关联。",
+    "主动保存全部工具/聊天草稿、首次用户和低配实机验证。",
+    "公网服务前补HTTPS、身份额度与账号恢复，现有账号仅本机服务。",
+    "11/14冻结、11/17材料、11/18提交。"
   ],
   "visualSources": [
     {
@@ -131,12 +132,12 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "published",
+    "pushStatus": "v035_pending_publication",
     "sourceCommit": "28909a3d1a695006764479dad67afff97452d5a8",
-    "verifiedAt": "2026-11-02",
+    "verifiedAt": "2026-11-03",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
     "previousPublishedHead": "00fb534367aad9958fad65e5e2b03cab3fe47225",
-    "publicationReceipt": "outputs/v034-review/git-publication.json",
+    "publicationReceipt": "outputs/v035-review/git-publication.json",
     "historyAndLogCommit": "097d39904f1d3226c458255a3f0684a199854c57"
   },
   "sideDeliverables": [
@@ -206,23 +207,23 @@
     "scoreTarget": 85,
     "scoreMeaning": "62（58–65）是v0.31基线内部估分；v0.32完成1/2项，不按测试数自动涨分；85仍为目标，非奖项预测。",
     "coreScope": "保留八工具，一条签约核对AI主线做深；不扩手机、全国政策、账号平台或音乐功能。",
-    "currentReview": "docs/38-image-and-optional-account-v034.md",
+    "currentReview": "docs/39-contract-knowledge-v035.md",
     "scoreCurrent": 62,
     "scoreRange": [
       58,
       65
     ],
     "remainingDates": [
-      "2026-11-02",
+      "2026-11-03",
       "2026-11-17"
     ],
     "remainingHours": [
-      48,
-      64
+      45,
+      60
     ],
     "futureWorkEstimate": [
-      39,
-      53
+      17,
+      23
     ],
     "futureContingencyHours": 6
   },
@@ -241,8 +242,8 @@
   "executionPlan": {
     "date": "2026-11-01",
     "document": "docs/36-next-execution-plan.md",
-    "state": "v034_completed",
-    "nextMilestone": "v0.35 bounded official RAG",
+    "state": "v035_completed",
+    "nextMilestone": "v0.36 contract evidence and editable question mainline",
     "executionHours": [
       34,
       46
@@ -265,6 +266,6 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v034_updated_desktop_verified"
+    "status": "v035_updated_pending_sync"
   }
 }

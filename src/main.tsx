@@ -17,6 +17,7 @@ import './simple-mode.css';
 import './assistant-guidance.css';
 import './assistant-continuity.css';
 import './account.css';
+import './contract-sources.css';
 
 window.history.scrollRestoration = 'manual';
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><AccountProvider><App /></AccountProvider></React.StrictMode>);

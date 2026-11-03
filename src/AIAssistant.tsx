@@ -1,3 +1,5 @@
+import ContractSources from './ContractSources.tsx';
+import {contractSourcesForCopy} from './lib/contract-knowledge.ts';
 import {useEffect,useRef,useState} from 'react';
 import type {ReactNode} from 'react';
 import {buildAssistantContext} from './services/assistant-context.ts';
@@ -42,12 +44,12 @@ export default function AIAssistant({open,onClose,module,seed,onAction,onTools,m
  useEffect(()=>{if(!open)return;if(!busy&&turns.at(-1)?.role==='assistant'&&!error)lastTurn.current?.scrollIntoView({block:'start',behavior:'instant'});else bottom.current?.scrollIntoView({block:'end',behavior:'instant'});},[turns,busy,error,open]);
  useEffect(()=>()=>{serial.current++;request.current?.abort();},[]);
  useEffect(()=>{if(copied===null)return;const timer=setTimeout(()=>setCopied(null),1800);return()=>clearTimeout(timer);},[copied]);
- async function copyReply(turn:Turn){try{const evidence=turn.result?evidenceForCopy(turn.result.actions):'';await navigator.clipboard.writeText([evidence,turn.content].filter(Boolean).join('\n\n'));setCopied(turn.id);setCopyError('');}catch{setCopyError('复制没有成功，可以选中文字复制。');}}
+ async function copyReply(turn:Turn){try{const evidence=turn.result?evidenceForCopy(turn.result.actions):'';await navigator.clipboard.writeText([evidence,turn.content,turn.result?.references?.status==='matched'?contractSourcesForCopy(turn.result.references):''].filter(Boolean).join('\n\n'));setCopied(turn.id);setCopyError('');}catch{setCopyError('复制没有成功，可以选中文字复制。');}}
  function apply(action:AssistantAction,id:string){if(applied.includes(id))return;setApplied(values=>[...values,id]);onAction(action);if(action.kind!=='add-questions')close();}
  const last=turns.at(-1);
  const hasFields=Boolean(last?.result?.guide?.questions.length)&&!busy&&!error;
  useEffect(()=>{if(!open||busy)return;const target=hasFields&&!freeReply?dialog.current?.querySelector<HTMLInputElement>('.assistant-needed-fields input, .assistant-needed-fields textarea'):field.current;target?.focus({preventScroll:true});},[open,busy,hasFields,freeReply]);
- async function copyConversation(){try{await navigator.clipboard.writeText(turns.map(turn=>`${turn.role==='user'?'你':'初程助手'}：${turn.content}`).join('\n\n'));setCopyError('对话已复制。');}catch{setCopyError('复制没有成功，可以选中文字复制。');}}
+ async function copyConversation(){try{await navigator.clipboard.writeText(turns.map(turn=>`${turn.role==='user'?'你':'初程助手'}：${turn.content}${turn.result?.references?.status==='matched'?'\n\n'+contractSourcesForCopy(turn.result.references):''}`).join('\n\n'));setCopyError('对话已复制。');}catch{setCopyError('复制没有成功，可以选中文字复制。');}}
  function correct(){setFreeReply(true);setInput('我想纠正一下，我要处理的是：');field.current?.focus();}
  return <><dialog ref={dialog} className="assistant-dialog" data-busy={busy} data-has-messages={turns.length>0} aria-labelledby="assistant-title" onCancel={event=>{event.preventDefault();close();}} onClick={event=>{if(event.target===event.currentTarget)close();}}>
   <div className="assistant-dialog-inner">
@@ -56,11 +58,12 @@ export default function AIAssistant({open,onClose,module,seed,onAction,onTools,m
    <div className="assistant-messages" role="log" aria-label="对话记录" aria-busy={busy}>
     {!turns.length&&<section className="assistant-welcome"><span className="eyebrow">FIRST STEP / LET'S TALK</span><h3>先说说，<br/>遇到什么事了？</h3><p>不用先找工具。把情况告诉我，<br/>我们先弄清楚眼前这一件。</p><div>{['刚拿到 offer，签字前要看什么？','工资扣了好几项，我想核对一下。','第一次租房，该先问清楚什么？'].map((example,index)=><button key={example} onClick={()=>{setInput(example);field.current?.focus();}}><small>{String(index+1).padStart(2,'0')}</small><span>{example}</span><ArrowUpRight size={14}/></button>)}</div></section>}
     {turns.map(turn=><article key={turn.id} ref={turn===last?lastTurn:undefined} className={`assistant-turn is-${turn.role}`}><div className="assistant-turn-heading"><small>{turn.role==='user'?'你':'初程助手'}</small>{turn.role==='assistant'&&<button onClick={()=>void copyReply(turn)} aria-label={copied===turn.id?'回复已复制':'复制这条回复'} title="复制回复">{copied===turn.id?<Check size={13}/>:<Copy size={13}/>}<span>{copied===turn.id?'已复制':'复制'}</span></button>}</div>{turn.result&&<AssistantEvidence actions={turn.result.actions}/>}<p>{turn.content}</p>{turn.result&&<>
+     {turn.result.references&&<ContractSources result={turn.result.references}/>}
      {!!turn.result.actions.length&&<div className="assistant-actions" data-current={turn===last}><small>{turn===last?'接下来可以':'较早的结果，操作已停用；以最新回复为准'}</small>{turn.result.actions.map((action,index)=>{const id=`${turn.id}:${index}`,done=applied.includes(id);return <button key={id} onClick={()=>apply(action,id)} disabled={busy||done||turn!==last}>{done?<Check size={15}/>:<ArrowUpRight size={15}/>}<span>{done?'已应用':action.label}{!done&&(action.kind==='apply-salary'||action.kind==='apply-contract')&&<small>替换该工具本次填写的内容</small>}</span></button>;})}</div>}
-     {turn===last&&turn.result.guide&&<AssistantNextStep key={turn.id} guide={turn.result.guide} busy={busy} onSend={text=>void send(text)} onCorrect={correct}/>}
+     {turn===last&&turn.result.guide&&<AssistantNextStep key={turn.id} guide={turn.result.guide} showLocalSource={!turn.result.references} busy={busy} onSend={text=>void send(text)} onCorrect={correct}/>}
      {!!turn.result.steps.length&&<details className="assistant-steps"><summary>处理依据 · {turn.result.steps.length} 步<ChevronDown size={13}/></summary><ol>{turn.result.steps.map(step=><li key={step.id} data-ok={step.ok}><span>{step.ok?'✓':'·'}</span><span>{step.label}<small>{step.summary}</small></span></li>)}</ol></details>}
     </>}</article>)}
-    {busy&&<div className="assistant-thinking" role="status"><span className="assistant-thinking-dots" aria-hidden="true"><i/><i/><i/></span><span>{stage==='planning'?'正在确认你要处理的事…':stage==='checking'?'正在用工具核对信息…':stage==='responding'?'正在整理回复…':'正在连接助手…'}</span></div>}
+    {busy&&<div className="assistant-thinking" role="status"><span className="assistant-thinking-dots" aria-hidden="true"><i/><i/><i/></span><span>{stage==='planning'?'正在确认你要处理的事…':stage==='retrieving'?'正在检索官方合同资料…':stage==='checking'?'正在用工具核对信息…':stage==='responding'?'正在整理回复…':'正在连接助手…'}</span></div>}
     {error&&<div className="assistant-error" role="alert"><p>{error}</p>{last?.role==='user'&&!busy&&<button onClick={()=>void send(last.content,true)}>重试这条问题<ArrowUpRight size={13}/></button>}{!!turns.length&&<button onClick={()=>void copyConversation()}>复制现有对话<Copy size={13}/></button>}</div>}
     <div ref={bottom}/>
    </div>

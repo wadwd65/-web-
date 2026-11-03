@@ -68,3 +68,6 @@ scene/deferred-asset区分字节prefetch与parse/load；music-scene-loader仅预
 App/八业务和ExperienceWorkspace继续常驻；mode只改变视觉层/布局，Scene与ArchiveScene在simple条件下不挂载。MusicEntry禁用预热，轻量播放器不创建盘面缩略图/频谱；唯一audio仍在同一父层。runtime-mode是可测试的有效帧检测和模式控制器，useExperienceMode只是React绑定；onFrame由原两渲染循环提供，无额外持续RAF。SceneBoundary拦截lazy场景失败，业务仍可达。减少动态与简易模式分别表达。
 
 assistant-guide共用结构验证和安全提示，plan_tasks为强制第一步；非ready返回guide提示且无执行动作，ready继续有限Function Calling。AssistantNextStep呈现最多3候选/补问、选择与纠正；只有最新assistant回复的动作可应用，所有表单仍需显式点击。money evidence数组逐段来自user原话，最新未知/撤回不复用旧值。合同只读参考属于本地核验，不是RAG。在线合成评测脚本独立，不发送真实材料。
+
+## v0.35 资料层
+contract-knowledge.ts固定官方八摘录及元数据，共用纯函数检索。网关plan_tasks确认合同后检索，真实tool结果携带命中片段。一般说明只生成解释，白名单open_tool补真实入口；review仍共用旧规则。ContractSources在聊天/手动核对展开，client逐项验证已知摘录，模型URL不可作为引用。标记guide的范围提示与模型解释区分。来源复制/导出可回查。无新增依赖或逐帧工作。

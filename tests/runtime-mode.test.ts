@@ -1,3 +1,4 @@
+import {readFileSync} from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createFrameMonitor,createModeController,initialExperienceMode} from '../src/runtime-mode.ts';
@@ -19,4 +20,10 @@ test('only the selected scene can contribute, and changing scene discards earlie
  const c=createModeController('full',()=>{});c.setActive('music');for(let t=0;t<10000;t+=100)c.frame('task',t,true);assert.equal(c.state().mode,'full');
  for(let t=10000;t<13000;t+=100)c.frame('music',t,true);c.setActive(null);c.setActive('task');for(let t=13000;t<16000;t+=100)c.frame('task',t,true);assert.equal(c.state().mode,'full');
  for(let t=16000;t<19000;t+=100)c.frame('task',t,true);assert.equal(c.state().mode,'simple');
+});
+
+test('entry replay and account-scoped assistant use distinct sibling key namespaces',()=>{
+ const source=readFileSync(new URL('../src/ExperienceWorkspace.tsx',import.meta.url),'utf8');
+ assert.ok(source.includes('<AIAssistant key={`assistant-${accountEpoch}`}'));
+ assert.ok(source.includes('<ExperienceEntry key={`entry-${introKey}`}'));
 });
