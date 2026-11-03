@@ -89,8 +89,8 @@
     },
     {
       "id": "save",
-      "status": "saved_pending_git_publication",
-      "acceptance": "230文件新0.35源码/dist快照，旧0.34保留；正确仓库发布收尾中。"
+      "status": "completed",
+      "acceptance": "230文件新0.35源码/dist快照匹配；旧0.34保留。5186真实RAG/回放/双模式/新对话均1个聊天窗口和audio，无warn/error；正确Git已正常推送，最终HEAD见回执。"
     }
   ],
   "validation": {
@@ -101,7 +101,7 @@
     "online": "7 synthetic real-model cases pass on saved 5186; 4 matched topic/rule cases, unsupported region, no-coverage topic and old version. Earlier failures preserved.",
     "scope": "Desktop. Five law articles, eight reviewed excerpts, local lexical retrieval, no live web search. Model explanation is not sentence-level legal verification; unfamiliar phrasing/coverage still limited. No new low-end hardware benchmark.",
     "manual": "5243来源展开、614字回复复制含法名/日期/官方URL，实际入口到空合同表单；合成示例7规则3待确认，导出包含准确依据。",
-    "savedPreview": "5186新保存版。首次入场曾产生4个聊天节点，修正同级key命名空间后首次/回放/双模式均保持1个，单audio。完整模式首页发送一次正常触发；旧v0.34保留。"
+    "savedPreview": "5186新保存版。首次入场曾产生4个聊天节点，修正同级key命名空间后首次/回放/双模式均保持1个，单audio。完整模式首页发送一次正常触发；旧v0.34保留。 最终1280桌面完整模式检索展开，无横向溢出、1对话/1输入/1audio、无warn/error，保留交付页。"
   },
   "nextActions": [
     "按36号完成合同材料→依据→核对项→可编辑询问清单/导出的完整关联。",
@@ -132,13 +132,13 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "v035_pending_publication",
-    "sourceCommit": "28909a3d1a695006764479dad67afff97452d5a8",
+    "pushStatus": "published",
+    "sourceCommit": "e89a5eb0c1f27bd3d98243ccfa7ff36d372e55d0",
     "verifiedAt": "2026-11-03",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "00fb534367aad9958fad65e5e2b03cab3fe47225",
+    "previousPublishedHead": "4ce7ed3cdc2e3ad70d22e403f9d1a68caafe88a4",
     "publicationReceipt": "outputs/v035-review/git-publication.json",
-    "historyAndLogCommit": "097d39904f1d3226c458255a3f0684a199854c57"
+    "historyAndLogCommit": "e89a5eb0c1f27bd3d98243ccfa7ff36d372e55d0"
   },
   "sideDeliverables": [
     {
@@ -266,6 +266,6 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v035_updated_pending_sync"
+    "status": "v035_updated_desktop_verified"
   }
 }
