@@ -46,7 +46,7 @@ test('unknown facts never receive a zero default from a model-written hint',()=>
 test('missing-information replies use the verified plan without asking the model for speculative prose',async()=>{
  let calls=0;const guide={...ready,status:'needs-info',intent:'calculate',questions:[{label:'个税',hint:'填0'}]};
  const result=await runAssistant({messages:[{role:'user',content:'个税不知道，不猜'}]},{config,fetcher:async()=>{calls++;return response({tool_calls:[call('plan_tasks',guide)]});}});
- assert.equal(calls,1);assert.equal(result.replyOrigin,'guide');assert.equal(result.actions.length,0);assert.match(result.reply,/不确定/);
+ assert.equal(calls,1);assert.equal(result.replyOrigin,'guide');assert.equal(result.actions.length,0);assert.match(result.reply,/不确定|还没确认/);
 });
 test('a vague rent deposit question does not presume a landlord has refused a refund',()=>{
  const guide={...ready,status:'needs-info',intent:'review',activeModule:'rent',tasks:[{module:'rent',reason:'核对押金'}],questions:[{label:'房东不退的理由',hint:''}]};

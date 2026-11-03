@@ -71,3 +71,6 @@ assistant-guide共用结构验证和安全提示，plan_tasks为强制第一步�
 
 ## v0.35 资料层
 contract-knowledge.ts固定官方八摘录及元数据，共用纯函数检索。网关plan_tasks确认合同后检索，真实tool结果携带命中片段。一般说明只生成解释，白名单open_tool补真实入口；review仍共用旧规则。ContractSources在聊天/手动核对展开，client逐项验证已知摘录，模型URL不可作为引用。标记guide的范围提示与模型解释区分。来源复制/导出可回查。无新增依赖或逐帧工作。
+
+## v0.35.1 对话通道
+AIAssistant输入常驻，删除freeReply/hasFields门控与补问自动聚焦。AssistantNextStep仅提供可选字段/多事项快捷回复，ready无重复面板。guideReply用实际问题生成自然语言补问，复用工资字段证据定位识别已说明未知的项目。一般guidance先回答，明确导航请求保留open_tool。快捷操作保留未发送草稿，单独规划步骤不显示为处理过程。

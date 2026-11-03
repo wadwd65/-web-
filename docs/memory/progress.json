@@ -1,26 +1,26 @@
 {
   "schemaVersion": 1,
   "updatedAt": "2026-11-03",
-  "workingVersion": "0.35.0",
-  "releasedVersion": "0.35.0",
+  "workingVersion": "0.35.1",
+  "releasedVersion": "0.35.1",
   "workState": "reviewed_internally",
-  "objective": "优化合同信息的可追溯性，接入小范围官方资料检索与展开式来源阅读。",
-  "latestUserRequest": "继续优化，检查还能改进的地方。",
+  "objective": "让自由提问始终可用，补问仅作可选辅助，去掉重复事项框。",
+  "latestUserRequest": "用户反馈聊天被框架和表单限制，无法直接说问题。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5186/?v=0.35#/home",
-    "snapshot": "first-step-官方合同依据-v0.35",
+    "url": "http://127.0.0.1:5186/?v=0.35.1#/home",
+    "snapshot": "first-step-自由对话修复-v0.35.1",
     "state": "ready_for_user_review"
   },
   "implemented": {
     "business": "保留八项限定本地工具及共享询问清单，八工具统一迁入#/tools，支持完全不经AI手动操作。",
     "music": "五曲/单audio；首页切歌弹小菜单点选即播不跳页，播放器进入完整三维声音档案并接续曲目/进度；v0.25抽取、旋转及逐曲环境保留。",
-    "visual": "保留浅蓝银色完整主体/音乐和原三维；新增同系统的轻量阅读布局、页首/聊天模式切换，简易播放器居中目录。完整模式模型/粒子/材质/抽取/播放旋转未重做。 v0.33首页去重复入口，补问时自由输入折叠、字色/字段对比加强、返回状态放页底不遮清单。",
+    "visual": "保留浅蓝银色完整主体/音乐和原三维；新增同系统的轻量阅读布局、页首/聊天模式切换，简易播放器居中目录。完整模式模型/粒子/材质/抽取/播放旋转未重做。 v0.33首页去重复入口，v0.35.1自由输入常驻、补问可选、字色/字段对比加强、返回状态放页底不遮清单。",
     "interaction": "前景模型的图内/文字子选项保留，要求手势开始和结束均为稳定前景、同pointer/物体/子区域、总位移≤6px且在画布内；后排只预览，无任意双击跳页。工作区/音乐/对话共享原业务与单audio。",
     "api": "真实同源Node助手网关与DeepSeek function calling；四项白名单工具，共用工资/合同规则；取消、超时、限额、Origin/Host与输入证据校验。旧文档review客户端仍仅协议预留。",
-    "copy": "首页、工具目录与对话采用直接自然用语，能力说明区分本地规则、真实助手与未完成OCR/RAG。",
-    "ai": "真实DeepSeek先plan_tasks识别意图/事项（最多3候选）、必要补问（最多3项）/先选一件/纠正/未知/超范围；原4项执行工具仍共用规则，非ready不执行。补问与选择的固定安全提示标记guide，解释/工具后的模型文字标记model。金额分次原话逐段校验、最新更正/撤回校验；新用户消息后旧应用停用，仅最新结果可显式填入工具/清单。聊天入口仍只读文字，合同单图能力见image字段；v0.35有小范围官方合同RAG，材料不自动发。 v0.33按序保留所有用户原话，仅折叠早期助手解释，约20k材料上限；不生成事实摘要。收起继续、停止可重试、旧动作停用；实际阶段NDJSON/JSON兼容。",
+    "copy": "首页、目录与对话采用直接用语，区分本地规则、真实助手、单图校对和小范围检索。",
+    "ai": "真实DeepSeek先plan_tasks识别意图/事项（最多3候选）、必要补问（最多3项）/先选一件/纠正/未知/超范围；原4项执行工具仍共用规则，非ready不执行。补问与选择的固定安全提示标记guide，解释/工具后的模型文字标记model。金额分次原话逐段校验、最新更正/撤回校验；新用户消息后旧应用停用，仅最新结果可显式填入工具/清单。聊天入口仍只读文字，合同单图能力见image字段；v0.35有小范围官方合同RAG，材料不自动发。 v0.33按序保留所有用户原话，仅折叠早期助手解释，约20k材料上限；不生成事实摘要。收起继续、停止可重试、旧动作停用；实际阶段NDJSON/JSON兼容。 v0.35.1直接自由回复/换题，补问可选；一般解释先答，明确打开时给入口；已说明未知的工资项给查找方法。",
     "performance": "v0.31缓存实际CSS赋值、同形几何复用、静态局部矩阵固定/世界矩阵单次更新、拾取数组复用及可见过滤、脉冲实例化；播放器悬停只预取字节，实际打开才解析/建场景。未降低DPR/粒子/阴影/动画；v0.31时自动简易未实现。 v0.32简易卸载事务/音乐三维，首访简易不请求Three场景/GLB/盘面。有效RAF采样窗口、预热和排除项、自动降级/手动恢复生产控制器已实现；阈值仅帧序列模拟验证，低配实机待校准。",
     "image": "单张PNG/JPEG明确发送DeepSeek，原图对照、编辑、校对确认后带入原文字规则；不自动确认关系/期限，不保存原图。",
     "account": "右上角可选真实本机账号；密码scrypt、会话散列/HttpOnly cookie、SQLite工程外。主动保存地区/阶段/备注/清单，AI预填不自动发；退出清当前填写/对话并回游客清单。无公网部署/找回密码/全部草稿自动同步。",
@@ -78,30 +78,30 @@
   ],
   "currentPlan": [
     {
-      "id": "bounded-retrieval",
+      "id": "free-conversation",
       "status": "verified",
-      "acceptance": "五条号八片，真实检索进入模型上下文；7例保存版实调及命中/范围/无结果/旧版/过期/来源篡改回归。"
+      "acceptance": "输入框在补问/选择/范围提示期间始终可见，补问默认折叠可选，当前事项重复框移除。"
     },
     {
-      "id": "reading-and-entry",
+      "id": "flow",
       "status": "verified",
-      "acceptance": "独立QA展开/复制/实际导航/原规则与带来源导出；入场与聊天key冲突修复，107测试/构建。"
+      "acceptance": "无需填旧字段可直接改问另一件事，选择/停止/重试及可选表单保留，快速操作保留未发送草稿。"
     },
     {
       "id": "save",
-      "status": "completed",
-      "acceptance": "230文件新0.35源码/dist快照匹配；旧0.34保留。5186真实RAG/回放/双模式/新对话均1个聊天窗口和audio，无warn/error；正确Git已正常推送，最终HEAD见回执。"
+      "status": "saved_pending_publication",
+      "acceptance": "232文件源码/dist新快照，原0.35保留；保存版真实调用与完整模式界面已复核，Git收尾中。"
     }
   ],
   "validation": {
-    "version": "0.35.0",
-    "automated": "107 tests, TypeScript and production build passed; existing 583KB shared Three warning.",
-    "evidence": "outputs/v035-review",
+    "version": "0.35.1",
+    "automated": "114 tests, TypeScript and production build passed; existing 583KB shared Three warning.",
+    "evidence": "outputs/v0351-review",
     "visualAcceptance": "internally reviewed, user feedback pending",
-    "online": "7 synthetic real-model cases pass on saved 5186; 4 matched topic/rule cases, unsupported region, no-coverage topic and old version. Earlier failures preserved.",
-    "scope": "Desktop. Five law articles, eight reviewed excerpts, local lexical retrieval, no live web search. Model explanation is not sentence-level legal verification; unfamiliar phrasing/coverage still limited. No new low-end hardware benchmark.",
-    "manual": "5243来源展开、614字回复复制含法名/日期/官方URL，实际入口到空合同表单；合成示例7规则3待确认，导出包含准确依据。",
-    "savedPreview": "5186新保存版。首次入场曾产生4个聊天节点，修正同级key命名空间后首次/回放/双模式均保持1个，单audio。完整模式首页发送一次正常触发；旧v0.34保留。 最终1280桌面完整模式检索展开，无横向溢出、1对话/1输入/1audio、无warn/error，保留交付页。"
+    "scope": "Desktop usability patch. Amounts require confirmed data, limited corpus and account/public/low-end gaps remain explicit.",
+    "manual": "独立5245真实补问时常驻可写输入、可选表单默认关闭、仅规划日志隐藏；输入租房草稿→可选提交社保800及其他未知→原草稿保留→直接发送换题。",
+    "online": "7 saved-5186 synthetic calls checked planning/continuation, direct explanation, free-topic priority, unknown lookup and explicit navigation. Not sentence-level legal verification.",
+    "savedPreview": "5186实际0.35.1/index匹配；完整模式补问时输入常驻可写，1对话/1输入/1audio，可选字段默认关闭、无横向溢出；保存版自由发送租房问题。"
   },
   "nextActions": [
     "按36号完成合同材料→依据→核对项→可编辑询问清单/导出的完整关联。",
@@ -132,12 +132,12 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "published",
+    "pushStatus": "v0351_pending",
     "sourceCommit": "e89a5eb0c1f27bd3d98243ccfa7ff36d372e55d0",
     "verifiedAt": "2026-11-03",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
     "previousPublishedHead": "4ce7ed3cdc2e3ad70d22e403f9d1a68caafe88a4",
-    "publicationReceipt": "outputs/v035-review/git-publication.json",
+    "publicationReceipt": "outputs/v0351-review/git-publication.json",
     "historyAndLogCommit": "e89a5eb0c1f27bd3d98243ccfa7ff36d372e55d0"
   },
   "sideDeliverables": [
@@ -153,10 +153,10 @@
     }
   ],
   "userFeedback": {
-    "date": "2026-10-31",
+    "date": "2026-11-03",
     "lowEndPerformance": "v0.32已实现资源隔离与有效低帧控制器，尚无用户低配CPU/GPU实机反馈，不称所有卡顿已消除。",
-    "usability": "用户反馈选项与操作复杂，提出问题输入和筛选分流的简易入口。",
-    "acceptance": "当前版本未因旧内部检查而获得新用户反馈问题的验收。",
+    "usability": "用户明确反馈自由问问题被框架和表单限制，本轮优先修聊天通道。",
+    "acceptance": "v0.35聊天易用性被用户否定，需修补问与自由表达，不把旧内部自检当认可。",
     "modePolicy": "默认完整，卡顿自动切简易，允许手动恢复；覆盖助手此前建议的默认简易。",
     "latestVisual": "用户明确否定v0.29，要求浅色主体及播放器，不再把深色统一版当认可结果。"
   },
@@ -207,7 +207,7 @@
     "scoreTarget": 85,
     "scoreMeaning": "62（58–65）是v0.31基线内部估分；v0.32完成1/2项，不按测试数自动涨分；85仍为目标，非奖项预测。",
     "coreScope": "保留八工具，一条签约核对AI主线做深；不扩手机、全国政策、账号平台或音乐功能。",
-    "currentReview": "docs/39-contract-knowledge-v035.md",
+    "currentReview": "docs/40-free-conversation-v0351.md",
     "scoreCurrent": 62,
     "scoreRange": [
       58,
@@ -242,7 +242,7 @@
   "executionPlan": {
     "date": "2026-11-01",
     "document": "docs/36-next-execution-plan.md",
-    "state": "v035_completed",
+    "state": "v0351_usability_patch_completed",
     "nextMilestone": "v0.36 contract evidence and editable question mainline",
     "executionHours": [
       34,
@@ -258,7 +258,7 @@
     "deadline": "2026-11-18",
     "mainline": "single contract image or text -> user correction -> bounded retrieval -> shared rules -> evidence -> editable questions/export",
     "dependencies": "Verify actual vision API before choosing extraction; no assumed DeepSeek image support; keep evidence and capacity limits for conversation continuity.",
-    "review": "Visual/theme/process review on independent QA; candidate rollback if worse; no new runtime changes this turn."
+    "review": "按用户更正优先撤销锁输入与重复事项框，独立QA和保存版审核后交付。"
   },
   "logbook": {
     "source": "docs/DEVELOPMENT_LOG.md",
@@ -266,6 +266,6 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v035_updated_desktop_verified"
+    "status": "v0351_updated_desktop_pending_check"
   }
 }
