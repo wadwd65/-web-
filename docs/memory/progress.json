@@ -84,8 +84,8 @@
     },
     {
       "id": "save-release",
-      "status": "saved_verified_publishing",
-      "acceptance": "243文件新保存点，localhost独立保存版工资/聊天恢复、无warn/error和单对话/audio验证通过；正确仓库发布收尾。"
+      "status": "completed",
+      "acceptance": "243文件新保存点、localhost保存版工资/聊天恢复与默认服务核验；源码正常推送，最终HEAD/哈希见回执。"
     },
     {
       "id": "real-usage",
@@ -132,13 +132,13 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "publishing",
-    "sourceCommit": "8b1b2de5f9f93edfc603e086494a15b0163405b0",
+    "pushStatus": "published",
+    "sourceCommit": "8a9268708c43fca51e56c14fecb21931ea107487",
     "verifiedAt": "2026-11-04",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
     "previousPublishedHead": "753be3f10bd557c856f2bef7797d3bdcd7aa8d30",
     "publicationReceipt": "outputs/v037-review/git-publication.json",
-    "historyAndLogCommit": "8b1b2de5f9f93edfc603e086494a15b0163405b0"
+    "historyAndLogCommit": "8a9268708c43fca51e56c14fecb21931ea107487"
   },
   "sideDeliverables": [
     {
@@ -266,7 +266,7 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v037_saved_verified"
+    "status": "v037_updated_desktop_verified"
   },
   "savedWork": {
     "version": "0.37.0",
