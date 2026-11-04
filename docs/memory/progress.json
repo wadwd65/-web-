@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "updatedAt": "2026-11-04",
   "workingVersion": "0.39.0",
-  "releasedVersion": "0.38.0",
+  "releasedVersion": "0.39.0",
   "workState": "reviewed_internally",
   "objective": "完成线上试用前优化，等待用户部署网址后做真实新人和低配验收。",
   "latestUserRequest": "用户要求先优化，其上线后以网址安排新人体验和低配测试。",
@@ -11,7 +11,7 @@
   "release": {
     "url": "http://127.0.0.1:5186/?v=0.39.0#/home",
     "snapshot": "first-step-线上试用准备-v0.39.0",
-    "state": "reviewed_ready_to_publish"
+    "state": "ready_for_user_review"
   },
   "implemented": {
     "business": "保留八项限定本地工具及共享询问清单，八工具统一迁入#/tools，支持完全不经AI手动操作。 v0.36合同问题可主动附带原文/确认值/来源，清单改写、答复、状态、搜索、导出和可选账号保存保留关联。",
@@ -84,7 +84,7 @@
     },
     {
       "id": "save-release",
-      "status": "in_progress",
+      "status": "completed",
       "acceptance": "新保存点、源包和Git对应；保存版最终复核。"
     },
     {
@@ -102,7 +102,7 @@
     "online": "单公开来源的代理Host/Origin条件模拟，真实DeepSeek200，其他Host/Origin403；并非公网HTTPS部署。",
     "performance": "同1280×720简易首页DOM1778→776/字段63→6；开发机187有效窗口，约165FPS，20核/16GB；非低配机器，自动低帧仍以控制器模拟为证。",
     "limits": "真实新人、低配、实际公网HTTPS、独立材料准确率和身份额度隔离仍待。",
-    "savedPreview": "localhost:5264新保存版默认完整模式、首页0业务表单、0诊断元素、单audio、无溢出；原浅色三维/入口视觉复核，控制台无warn/error。"
+    "savedPreview": "localhost:5264新保存版默认完整模式、首页0业务表单、0诊断元素、单audio、无溢出；原浅色三维/入口视觉复核，控制台无warn/error。 默认5186实际0.39.0，index与当前构建和保存点逐字一致。"
   },
   "nextActions": [
     "用户部署支持Node的试用网址，按45号设置进程环境并核验实际HTTPS/AI/图像/账号/音乐。",
@@ -132,13 +132,13 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "preparing",
-    "sourceCommit": "2e3e9070ca35ff0ca16084acae9cda778c35a774",
+    "pushStatus": "published",
+    "sourceCommit": "5bf22cc85af8dce2f6c0cf166711b7f2def724ce",
     "verifiedAt": "2026-11-04",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
     "previousPublishedHead": "051b65733a573fe97745adcdae5257d39eb942ba",
     "publicationReceipt": "outputs/v039-review/git-publication.json",
-    "historyAndLogCommit": "2e3e9070ca35ff0ca16084acae9cda778c35a774"
+    "historyAndLogCommit": "5bf22cc85af8dce2f6c0cf166711b7f2def724ce"
   },
   "sideDeliverables": [
     {
@@ -267,7 +267,7 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v039_updated_sync_pending"
+    "status": "v039_updated_desktop_verified"
   },
   "savedWork": {
     "version": "0.39.0",
