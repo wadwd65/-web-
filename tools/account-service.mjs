@@ -5,6 +5,7 @@ import {promisify} from 'node:util';
 import {mkdirSync} from 'node:fs';
 import {resolve,dirname} from 'node:path';
 import {homedir} from 'node:os';
+import {createRequestPolicy} from './request-policy.mjs';
 const scrypt=promisify(derive),ttl=7*86400000;
 const hash=value=>createHash('sha256').update(value).digest('hex');
 const blank=()=>({city:'',stage:'',notes:'',questions:[]});
@@ -31,14 +32,14 @@ export function createAccountStore({file=resolve(process.env.FIRST_STEP_DATA_DIR
   close(){db.close();},
  };
 }
-export function createAccountMiddleware({store:provided}={}){
+export function createAccountMiddleware({store:provided,policy=createRequestPolicy()}={}){
  let store=provided,busy=0;const attempts=[];
  return (req,res)=>{
   const path=new URL(req.url,'http://localhost').pathname;if(!path.startsWith('/api/v1/account/'))return false;
   const respond=(status,data)=>{if(!res.destroyed) {res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(JSON.stringify(data));}};
-  const cookie=value=>res.setHeader('Set-Cookie',`first_step_session=${value}; HttpOnly; SameSite=Strict; Path=/api/v1; Max-Age=${value?604800:0}${req.socket.encrypted?'; Secure':''}`);
+  const cookie=value=>res.setHeader('Set-Cookie',`first_step_session=${value}; HttpOnly; SameSite=Strict; Path=/api/v1; Max-Age=${value?604800:0}${req.socket.encrypted||policy.secure?'; Secure':''}`);
   try{
-   const host=req.headers.host||'';if(!['127.0.0.1','localhost','[::1]'].includes(new URL('http://'+host).hostname)||req.headers.origin&&req.headers.origin!==`http://${host}`&&req.headers.origin!==`https://${host}`){respond(403,{error:'请在本站使用账号。'});return true;}
+   if(!policy.allows(req)){respond(403,{error:'请在本站使用账号。'});return true;}
    store??=createAccountStore();const token=(req.headers.cookie||'').split(';').map(v=>v.trim()).find(v=>v.startsWith('first_step_session='))?.slice('first_step_session='.length);
    if(path==='/api/v1/account/me'&&req.method==='GET'){respond(200,{user:store.current(token)});return true;}
    if(req.method!=='POST'||!req.headers['content-type']?.startsWith('application/json')){respond(405,{error:'请使用账号界面操作。'});return true;}

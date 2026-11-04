@@ -1,5 +1,6 @@
 import {lazy,Suspense,useCallback,useEffect,useLayoutEffect,useRef,useState} from 'react';
 import {version} from '../package.json';
+import PerformanceDiagnostics from './PerformanceDiagnostics.tsx';
 import type {ReactNode} from 'react';
 import {ArrowLeft,ArrowRight,ArrowUpRight,ChevronRight,CircleHelp,Maximize,Play,RotateCcw,SlidersHorizontal,Sparkles,X} from 'lucide-react';
 import {EXPERIENCE_MODULES} from './experience-modules.ts';
@@ -151,7 +152,7 @@ export default function ExperienceWorkspace({page,go,questionCount,signals,openS
     {modeState.notice&&<div className="experience-mode-notice" role="status"><span>{modeState.notice}</span>{lightweight&&<button onClick={()=>changeMode('full')}>切回完整</button>}<button onClick={modeState.dismiss} aria-label="关闭模式提示"><X size={14}/></button></div>}
     <MusicPlayer state={soundtrack} lightweight={lightweight} modeNotice={modeState.notice} onSimpleMode={()=>changeMode('simple')} onFullMode={()=>changeMode('full')} onFrame={(now,eligible)=>modeState.frame('music',now,eligible)} open={musicOpen} onClose={closeMusic} returnPage={page} returnLabel={page==='home'?'首页':tools?'工具列表':list?'询问清单':task.label} reduced={simple} entryDetail={musicDetail} onModeChange={setMusicPhase}/>
     <AIAssistant key={`assistant-${accountEpoch}`} onResume={()=>setAssistantOpen(true)} modeSwitch={<ModeSwitch mode={modeState.mode} onChange={changeMode}/>} open={assistantOpen} onClose={()=>setAssistantOpen(false)} module={page} seed={assistantSeed} onAction={onAssistantAction} onTools={openTools}/>
-    <PointerFeedback enabled={!intro&&!simple&&!lightweight}/><audio ref={soundtrack.audio} crossOrigin="anonymous" loop={soundtrack.loop==='single'} preload="none" data-soundtrack={soundtrack.track.cid} aria-hidden="true"/>
+    <PerformanceDiagnostics record={modeState.record}/><PointerFeedback enabled={!intro&&!simple&&!lightweight}/><audio ref={soundtrack.audio} crossOrigin="anonymous" loop={soundtrack.loop==='single'} preload="none" data-soundtrack={soundtrack.track.cid} aria-hidden="true"/>
     {intro&&<ExperienceEntry key={`entry-${introKey}`} staticMode={simple} ready={ready||simple||failed} onComplete={completeIntro} onMusicToggle={soundtrack.toggle} musicPlaying={soundtrack.playing}/>}
   </>;
 }

@@ -1,8 +1,8 @@
-# 初程 FIRST STEP · 检索接续与失败恢复 v0.38.0
+# 初程 FIRST STEP · 线上试用准备 v0.39.0
 
 面向初入职场毕业生的八项办事工具，音乐为辅助。首页可以直接向 DeepSeek 说明问题，也可以进入工具列表自行操作。三维前景模型的文字与子选项保留点击；后排只能切换预览，拖动、跨区域和转场中的命中不会执行动作。主体和播放器回到浅蓝银色，保留抽取、旋转、单音频、鼠标反馈和入场回放。仅电脑端。
 
-版本入口：[历史版本说明](docs/VERSION_HISTORY.md)、[开发总日志](docs/DEVELOPMENT_LOG.md)、[当前自检](docs/44-retrieval-and-recovery-v038.md)、[后续执行计划](docs/36-next-execution-plan.md)。当前目录包含v0.38.0完整源码、测试、锁文件与所需静态资源；旧版只记录沿革，不新增多套旧源码或构建快照。已有Git提交历史保留。v0.34单图及可选账号、v0.35小范围官方检索已实现，v0.36限定合同清单关联已实现，v0.37草稿已完成，新人/低配实测仍待。桌面参赛包根“开发总日志.md”与本仓库日志同步维护。
+版本入口：[历史版本说明](docs/VERSION_HISTORY.md)、[开发总日志](docs/DEVELOPMENT_LOG.md)、[当前自检](docs/45-online-trial-preparation-v039.md)、[后续执行计划](docs/36-next-execution-plan.md)。当前目录包含v0.39.0完整源码、测试、锁文件与所需静态资源；旧版只记录沿革，不新增多套旧源码或构建快照。已有Git提交历史保留。v0.34单图及可选账号、v0.35小范围官方检索已实现，v0.36限定合同清单关联已实现，v0.37草稿已完成，新人/低配实测仍待。桌面参赛包根“开发总日志.md”与本仓库日志同步维护。
 
 先读[本轮图片与个人空间说明](docs/38-image-and-optional-account-v034.md)，双模式见[双模式与AI流程说明](docs/34-two-modes-and-guided-ai-v032.md)。前轮优化见[性能说明](docs/32-home-render-performance-v031.md)与[自评/逐步改进表](docs/33-score-and-improvement-plan-v031.md)；AI与工具范围见[31号](docs/31-light-ai-entry-and-tools-v030.md)。恢复开发运行 `npm run resume`，再读 `docs/memory/progress.json` 与 `DECISIONS.md`。源码只同步 [wadwd65/-web-](https://github.com/wadwd65/-web-)。
 
@@ -23,7 +23,7 @@ npm run build
 npm start
 ```
 
-默认 `http://127.0.0.1:5186/?v=0.38.0#/home`；工具列表 `#/tools`；音乐 `#/music`。`/__first-step-version` 可核对实际版本。参赛包仍双击“开始预览.cmd”。开发、Vite preview 与保存版都使用同一 AI 网关。
+默认 `http://127.0.0.1:5186/?v=0.39.0#/home`；工具列表 `#/tools`；音乐 `#/music`。`/__first-step-version` 可核对实际版本。参赛包仍双击“开始预览.cmd”。开发、Vite preview 与保存版都使用同一 AI 网关。
 
 ## DeepSeek 配置
 
@@ -38,7 +38,7 @@ FIRST_STEP_AI_MODEL=deepseek-flash
 
 助手先以真实模型调用非执行型plan_tasks识别当前事项和意图；多事项先选、必要信息再补、未知不猜，旧回复的应用按钮随新问题停用。补问提示由程序安全呈现（guide），解释由模型生成（model）；金额可分次提供并逐段核验原话。之后调用原四项白名单工具：推荐站内入口、已知工资金额核对、已确认全日制合同文字核对、整理询问清单。结果复用原工具与规则；点击操作按钮后才填入目标工具或加入清单。已有表单和文件不会自动发送；点击发送的对话文字会交给 DeepSeek。对话默认留在页面内存，可主动保存到当前浏览器草稿；没有服务器会话存储。
 
-本地接口仅监听回环地址，带同源/Host 检查、请求大小限制、并发/频次上限、超时和取消。它不是已部署的公网多用户后端；公网接入的身份、额度隔离与滥用控制仍需补齐。
+默认本地接口监听回环地址，带同源/Host 检查、请求大小限制、并发/频次上限、超时和取消。指定HTTPS站点的接入设置见45号。实际公网部署、按身份额度隔离与滥用控制仍需验证和补齐。
 
 ## 当前范围与缺口
 
@@ -88,3 +88,7 @@ FIRST_STEP_AI_MODEL=deepseek-flash
 ## v0.38 检索与失败恢复
 
 [本轮自检与下一步](docs/44-retrieval-and-recovery-v038.md)。口语合同检索及明确短追问接续、租房一般咨询计划冲突、识别失败回到粘贴文字已修复。130项检查与真实合成接口/图片UI复测通过。32条检索回归与7条接续检查属于开发用例，真实新人、低配与独立材料准确率仍待；内部75估计不因测试数自动上调。
+
+## v0.39 线上试用准备
+
+[优化、自检、部署与试用方式](docs/45-online-trial-preparation-v039.md)。工具首次访问才创建，已访问工具保留填写，首页DOM1778→776。可选?perf=1记录并主动下载帧窗口/模式原因。设置Node进程环境FIRST_STEP_PUBLIC_ORIGIN可接单一HTTPS站点，默认仍本机。135检查和开发走查通过；实际公网HTTPS、新人和低配测试仍待。

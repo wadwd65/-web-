@@ -3,6 +3,7 @@ import {resolve} from 'node:path';
 import {homedir} from 'node:os';
 import {parseEnv} from 'node:util';
 import {randomUUID} from 'node:crypto';
+import {createRequestPolicy} from './request-policy.mjs';
 import {validateAssistantGuide} from '../src/services/assistant-guide.ts';
 import {calculatePayslip} from '../src/lib/wages.ts';
 import {analyzeContract,CONTRACT_REFERENCE} from '../src/lib/contracts.ts';
@@ -161,7 +162,7 @@ export function finalizeContractExplanation(content,references){
 
 export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=45000,onProgress}={}){
   const conversation=validateConversation(input);
-  if(!config?.apiKey)throw new AssistantError('not-configured','DeepSeek还没有连接。请配置服务端密钥，或先使用下方的办事工具。',503);
+  if(!config?.apiKey)throw new AssistantError('not-configured','助手暂时没有连接，可以先打开工具列表自行核对。',503);
   if(signal?.aborted)throw new AssistantError('aborted','已停止这次回复。',499);
   const controller=new AbortController();
   const cancel=()=>controller.abort();if(signal?.aborted)cancel();else signal?.addEventListener('abort',cancel,{once:true});
@@ -182,8 +183,8 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
       try{response=await fetcher(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${config.apiKey}`},body:JSON.stringify({model:config.model||'deepseek-flash',messages,tools:guide?(allowTools?tools:[]):[planner],tool_choice:guide?(allowTools?'auto':'none'):{type:'function',function:{name:'plan_tasks'}},thinking:{type:'disabled'},stream:false,max_tokens:1600,temperature:.3}),signal:controller.signal});}
       catch{if(controller.signal.aborted)throw new AssistantError(timedOut?'timeout':'aborted',timedOut?'DeepSeek这次回复较慢，请稍后重试。':'已停止这次回复。',timedOut?504:499);throw new AssistantError('upstream-network','暂时联系不上DeepSeek，请稍后再试。',502);}
       if(!response.ok){
-        if(response.status===401||response.status===403)throw new AssistantError('upstream-auth','DeepSeek密钥无效或没有访问权限，请检查本机配置。',503);
-        if(response.status===402)throw new AssistantError('upstream-balance','DeepSeek账户额度不足，请检查服务商账户。',503);
+        if(response.status===401||response.status===403)throw new AssistantError('upstream-auth','助手的模型服务暂不可用，请联系网站维护者，或先使用工具列表。',503);
+        if(response.status===402)throw new AssistantError('upstream-balance','助手当前额度暂不可用，请联系网站维护者，或先使用工具列表。',503);
         if(response.status===429)throw new AssistantError('upstream-rate','DeepSeek当前请求较多，请稍后重试。',429);
         throw new AssistantError('upstream-http','DeepSeek暂时没有完成请求，请稍后重试。',502);
       }
@@ -264,7 +265,7 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
 
 function json(res,status,body){res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(JSON.stringify(body));}
 function readBody(req){return new Promise((resolve,reject)=>{let size=0;const chunks=[];req.on('data',chunk=>{size+=chunk.length;if(size<=98304)chunks.push(chunk);});req.on('end',()=>{if(size>98304){reject(new AssistantError('too-large','问题内容太长，请分次发送。',413));return;}try{resolve(JSON.parse(Buffer.concat(chunks).toString('utf8')));}catch{reject(new AssistantError('invalid-input','请求内容无法读取，请重新发送。'));}});req.on('error',()=>reject(new AssistantError('aborted','请求已停止。',499)));});}
-export function createAssistantMiddleware({directory,config,fetcher,timeoutMs}={}){
+export function createAssistantMiddleware({directory,config,fetcher,timeoutMs,policy=createRequestPolicy()}={}){
   let busy=0;const starts=[];
   return (req,res)=>{
     const path=new URL(req.url,'http://localhost').pathname;
@@ -272,17 +273,14 @@ export function createAssistantMiddleware({directory,config,fetcher,timeoutMs}={
     const requestId=randomUUID();
     const fail=error=>{if(res.destroyed||res.writableEnded)return;const e=error instanceof AssistantError?error:new AssistantError('internal','这次请求没有完成，请稍后重试。',500);if(res.headersSent){res.end(JSON.stringify({type:'error',error:{code:e.code,message:e.message}})+'\n');}else json(res,e.status,{requestId,error:{code:e.code,message:e.message}});};
     try{
-      const hostname=new URL(`http://${req.headers.host||''}`).hostname;
-      if(!['127.0.0.1','localhost','[::1]'].includes(hostname))throw new AssistantError('host','AI助手目前只在本机服务中使用。',403);
-      const origin=req.headers.origin;
-      if(origin&&origin!==`http://${req.headers.host}`&&origin!==`https://${req.headers.host}`)throw new AssistantError('origin','请在本站页面中使用AI助手。',403);
+      if(!policy.allows(req))throw new AssistantError('origin','请在本站页面中使用AI助手。',403);
       const current=config??readAssistantConfig(directory||process.cwd());
       if(path==='/api/v1/assistant/status'&&req.method==='GET'){json(res,200,{requestId,data:{configured:Boolean(current.apiKey),provider:'DeepSeek',model:current.model||'deepseek-flash'}});return true;}
       if(path!=='/api/v1/assistant/chat'){throw new AssistantError('not-found','没有找到这个AI接口。',404);}
       if(req.method!=='POST')throw new AssistantError('method','这个接口需要发送文字问题。',405);
       if(!req.headers['content-type']?.startsWith('application/json'))throw new AssistantError('content-type','请使用文字对话入口。',415);
       const now=Date.now();while(starts.length&&starts[0]<now-60000)starts.shift();
-      if(busy>=2||starts.length>=12)throw new AssistantError('rate','当前请求较多，请等这次回复完成。',429);
+      if(busy>=2||starts.length>=12)throw new AssistantError('rate','现在使用的人较多，请稍后重试，也可以先使用工具列表。',429);
       starts.push(now);busy++;
       const abort=new AbortController();const disconnected=()=>{if(!res.writableEnded)abort.abort();};res.on('close',disconnected);
       const streaming=req.headers.accept?.includes('application/x-ndjson');

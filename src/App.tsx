@@ -208,9 +208,9 @@ function Subsidy({onSignal,addQuestions}:{onSignal:(signal:SubsidySignal)=>void;
 function QuestionEditor({label,value,change}:{label:string;value:string;change:(text:string)=>void}) {
   const ref=useRef<HTMLTextAreaElement>(null);
   function fit(){const field=ref.current;if(!field||field.offsetParent===null)return;field.style.height='auto';field.style.height=`${Math.min(300,Math.max(46,field.scrollHeight))}px`;}
-  useLayoutEffect(fit);
+  useLayoutEffect(fit,[value]);
   useEffect(()=>{window.addEventListener('resize',fit);return()=>window.removeEventListener('resize',fit);},[]);
-  return <textarea ref={ref} aria-label={label} value={value} rows={1} maxLength={1500} onChange={event=>change(event.target.value)}/>;
+  return <textarea ref={ref} aria-label={label} value={value} rows={1} maxLength={1500} onFocus={fit} onChange={event=>change(event.target.value)}/>;
 }
 function Checklist({ questions, change, add, go, notify }: { questions: Question[]; change: (items: Question[]) => void; add:(items:QuestionDraft[])=>void; go: (page: Page) => void; notify: (text: string) => void }) {
   const [filter, setFilter] = useState<'all' | 'todo' | 'done'>('all');
@@ -253,6 +253,8 @@ export default function App() {
   const [page, setPage] = useState<Page>(currentPage);
   const remembered=typeof window.history.state?.firstStepMusicReturn==='string'?parseExperiencePage('#/'+window.history.state.firstStepMusicReturn):'home';
   const retainedPage=useRef<WorkspacePage>(page==='music'?(remembered==='music'?'home':remembered):page);if(page!=='music')retainedPage.current=page;const workspacePage=retainedPage.current;
+  const [visitedPages,setVisitedPages]=useState<ReadonlySet<WorkspacePage>>(()=>new Set([workspacePage]));
+  if(!visitedPages.has(workspacePage))setVisitedPages(new Set([...visitedPages,workspacePage]));
   const [questions, setQuestions] = useState<Question[]>(initialQuestions);
   const [demoSeed, setDemoSeed] = useState(0);
   const [salaryRequest,setSalaryRequest]=useState<AssistantApply<PayslipInput>|null>(null),[contractRequest,setContractRequest]=useState<AssistantApply<ContractAssistantInput>|null>(null);
@@ -294,11 +296,11 @@ export default function App() {
     addQuestions(action.items);
   }
   return <><SpatialTerminal accountEpoch={accountEpoch} accountQuestions={questions} restoreAccountQuestions={restoreAccountQuestions} page={workspacePage} musicOpen={page==='music'} openMusic={openMusic} closeMusic={closeMusic} go={go} questionCount={questions.length} signals={signals} covered={sourcesOpen} openSources={() => setSourcesOpen(true)} demo={demo} onAssistantAction={applyAssistantAction}>
-    <div className="business-module module-contract" hidden={workspacePage !== 'contract'}><Contract key={accountEpoch} openList={()=>go('list')} demoSeed={demoSeed} addQuestions={addQuestions} notify={setToast} onSignal={contractSignal} applyRequest={contractRequest}/></div>
-    <div className="business-module module-salary" hidden={workspacePage !== 'salary'}><Salary key={accountEpoch} addQuestions={addQuestions} onSignal={salarySignal} applyRequest={salaryRequest}/></div>
-    <div className="business-module module-subsidy" hidden={workspacePage !== 'subsidy'}><Subsidy key={accountEpoch} onSignal={subsidySignal} addQuestions={addQuestions}/></div>
-    <NewModules key={accountEpoch} page={workspacePage} onProgress={toolSignal} addQuestions={addQuestions} notify={setToast}/>
-    <div className="business-module module-list" hidden={workspacePage !== 'list'}><Checklist questions={questions} change={changeQuestions} add={addQuestions} go={go} notify={setToast} /></div>
+    {visitedPages.has('contract')&&<div className="business-module module-contract" hidden={workspacePage !== 'contract'}><Contract key={accountEpoch} openList={()=>go('list')} demoSeed={demoSeed} addQuestions={addQuestions} notify={setToast} onSignal={contractSignal} applyRequest={contractRequest}/></div>}
+    {visitedPages.has('salary')&&<div className="business-module module-salary" hidden={workspacePage !== 'salary'}><Salary key={accountEpoch} addQuestions={addQuestions} onSignal={salarySignal} applyRequest={salaryRequest}/></div>}
+    {visitedPages.has('subsidy')&&<div className="business-module module-subsidy" hidden={workspacePage !== 'subsidy'}><Subsidy key={accountEpoch} onSignal={subsidySignal} addQuestions={addQuestions}/></div>}
+    <NewModules key={accountEpoch} page={workspacePage} visitedPages={visitedPages} onProgress={toolSignal} addQuestions={addQuestions} notify={setToast}/>
+    {visitedPages.has('list')&&<div className="business-module module-list" hidden={workspacePage !== 'list'}><Checklist key={accountEpoch} questions={questions} change={changeQuestions} add={addQuestions} go={go} notify={setToast} /></div>}
   </SpatialTerminal><SourcesDialog open={sourcesOpen} close={() => setSourcesOpen(false)} />{toast && <div className="toast" role="status"><CheckCircle2 size={17} /><span>{toast}</span><button className="icon-button" onClick={() => setToast('')} aria-label="关闭提示"><X size={15} /></button></div>}
   </>;
 }

@@ -92,3 +92,11 @@ lib/drafts.ts提供九模块的版本/字段验证、每账号/模块存储键�
 contractQueryFromMessages只构造检索主题查询，不改原用户证据。短追问须完整匹配，最近三条用户消息只允许单主题；换题/多主题/其他事项停止借用。searchContractKnowledge补口语及明确主题排序，原条文、适用范围、时效和显式条号优先保持。网关仍以原conversation.userText作事实校验。
 
 ContractImage新增onUseText回调，仅关闭图片区、聚焦原textarea，不改原文/期限/用工确认。图片识别端为缺少warnings的无法辨认标记加人工校对提示。无效guidance+needs-info返回明确纠正信息；一般租房guidance先答，个人核对才补问。已观察的越界模型解释按原摘录回退为guide，边界规则不是完整语义校验。
+
+## v0.39 初次访问与公开来源
+
+App用visitedPages保留已访问工作区，NewModules过滤未访问工具；根表单不提前初始化。身份epoch仍重置工具和对话，并补清单输入重置。QuestionEditor只在value变化/聚焦/resize调整高度。TaskArrayScene直接toArray到现有Float32Array。
+
+性能记录仅?perf=1创建，observer接生产控制器有效窗口及原因，300窗口/200事件、手动本机JSON下载。诊断模式下手动完整也可继续记录窗口，仍尊重手动选择；普通模式无observer保持原自动策略。暂停不记0FPS，内容和账号不进入报告。
+
+request-policy.mjs在AI/图片/账号共用；PUBLIC_ORIGIN从进程环境选择一个HTTPS来源，Host精确匹配，公开POST须同Origin；不信任转发头。serve支持PORT/HOST，0.0.0.0需公开来源；代理账号Cookie始终Secure，公开指纹JS/CSS长缓存、HTML no-store。实际HTTPS终止/持久盘由部署平台提供，公平用户额度仍待。
