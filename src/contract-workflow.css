@@ -1,0 +1,35 @@
+.contract-save-option { display:flex; align-items:flex-start; gap:10px; padding:12px 0 18px; color:#34566f; font-size:12px; line-height:1.8; }
+.contract-save-option input { accent-color:#367fbb; margin:5px 0 0; }
+.contract-save-option span { display:grid; gap:2px; }
+.contract-save-option small { font-size:10px; color:#6b8192; }
+.contract-open-list { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; margin-top:12px; padding:13px 0; color:#236eaa; font-size:12px; border-bottom:1px solid #cedee9; }
+.question-evidence { margin:12px 0; border-top:1px solid #d7e3ed; }
+.question-evidence > summary { cursor:pointer; display:flex; align-items:center; gap:8px; list-style:none; padding:12px 0; color:#346b94; font-size:12px; }
+.question-evidence > summary > svg:last-child { margin-left:auto; transition:transform .18s; }
+.question-evidence[open] > summary > svg:last-child { transform:rotate(180deg); }
+.question-evidence > div { padding:0 0 8px; }
+.question-evidence > div > strong { display:block; color:#34516a; font-size:13px; margin:5px 0 8px; }
+.question-evidence > div > p,.question-evidence > div > small { color:#657b8b; font-size:11px; line-height:1.9; }
+.question-evidence blockquote { margin:10px 0; padding:10px 14px; border-left:2px solid #83b7db; background:#edf4fa; color:#345268; font-size:13px; line-height:1.9; white-space:pre-wrap; overflow-wrap:anywhere; }
+.question-reworded { margin-top:8px; }
+.question-answer { border-top:1px solid #d7e3ed; margin-top:10px; padding-top:10px; }
+.question-answer summary { cursor:pointer; color:#5e788d; font-size:12px; padding:5px 0; }
+.question-answer textarea { margin-top:8px; }
+.question-answer > small { color:#758795; font-size:10px; }
+.checklist-manual { margin:0 0 24px; border-bottom:1px solid #d4e0e9; }
+.checklist-manual > summary { display:flex; align-items:center; gap:8px; cursor:pointer; list-style:none; color:#3978a6; padding:14px 0; font-size:13px; }
+.checklist-manual .checklist-compose { margin-top:0; }
+.experience-shell[data-module=list] .page-heading-stamp,.experience-shell[data-module=contract] .page-heading-stamp { display:none; }
+.experience-shell[data-module=list] .page-heading-copy > .eyebrow,.experience-shell[data-module=contract] .page-heading-copy > .eyebrow { display:none; }
+.experience-shell[data-module=list] .terminal-page-heading h1,.experience-shell[data-module=contract] .terminal-page-heading h1 { font-size:28px; letter-spacing:-.5px; }
+.experience-shell[data-module=list] .checklist-item { padding-top:22px; padding-bottom:22px; }
+.experience-shell[data-module=list] .checklist-item > div { min-width:0; }
+.experience-shell[data-module=list] .checklist-item textarea { font-size:14px; line-height:1.8; color:#29485e; }
+.experience-shell.is-working .experience-footer,.experience-shell.is-working .experience-systemline { display:none; }
+.experience-shell.is-working .experience-workspace { bottom:30px!important; }
+.experience-shell[data-module=contract][data-view=result] .contract-image { display:none; }
+.experience-shell[data-module=contract] .review-summary { margin-bottom:0; }
+@media(prefers-reduced-motion:reduce) { .question-evidence > summary > svg:last-child { transition:none; } }
+
+.experience-shell[data-module=list] .checklist-item.done { opacity:1; }
+.experience-shell[data-module=list] .checklist-item textarea { min-height:46px; }

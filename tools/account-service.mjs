@@ -1,3 +1,4 @@
+import {isQuestion} from '../src/lib/checklist.ts';
 import {DatabaseSync} from 'node:sqlite';
 import {randomBytes,randomUUID,scrypt as derive,timingSafeEqual,createHash} from 'node:crypto';
 import {promisify} from 'node:util';
@@ -11,8 +12,8 @@ export function validateMemory(value){
  if(!value||typeof value!=='object'||Array.isArray(value))throw Error('资料格式不完整。');
  const text=(key,max)=>{if(typeof value[key]!=='string'||value[key].length>max)throw Error('资料内容过长或格式不正确。');return value[key].trim();};
  const questions=value.questions??[];
- if(!Array.isArray(questions)||questions.length>50||questions.some(q=>!q||typeof q.id!=='string'||q.id.length>100||typeof q.text!=='string'||q.text.length>1500||typeof q.category!=='string'||q.category.length>50||typeof q.done!=='boolean'))throw Error('清单格式不完整或超过50项。');
- return {city:text('city',60),stage:text('stage',60),notes:text('notes',2000),questions:questions.map(({id,text,category,done})=>({id,text,category,done}))};
+ if(!Array.isArray(questions)||questions.length>50||questions.some(q=>!isQuestion(q)))throw Error('清单格式不完整或超过50项。');
+ return {city:text('city',60),stage:text('stage',60),notes:text('notes',2000),questions:questions.map(({id,text,category,done,evidence,answer})=>({id,text,category,done,...(evidence?{evidence}:{}),...(answer!==undefined?{answer}:{})}))};
 }
 export function createAccountStore({file=resolve(process.env.FIRST_STEP_DATA_DIR||resolve(homedir(),'.config/first-step/private-data'),'accounts.sqlite'),now=Date.now}={}){
  if(file!==':memory:')mkdirSync(dirname(file),{recursive:true,mode:0o700});
@@ -45,10 +46,10 @@ export function createAccountMiddleware({store:provided}={}){
    const now=Date.now();while(attempts.length&&attempts[0]<now-600000)attempts.shift();
    if(busy>=2||(/\/(login|register)$/.test(path)&&attempts.length>=20)){respond(429,{error:'操作过于频繁，请稍后再试。'});return true;}
    if(/\/(login|register)$/.test(path))attempts.push(now);busy++;
-   let size=0,chunks=[];req.on('data',chunk=>{size+=chunk.length;if(size<=131072)chunks.push(chunk);});
+   let size=0,chunks=[];req.on('data',chunk=>{size+=chunk.length;if(size<=1048576)chunks.push(chunk);});
    let ended=false;const release=()=>{if(!ended){ended=true;busy--;}};req.on('error',()=>{release();respond(400,{error:'请求中断，请重试。'});});req.on('aborted',release);
    req.on('end',()=>{void(async()=>{try{
-    if(size>131072){respond(413,{error:'资料过大，请精简内容。'});return;}
+    if(size>1048576){respond(413,{error:'资料过大，请精简内容。'});return;}
     let body;try{body=JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{respond(400,{error:'请求格式不正确。'});return;}
     if(!body||typeof body!=='object'||Array.isArray(body))throw Error('请求格式不正确。');
     if(path.endsWith('/logout')){store.logout(token);cookie('');respond(200,{user:null});}

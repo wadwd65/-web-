@@ -1,4 +1,7 @@
 import ContractSources from './ContractSources.tsx';
+import QuestionEvidence from './QuestionEvidence.tsx';
+import {isQuestion,contractQuestion,sameQuestion,questionExport} from './lib/checklist.ts';
+import type {Question,QuestionDraft} from './lib/checklist.ts';
 import {searchContractKnowledge,contractSourcesForCopy} from './lib/contract-knowledge.ts';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { ReactNode, ChangeEvent } from 'react';
@@ -29,7 +32,6 @@ import type {AssistantAction,AssistantApply,ContractAssistantInput} from './serv
 import type {PayslipInput} from './lib/wages.ts';
 
 type Page = ExperiencePage;
-type Question = { id: string; text: string; done: boolean; category: string };
 const STORE = 'first-step:questions:v1';
 const LAW = 'https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/bgt/art/2023/art_0abfdd261c03417b949df19d869add8d.html';
 const SUBSIDY = 'https://rsj.gz.gov.cn/zmhd/cjwt/ldbz/content/post_10677608.html';
@@ -47,10 +49,10 @@ function currentPage(): Page {return parseExperiencePage(window.location.hash);}
 function initialQuestions(): Question[] {
   try {
     const raw = localStorage.getItem(STORE);
-    if (!raw || raw.length > 128000) return [];
+    if (!raw || raw.length > 512000) return [];
     const data: unknown = JSON.parse(raw);
     if (!Array.isArray(data)) return [];
-    return data.filter((item): item is Question => !!item && typeof item.id === 'string' && typeof item.text === 'string' && item.text.length <= 1500 && typeof item.done === 'boolean' && typeof item.category === 'string').slice(0, 50);
+    return data.filter(isQuestion).slice(0, 50);
   } catch { return []; }
 }
 function Wordmark({ small = false }: { small?: boolean }) {
@@ -68,12 +70,14 @@ function PageHeading({ number, english, title, description, right }: { number: s
 function ControlFace({ label, icon, code }: { label:ReactNode;icon:ReactNode;code:string }) {
   return <><span className="control-label">{label}</span><span className="control-action" aria-hidden="true"><small>{code}</small>{icon}</span></>;
 }
-function Contract({ demoSeed, addQuestions, notify, onSignal,applyRequest }: { demoSeed: number; addQuestions: (questions: { text: string; category: string }[]) => void; notify: (text: string) => void; onSignal:(signal:ContractSignal)=>void;applyRequest:AssistantApply<ContractAssistantInput>|null }) {
+function Contract({ demoSeed, addQuestions, notify, onSignal,applyRequest,openList }: { demoSeed: number; addQuestions: (questions: QuestionDraft[]) => void; openList:()=>void; notify: (text: string) => void; onSignal:(signal:ContractSignal)=>void;applyRequest:AssistantApply<ContractAssistantInput>|null }) {
   const [text, setText] = useState('');
   const [months, setMonths] = useState('');
   const [probation, setProbation] = useState('');
   const [findings, setFindings] = useState<Finding[] | null>(null);
   const [active, setActive] = useState('');
+  const [reviewStamp,setReviewStamp]=useState({id:'',at:''});
+  const [includeEvidence,setIncludeEvidence]=useState(true);
   const [filename, setFilename] = useState('');
   const [sample, setSample] = useState(false);
   const [error, setError] = useState('');
@@ -86,7 +90,7 @@ function Contract({ demoSeed, addQuestions, notify, onSignal,applyRequest }: { d
   const reviewRef = useRef<HTMLElement>(null);
   function loadDemo() { setText(DEMO_CONTRACT); setMonths('12'); setProbation('3'); setFindings(null); setError(''); setFilename('合成示例 · 劳动合同.txt'); setSample(true); setPreview(null); setScope('fulltime'); }
   useLayoutEffect(() => { if (demoSeed > 0) loadDemo(); }, [demoSeed]);
-  useEffect(()=>{if(!applyRequest)return;const input=applyRequest.input;try{const result=analyzeContract(input);setText(input.text);setMonths(input.contractMonths===null?'':String(input.contractMonths));setProbation(input.probationMonths===null?'':String(input.probationMonths));setScope('fulltime');setFilename('对话中提供的文字');setSample(false);setPreview(null);setError('');setFindings(result);setActive(result[0]?.id??'');}catch{setError('对话材料未能通过核对，请手动填写。');}},[applyRequest]);
+  useEffect(()=>{if(!applyRequest)return;const input=applyRequest.input;try{const result=analyzeContract(input);setText(input.text);setMonths(input.contractMonths===null?'':String(input.contractMonths));setProbation(input.probationMonths===null?'':String(input.probationMonths));setScope('fulltime');setFilename('对话中提供的文字');setSample(false);setPreview(null);setError('');setReviewStamp({id:crypto.randomUUID(),at:new Date().toISOString()});setFindings(result);setActive(result[0]?.id??'');}catch{setError('对话材料未能通过核对，请手动填写。');}},[applyRequest]);
   useEffect(() => () => { if (preview) URL.revokeObjectURL(preview.url); }, [preview]);
   useEffect(() => { if (findings) reviewRef.current?.scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'}); }, [findings]);
   function editText(value: string) { setText(value); setFindings(null); setSample(false); setError(''); setMonths(''); setProbation(''); setScope('unknown'); setFilename('手动输入的合同文字'); }
@@ -107,10 +111,14 @@ function Contract({ demoSeed, addQuestions, notify, onSignal,applyRequest }: { d
     if (!text.trim()) { setError('请先粘贴合同文字，或使用合成示例。'); showField(textRef.current); return; }
     if (scope !== 'fulltime') { setError('请先确认用工类型。实习、劳务和非全日制协议需要其他适用规则，此版不自动套用。'); showField(scopeRef.current); return; }
     if (text.length > 60000) { setError('本次最多核对 60,000 字符，请缩短内容后重试。'); return; }
-    try { const result = analyzeContract({ text, contractMonths: months === '' ? null : Number(months), probationMonths: probation === '' ? null : Number(probation) }); setFindings(result); setActive(result[0]?.id ?? ''); setError(''); }
+    try { const result = analyzeContract({ text, contractMonths: months === '' ? null : Number(months), probationMonths: probation === '' ? null : Number(probation) }); setReviewStamp({id:crypto.randomUUID(),at:new Date().toISOString()});setFindings(result); setActive(result[0]?.id ?? ''); setError(''); }
     catch (e) { setError(e instanceof Error ? e.message : '暂时无法核对，请检查确认值。'); }
   }
   function locate(quote: string) { const index = quote.trim() ? text.indexOf(quote) : -1; if (index < 0 || !textRef.current) { notify('这项未能在已提供文本中定位，请核对材料是否完整。'); return; } textRef.current.focus(); textRef.current.setSelectionRange(index, index + quote.length); textRef.current.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth', block: 'center' }); }
+  function questionFor(f:Finding):QuestionDraft {
+    if(!includeEvidence)return {text:f.question,category:f.category};
+    return contractQuestion(f,{id:reviewStamp.id,at:reviewStamp.at,text,material:filename||'粘贴的合同文字',contractMonths:months===''?null:Number(months),probationMonths:probation===''?null:Number(probation)});
+  }
   const unresolved = findings?.filter(f => f.status !== 'noted') ?? [];
   const unresolvedCount=findings?unresolved.length:null;
   function exportReview(){
@@ -130,7 +138,7 @@ function Contract({ demoSeed, addQuestions, notify, onSignal,applyRequest }: { d
   useEffect(()=>onSignal({characters:text.length,reviewed:findings!==null,unresolved:unresolvedCount,items:findings?.length??0}),[text.length,findings,unresolvedCount,onSignal]);
   return <>
     <PageHeading number="02" english="CONTRACT REVIEW" title="劳动合同核对" description="从照片识别或粘贴文字，校对后确认用工类型与期限，再整理询问。" right={<button className="button secondary" onClick={loadDemo}><ControlFace label="载入合成示例" icon={<FileText size={16}/>} code="DEMO"/></button>} />
-    <ContractImage onConfirm={value=>{editText(value);setPreview(null);requestAnimationFrame(()=>{textRef.current?.focus({preventScroll:true});textRef.current?.scrollIntoView({block:"center",behavior:"smooth"});});notify("已带入校对后的文字，请确认用工类型与期限。");}}/>
+    <ContractImage onConfirm={value=>{editText(value);setFilename('已校对的合同图片 · 第1页');setPreview(null);requestAnimationFrame(()=>{textRef.current?.focus({preventScroll:true});textRef.current?.scrollIntoView({block:"center",behavior:"smooth"});});notify("已带入校对后的文字，请确认用工类型与期限。");}}/>
     <div className="process-line workflow-stations"><span className={text.trim()?'current ready':'current'}><b>01</b><span><strong>准备材料</strong><small>{text.trim()?'已载入文字':'导入或粘贴'}</small></span></span><ChevronRight size={14}/><span className={findings?'current ready':''}><b>02</b><span><strong>核对约定</strong><small>{findings?'已有核对结果':'确认类型与期限'}</small></span></span><ChevronRight size={14}/><span className={unresolved.length?'available':''}><b>03</b><span><strong>整理询问</strong><small>{unresolved.length?`${unresolved.length}项可继续确认`:'带走自己的问题'}</small></span></span><Tag>本地文字规则体验</Tag></div>
     <div className="task-action-strip"><div><strong>{findings?'查看结果，带走这次核对记录':'先准备合同文字并确认期限'}</strong><span>{findings?'修改原文或确认值后，需要重新核对。':text.trim()?'原文已载入，请确认下方用工类型与期限。':'没有材料也可先载入合成示例。'}</span></div><button className="button primary" onClick={findings?exportReview:run} disabled={reading}><ControlFace label={findings?'导出核对记录':'开始核对'} icon={findings?<Download size={18}/>:<ArrowRight size={19}/>} code={findings?'TXT':'RUN'}/></button>{error&&<p className="task-action-message" role="alert">{error}</p>}</div>
     <div className="contract-grid">
@@ -150,11 +158,11 @@ function Contract({ demoSeed, addQuestions, notify, onSignal,applyRequest }: { d
       <section ref={reviewRef} className="panel review-panel"><div className="panel-heading"><div><ClipboardCheck size={17} /><h2>核对结果</h2></div>{findings ? <Tag tone="orange">{unresolved.length} 项待确认</Tag> : <span className="mono">REVIEW / 02</span>}</div>
         {!findings ? <div className="review-empty"><div className="empty-optic" aria-hidden="true"><i/><i/><i/><FileCheck2 size={38} strokeWidth={1.1}/></div><span className="eyebrow">WAITING FOR SOURCE</span><h3>清楚的下一步，从原文开始。</h3><p>添加文字并确认期限后，这里会显示需要核实的约定、依据和可以问 HR 的问题。</p><div className="empty-points"><span><Check size={14}/>对应原文</span><span><Check size={14}/>解释依据</span><span><Check size={14}/>整理提问</span></div><button className="button text-button" onClick={loadDemo}><ControlFace label="用合成示例走一遍" icon={<ArrowRight size={16}/>} code="DEMO"/></button></div>
           : <div className="review-content"><div className="review-summary"><div><span className="eyebrow">NEXT ACTIONS</span><h3>{unresolved.length?'先把这些约定问清楚':'已完成这轮文字核对'}</h3><p>核对只覆盖当前文字与所选范围；“未找到”不等于合同一定没有。</p></div><div className="review-count"><strong>{String(unresolved.length).padStart(2,'0')}</strong><small>项待确认</small></div></div>
-            <div className="finding-list">{findings.map((f, i) => <article key={f.id} className={`finding ${active === f.id ? 'open' : ''}`}><button className="finding-heading" onClick={() => setActive(active === f.id ? '' : f.id)} aria-expanded={active === f.id}><span className={`finding-number ${f.status}`}>{String(i + 1).padStart(2, '0')}</span><span><strong>{f.title}</strong><small>{f.category}</small></span><Tag tone={f.status === 'noted' ? 'green' : 'orange'}>{f.status === 'noted' ? '材料有说明' : f.status === 'missing' ? '信息待补充' : '需要确认'}</Tag><ChevronDown size={15} /></button>
-              {active === f.id && <div className="finding-body">{f.quote&&<blockquote>{f.quote}</blockquote>}<p>{f.summary}</p><ContractSources result={searchContractKnowledge(`${f.category} ${f.article} ${f.quote}`,{fullTimeConfirmed:true})}/><div className="question-preview"><span>可以这样问 HR</span><p>{f.question}</p></div><div className="finding-actions"><button className="button tiny secondary" onClick={()=>locate(f.quote)}><ControlFace label="查看原文" icon={<ArrowUpRight size={14}/>} code="QUOTE"/></button><button className="button tiny primary" onClick={()=>addQuestions([{text:f.question,category:f.category}])}><ControlFace label="加入询问清单" icon={<Plus size={14}/>} code="ADD"/></button></div></div>}
+            <label className="contract-save-option"><input type="checkbox" checked={includeEvidence} onChange={event=>setIncludeEvidence(event.target.checked)}/><span>加入清单时附上原文片段与依据<small>只保存本项最多600字；可取消后仅保存问题</small></span></label><div className="finding-list">{findings.map((f, i) => <article key={f.id} className={`finding ${active === f.id ? 'open' : ''}`}><button className="finding-heading" onClick={() => setActive(active === f.id ? '' : f.id)} aria-expanded={active === f.id}><span className={`finding-number ${f.status}`}>{String(i + 1).padStart(2, '0')}</span><span><strong>{f.title}</strong><small>{f.category}</small></span><Tag tone={f.status === 'noted' ? 'green' : 'orange'}>{f.status === 'noted' ? '材料有说明' : f.status === 'missing' ? '信息待补充' : '需要确认'}</Tag><ChevronDown size={15} /></button>
+              {active === f.id && <div className="finding-body">{f.quote&&<blockquote>{f.quote}</blockquote>}<p>{f.summary}</p><ContractSources result={searchContractKnowledge(`${f.category} ${f.article} ${f.quote}`,{fullTimeConfirmed:true})}/><div className="question-preview"><span>可以这样问 HR</span><p>{f.question}</p></div><div className="finding-actions"><button className="button tiny secondary" disabled={!f.quote} onClick={()=>locate(f.quote)}><ControlFace label="查看原文" icon={<ArrowUpRight size={14}/>} code="QUOTE"/></button><button className="button tiny primary" onClick={()=>addQuestions([questionFor(f)])}><ControlFace label="加入询问清单" icon={<Plus size={14}/>} code="ADD"/></button></div></div>}
             </article>)}</div>
-            {!!unresolved.length&&<button className="button primary wide-button" onClick={()=>addQuestions(unresolved.map(f=>({text:f.question,category:f.category})))}><ControlFace label={`整理 ${unresolved.length} 项待确认问题`} icon={<ListChecks size={17}/>} code="COLLECT"/></button>}
-            <p className="input-footnote">结果用于理解材料和准备沟通；具体争议请结合完整事实向人社部门或专业人员咨询。</p>
+            {!!unresolved.length&&<button className="button primary wide-button" onClick={()=>addQuestions(unresolved.map(questionFor))}><ControlFace label={`整理 ${unresolved.length} 项待确认问题`} icon={<ListChecks size={17}/>} code="COLLECT"/></button>}
+            <button className="contract-open-list" onClick={openList}>打开询问清单，修改问题与记录答复<ArrowRight size={16}/></button><p className="input-footnote">结果用于理解材料和准备沟通；具体争议请结合完整事实向人社部门或专业人员咨询。</p>
           </div>}
       </section>
     </div>
@@ -195,25 +203,27 @@ function Subsidy({onSignal,addQuestions}:{onSignal:(signal:SubsidySignal)=>void;
 
 function QuestionEditor({label,value,change}:{label:string;value:string;change:(text:string)=>void}) {
   const ref=useRef<HTMLTextAreaElement>(null);
-  function fit(){const field=ref.current;if(!field||field.offsetParent===null)return;field.style.height='auto';field.style.height=`${Math.min(300,Math.max(83,field.scrollHeight))}px`;}
+  function fit(){const field=ref.current;if(!field||field.offsetParent===null)return;field.style.height='auto';field.style.height=`${Math.min(300,Math.max(46,field.scrollHeight))}px`;}
   useLayoutEffect(fit);
   useEffect(()=>{window.addEventListener('resize',fit);return()=>window.removeEventListener('resize',fit);},[]);
-  return <textarea ref={ref} aria-label={label} value={value} rows={3} maxLength={1500} onChange={event=>change(event.target.value)}/>;
+  return <textarea ref={ref} aria-label={label} value={value} rows={1} maxLength={1500} onChange={event=>change(event.target.value)}/>;
 }
-function Checklist({ questions, change, add, go, notify }: { questions: Question[]; change: (items: Question[]) => void; add:(items:{text:string;category:string}[])=>void; go: (page: Page) => void; notify: (text: string) => void }) {
+function Checklist({ questions, change, add, go, notify }: { questions: Question[]; change: (items: Question[]) => void; add:(items:QuestionDraft[])=>void; go: (page: Page) => void; notify: (text: string) => void }) {
   const [filter, setFilter] = useState<'all' | 'todo' | 'done'>('all');
   const [removed, setRemoved] = useState<Question | null>(null);
   const [draft,setDraft]=useState(''),[category,setCategory]=useState<string>('合同核对'),[query,setQuery]=useState(''),[composeError,setComposeError]=useState('');
+  const previousCount=useRef(questions.length);
+  useEffect(()=>{if(questions.length>previousCount.current){setFilter('all');setQuery('');}previousCount.current=questions.length;},[questions.length]);
   const needle=query.trim().toLocaleLowerCase();
-  const visible = questions.filter(q => (filter === 'all' || (filter === 'done' ? q.done : !q.done))&&(!needle||`${q.text} ${q.category}`.toLocaleLowerCase().includes(needle)));
+  const visible = questions.filter(q => (filter === 'all' || (filter === 'done' ? q.done : !q.done))&&(!needle||`${q.text} ${q.category} ${q.answer??''} ${q.evidence?.title??''}`.toLocaleLowerCase().includes(needle)));
   function addManual(){const text=draft.trim();if(!text){setComposeError('先写下需要确认的问题。');return;}if(text.length>1500){setComposeError('每条问题最多1500字。');return;}if(questions.length>=50){setComposeError('清单最多50条，请先整理或导出已有问题。');return;}if(questions.some(item=>item.text.trim()===text)){setComposeError('这条问题已在清单里，可以直接编辑原问题。');return;}add([{text,category}]);setDraft('');setComposeError('');setFilter('all');setQuery('');}
   const completed = questions.filter(q => q.done).length;
-  const content = () => ['初程 · 我的询问清单', '请结合自己的材料与实际情况沟通。', '', ...questions.map((q, i) => `${q.done ? '[已确认]' : '[待确认]'} [${q.category}] ${i + 1}. ${q.text}`)].join('\n\n');
+  const content = () => questionExport(questions);
   async function copy() { try { await navigator.clipboard.writeText(content()); notify('询问清单已复制。'); } catch { notify('浏览器未允许复制，可以使用导出按钮。'); } }
   return <><PageHeading number="—" english="YOUR CHECKLIST" title="要问的问题，先记在这里" description="把没弄明白的约定记下来，逐项确认，也可以修改为自己的说法。" right={questions.length > 0 && <div className="inline-actions"><button className="button secondary" onClick={copy}><ControlFace label="复制清单" icon={<Copy size={16}/>} code="COPY"/></button><button className="button primary" onClick={() => saveText(content(), '初程-我的询问清单.txt')}><ControlFace label="导出全部" icon={<Download size={16}/>} code="TXT"/></button></div>} />
-    <form className="checklist-compose" onSubmit={event=>{event.preventDefault();addManual();}}><div className="checklist-compose-heading"><h2>写一个自己的问题</h2><span>也可以从各项工具加入待确认事项 · 最多50条</span></div><div className="checklist-compose-fields"><label>所属事务<select aria-label="新问题所属事务" value={category} onChange={event=>setCategory(event.target.value)}>{[...EXPERIENCE_MODULES.map(item=>item.label),'其他'].map(label=><option key={label} value={label}>{label}</option>)}</select></label><label>要确认什么<textarea aria-label="新问题内容" value={draft} rows={2} maxLength={1500} placeholder="例如：试用期的社保从哪天开始缴？" onChange={event=>{setDraft(event.target.value);setComposeError('');}}/></label><button className="button secondary" type="submit"><Plus size={16}/>加入清单</button></div>{composeError&&<p className="form-error" role="alert">{composeError}</p>}</form>
+    <details className="checklist-manual" open={questions.length===0?true:undefined}><summary><Plus size={16}/>添加一个问题</summary><form className="checklist-compose" onSubmit={event=>{event.preventDefault();addManual();}}><div className="checklist-compose-heading"><h2>写一个自己的问题</h2><span>也可以从各项工具加入待确认事项 · 最多50条</span></div><div className="checklist-compose-fields"><label>所属事务<select aria-label="新问题所属事务" value={category} onChange={event=>setCategory(event.target.value)}>{[...EXPERIENCE_MODULES.map(item=>item.label),'其他'].map(label=><option key={label} value={label}>{label}</option>)}</select></label><label>要确认什么<textarea aria-label="新问题内容" value={draft} rows={2} maxLength={1500} placeholder="例如：试用期的社保从哪天开始缴？" onChange={event=>{setDraft(event.target.value);setComposeError('');}}/></label><button className="button secondary" type="submit"><Plus size={16}/>加入清单</button></div>{composeError&&<p className="form-error" role="alert">{composeError}</p>}</form></details>
     <section className="panel checklist-panel"><div className="checklist-search-row"><label><Search size={15}/><input type="search" aria-label="搜索询问清单" value={query} onChange={event=>setQuery(event.target.value)} placeholder="按问题内容或事务名称搜索"/></label>{query&&<button onClick={()=>setQuery('')} aria-label="清除问题搜索"><X size={14}/></button>}<span role="status">显示 {visible.length} / {questions.length} 项</span></div><div className="checklist-toolbar"><div className="filter-tabs" aria-label="清单状态">{(['all', 'todo', 'done'] as const).map(item => <button key={item} className={filter === item ? 'active' : ''} aria-pressed={filter === item} onClick={() => setFilter(item)}>{item === 'all' ? `全部 ${questions.length}` : item === 'todo' ? `待确认 ${questions.length - completed}` : `已确认 ${completed}`}</button>)}</div><span>游客本地保存 · 账号清单请在个人空间主动保存</span></div>
-      {questions.length === 0 ? <div className="list-empty"><div className="empty-icon"><ListChecks size={35} strokeWidth={1.2} /></div><h2>先整理一个真正想问的问题。</h2><p>可以直接在上方写下问题，也可以从八项工具加入需要确认的事项。</p><button className="button primary" onClick={() => go('contract')}><ControlFace label="去核对合同" icon={<ArrowRight size={17}/>} code="OPEN"/></button></div> : <div className="checklist-items">{visible.length === 0 && <div className="compact-empty"><CheckCheck size={28} /><p>{needle?'没有匹配的问题，试试其他关键词或清除搜索。':'这个状态下暂时没有问题。'}</p></div>}{visible.map((q, i) => <div className={`checklist-item ${q.done ? 'done' : ''}`} key={q.id}><span className="checklist-order" aria-hidden="true">{String(i+1).padStart(2,'0')}</span><input type="checkbox" checked={q.done} onChange={() => change(questions.map(item => item.id === q.id ? { ...item, done: !item.done } : item))} aria-label={`标记问题${i + 1}为${q.done ? '待确认' : '已确认'}`} /><div><span className="eyebrow">{q.category}</span><QuestionEditor label={`编辑问题${i + 1}`} value={q.text} change={text=>change(questions.map(item=>item.id===q.id?{...item,text}:item))}/><span className="question-state">{q.done ? '已确认' : '待确认 · 可直接修改文字'}</span></div><button className="icon-button" aria-label={`移除问题${i + 1}`} onClick={() => { setRemoved(q); change(questions.filter(item => item.id !== q.id)); }}><Trash2 size={15} /></button></div>)}</div>}
+      {questions.length === 0 ? <div className="list-empty"><div className="empty-icon"><ListChecks size={35} strokeWidth={1.2} /></div><h2>先整理一个真正想问的问题。</h2><p>可以直接在上方写下问题，也可以从八项工具加入需要确认的事项。</p><button className="button primary" onClick={() => go('contract')}><ControlFace label="去核对合同" icon={<ArrowRight size={17}/>} code="OPEN"/></button></div> : <div className="checklist-items">{visible.length === 0 && <div className="compact-empty"><CheckCheck size={28} /><p>{needle?'没有匹配的问题，试试其他关键词或清除搜索。':'这个状态下暂时没有问题。'}</p></div>}{visible.map((q, i) => <div className={`checklist-item ${q.done ? 'done' : ''}`} key={q.id}><span className="checklist-order" aria-hidden="true">{String(i+1).padStart(2,'0')}</span><input type="checkbox" checked={q.done} onChange={() => change(questions.map(item => item.id === q.id ? { ...item, done: !item.done } : item))} aria-label={`标记问题${i + 1}为${q.done ? '待确认' : '已确认'}`} /><div><span className="eyebrow">{q.category}</span><QuestionEditor label={`编辑问题${i + 1}`} value={q.text} change={text=>change(questions.map(item=>item.id===q.id?{...item,text}:item))}/><span className="question-state">{q.done ? '已确认' : '待确认 · 可直接修改文字'}</span><QuestionEvidence question={q}/><details className="question-answer" open={q.answer?true:undefined}><summary>记录沟通答复或下一步</summary><QuestionEditor label={`问题${i+1}的确认记录`} value={q.answer??''} change={answer=>change(questions.map(item=>item.id===q.id?{...item,answer}:item))}/><small>自行记录，不会自动发送给 AI</small></details></div><button className="icon-button" aria-label={`移除问题${i + 1}`} onClick={() => { setRemoved(q); change(questions.filter(item => item.id !== q.id)); }}><Trash2 size={15} /></button></div>)}</div>}
       {removed && <div className="undo-strip">已移除一个问题。<button className="button text-button" onClick={() => { if(questions.length>=50){notify('清单已满，请先整理一条问题后再撤销。');return;}if(questions.some(item=>item.id===removed.id||item.text.trim()===removed.text.trim())){notify('清单中已有这条问题，未重复恢复。');setRemoved(null);return;}change([...questions, removed]); setRemoved(null); }}><ControlFace label="撤销移除" icon={<RotateCcw size={14}/>} code="UNDO"/></button></div>}
     </section><div className="bottom-notes"><span>确认某个问题不代表所有条款都已核验；保留双方沟通的实际记录。</span><span className="mono">KEEP IT CLEAR.</span></div>
   </>;
@@ -258,7 +268,20 @@ export default function App() {
     window.history.replaceState(window.history.state,'', '#/'+workspacePage);setPage(workspacePage);
   }
   function changeQuestions(items: Question[]) { setQuestions(items); if(accountUser){if(!questionOwner.current)guestQuestions.current=questions;questionOwner.current=accountUser.id;return true;} if(questionOwner.current)return true;guestQuestions.current=items; try { localStorage.setItem(STORE, JSON.stringify(items)); return true; } catch { setToast('浏览器暂时无法保存；清单仅本次可用，请导出留存。'); return false; } }
-  function addQuestions(items: { text: string; category: string }[]) { const added = items.filter(item => item.text.trim() && !questions.some(q => q.text === item.text)); if (!added.length) { setToast('这些问题已经在询问清单里。'); return; } const room = 50 - questions.length; if (room <= 0) { setToast('当前最多保存 50 条问题，请先整理或导出已有清单。'); return; } const saved = changeQuestions([...questions, ...added.slice(0, room).map(item => ({ id: crypto.randomUUID(), text: item.text, category: item.category, done: false }))]); if (saved) setToast(`已加入 ${Math.min(room, added.length)} 个问题，可以到“我的询问清单”修改和导出。`); }
+  function addQuestions(items: QuestionDraft[]) {
+    const added:QuestionDraft[]=[];
+    for(const item of items){
+      if(item.text.trim()&&!questions.some(q=>sameQuestion(q,item))&&!added.some(q=>sameQuestion(q,item))){
+        added.push(item);
+      }
+    }
+    if(!added.length){setToast('这些问题已经在询问清单里。');return;}
+    const room=50-questions.length;
+    if(room<=0){setToast('当前最多保存50条问题，请先整理或导出已有清单。');return;}
+    const selected=added.slice(0,room);
+    const saved=changeQuestions([...questions,...selected.map(item=>({...item,id:crypto.randomUUID(),done:false}))]);
+    if(saved)setToast(`已加入 ${selected.length} 个问题，可以到“我的询问清单”修改和导出。`);
+  }
   function demo() { setDemoSeed(value => value + 1); go('contract'); }
   function applyAssistantAction(action:AssistantAction){
     if(action.kind==='open-tool'){go(action.module);return;}
@@ -267,7 +290,7 @@ export default function App() {
     addQuestions(action.items);
   }
   return <><SpatialTerminal accountEpoch={accountEpoch} accountQuestions={questions} restoreAccountQuestions={restoreAccountQuestions} page={workspacePage} musicOpen={page==='music'} openMusic={openMusic} closeMusic={closeMusic} go={go} questionCount={questions.length} signals={signals} covered={sourcesOpen} openSources={() => setSourcesOpen(true)} demo={demo} onAssistantAction={applyAssistantAction}>
-    <div className="business-module module-contract" hidden={workspacePage !== 'contract'}><Contract key={accountEpoch} demoSeed={demoSeed} addQuestions={addQuestions} notify={setToast} onSignal={contractSignal} applyRequest={contractRequest}/></div>
+    <div className="business-module module-contract" hidden={workspacePage !== 'contract'}><Contract key={accountEpoch} openList={()=>go('list')} demoSeed={demoSeed} addQuestions={addQuestions} notify={setToast} onSignal={contractSignal} applyRequest={contractRequest}/></div>
     <div className="business-module module-salary" hidden={workspacePage !== 'salary'}><Salary key={accountEpoch} addQuestions={addQuestions} onSignal={salarySignal} applyRequest={salaryRequest}/></div>
     <div className="business-module module-subsidy" hidden={workspacePage !== 'subsidy'}><Subsidy key={accountEpoch} onSignal={subsidySignal} addQuestions={addQuestions}/></div>
     <NewModules key={accountEpoch} page={workspacePage} onProgress={toolSignal} addQuestions={addQuestions} notify={setToast}/>

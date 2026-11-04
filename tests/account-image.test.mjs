@@ -7,6 +7,52 @@ import http from 'node:http';
 import {createAccountStore,createAccountMiddleware,validateMemory} from '../tools/account-service.mjs';
 import {validateImage,validateExtraction,extractContractImage} from '../tools/contract-image.mjs';
 import {runAssistant} from '../tools/assistant-gateway.mjs';
+import {contractQuestion,isQuestion,isQuestionEvidence,sameQuestion,questionExport,evidenceSources} from '../src/lib/checklist.ts';
+import {analyzeContract,DEMO_CONTRACT} from '../src/lib/contracts.ts';
+
+const reviewed={id:'synthetic-review',text:DEMO_CONTRACT,material:'合成材料',at:'2026-11-04T02:00:00.000Z',contractMonths:12,probationMonths:3};
+const finding=analyzeContract({text:DEMO_CONTRACT,contractMonths:12,probationMonths:3})[0];
+
+test('contract questions retain exact reviewed quotation, confirmed values and bounded official sources',()=>{
+ const draft=contractQuestion(finding,reviewed),e=draft.evidence;
+ assert.ok(isQuestionEvidence(e));assert.equal(reviewed.text.slice(e.offset,e.offset+e.quote.length),e.quote);
+ assert.equal(e.contractMonths,12);assert.equal(e.probationMonths,3);assert.ok(e.excerptIds.includes('LC19-1'));
+ assert.ok(evidenceSources(e).excerpts.every(item=>e.excerptIds.includes(item.id)));
+ const missing=contractQuestion({...finding,quote:'not in source'},reviewed).evidence;
+ assert.equal(missing.quote,'');assert.equal(missing.offset,null);
+ const long='试用期'+ '文'.repeat(2000);const capped=contractQuestion({...finding,quote:long},{...reviewed,text:long}).evidence;
+ assert.equal(capped.quote.length,600);assert.equal(capped.offset,0);
+});
+
+test('checklist accepts old records and rejects malformed metadata and arbitrary references',()=>{
+ const q={id:'old',text:'旧问题',category:'合同',done:false};assert.ok(isQuestion(q));
+ const e=contractQuestion(finding,reviewed).evidence;
+ assert.equal(isQuestion({...q,evidence:{...e,excerptIds:['https://wrong.example']}}),false);
+ assert.equal(isQuestion({...q,evidence:{...e,quote:'',offset:0}}),false);
+ assert.equal(isQuestion({...q,answer:'a'.repeat(1501)}),false);
+ assert.equal(isQuestionEvidence({...e,contractMonths:Infinity}),false);
+ assert.equal(evidenceSources({...e,corpusId:'old-version'}).excerpts.length,0);
+});
+
+test('deduplication preserves a rewritten question and separate material reviews',()=>{
+ const a=contractQuestion(finding,reviewed);
+ assert.equal(sameQuestion(a,{...a,text:'我自己改写的问题'}),true);
+ assert.equal(sameQuestion(a,contractQuestion(finding,{...reviewed,id:'another-review'})),false);
+ assert.equal(sameQuestion({text:'问题',category:'x'},{text:' 问题 ',category:'x'}),true);
+});
+
+test('account saving and export preserve evidence and user answers',async()=>{
+ const store=createAccountStore({file:':memory:'});
+ try{
+  const account=await store.register('evidence_case','synthetic-password-36');
+  const draft=contractQuestion(finding,reviewed),q={...draft,id:'q',done:true,text:'我改写的提问',answer:'合成答复记录'};
+  store.save(account.token,{city:'',stage:'',notes:'',questions:[q]});
+  const restored=store.current(account.token).memory.questions[0];assert.deepEqual(restored,q);
+  const output=questionExport([restored]);
+  for(const part of ['合成答复记录','原核对建议','合成材料',draft.evidence.quote,'第十九条','https://fgk.chinatax.gov.cn/'])assert.ok(output.includes(part),part);
+  assert.equal(output.includes('undefined'),false);
+ }finally{store.close();}
+});
 
 test('real account persistence, salted password, isolated memories, session revocation and expiry',async()=>{
  const dir=mkdtempSync(join(tmpdir(),'first-step-account-'));const file=join(dir,'test.sqlite');let now=1000;let store=createAccountStore({file,now:()=>now});

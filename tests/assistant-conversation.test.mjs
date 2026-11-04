@@ -74,3 +74,12 @@ test('describing an opened payslip is a question rather than a tool-navigation r
  }});
  assert.equal(requests[1].tool_choice,'none');
 });
+
+test('the tool-page question is forwarded through the real shared conversation entry',()=>{
+ const directory=readFileSync(new URL('../src/ToolDirectory.tsx',import.meta.url),'utf8');
+ const workspace=readFileSync(new URL('../src/ExperienceWorkspace.tsx',import.meta.url),'utf8');
+ assert.ok(directory.includes('onAsk(question.trim())'));
+ assert.ok(workspace.includes('<ToolDirectory go={go} onAsk={text=>ask(text)}/>'));
+ assert.ok(directory.includes('maxLength={6000}'));
+ assert.ok(!directory.includes('tool-directory-number'));
+});

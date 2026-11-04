@@ -1,22 +1,22 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-03",
-  "workingVersion": "0.35.1",
-  "releasedVersion": "0.35.1",
+  "updatedAt": "2026-11-04",
+  "workingVersion": "0.36.0",
+  "releasedVersion": "0.36.0",
   "workState": "reviewed_internally",
-  "objective": "让自由提问始终可用，补问仅作可选辅助，去掉重复事项框。",
-  "latestUserRequest": "用户反馈聊天被框架和表单限制，无法直接说问题。",
+  "objective": "完成合同核对依据与可编辑询问清单的关联，按真实使用证据继续提高至内部85目标。",
+  "latestUserRequest": "用户要求继续提高项目到85分。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5186/?v=0.35.1#/home",
-    "snapshot": "first-step-自由对话修复-v0.35.1",
+    "url": "http://127.0.0.1:5186/?v=0.36.0#/home",
+    "snapshot": "first-step-合同依据与询问清单-v0.36.0",
     "state": "ready_for_user_review"
   },
   "implemented": {
-    "business": "保留八项限定本地工具及共享询问清单，八工具统一迁入#/tools，支持完全不经AI手动操作。",
+    "business": "保留八项限定本地工具及共享询问清单，八工具统一迁入#/tools，支持完全不经AI手动操作。 v0.36合同问题可主动附带原文/确认值/来源，清单改写、答复、状态、搜索、导出和可选账号保存保留关联。",
     "music": "五曲/单audio；首页切歌弹小菜单点选即播不跳页，播放器进入完整三维声音档案并接续曲目/进度；v0.25抽取、旋转及逐曲环境保留。",
-    "visual": "保留浅蓝银色完整主体/音乐和原三维；新增同系统的轻量阅读布局、页首/聊天模式切换，简易播放器居中目录。完整模式模型/粒子/材质/抽取/播放旋转未重做。 v0.33首页去重复入口，v0.35.1自由输入常驻、补问可选、字色/字段对比加强、返回状态放页底不遮清单。",
+    "visual": "保留浅蓝银色完整主体/音乐和原三维；新增同系统的轻量阅读布局、页首/聊天模式切换，简易播放器居中目录。完整模式模型/粒子/材质/抽取/播放旋转未重做。 v0.33首页去重复入口，v0.35.1自由输入常驻、补问可选、字色/字段对比加强、返回状态放页底不遮清单。 v0.35.2本地工具页问题入口/八项首屏列表、全屏浅色对话阅读布局已实现，尚待最终QA和用户反馈。 v0.36收起工作区重复底部入口、精简合同/清单标题和空白、确认后仍可读；v0.35.2跨模式/1041桌面检查已补。",
     "interaction": "前景模型的图内/文字子选项保留，要求手势开始和结束均为稳定前景、同pointer/物体/子区域、总位移≤6px且在画布内；后排只预览，无任意双击跳页。工作区/音乐/对话共享原业务与单audio。",
     "api": "真实同源Node助手网关与DeepSeek function calling；四项白名单工具，共用工资/合同规则；取消、超时、限额、Origin/Host与输入证据校验。旧文档review客户端仍仅协议预留。",
     "copy": "首页、目录与对话采用直接用语，区分本地规则、真实助手、单图校对和小范围检索。",
@@ -69,7 +69,7 @@
     }
   ],
   "missingCapabilities": [
-    "检索库以外的法规/地区维护、指代召回与完整证据清单主线",
+    "检索库以外的法规/地区维护、指代召回、真实材料准确率和更完整的证据关系",
     "图像页码坐标框/真实材料准确率评测与完整多模态主线",
     "公网HTTPS、身份额度/滥用隔离及账号恢复",
     "全国政策维护",
@@ -78,36 +78,35 @@
   ],
   "currentPlan": [
     {
-      "id": "free-conversation",
+      "id": "layout-qa",
       "status": "verified",
-      "acceptance": "输入框在补问/选择/范围提示期间始终可见，补问默认折叠可选，当前事项重复框移除。"
+      "acceptance": "完成对话内模式切换、1041桌面及工作区布局检查；审美待用户反馈。"
     },
     {
-      "id": "flow",
+      "id": "contract-loop",
       "status": "verified",
-      "acceptance": "无需填旧字段可直接改问另一件事，选择/停止/重试及可选表单保留，快速操作保留未发送草稿。"
+      "acceptance": "真实文本AI应用/单图校对→共享规则/依据→可编辑清单/答复/恢复/导出通过。"
     },
     {
-      "id": "save",
-      "status": "completed",
-      "acceptance": "232文件源码/dist新快照，原0.35保留；保存版真实调用与完整模式已复核、正确Git正常推送，最终HEAD/哈希见回执。"
+      "id": "release",
+      "status": "saved_verified_publishing",
+      "acceptance": "238文件新快照、保存版完整模式清单/真实助手通过，源/包/Git发布核验中。"
     }
   ],
   "validation": {
-    "version": "0.35.1",
-    "automated": "114 tests, TypeScript and production build passed; existing 583KB shared Three warning.",
-    "evidence": "outputs/v0351-review",
-    "visualAcceptance": "internally reviewed, user feedback pending",
-    "scope": "Desktop usability patch. Amounts require confirmed data, limited corpus and account/public/low-end gaps remain explicit.",
-    "manual": "独立5245真实补问时常驻可写输入、可选表单默认关闭、仅规划日志隐藏；输入租房草稿→可选提交社保800及其他未知→原草稿保留→直接发送换题。",
-    "online": "7 saved-5186 synthetic calls checked planning/continuation, direct explanation, free-topic priority, unknown lookup and explicit navigation. Not sentence-level legal verification.",
-    "savedPreview": "5186实际0.35.1/index匹配；完整模式补问时输入常驻可写，1对话/1输入/1audio，可选字段默认关闭、无横向溢出；保存版自由发送租房问题。 直接换题得到租房答复，ready无重复框/规划日志；新对话清空可输入，console无warn/error。"
+    "version": "0.36.0",
+    "automated": "119 tests, TypeScript and production build passed; existing shared Three 583KB warning.",
+    "evidence": "outputs/v036-review",
+    "visualAcceptance": "internally reviewed, user acceptance pending",
+    "manual": "合成示例/真实AI文本应用/真实单图134字到清单；原文选区；改写、答复、状态、刷新、来源与实际TXT导出；重复加入及新增复位筛选；1041桌面/跨模式单对话输入audio。",
+    "limits": "低配实机/新人验收/真实材料准确率待；QA旧页跨构建懒加载失效已重新载入；完整场景见WebGL数值精度警告，保存版另复核。",
+    "savedPreview": "5250独立保存版默认完整首次入场→示例核对→3条带原文/依据清单，单对话/audio且无溢出，控制台无warn/error；真实助手普通解释直接答复。5186实际版本/index/配置已核对。"
   },
   "nextActions": [
-    "按36号完成合同材料→依据→核对项→可编辑询问清单/导出的完整关联。",
-    "主动保存全部工具/聊天草稿、首次用户和低配实机验证。",
-    "公网服务前补HTTPS、身份额度与账号恢复，现有账号仅本机服务。",
-    "11/14冻结、11/17材料、11/18提交。"
+    "按42号推进用户主动草稿保存/恢复/清除，并保持账号/游客隔离。",
+    "需要2–3位首次用户实际试用反馈；低配实机采样和阈值校准。",
+    "补检索对照/图像失败恢复与交付材料，11/14冻结、11/17材料、11/18提交。",
+    "公网服务前补HTTPS、身份额度与账号恢复，现有账号仅本机服务。"
   ],
   "visualSources": [
     {
@@ -132,12 +131,12 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "published",
+    "pushStatus": "publishing",
     "sourceCommit": "dfdb609ce267fb35ce821f83323fc4086ddd4778",
     "verifiedAt": "2026-11-03",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "07d8fe90d83a571a96ed3738b9acac4c306b159a",
-    "publicationReceipt": "outputs/v0351-review/git-publication.json",
+    "previousPublishedHead": "b609ec2841472585c7e6a1a7a1f5925e9688b54e",
+    "publicationReceipt": "outputs/v036-review/git-publication.json",
     "historyAndLogCommit": "dfdb609ce267fb35ce821f83323fc4086ddd4778"
   },
   "sideDeliverables": [
@@ -153,10 +152,10 @@
     }
   ],
   "userFeedback": {
-    "date": "2026-11-03",
+    "date": "2026-11-04",
     "lowEndPerformance": "v0.32已实现资源隔离与有效低帧控制器，尚无用户低配CPU/GPU实机反馈，不称所有卡顿已消除。",
-    "usability": "用户明确反馈自由问问题被框架和表单限制，本轮优先修聊天通道。",
-    "acceptance": "v0.35聊天易用性被用户否定，需修补问与自由表达，不把旧内部自检当认可。",
+    "usability": "用户继续否定v0.35.1入口观感，不愿使用；v0.35.2重排后尚未反馈。",
+    "acceptance": "新布局仅部分内部QA，不把测试与截图当作用户接受。",
     "modePolicy": "默认完整，卡顿自动切简易，允许手动恢复；覆盖助手此前建议的默认简易。",
     "latestVisual": "用户明确否定v0.29，要求浅色主体及播放器，不再把深色统一版当认可结果。"
   },
@@ -207,43 +206,43 @@
     "scoreTarget": 85,
     "scoreMeaning": "62（58–65）是v0.31基线内部估分；v0.32完成1/2项，不按测试数自动涨分；85仍为目标，非奖项预测。",
     "coreScope": "保留八工具，一条签约核对AI主线做深；不扩手机、全国政策、账号平台或音乐功能。",
-    "currentReview": "docs/40-free-conversation-v0351.md",
-    "scoreCurrent": 62,
+    "currentReview": "docs/42-contract-evidence-loop-v036.md",
+    "scoreCurrent": 75,
     "scoreRange": [
-      58,
-      65
+      72,
+      80
     ],
     "remainingDates": [
-      "2026-11-03",
+      "2026-11-04",
       "2026-11-17"
     ],
     "remainingHours": [
-      45,
-      60
+      42,
+      56
     ],
     "futureWorkEstimate": [
-      17,
-      23
+      21,
+      29
     ],
     "futureContingencyHours": 6
   },
   "latestAudit": {
-    "date": "2026-11-01",
-    "document": "docs/35-v032-independent-review.md",
-    "scope": "code, saved screenshots and prior evidence; no new browser or online tests; no application changes",
-    "internalEstimate": 68,
+    "date": "2026-11-04",
+    "document": "docs/42-contract-evidence-loop-v036.md",
+    "scope": "current code/build/119 tests, independent desktop UI, real synthetic AI/image flow and export; low-end/new users remain untested",
+    "internalEstimate": 75,
     "range": [
-      65,
-      72
+      72,
+      80
     ],
-    "meaning": "product maturity estimate, not official score or award prediction",
-    "nextRecommendation": "Next development is v0.33; dated execution plan in docs/36-next-execution-plan.md; currently planning only."
+    "meaning": "weighted internal estimate, not official result or award forecast",
+    "nextRecommendation": "Draft saving, first-time users, low-end hardware, evidence evaluation and submission materials."
   },
   "executionPlan": {
     "date": "2026-11-01",
     "document": "docs/36-next-execution-plan.md",
-    "state": "v0351_usability_patch_completed",
-    "nextMilestone": "v0.36 contract evidence and editable question mainline",
+    "state": "v036_contract_loop_implemented",
+    "nextMilestone": "v0.37 explicit draft saving and actual usage validation",
     "executionHours": [
       34,
       46
@@ -266,6 +265,12 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v0351_updated_desktop_verified"
+    "status": "v036_saved_verified"
+  },
+  "savedWork": {
+    "version": "0.36.0",
+    "snapshot": "first-step-合同依据与询问清单-v0.36.0",
+    "state": "saved_and_reviewed",
+    "review": "docs/42-contract-evidence-loop-v036.md"
   }
 }

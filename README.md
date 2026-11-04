@@ -1,8 +1,8 @@
-# 初程 FIRST STEP · 自由提问修复 v0.35.1
+# 初程 FIRST STEP · 合同依据与询问清单 v0.36.0
 
 面向初入职场毕业生的八项办事工具，音乐为辅助。首页可以直接向 DeepSeek 说明问题，也可以进入工具列表自行操作。三维前景模型的文字与子选项保留点击；后排只能切换预览，拖动、跨区域和转场中的命中不会执行动作。主体和播放器回到浅蓝银色，保留抽取、旋转、单音频、鼠标反馈和入场回放。仅电脑端。
 
-版本入口：[历史版本说明](docs/VERSION_HISTORY.md)、[开发总日志](docs/DEVELOPMENT_LOG.md)、[当前自检](docs/35-v032-independent-review.md)、[后续执行计划](docs/36-next-execution-plan.md)。仓库根目录是当前v0.35.1完整源码、测试、锁文件与所需静态资源；旧版只记录沿革，不新增多套旧源码或构建快照。已有Git提交历史保留。v0.34单图及可选账号、v0.35小范围官方检索已实现，v0.36–0.37仍待。桌面参赛包根“开发总日志.md”与本仓库日志同步维护。
+版本入口：[历史版本说明](docs/VERSION_HISTORY.md)、[开发总日志](docs/DEVELOPMENT_LOG.md)、[当前自检](docs/35-v032-independent-review.md)、[后续执行计划](docs/36-next-execution-plan.md)。当前目录包含v0.36.0完整源码、测试、锁文件与所需静态资源；旧版只记录沿革，不新增多套旧源码或构建快照。已有Git提交历史保留。v0.34单图及可选账号、v0.35小范围官方检索已实现，v0.36–0.37仍待。桌面参赛包根“开发总日志.md”与本仓库日志同步维护。
 
 先读[本轮图片与个人空间说明](docs/38-image-and-optional-account-v034.md)，双模式见[双模式与AI流程说明](docs/34-two-modes-and-guided-ai-v032.md)。前轮优化见[性能说明](docs/32-home-render-performance-v031.md)与[自评/逐步改进表](docs/33-score-and-improvement-plan-v031.md)；AI与工具范围见[31号](docs/31-light-ai-entry-and-tools-v030.md)。恢复开发运行 `npm run resume`，再读 `docs/memory/progress.json` 与 `DECISIONS.md`。源码只同步 [wadwd65/-web-](https://github.com/wadwd65/-web-)。
 
@@ -23,7 +23,7 @@ npm run build
 npm start
 ```
 
-默认 `http://127.0.0.1:5186/?v=0.35.1#/home`；工具列表 `#/tools`；音乐 `#/music`。`/__first-step-version` 可核对实际版本。参赛包仍双击“开始预览.cmd”。开发、Vite preview 与保存版都使用同一 AI 网关。
+默认 `http://127.0.0.1:5186/?v=0.36.0#/home`；工具列表 `#/tools`；音乐 `#/music`。`/__first-step-version` 可核对实际版本。参赛包仍双击“开始预览.cmd”。开发、Vite preview 与保存版都使用同一 AI 网关。
 
 ## DeepSeek 配置
 
@@ -69,3 +69,13 @@ FIRST_STEP_AI_MODEL=deepseek-flash
 ## v0.35.1 自由提问
 
 聊天输入始终可用，补问按自然语言提出，结构字段只作可选展开。可直接纠正或换问题，普通解释先答，明确要进工具时给真实入口。删除重复事项框与仅规划步骤展示，快捷操作保留未发送草稿。已明确不知道的工资项给查找方式，金额规则仍核实确认值。114测试与构建，范围和自检见[40号说明](docs/40-free-conversation-v0351.md)。
+
+
+## v0.35.2 保存进度
+
+见[41号交接](docs/41-conversation-and-tools-layout-v0352.md)。工具列表和聊天新布局已完成，115测试与构建通过，部分独立QA通过。用户要求先保存，完整模式/较窄桌面/控制台/保存快照的最终复核待做，未切换默认预览或推送。
+
+
+## v0.36 合同问题与来源关联
+
+见[42号自检与下一步](docs/42-contract-evidence-loop-v036.md)。单图或文字核对后，可主动将问题连同最多600字原文、确认值和官方摘录加入询问清单。支持改写、记录答复、状态、搜索、恢复及完整导出，账号主动保存保留关联。119测试/构建与合成流程走查通过，真实用户和低配实机仍待。v0.35.2段落为上轮保存历史，剩余布局QA本轮已补。

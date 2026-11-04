@@ -74,3 +74,11 @@ contract-knowledge.ts固定官方八摘录及元数据，共用纯函数检索�
 
 ## v0.35.1 对话通道
 AIAssistant输入常驻，删除freeReply/hasFields门控与补问自动聚焦。AssistantNextStep仅提供可选字段/多事项快捷回复，ready无重复面板。guideReply用实际问题生成自然语言补问，复用工资字段证据定位识别已说明未知的项目。一般guidance先回答，明确导航请求保留open_tool。快捷操作保留未发送草稿，单独规划步骤不显示为处理过程。
+
+## v0.35.2 本地布局
+
+conversation-layout.css最后导入，集中覆盖工具目录和助手呈现。AIAssistant仍使用原生dialog、同一send/上下文/账户隔离生命周期；没有新路由或后台存储。ToolDirectory通过onAsk(text)把用户明确发送的文字交给ExperienceWorkspace.ask，后者复用共享助手。tools时暂停隐藏Scene并将活动采样设null。最终保存版/完整模式QA待做。
+
+## v0.36 清单依据
+
+lib/checklist.ts共用Question/QuestionDraft及可选合同证据类型、持久化校验、同次去重和导出。只保存用户点击加入时的真实子串（最多600字）与字符起点，官方资料使用已知摘录ID，读取时不按新问题重新猜依据。不同reviewId分别保留，改写不覆盖原始问题。QuestionEvidence与ContractSources复用阅读组件。Account服务验证新增可选字段，保留旧行；请求上限1MiB覆盖50条含答复/片段的合法记录。私有数据库位置仍在工程外。
