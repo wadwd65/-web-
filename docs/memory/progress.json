@@ -2,15 +2,15 @@
   "schemaVersion": 1,
   "updatedAt": "2026-11-04",
   "workingVersion": "0.41.0",
-  "releasedVersion": "0.40.0",
+  "releasedVersion": "0.41.0",
   "workState": "reviewed_internally",
-  "objective": "v0.41点击后才播放入场、可见时间推进和提前三维衔接已内部审核，保存发布收尾。",
+  "objective": "v0.41点击后才播放入场、可见时间推进和三维提前衔接已保存复核；默认5186与正确仓库同步完成。",
   "latestUserRequest": "参考明日方舟登录界面的等待点击进入方式，避免网页加载期间自动播完，提升动画流畅性。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5186/?v=0.40.0#/home",
-    "snapshot": "first-step-首页布局调整-v0.40.0",
+    "url": "http://127.0.0.1:5186/?v=0.41.0#/home",
+    "snapshot": "first-step-点击进入与流畅入场-v0.41.0",
     "state": "ready_for_user_review"
   },
   "implemented": {
@@ -89,7 +89,7 @@
     },
     {
       "id": "save-release",
-      "status": "pending",
+      "status": "complete",
       "acceptance": "测试构建、持久记忆、参赛包和正确仓库对应。"
     }
   ],
@@ -102,7 +102,7 @@
     "online": "本轮未重跑AI，原业务/API源码保留。",
     "performance": "入口等待无阶段计时；开始后20Hz离散钟仅阶段变化更新React。三维原绘制不重做，低配实机仍待。",
     "limits": "实际新人、低配、HTTPS、独立材料及身份额度隔离仍待；减少动态分支仅生产单测。",
-    "savedPreview": "保存版最终核对中。"
+    "savedPreview": "localhost:5272保存版等待点击，实际进入/幕布时首页inert/最终解除、单audio/唯一输入/无溢出/控制台无warn/error；默认5186实际0.41.0且index与当前构建一致。"
   },
   "nextActions": [
     "用户部署支持Node的试用网址，按45号设置进程环境并核验实际HTTPS/AI/图像/账号/音乐。",
@@ -132,13 +132,13 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "pending_v041",
-    "sourceCommit": "7cdb094e1c711ca6b490884225384502a9ce12f1",
+    "pushStatus": "published",
+    "sourceCommit": "f7677b6e4763fcd58962bc0a856b84bae648f4b1",
     "verifiedAt": "2026-11-04",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "ecb3e3314ece9645a3ecd0e0eea455cc3c3e7980",
-    "publicationReceipt": "outputs/v040-review/git-publication.json",
-    "historyAndLogCommit": "7cdb094e1c711ca6b490884225384502a9ce12f1"
+    "previousPublishedHead": "56ff9d2b67d54cd7261bc66107397b44a1290bbd",
+    "publicationReceipt": "outputs/v041-review/git-publication.json",
+    "historyAndLogCommit": "f7677b6e4763fcd58962bc0a856b84bae648f4b1"
   },
   "sideDeliverables": [
     {
@@ -243,7 +243,7 @@
   "executionPlan": {
     "date": "2026-11-01",
     "document": "docs/36-next-execution-plan.md",
-    "state": "v041_entry_reviewed_save_pending",
+    "state": "v041_entry_saved_reviewed",
     "nextMilestone": "Actual deployment URL verification, novice users and low-end device evidence",
     "executionHours": [
       34,
@@ -267,12 +267,12 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v041_updated_desktop_sync_pending"
+    "status": "v041_updated_desktop_verified"
   },
   "savedWork": {
     "version": "0.41.0",
     "snapshot": "first-step-点击进入与流畅入场-v0.41.0",
-    "state": "save_pending",
+    "state": "saved_and_reviewed",
     "review": "docs/47-click-to-enter-v041.md"
   }
 }
