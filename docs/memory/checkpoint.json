@@ -1,10 +1,10 @@
 {
-  "version": "0.40.0",
-  "recordedAt": "2026-11-04T15:17:08.236Z",
+  "version": "0.41.0",
+  "recordedAt": "2026-11-04T15:44:59.490Z",
   "workState": "reviewed_internally",
-  "validationVersion": "0.40.0",
+  "validationVersion": "0.41.0",
   "textNormalisation": "LF",
-  "sourceDigest": "ad59a19d7722a61beeb8ff20d3d199769354785d8e651fa9aa5003dc63256817",
+  "sourceDigest": "cf402ec90f5c2dd2ea565fd155c12e7654b4f827c50f3c5ec69b8618b44d0ee9",
   "files": [
     {
       "path": ".env.example",
@@ -12,35 +12,35 @@
     },
     {
       "path": "AGENTS.md",
-      "sha256": "fa33907f17de70a9544b20d7d81e59b379a469d26124a76c890ffbcbcf5366c6"
+      "sha256": "00cbed6f53550b35fbc7ade8581355bb59fa2f2e268f5f1d2979e06fd7ffc59d"
     },
     {
       "path": "docs/memory/ARCHITECTURE.md",
-      "sha256": "8cf2a01eeb84f1141c646828a9e2ab2721f37cc38676e09f58d5e66159fdc4a1"
+      "sha256": "586d46f538874189a33c119164062896aab8aac0287f012d2f6d6aa41f0a24bd"
     },
     {
       "path": "docs/memory/BACKLOG.md",
-      "sha256": "59bb64da2940077b16a8a01a7a6df8ed44fb1784a9c08e23ef88ea2d42bbed89"
+      "sha256": "4b0b91aaaee7397942f6728dfca7b0356191d960188c82abd5aca6a23e3198f0"
     },
     {
       "path": "docs/memory/DECISIONS.md",
-      "sha256": "dd53e9d6be18e1f5ff872f2daf27ba107d804a4d6bcc87f845b49d95c68815ff"
+      "sha256": "d0719661bc4b9a2b9cca4ea2f385cd1c6f45d170834b1fed372370197da18ddd"
     },
     {
       "path": "docs/memory/SESSIONS.md",
-      "sha256": "e565ae82aacc509d67a7b687f9edf7ecf85ff2da1b585a162ce0e9edfa2c1115"
+      "sha256": "744047f0dc334237763e7264b92867d87d39b174d2e0c66da99673519a15f687"
     },
     {
       "path": "docs/memory/progress.json",
-      "sha256": "97ca92dc22f0e74f995b29e3fab695ab61c900a3e74a11d44e1e29e1da3eba6a"
+      "sha256": "5d1774a46785c2b6e1a55765cfa89244f6f32deeb13267bd4bc4a484f7fccf71"
     },
     {
       "path": "package-lock.json",
-      "sha256": "f0883547f38ae880fca83858099f617d63a6b8443e77874d89461018c7e93056"
+      "sha256": "56ebe46b7a7f609b06fc9cc88682e1a0d6c090754fe844d9b6613ab2d36493fa"
     },
     {
       "path": "package.json",
-      "sha256": "fed0c93f12f16ee225480a483038d491bd2e7b170248c164e8087dfe3a144158"
+      "sha256": "c1af793066a0b9a0ba495463df8780601242798c3d1c4f4299bf4f4bfdd438dd"
     },
     {
       "path": "public/artwork/rhine-ascent.png",
@@ -184,11 +184,11 @@
     },
     {
       "path": "src/ExperienceEntry.tsx",
-      "sha256": "59392f27ad81424d2d80ef3df3f4f49d66397712e3a5f9fbd93afa3e9a3671c2"
+      "sha256": "1f6975872bcab2c1b68ec7aec77f6e69ff78e8221d68df24039873ad92737bd9"
     },
     {
       "path": "src/ExperienceWorkspace.tsx",
-      "sha256": "6893460b6fdf155d52132016b7698f59900737d913b0fd7fc8a5a1f643b27c45"
+      "sha256": "043c4337fbe6c30735c79a74446151be9ed1265bad74a43d113e153e591ee33e"
     },
     {
       "path": "src/HomeTaskDirectory.tsx",
@@ -303,6 +303,14 @@
       "sha256": "e35cb02d7960e9fea66011e0c6a8c6f5a25ae7fd1691249c96f4be823d21ea83"
     },
     {
+      "path": "src/entry-sequence.css",
+      "sha256": "b3a0f9ffa3f32a79a564a82a11cd4ee37c3c0f1f54b38d2bc4567d1dec42b00f"
+    },
+    {
+      "path": "src/entry-sequence.ts",
+      "sha256": "10750dbd6d292e4137da236005c6e1cea995ab3fc8dba0e3352b0c7c2fa8b28b"
+    },
+    {
       "path": "src/experience-modules.ts",
       "sha256": "d576f9c1345c4075ba4b958e8ab774284ac27745309485a0fd71b18fdc431746"
     },
@@ -360,7 +368,7 @@
     },
     {
       "path": "src/main.tsx",
-      "sha256": "df0ba3d28ae0344367346a8120f00e7de14a44a2533b995cd0f1e9ddc6170efc"
+      "sha256": "e5ba1127f379d2d08186933f2ea463f3f5c1334148e7059e6f1abaebfb8737ce"
     },
     {
       "path": "src/module-guides.ts",
@@ -545,6 +553,10 @@
     {
       "path": "tests/eight-tools.test.ts",
       "sha256": "53771f2f5c1d16a576154828e123bdebb44872329c67113eb38559fb783b9c9c"
+    },
+    {
+      "path": "tests/entry-sequence.test.ts",
+      "sha256": "eb8dc9b7feccad7a5750dbc473cf906a76ab0fa216bcff7d3ad1882be4d53b75"
     },
     {
       "path": "tests/music-mode.test.ts",

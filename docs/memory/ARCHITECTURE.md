@@ -104,3 +104,7 @@ request-policy.mjs在AI/图片/账号共用；PUBLIC_ORIGIN从进程环境选择
 ## v0.40 布局层职责
 
 首页DOM仅将原表单移至home-command-dock；home-layout.css限定首页位置/间距/字号。业务提交、三维场景、音乐和后台维持v0.39。左侧纵向入口/底部输入覆盖完整与简易；简易原步骤说明右上放置。承载轨道、黄金图形和蓝雾候选已撤回，不属于当前架构。
+
+## v0.41 入场职责
+
+entry-sequence.ts为可测试的主动启动/可见时间阶段钟，ExperienceEntry负责等待按钮、焦点圈定、可见性暂停与阶段显示，entry-sequence.css仅影响入场及入场期间首页淡入。父级intro负责inert/防误触，introReveal提前放行三维绘制；音频仍独立单实例。首页不再依赖sessionStorage seen；仅完整首页新文档启动显示，站内返回不重播。
