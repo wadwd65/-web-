@@ -1,6 +1,7 @@
+import DraftControls from './DraftControls.tsx';
 import ContractSources from './ContractSources.tsx';
 import {contractSourcesForCopy} from './lib/contract-knowledge.ts';
-import {useEffect,useRef,useState} from 'react';
+import {useEffect,useMemo,useRef,useState} from 'react';
 import type {ReactNode} from 'react';
 import {buildAssistantContext} from './services/assistant-context.ts';
 import AssistantNextStep from './AssistantNextStep.tsx';
@@ -47,12 +48,13 @@ export default function AIAssistant({open,onClose,module,seed,onAction,onTools,m
  async function copyReply(turn:Turn){try{const evidence=turn.result?evidenceForCopy(turn.result.actions):'';await navigator.clipboard.writeText([evidence,turn.content,turn.result?.references?.status==='matched'?contractSourcesForCopy(turn.result.references):''].filter(Boolean).join('\n\n'));setCopied(turn.id);setCopyError('');}catch{setCopyError('复制没有成功，可以选中文字复制。');}}
  function apply(action:AssistantAction,id:string){if(applied.includes(id))return;setApplied(values=>[...values,id]);onAction(action);if(action.kind!=='add-questions')close();}
  const last=turns.at(-1);
+ const draftTurns=useMemo(()=>turns.map(turn=>({role:turn.role,content:[turn.result?evidenceForCopy(turn.result.actions):'',turn.content,turn.result?.references?.status==='matched'?contractSourcesForCopy(turn.result.references):''].filter(Boolean).join('\n\n')})),[turns]);
  async function copyConversation(){try{await navigator.clipboard.writeText(turns.map(turn=>`${turn.role==='user'?'你':'初程'}：${turn.content}${turn.result?.references?.status==='matched'?'\n\n'+contractSourcesForCopy(turn.result.references):''}`).join('\n\n'));setCopyError('对话已复制。');}catch{setCopyError('复制没有成功，可以选中文字复制。');}}
  return <><dialog ref={dialog} className="assistant-dialog" data-busy={busy} data-has-messages={turns.length>0} aria-labelledby="assistant-title" onCancel={event=>{event.preventDefault();close();}} onClick={event=>{if(event.target===event.currentTarget)close();}}>
   <div className="assistant-dialog-inner">
    <header>
     <div className="assistant-heading"><button className="assistant-back" onClick={close} aria-label="收起AI助手" title="返回页面，正在处理的回复会继续"><ArrowLeft size={17}/>返回</button><span className="assistant-mark"><RhineMark/></span><h2 id="assistant-title">初程</h2><small className="assistant-connection"><i/>{status?.configured?'可以提问':status?.configured===false?'尚未连接':'连接待确认'}</small></div>
-    <div className="assistant-top-actions"><button onClick={()=>{close();onTools();}}><FolderOpen size={15}/>工具</button>{turns.length>0&&<button onClick={()=>{stop();setTurns([]);setApplied([]);setInput('');setError('');setCopyError('');setContextFolded(false);field.current?.focus();}} disabled={busy}><Plus size={16}/>新对话</button>}<details className="assistant-view-options"><summary aria-label="显示设置" title="显示设置"><SlidersHorizontal size={16}/></summary><div>{modeSwitch}</div></details></div>
+    <div className="assistant-top-actions"><details className="assistant-draft-menu"><summary><FolderOpen size={15}/>草稿</summary><DraftControls module="chat" disabled={busy} value={{input,turns:draftTurns}} onRestore={saved=>{setTurns(saved.turns.map((turn,index)=>({...turn,id:-(index+1)})));setInput(saved.input);setApplied([]);setError('');setCopyError('');setContextFolded(false);}}/></details><button onClick={()=>{close();onTools();}}><FolderOpen size={15}/>工具</button>{turns.length>0&&<button onClick={()=>{stop();setTurns([]);setApplied([]);setInput('');setError('');setCopyError('');setContextFolded(false);field.current?.focus();}} disabled={busy}><Plus size={16}/>新对话</button>}<details className="assistant-view-options"><summary aria-label="显示设置" title="显示设置"><SlidersHorizontal size={16}/></summary><div>{modeSwitch}</div></details></div>
    </header>
    {contextFolded&&<div className="assistant-context-note">较早解释已折叠发送，用户原话与更正仍按顺序保留。<button onClick={()=>void copyConversation()}>复制对话</button></div>}
    <div className="assistant-messages" role="log" aria-label="对话记录" aria-busy={busy}>
@@ -73,7 +75,7 @@ export default function AIAssistant({open,onClose,module,seed,onAction,onTools,m
    </form>
    <footer>
     {!turns.length&&<div className="assistant-starters" aria-label="可以从这些话题开始">{[{label:'合同看不懂',text:'刚收到劳动合同，有些地方没看懂，应该先看什么？'},{label:'工资对不上',text:'工资好像少了一笔，我想先弄清楚该怎么看。'},{label:'第一次租房',text:'第一次租房，签之前要问清哪些事？'}].map(example=><button key={example.label} onClick={()=>{setInput(example.text);field.current?.focus();}}>{example.label}<ArrowUpRight size={12}/></button>)}</div>}
-    <div className="assistant-footnote"><p>文字由 DeepSeek 处理，已有材料不会自动发送。<span id="assistant-input-help">{copyError||(busy?'可以先写下一条，停止后发送。':'Enter 发送 · Shift + Enter 换行 · 对话仅本次保留')}</span></p></div>
+    <div className="assistant-footnote"><p>文字由 DeepSeek 处理，已有材料不会自动发送。<span id="assistant-input-help">{copyError||(busy?'可以先写下一条，停止后发送。':'Enter 发送 · Shift + Enter 换行 · 可主动保存草稿')}</span></p></div>
    </footer>
   </div>
  </dialog>

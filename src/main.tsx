@@ -20,6 +20,7 @@ import './account.css';
 import './contract-sources.css';
 import './conversation-layout.css';
 import './contract-workflow.css';
+import './drafts.css';
 
 window.history.scrollRestoration = 'manual';
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><AccountProvider><App /></AccountProvider></React.StrictMode>);

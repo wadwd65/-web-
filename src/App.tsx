@@ -1,3 +1,4 @@
+import DraftControls from './DraftControls.tsx';
 import ContractSources from './ContractSources.tsx';
 import QuestionEvidence from './QuestionEvidence.tsx';
 import {isQuestion,contractQuestion,sameQuestion,questionExport} from './lib/checklist.ts';
@@ -78,6 +79,7 @@ function Contract({ demoSeed, addQuestions, notify, onSignal,applyRequest,openLi
   const [active, setActive] = useState('');
   const [reviewStamp,setReviewStamp]=useState({id:'',at:''});
   const [includeEvidence,setIncludeEvidence]=useState(true);
+  const [imageEpoch,setImageEpoch]=useState(0);
   const [filename, setFilename] = useState('');
   const [sample, setSample] = useState(false);
   const [error, setError] = useState('');
@@ -88,9 +90,9 @@ function Contract({ demoSeed, addQuestions, notify, onSignal,applyRequest,openLi
   const scopeRef = useRef<HTMLSelectElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const reviewRef = useRef<HTMLElement>(null);
-  function loadDemo() { setText(DEMO_CONTRACT); setMonths('12'); setProbation('3'); setFindings(null); setError(''); setFilename('合成示例 · 劳动合同.txt'); setSample(true); setPreview(null); setScope('fulltime'); }
+  function loadDemo() { setImageEpoch(value=>value+1);setText(DEMO_CONTRACT); setMonths('12'); setProbation('3'); setFindings(null); setError(''); setFilename('合成示例 · 劳动合同.txt'); setSample(true); setPreview(null); setScope('fulltime'); }
   useLayoutEffect(() => { if (demoSeed > 0) loadDemo(); }, [demoSeed]);
-  useEffect(()=>{if(!applyRequest)return;const input=applyRequest.input;try{const result=analyzeContract(input);setText(input.text);setMonths(input.contractMonths===null?'':String(input.contractMonths));setProbation(input.probationMonths===null?'':String(input.probationMonths));setScope('fulltime');setFilename('对话中提供的文字');setSample(false);setPreview(null);setError('');setReviewStamp({id:crypto.randomUUID(),at:new Date().toISOString()});setFindings(result);setActive(result[0]?.id??'');}catch{setError('对话材料未能通过核对，请手动填写。');}},[applyRequest]);
+  useEffect(()=>{if(!applyRequest)return;const input=applyRequest.input;try{const result=analyzeContract(input);setImageEpoch(value=>value+1);setText(input.text);setMonths(input.contractMonths===null?'':String(input.contractMonths));setProbation(input.probationMonths===null?'':String(input.probationMonths));setScope('fulltime');setFilename('对话中提供的文字');setSample(false);setPreview(null);setError('');setReviewStamp({id:crypto.randomUUID(),at:new Date().toISOString()});setFindings(result);setActive(result[0]?.id??'');}catch{setError('对话材料未能通过核对，请手动填写。');}},[applyRequest]);
   useEffect(() => () => { if (preview) URL.revokeObjectURL(preview.url); }, [preview]);
   useEffect(() => { if (findings) reviewRef.current?.scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'}); }, [findings]);
   function editText(value: string) { setText(value); setFindings(null); setSample(false); setError(''); setMonths(''); setProbation(''); setScope('unknown'); setFilename('手动输入的合同文字'); }
@@ -100,8 +102,8 @@ function Contract({ demoSeed, addQuestions, notify, onSignal,applyRequest,openLi
     if (file.size > 8 * 1024 * 1024) { setError('文件超过 8 MB，请先选择较小的文件或粘贴合同文字。'); return; }
     setReading(true); setError(''); setFindings(null); setSample(false); setMonths(''); setProbation(''); setScope('unknown');
     try {
-      if (/\.(txt|md)$/i.test(file.name)) { const content = await file.text(); if (!content.trim()) throw new Error('文件里没有可读取的文字。'); if (content.length > 60000) throw new Error('文字较多，请先选取本次要核对的合同内容（最多 60,000 字符）。'); setText(content); setFilename(file.name); setPreview(null); notify('已读取文件，请核对文字并确认合同期限。'); }
-      else if (file.type === 'application/pdf' || /\.pdf$/i.test(file.name)) { setPreview({ url: URL.createObjectURL(file), image: false }); setFilename(file.name); setText(''); notify('已打开预览。此版请在下方粘贴对应文字，再进行规则核对。'); }
+      if (/\.(txt|md)$/i.test(file.name)) { const content = await file.text(); if (!content.trim()) throw new Error('文件里没有可读取的文字。'); if (content.length > 60000) throw new Error('文字较多，请先选取本次要核对的合同内容（最多 60,000 字符）。'); setImageEpoch(value=>value+1);setText(content); setFilename(file.name); setPreview(null); notify('已读取文件，请核对文字并确认合同期限。'); }
+      else if (file.type === 'application/pdf' || /\.pdf$/i.test(file.name)) { setImageEpoch(value=>value+1);setPreview({ url: URL.createObjectURL(file), image: false }); setFilename(file.name); setText(''); notify('已打开预览。此版请在下方粘贴对应文字，再进行规则核对。'); }
       else throw new Error('这里支持TXT、Markdown和PDF；照片请用上方识别入口。');
     } catch (e) { setError(e instanceof Error ? e.message : '读取失败，请重新选择文件或粘贴文字。'); }
     finally { setReading(false); }
@@ -138,7 +140,8 @@ function Contract({ demoSeed, addQuestions, notify, onSignal,applyRequest,openLi
   useEffect(()=>onSignal({characters:text.length,reviewed:findings!==null,unresolved:unresolvedCount,items:findings?.length??0}),[text.length,findings,unresolvedCount,onSignal]);
   return <>
     <PageHeading number="02" english="CONTRACT REVIEW" title="劳动合同核对" description="从照片识别或粘贴文字，校对后确认用工类型与期限，再整理询问。" right={<button className="button secondary" onClick={loadDemo}><ControlFace label="载入合成示例" icon={<FileText size={16}/>} code="DEMO"/></button>} />
-    <ContractImage onConfirm={value=>{editText(value);setFilename('已校对的合同图片 · 第1页');setPreview(null);requestAnimationFrame(()=>{textRef.current?.focus({preventScroll:true});textRef.current?.scrollIntoView({block:"center",behavior:"smooth"});});notify("已带入校对后的文字，请确认用工类型与期限。");}}/>
+    <DraftControls module="contract" value={{text,months,probation,scope,filename,sample}} disabled={reading} onRestore={saved=>{setImageEpoch(value=>value+1);setText(saved.text);setMonths(saved.months);setProbation(saved.probation);setScope(saved.scope);setFilename(saved.filename);setSample(saved.sample);setPreview(null);setFindings(null);setActive('');setError('');}}/>
+    <ContractImage key={imageEpoch} onConfirm={value=>{editText(value);setFilename('已校对的合同图片 · 第1页');setPreview(null);requestAnimationFrame(()=>{textRef.current?.focus({preventScroll:true});textRef.current?.scrollIntoView({block:"center",behavior:"smooth"});});notify("已带入校对后的文字，请确认用工类型与期限。");}}/>
     <div className="process-line workflow-stations"><span className={text.trim()?'current ready':'current'}><b>01</b><span><strong>准备材料</strong><small>{text.trim()?'已载入文字':'导入或粘贴'}</small></span></span><ChevronRight size={14}/><span className={findings?'current ready':''}><b>02</b><span><strong>核对约定</strong><small>{findings?'已有核对结果':'确认类型与期限'}</small></span></span><ChevronRight size={14}/><span className={unresolved.length?'available':''}><b>03</b><span><strong>整理询问</strong><small>{unresolved.length?`${unresolved.length}项可继续确认`:'带走自己的问题'}</small></span></span><Tag>本地文字规则体验</Tag></div>
     <div className="task-action-strip"><div><strong>{findings?'查看结果，带走这次核对记录':'先准备合同文字并确认期限'}</strong><span>{findings?'修改原文或确认值后，需要重新核对。':text.trim()?'原文已载入，请确认下方用工类型与期限。':'没有材料也可先载入合成示例。'}</span></div><button className="button primary" onClick={findings?exportReview:run} disabled={reading}><ControlFace label={findings?'导出核对记录':'开始核对'} icon={findings?<Download size={18}/>:<ArrowRight size={19}/>} code={findings?'TXT':'RUN'}/></button>{error&&<p className="task-action-message" role="alert">{error}</p>}</div>
     <div className="contract-grid">
@@ -190,6 +193,7 @@ function Subsidy({onSignal,addQuestions}:{onSignal:(signal:SubsidySignal)=>void;
       '申报窗口、完整材料和实际审核以官方平台为准。'].join('\n'),'初程-补贴条件对照记录.txt');
   }
   return <><PageHeading number="07" english="POLICY NAVIGATOR" title="补贴条件初筛" description="先填写实际情况，再查看待确认条件与官方办理入口。" right={<Tag>政策示例地区 · 广州</Tag>} />
+    <DraftControls module="subsidy" value={form} onRestore={saved=>{setForm(saved);setResult(null);}}/>
     <div className="notice-band"><MapPin size={16} /><span>首版只维护下方一条广州政策示例。学校所在地、就业地和参保地不能混用，其他地区不会直接套用。</span></div>
     <div className="task-action-strip"><div><strong>{result?'保留这次条件对照，再核实办理':'填写自己的情况，再对照条件'}</strong><span>不清楚的项目可以保留“还需要确认”。</span></div>{result?<button className="button primary" onClick={exportPolicy}><ControlFace label="导出条件对照" icon={<Download size={18}/>} code="TXT"/></button>:<button className="button primary" type="submit" form="subsidy-form"><ControlFace label="对照这条政策" icon={<ArrowRight size={18}/>} code="MATCH"/></button>}</div>
     <div className="two-column"><section className="panel"><div className="panel-heading"><div><Search size={17} /><h2>先确认几件事</h2></div><span className="mono">PROFILE / 01</span></div><form id="subsidy-form" className="panel-body policy-form" onSubmit={e => { e.preventDefault(); setResult(evaluateSubsidy(form)); }}>
@@ -232,14 +236,14 @@ function Checklist({ questions, change, add, go, notify }: { questions: Question
 function SourcesDialog({ open, close }: { open: boolean; close: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => { if (open && !ref.current?.open) ref.current?.showModal(); else if (!open && ref.current?.open) ref.current.close(); }, [open]);
-  return <dialog ref={ref} className="sources-dialog" onCancel={close} onClick={e => { if (e.target === e.currentTarget) close(); }} aria-labelledby="sources-title"><div className="dialog-inner"><div className="panel-heading"><div><ShieldCheck size={18} /><h2 id="sources-title">资料与当前能力</h2></div><button className="icon-button" onClick={close} aria-label="关闭资料说明"><X size={19} /></button></div><div className="dialog-body"><Tag tone="green">当前版本</Tag><h3>能帮你做什么，哪些还做不到</h3><p>当前有八项本地工具：条件对齐、文本规则核对、金额公式试算、办理路线和交接台账。补贴仍仅维护广州样例。AI 助手通过本机服务调用 DeepSeek，可推荐工具、核对已知工资金额、检查提供的合同文字并整理询问问题。合同工具已支持单张图片明确发送、识别和人工校对；PDF仍仅预览。合同问题已接入小范围官方资料检索，能展开原文、范围与核验日期；当前覆盖第17、19、22、23、25条。AI不会替你办理或提交申请。</p><div className="source-entry"><span>02 / 合同</span><a href={LAW} target="_blank" rel="noreferrer">《中华人民共和国劳动合同法》<ArrowUpRight size={14} /></a><p>本次关注第 17、19、22、23、25 条。规则只核对已提供文本与确认值，不代替对完整事实的法律判断。</p></div><div className="source-entry"><span>07 / 补贴</span><a href={SUBSIDY} target="_blank" rel="noreferrer">广州市求职创业补贴常见问题<ArrowUpRight size={14} /></a><p>发布于 2026-02-11，资料核验于 2026-10-26。这里只维护此条示例，不默认你身处广州。</p></div>{[SOURCES.tax,SOURCES.rates,SOURCES.rent,SOURCES.medical,SOURCES.transfer,SOURCES.card].map(source=><div className="source-entry" key={source.url}><span>扩展依据 · 核验 {VERIFIED}</span><a href={source.url} target="_blank" rel="noreferrer">{source.name}<ArrowUpRight size={14}/></a><p>{source.scope}</p></div>)}<div className="source-entry"><span>数据与保存</span><strong>由你决定发送和保存</strong><p>文件与表单不会自动上传。发送AI问题或合同图片识别时，仅发送你明确选择的文字或单图给DeepSeek。可选账号将主动保存的情况/清单留在当前服务端，合同原图与聊天不自动持久保存。游客清单保存在当前浏览器；退出账号清除本次账号填写和对话，已保存资料仍在个人空间。</p></div></div></div></dialog>;
+  return <dialog ref={ref} className="sources-dialog" onCancel={close} onClick={e => { if (e.target === e.currentTarget) close(); }} aria-labelledby="sources-title"><div className="dialog-inner"><div className="panel-heading"><div><ShieldCheck size={18} /><h2 id="sources-title">资料与当前能力</h2></div><button className="icon-button" onClick={close} aria-label="关闭资料说明"><X size={19} /></button></div><div className="dialog-body"><Tag tone="green">当前版本</Tag><h3>能帮你做什么，哪些还做不到</h3><p>当前有八项本地工具：条件对齐、文本规则核对、金额公式试算、办理路线和交接台账。补贴仍仅维护广州样例。AI 助手通过本机服务调用 DeepSeek，可推荐工具、核对已知工资金额、检查提供的合同文字并整理询问问题。合同工具已支持单张图片明确发送、识别和人工校对；PDF仍仅预览。合同问题已接入小范围官方资料检索，能展开原文、范围与核验日期；当前覆盖第17、19、22、23、25条。AI不会替你办理或提交申请。</p><div className="source-entry"><span>02 / 合同</span><a href={LAW} target="_blank" rel="noreferrer">《中华人民共和国劳动合同法》<ArrowUpRight size={14} /></a><p>本次关注第 17、19、22、23、25 条。规则只核对已提供文本与确认值，不代替对完整事实的法律判断。</p></div><div className="source-entry"><span>07 / 补贴</span><a href={SUBSIDY} target="_blank" rel="noreferrer">广州市求职创业补贴常见问题<ArrowUpRight size={14} /></a><p>发布于 2026-02-11，资料核验于 2026-10-26。这里只维护此条示例，不默认你身处广州。</p></div>{[SOURCES.tax,SOURCES.rates,SOURCES.rent,SOURCES.medical,SOURCES.transfer,SOURCES.card].map(source=><div className="source-entry" key={source.url}><span>扩展依据 · 核验 {VERIFIED}</span><a href={source.url} target="_blank" rel="noreferrer">{source.name}<ArrowUpRight size={14}/></a><p>{source.scope}</p></div>)}<div className="source-entry"><span>数据与保存</span><strong>由你决定发送和保存</strong><p>文件与表单不会自动上传。发送AI问题或合同图片识别时，仅发送你明确选择的文字或单图给DeepSeek。可选账号将主动保存的情况/清单留在当前服务端，合同原图与聊天不自动持久保存。游客清单保存在当前浏览器；工具和聊天草稿可主动保存到当前浏览器，各账号分别存放。退出账号清除本次填写和对话，已保存资料仍在个人空间，浏览器草稿可在对应页面清除。</p></div></div></div></dialog>;
 }
 
 export default function App() {
-  const {user:accountUser}=useAccount();
+  const {user:accountUser,ready:accountReady}=useAccount();
   const questionOwner=useRef<string|null>(null),guestQuestions=useRef<Question[]>(initialQuestions()),previousAccount=useRef<string|null>(null);
   const [accountEpoch,setAccountEpoch]=useState(0);
-  useEffect(()=>{if(previousAccount.current&&previousAccount.current!==accountUser?.id){setAccountEpoch(v=>v+1);setDemoSeed(0);setSignals(EMPTY_SIGNALS);setSalaryRequest(null);setContractRequest(null);}previousAccount.current=accountUser?.id??null;if(questionOwner.current&&questionOwner.current!==accountUser?.id){setQuestions(guestQuestions.current);questionOwner.current=null;}},[accountUser?.id]);
+  useLayoutEffect(()=>{if(!accountReady)return;if(previousAccount.current!==(accountUser?.id??null)){setAccountEpoch(v=>v+1);setDemoSeed(0);setSignals(EMPTY_SIGNALS);setSalaryRequest(null);setContractRequest(null);}previousAccount.current=accountUser?.id??null;if(questionOwner.current&&questionOwner.current!==accountUser?.id){setQuestions(guestQuestions.current);questionOwner.current=null;}},[accountUser?.id,accountReady]);
   function restoreAccountQuestions(items:Question[]){if(!accountUser)return;if(!questionOwner.current)guestQuestions.current=questions;questionOwner.current=accountUser.id;setQuestions(items.map(item=>({...item})));}
   const [signals,setSignals]=useState(EMPTY_SIGNALS);
   const contractSignal=useCallback((value:ContractSignal)=>setSignals(previous=>({...previous,contract:value})),[]);

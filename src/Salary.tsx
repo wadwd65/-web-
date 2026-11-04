@@ -1,3 +1,4 @@
+import DraftControls from './DraftControls.tsx';
 import { useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { ArrowDown, ArrowRight, CheckCircle2, CircleHelp, Download, FileText, Plus, Wallet } from 'lucide-react';
@@ -79,6 +80,7 @@ export default function Salary({ addQuestions, onSignal,applyRequest }: { addQue
   }
   return <div className="salary-workbench">
     <header className="page-heading terminal-page-heading"><div className="page-heading-stamp" aria-hidden="true"><strong>03</strong><i/><small>MODULE</small></div><div className="page-heading-copy"><div className="eyebrow">PAYSLIP EXPLAINER</div><h1>工资明细核对</h1><p>按工资条填写已知金额，核对扣款和实际到账。</p></div><div className="page-heading-actions"><button className="button secondary" onClick={loadDemo}><SalaryControl label="载入示例金额" icon={<FileText size={16}/>} code="DEMO"/></button></div></header>
+    <DraftControls module="salary" value={{form,demo}} onRestore={saved=>{setForm(saved.form);setDemo(saved.demo);setResult(null);setError('');}}/>
     <div className="machine-bridge business-bridge"><span><Wallet size={15}/>工资明细核对</span><span className="mono">INPUT <ArrowRight size={11}/> CALCULATE <ArrowRight size={11}/> EXPLAIN</span><span className="bridge-status"><i/>{result?'已按填写金额计算':'本地计算'}</span></div>
     <div className="task-action-strip"><div><strong>{result?'核对结果与到账，带走这份记录':'先填应发工资与个人扣款'}</strong><span>确认没有的扣款填 0，实际到账可以留空。</span></div>{result?<button className="button primary machine-submit" onClick={exportPay}><SalaryControl label="导出工资记录" icon={<Download size={18}/>} code="TXT"/></button>:<button className="button primary machine-submit" type="submit" form="salary-form"><SalaryControl label="核对并展开计算" icon={<ArrowRight size={18}/>} code="CALC"/></button>}{error&&<p className="task-action-message" role="alert">{error}</p>}</div>
     <div className="salary-machine">
