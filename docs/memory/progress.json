@@ -2,15 +2,15 @@
   "schemaVersion": 1,
   "updatedAt": "2026-11-05",
   "workingVersion": "0.42.0",
-  "releasedVersion": "0.41.0",
+  "releasedVersion": "0.42.0",
   "workState": "reviewed_internally",
-  "objective": "v42原版序列入场完成内部审查，保存发布收尾。",
+  "objective": "v42原版序列入场已保存复核，默认5186与正确仓库同步完成。",
   "latestUserRequest": "用户否定v41入场美观，要求沿之前入场优化重做，做完自检丑则重做。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5186/?v=0.41.0#/home",
-    "snapshot": "first-step-点击进入与流畅入场-v0.41.0",
+    "url": "http://127.0.0.1:5186/?v=0.42.0#/home",
+    "snapshot": "first-step-原版序列入场优化-v0.42.0",
     "state": "ready_for_user_review"
   },
   "implemented": {
@@ -89,7 +89,7 @@
     },
     {
       "id": "save-release",
-      "status": "pending",
+      "status": "complete",
       "acceptance": "保持业务与主页画面，测试、记忆、保存点及正确仓库对应。"
     }
   ],
@@ -102,7 +102,7 @@
     "performance": "阶段钟20Hz，按阶段更新；原三维绘制循环保持。低配实机等待。",
     "online": "当前业务/API沿用，在线AI本轮未复跑。",
     "limits": "用户审美反馈、真实新人、低配、实际HTTPS及独立材料评测待收集。",
-    "savedPreview": "保存版核对中。"
+    "savedPreview": "localhost:5276保存版完整等待/进入/首页接管通过；交接中首页inert，结束解除，单audio/唯一输入，无水平溢出和warn/error；默认5186实际0.42.0/index匹配。"
   },
   "nextActions": [
     "用户部署支持Node的试用网址，按45号设置进程环境并核验实际HTTPS/AI/图像/账号/音乐。",
@@ -132,13 +132,13 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "pending_v042",
-    "sourceCommit": "f7677b6e4763fcd58962bc0a856b84bae648f4b1",
-    "verifiedAt": "2026-11-04",
+    "pushStatus": "published",
+    "sourceCommit": "fce56692e43cb883cfcec631881df6cecbaf4101",
+    "verifiedAt": "2026-11-05",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "56ff9d2b67d54cd7261bc66107397b44a1290bbd",
-    "publicationReceipt": "outputs/v041-review/git-publication.json",
-    "historyAndLogCommit": "f7677b6e4763fcd58962bc0a856b84bae648f4b1"
+    "previousPublishedHead": "5f9fea81708c3821e1430030d2b9733e26a87060",
+    "publicationReceipt": "outputs/v042-review/git-publication.json",
+    "historyAndLogCommit": "fce56692e43cb883cfcec631881df6cecbaf4101"
   },
   "sideDeliverables": [
     {
@@ -243,7 +243,7 @@
   "executionPlan": {
     "date": "2026-11-01",
     "document": "docs/36-next-execution-plan.md",
-    "state": "v042_entry_reviewed_save_pending",
+    "state": "v042_entry_saved_reviewed",
     "nextMilestone": "Actual deployment URL verification, novice users and low-end device evidence",
     "executionHours": [
       34,
@@ -267,12 +267,12 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v042_sync_pending"
+    "status": "v042_updated_desktop_verified"
   },
   "savedWork": {
     "version": "0.42.0",
     "snapshot": "first-step-原版序列入场优化-v0.42.0",
-    "state": "save_pending",
+    "state": "saved_and_reviewed",
     "review": "docs/48-original-entry-sequence-v042.md"
   }
 }
