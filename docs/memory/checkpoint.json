@@ -1,10 +1,10 @@
 {
-  "version": "0.39.0",
-  "recordedAt": "2026-11-04T14:06:04.322Z",
+  "version": "0.40.0",
+  "recordedAt": "2026-11-04T15:13:48.000Z",
   "workState": "reviewed_internally",
-  "validationVersion": "0.39.0",
+  "validationVersion": "0.40.0",
   "textNormalisation": "LF",
-  "sourceDigest": "a918d3aa74078ccd746c661f230fc7e93382b4bb671860615d7ad59751998d8d",
+  "sourceDigest": "f5b6088238f4f376fee35b7be32f8994a0248ca0ecb9449b3e8e822bba18693f",
   "files": [
     {
       "path": ".env.example",
@@ -12,35 +12,35 @@
     },
     {
       "path": "AGENTS.md",
-      "sha256": "124d608b0ba11e07a92ad3a4c602920260935362c40582abaf3bf10c2364b3c6"
+      "sha256": "fa33907f17de70a9544b20d7d81e59b379a469d26124a76c890ffbcbcf5366c6"
     },
     {
       "path": "docs/memory/ARCHITECTURE.md",
-      "sha256": "45d31461dd20941c7d4727c9d8c5c8977b6271d15adfd80f1d495d24fc1ead43"
+      "sha256": "8cf2a01eeb84f1141c646828a9e2ab2721f37cc38676e09f58d5e66159fdc4a1"
     },
     {
       "path": "docs/memory/BACKLOG.md",
-      "sha256": "34bce41af5f7c379f9aa6bdc317225c8aea1cb2927b92f2e5ba878898778d853"
+      "sha256": "59bb64da2940077b16a8a01a7a6df8ed44fb1784a9c08e23ef88ea2d42bbed89"
     },
     {
       "path": "docs/memory/DECISIONS.md",
-      "sha256": "2dc82cacc25793244a68075098862afab37f60500344a8863d41960db2e5b546"
+      "sha256": "dd53e9d6be18e1f5ff872f2daf27ba107d804a4d6bcc87f845b49d95c68815ff"
     },
     {
       "path": "docs/memory/SESSIONS.md",
-      "sha256": "1f55f7e139695a02de0ed30dc40cebd62a97a7a9d9342aad864fc4c53e664864"
+      "sha256": "2d229952fac41c974b3f0c69264209ea138012aed466bc6e8b3918a62f80fe6c"
     },
     {
       "path": "docs/memory/progress.json",
-      "sha256": "2f3cb76c28bc6c29d18860b92324cf5ecb93cfa1ab07404789517ca0e9367fa7"
+      "sha256": "2c1add0a910ccc85903c345e006e21dc822ddb56661af14f4fcbedb9b63aa409"
     },
     {
       "path": "package-lock.json",
-      "sha256": "1ab18311a609a5dd34961cb516dc6b8276e4c0afd801ee016286a4a12b7fad2c"
+      "sha256": "f0883547f38ae880fca83858099f617d63a6b8443e77874d89461018c7e93056"
     },
     {
       "path": "package.json",
-      "sha256": "192dc17ebfaa94b1a913489dc5bca07890e42c49a481f94612b0501f70cc8091"
+      "sha256": "fed0c93f12f16ee225480a483038d491bd2e7b170248c164e8087dfe3a144158"
     },
     {
       "path": "public/artwork/rhine-ascent.png",
@@ -188,7 +188,7 @@
     },
     {
       "path": "src/ExperienceWorkspace.tsx",
-      "sha256": "cddc9d6b86215cb227a29be891e06fbbd326e70d1348134a53929479f83e95d7"
+      "sha256": "6893460b6fdf155d52132016b7698f59900737d913b0fd7fc8a5a1f643b27c45"
     },
     {
       "path": "src/HomeTaskDirectory.tsx",
@@ -315,6 +315,10 @@
       "sha256": "f07943763f0d8fcddcf024f279b7e432284eb789b55ebad4558b118c38409228"
     },
     {
+      "path": "src/home-layout.css",
+      "sha256": "7e3a6c9a968784ad2eb1bb1ba77582d68d5988aefde144b9e4f858d97f05fd81"
+    },
+    {
       "path": "src/home-overview.css",
       "sha256": "793ae43200f6496ffe3559ee62f1906590ced3de9b4957ec7503e86afe3d9dc1"
     },
@@ -356,7 +360,7 @@
     },
     {
       "path": "src/main.tsx",
-      "sha256": "439a78eb69908571e9399672c671de8449e5c4875d24c91079df1b49369ac71b"
+      "sha256": "df0ba3d28ae0344367346a8120f00e7de14a44a2533b995cd0f1e9ddc6170efc"
     },
     {
       "path": "src/module-guides.ts",

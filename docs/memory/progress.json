@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "updatedAt": "2026-11-04",
-  "workingVersion": "0.39.0",
+  "workingVersion": "0.40.0",
   "releasedVersion": "0.39.0",
   "workState": "reviewed_internally",
-  "objective": "完成线上试用前优化，等待用户部署网址后做真实新人和低配验收。",
-  "latestUserRequest": "用户要求先优化，其上线后以网址安排新人体验和低配测试。",
+  "objective": "v0.40仅保留左侧入口与底部提问的新布局；其他恢复v0.39，完成独立检查，保存发布收尾。",
+  "latestUserRequest": "用户最终明确“就除了布局，其他的都回39版本”，黄金比例图形与所有新增细节取消。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
@@ -16,7 +16,7 @@
   "implemented": {
     "business": "保留八项限定本地工具及共享询问清单，八工具统一迁入#/tools，支持完全不经AI手动操作。 v0.36合同问题可主动附带原文/确认值/来源，清单改写、答复、状态、搜索、导出和可选账号保存保留关联。",
     "music": "五曲/单audio；首页切歌弹小菜单点选即播不跳页，播放器进入完整三维声音档案并接续曲目/进度；v0.25抽取、旋转及逐曲环境保留。",
-    "visual": "保留浅蓝银色完整主体/音乐和原三维；新增同系统的轻量阅读布局、页首/聊天模式切换，简易播放器居中目录。完整模式模型/粒子/材质/抽取/播放旋转未重做。 v0.33首页去重复入口，v0.35.1自由输入常驻、补问可选、字色/字段对比加强、返回状态放页底不遮清单。 v0.35.2本地工具页问题入口/八项首屏列表、全屏浅色对话阅读布局已实现，尚待最终QA和用户反馈。 v0.36收起工作区重复底部入口、精简合同/清单标题和空白、确认后仍可读；v0.35.2跨模式/1041桌面检查已补。",
+    "visual": "保留浅蓝银色完整主体/音乐和原三维；新增同系统的轻量阅读布局、页首/聊天模式切换，简易播放器居中目录。完整模式模型/粒子/材质/抽取/播放旋转未重做。 v0.33首页去重复入口，v0.35.1自由输入常驻、补问可选、字色/字段对比加强、返回状态放页底不遮清单。 v0.35.2本地工具页问题入口/八项首屏列表、全屏浅色对话阅读布局已实现，尚待最终QA和用户反馈。 v0.36收起工作区重复底部入口、精简合同/清单标题和空白、确认后仍可读；v0.35.2跨模式/1041桌面检查已补。 v0.40仅保留左侧入口和底部横向提问的新布局，其余恢复v0.39；轨道/蓝雾/黄金比例图形撤回，46号为事实。",
     "interaction": "前景模型的图内/文字子选项保留，要求手势开始和结束均为稳定前景、同pointer/物体/子区域、总位移≤6px且在画布内；后排只预览，无任意双击跳页。工作区/音乐/对话共享原业务与单audio。",
     "api": "真实同源Node助手网关与DeepSeek function calling；四项白名单工具，共用工资/合同规则；取消、超时、限额、Origin/Host与输入证据校验。旧文档review客户端仍仅协议预留。 v0.39进程环境PUBLIC_ORIGIN可指定一个HTTPS站点，AI/图像/账号共用Host/Origin精确校验；serve支持PORT和显式HOST，公开指纹资源缓存。仅本地代理条件模拟验过，实际部署待。",
     "copy": "首页、目录与对话采用直接用语，区分本地规则、真实助手、单图校对和小范围检索。",
@@ -78,31 +78,31 @@
   ],
   "currentPlan": [
     {
-      "id": "trial-preparation",
-      "status": "verified",
-      "acceptance": "135测试/构建，冷首页DOM1778→776，八工具/草稿/真实AI带入/清单导出，诊断下载，代理条件真实API通过。"
+      "id": "layout-only",
+      "status": "complete",
+      "acceptance": "保留底部横向输入与左侧入口；v39背景模型色彩源文件完全一致，无黄金图形/蓝雾/轨道。"
+    },
+    {
+      "id": "layout-verification",
+      "status": "complete",
+      "acceptance": "完整/简易与835/1041/1280桌面无重叠/横向溢出；唯一输入命中、例句与工具往返通过；135原有测试和构建通过。未重测低配硬件。"
     },
     {
       "id": "save-release",
-      "status": "completed",
-      "acceptance": "新保存点、源包和Git对应；保存版最终复核。"
-    },
-    {
-      "id": "live-trials",
       "status": "pending",
-      "acceptance": "用户部署网址，实际HTTPS核验，2–3首次用户和一台低配实机报告。"
+      "acceptance": "审查后新保存点与Git/日志对应。"
     }
   ],
   "validation": {
-    "version": "0.39.0",
-    "automated": "135 tests, TypeScript and build passed; shared Three 583KB warning remains.",
-    "evidence": "outputs/v039-review",
-    "visualAcceptance": "existing light desktop full/simple retained and internally checked; diagnostics only opt-in",
-    "manual": "独立localhost:5260八工具首次创建，工资空白/0主动保存刷新恢复；真实AI首次创建合同并留工资；4问题编辑导出；模式与音乐保留。",
-    "online": "单公开来源的代理Host/Origin条件模拟，真实DeepSeek200，其他Host/Origin403；并非公网HTTPS部署。",
-    "performance": "同1280×720简易首页DOM1778→776/字段63→6；开发机187有效窗口，约165FPS，20核/16GB；非低配机器，自动低帧仍以控制器模拟为证。",
-    "limits": "真实新人、低配、实际公网HTTPS、独立材料准确率和身份额度隔离仍待。",
-    "savedPreview": "localhost:5264新保存版默认完整模式、首页0业务表单、0诊断元素、单audio、无溢出；原浅色三维/入口视觉复核，控制台无warn/error。 默认5186实际0.39.0，index与当前构建和保存点逐字一致。"
+    "version": "0.40.0",
+    "automated": "135 existing tests, TypeScript and build passed; shared Three 583KB warning remains.",
+    "evidence": "outputs/v040-review",
+    "visualAcceptance": "内部检查最终布局，不代表用户认可；v39背景/颜色/材质/场景8文件哈希一致。",
+    "manual": "独立QA完整/简易，835×811、1041×720、1280×720无横向溢出；输入命中、例句预填、八工具入口/返回输入保留、控制台无warn/error。",
+    "online": "本轮未重跑；网关/业务源文件沿用v39，旧在线验证见45号，不冒充本轮实调。",
+    "performance": "本轮只改布局，未改三维循环/帧控制器；不是低配设备验收。",
+    "limits": "实际用户审美反馈、真实新人、低配、实际公网HTTPS、独立材料准确率和身份额度隔离仍待。",
+    "savedPreview": "保存点与默认5186最终核对中。"
   },
   "nextActions": [
     "用户部署支持Node的试用网址，按45号设置进程环境并核验实际HTTPS/AI/图像/账号/音乐。",
@@ -132,7 +132,7 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "published",
+    "pushStatus": "pending_v040",
     "sourceCommit": "5bf22cc85af8dce2f6c0cf166711b7f2def724ce",
     "verifiedAt": "2026-11-04",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
@@ -156,9 +156,9 @@
     "date": "2026-11-04",
     "lowEndPerformance": "v0.32已实现资源隔离与有效低帧控制器，尚无用户低配CPU/GPU实机反馈，不称所有卡顿已消除。",
     "usability": "用户继续否定v0.35.1入口观感，不愿使用；v0.35.2重排后尚未反馈。",
-    "acceptance": "当前布局与草稿已内部审核，真实用户反馈仍待。",
+    "acceptance": "最终布局已内部审核，尚无用户认可反馈。",
     "modePolicy": "默认完整，卡顿自动切简易，允许手动恢复；覆盖助手此前建议的默认简易。",
-    "latestVisual": "用户明确否定v0.29，要求浅色主体及播放器，不再把深色统一版当认可结果。",
+    "latestVisual": "最终明确“就除了布局，其他的都回39版本”，保留左侧入口/底部提问；取消蓝雾、轨道和黄金图形，不继续加细节。",
     "realUsage": "用户改为先优化，之后上线网址邀新人及低配用户体验。"
   },
   "nextIteration": {
@@ -170,7 +170,7 @@
       "问题提交、分类、补问、纠正和工具结果闭环"
     ],
     "shared": "同一套八工具、规则、填写、结果、清单及单audio",
-    "background": "后置，不增加简易负担，不在本轮实现。",
+    "background": "v0.40最终要求仅布局，背景/颜色/装饰恢复v0.39，已取消候选不再加入。",
     "onlineClassifier": "真实DeepSeek plan_tasks识别事项/意图，最多3候选/补问；受限规则与显式应用；非ready不执行。",
     "initialMode": "full",
     "initialModeSource": "explicit_user_instruction_2026-10-31",
@@ -243,7 +243,7 @@
   "executionPlan": {
     "date": "2026-11-01",
     "document": "docs/36-next-execution-plan.md",
-    "state": "v039_online_trial_preparation_verified_actual_usage_pending",
+    "state": "v040_layout_only_reviewed_save_pending",
     "nextMilestone": "Actual deployment URL verification, novice users and low-end device evidence",
     "executionHours": [
       34,
@@ -267,12 +267,12 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v039_updated_desktop_verified"
+    "status": "v040_updated_desktop_sync_pending"
   },
   "savedWork": {
-    "version": "0.39.0",
-    "snapshot": "first-step-线上试用准备-v0.39.0",
-    "state": "saved_and_reviewed",
-    "review": "docs/45-online-trial-preparation-v039.md"
+    "version": "0.40.0",
+    "snapshot": "first-step-首页布局调整-v0.40.0",
+    "state": "save_pending",
+    "review": "docs/46-home-layout-v040.md"
   }
 }

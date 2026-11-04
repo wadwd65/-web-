@@ -100,3 +100,7 @@ App用visitedPages保留已访问工作区，NewModules过滤未访问工具；�
 性能记录仅?perf=1创建，observer接生产控制器有效窗口及原因，300窗口/200事件、手动本机JSON下载。诊断模式下手动完整也可继续记录窗口，仍尊重手动选择；普通模式无observer保持原自动策略。暂停不记0FPS，内容和账号不进入报告。
 
 request-policy.mjs在AI/图片/账号共用；PUBLIC_ORIGIN从进程环境选择一个HTTPS来源，Host精确匹配，公开POST须同Origin；不信任转发头。serve支持PORT/HOST，0.0.0.0需公开来源；代理账号Cookie始终Secure，公开指纹JS/CSS长缓存、HTML no-store。实际HTTPS终止/持久盘由部署平台提供，公平用户额度仍待。
+
+## v0.40 布局层职责
+
+首页DOM仅将原表单移至home-command-dock；home-layout.css限定首页位置/间距/字号。业务提交、三维场景、音乐和后台维持v0.39。左侧纵向入口/底部输入覆盖完整与简易；简易原步骤说明右上放置。承载轨道、黄金图形和蓝雾候选已撤回，不属于当前架构。

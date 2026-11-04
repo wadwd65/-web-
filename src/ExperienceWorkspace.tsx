@@ -122,10 +122,11 @@ export default function ExperienceWorkspace({page,go,questionCount,signals,openS
           <div className="experience-kicker"><span>FIRST STEP / YOUR NEXT MOVE</span></div>
           <h1>遇到什么事了？</h1>
           <p>合同怎么看，工资怎么算，租房先问什么。<br/>从你眼前的这件事开始。</p>
-          <form className="home-question-form" onSubmit={event=>{event.preventDefault();if(homeQuestion.trim())ask(homeQuestion);}}><label htmlFor="home-question" className="sr-only">说说你遇到的问题</label><textarea id="home-question" rows={3} value={homeQuestion} maxLength={6000} onChange={event=>setHomeQuestion(event.target.value)} placeholder="比如：刚收到合同，不知道该先看哪里…"/><footer><span>DeepSeek 助手</span><button type="submit" disabled={!homeQuestion.trim()}>发送问题<ArrowUpRight size={16}/></button></footer></form>
-          <div className="home-question-examples"><small>也可以问</small>{['试用期怎么算？','第一笔工资怎么核对？'].map(example=><button key={example} onClick={()=>setHomeQuestion(example)}>{example}</button>)}</div>
-          <p className="home-input-note">不清楚的信息可以先留空，我们会逐项确认。</p>
         </article>
+        <section className="home-command-dock" aria-label="直接提问">
+          <form className="home-question-form" onSubmit={event=>{event.preventDefault();if(homeQuestion.trim())ask(homeQuestion);}}><label htmlFor="home-question" className="sr-only">说说你遇到的问题</label><span className="home-command-provider"><Sparkles size={18}/>DeepSeek 助手</span><textarea id="home-question" rows={1} value={homeQuestion} maxLength={6000} onChange={event=>setHomeQuestion(event.target.value)} placeholder="比如：刚收到合同，不知道该先看哪里…"/><footer><button type="submit" disabled={!homeQuestion.trim()}>发送问题<ArrowUpRight size={16}/></button></footer></form>
+          <div className="home-command-foot"><div className="home-question-examples"><small>也可以问</small>{['试用期怎么算？','第一笔工资怎么核对？'].map(example=><button key={example} onClick={()=>setHomeQuestion(example)}>{example}</button>)}</div><p className="home-input-note">不清楚的信息可以先留空，我们会逐项确认。</p></div>
+        </section>
         {lightweight&&<aside className="simple-home-guide"><small>从问题到下一步</small><ol><li><span>01</span><div><strong>先说情况</strong><p>不用判断该选哪个工具。</p></div></li><li><span>02</span><div><strong>只补必要信息</strong><p>不确定的地方，可以直接说不知道。</p></div></li><li><span>03</span><div><strong>核对，再带走结果</strong><p>金额按规则算，要问的事留在清单里。</p></div></li></ol><p className="simple-guide-foot">也可以从下方工具列表自行核对。</p></aside>}
         <aside className="experience-spatial-note" aria-hidden="true"><span>{task?.code}</span><div><small>{phase}</small><span>08 / CONNECTED TASKS</span></div><i/></aside>
       </main>
