@@ -2,7 +2,7 @@
 
 面向初入职场毕业生的八项办事工具，音乐为辅助。首页可以直接向 DeepSeek 说明问题，也可以进入工具列表自行操作。三维前景模型的文字与子选项保留点击；后排只能切换预览，拖动、跨区域和转场中的命中不会执行动作。主体和播放器回到浅蓝银色，保留抽取、旋转、单音频、鼠标反馈和入场回放。仅电脑端。
 
-版本入口：[历史版本说明](docs/VERSION_HISTORY.md)、[开发总日志](docs/DEVELOPMENT_LOG.md)、[当前自检](docs/35-v032-independent-review.md)、[后续执行计划](docs/36-next-execution-plan.md)。当前目录包含v0.36.0完整源码、测试、锁文件与所需静态资源；旧版只记录沿革，不新增多套旧源码或构建快照。已有Git提交历史保留。v0.34单图及可选账号、v0.35小范围官方检索已实现，v0.36–0.37仍待。桌面参赛包根“开发总日志.md”与本仓库日志同步维护。
+版本入口：[历史版本说明](docs/VERSION_HISTORY.md)、[开发总日志](docs/DEVELOPMENT_LOG.md)、[当前自检](docs/35-v032-independent-review.md)、[后续执行计划](docs/36-next-execution-plan.md)。当前目录包含v0.36.0完整源码、测试、锁文件与所需静态资源；旧版只记录沿革，不新增多套旧源码或构建快照。已有Git提交历史保留。v0.34单图及可选账号、v0.35小范围官方检索已实现，v0.36限定合同清单关联已实现，v0.37草稿与实测仍待。桌面参赛包根“开发总日志.md”与本仓库日志同步维护。
 
 先读[本轮图片与个人空间说明](docs/38-image-and-optional-account-v034.md)，双模式见[双模式与AI流程说明](docs/34-two-modes-and-guided-ai-v032.md)。前轮优化见[性能说明](docs/32-home-render-performance-v031.md)与[自评/逐步改进表](docs/33-score-and-improvement-plan-v031.md)；AI与工具范围见[31号](docs/31-light-ai-entry-and-tools-v030.md)。恢复开发运行 `npm run resume`，再读 `docs/memory/progress.json` 与 `DECISIONS.md`。源码只同步 [wadwd65/-web-](https://github.com/wadwd65/-web-)。
 
@@ -73,7 +73,7 @@ FIRST_STEP_AI_MODEL=deepseek-flash
 
 ## v0.35.2 保存进度
 
-见[41号交接](docs/41-conversation-and-tools-layout-v0352.md)。工具列表和聊天新布局已完成，115测试与构建通过，部分独立QA通过。用户要求先保存，完整模式/较窄桌面/控制台/保存快照的最终复核待做，未切换默认预览或推送。
+见[41号交接](docs/41-conversation-and-tools-layout-v0352.md)。工具列表和聊天新布局已完成，115测试与构建通过，部分独立QA通过。11/3用户要求先保存时，最终复核、默认预览与推送曾待做。本轮v0.36已补完并发布。
 
 
 ## v0.36 合同问题与来源关联
