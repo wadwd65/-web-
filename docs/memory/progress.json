@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "updatedAt": "2026-11-04",
   "workingVersion": "0.38.0",
-  "releasedVersion": "0.37.0",
+  "releasedVersion": "0.38.0",
   "workState": "reviewed_internally",
   "objective": "完成合同检索接续与失败恢复，等待真实新人和低配硬件，按44号继续向85目标推进。",
   "latestUserRequest": "用户同意先继续自检，稍后安排真实试用；完成当前检索和失败恢复后保存并发布。",
@@ -11,7 +11,7 @@
   "release": {
     "url": "http://127.0.0.1:5186/?v=0.38.0#/home",
     "snapshot": "first-step-检索接续与失败恢复-v0.38.0",
-    "state": "reviewed_ready_to_publish"
+    "state": "ready_for_user_review"
   },
   "implemented": {
     "business": "保留八项限定本地工具及共享询问清单，八工具统一迁入#/tools，支持完全不经AI手动操作。 v0.36合同问题可主动附带原文/确认值/来源，清单改写、答复、状态、搜索、导出和可选账号保存保留关联。",
@@ -84,7 +84,7 @@
     },
     {
       "id": "save-release",
-      "status": "in_progress",
+      "status": "completed",
       "acceptance": "新保存点、源包和Git一致，最终保存版复核。"
     },
     {
@@ -101,7 +101,7 @@
     "manual": "localhost:5256空白图失败粘贴回原17字，清晰图134字需校对；停止后原图/文字保留、重试成功；手动完整/简易材料与单audio进度保留。",
     "online": "最终5条真实合成接口完成；初轮4/5中租房无效计划失败已修，越界解释约束及回退后复测；空白图实调返回无文字。",
     "limits": "32+7为开发回归，没有独立留出测试集；真实新人/低配/广泛图像准确率尚待。自动简易提示出现过但无硬件/完整帧采样，不作实机验收。",
-    "savedPreview": "localhost:5258最终保存版真实连续两问，短追问命中LC19-2，独立来源展开、旧操作停用；一个dialog/一个audio、无横溢，控制台无warn/error。首页版本号改为读取package。"
+    "savedPreview": "localhost:5258最终保存版真实连续两问，短追问命中LC19-2，独立来源展开、旧操作停用；一个dialog/一个audio、无横溢，控制台无warn/error。首页版本号改为读取package。 5186实际0.38.0，index与canonical/dist/新保存点逐字一致。"
   },
   "nextActions": [
     "按43/44号找2–3位首次使用者，三项合成任务记录完成率/用时/求助位置。",
@@ -132,13 +132,13 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "preparing",
-    "sourceCommit": "8a9268708c43fca51e56c14fecb21931ea107487",
+    "pushStatus": "published",
+    "sourceCommit": "2e3e9070ca35ff0ca16084acae9cda778c35a774",
     "verifiedAt": "2026-11-04",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
     "previousPublishedHead": "6722ad1b4ac177555e8d164fdfee77b9ce1e9d2f",
     "publicationReceipt": "outputs/v038-review/git-publication.json",
-    "historyAndLogCommit": "8a9268708c43fca51e56c14fecb21931ea107487"
+    "historyAndLogCommit": "2e3e9070ca35ff0ca16084acae9cda778c35a774"
   },
   "sideDeliverables": [
     {
@@ -267,7 +267,7 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v038_updated_sync_pending"
+    "status": "v038_updated_desktop_verified"
   },
   "savedWork": {
     "version": "0.38.0",
