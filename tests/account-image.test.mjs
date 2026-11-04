@@ -90,3 +90,28 @@ test('image request sends only explicitly selected image and unknown text remain
  const abort=new AbortController();abort.abort();await assert.rejects(extractContractImage(png(),{config:{apiKey:'synthetic'},signal:abort.signal,fetcher:async(_url,init)=>{assert.equal(init.signal.aborted,true);throw Error('abort');}}),/已停止/);
  await assert.rejects(extractContractImage(png(),{config:{apiKey:'synthetic'},fetcher:async()=>new Response('',{status:401})}),/配置/);
 });
+
+test('unreadable markers always carry a correction warning without guessing text',()=>{
+ const result=validateExtraction({text:'月薪 [无法辨认]',warnings:[]});
+ assert.equal(result.text,'月薪 [无法辨认]');assert.equal(result.warnings.length,1);assert.match(result.warnings[0],/对照原图/);
+});
+
+test('image service recovers safely from blank, truncated, malformed and unavailable responses',async()=>{
+ const run=choice=>extractContractImage(png(),{config:{apiKey:'synthetic'},fetcher:async()=>new Response(JSON.stringify({choices:[choice]}))});
+ await assert.rejects(run({finish_reason:'stop',message:{content:JSON.stringify({text:' ',warnings:['空白页']})}}),/没有读到/);
+ await assert.rejects(run({finish_reason:'length',message:{content:'{}'}}),/文字过多/);
+ await assert.rejects(run({finish_reason:'stop',message:{content:'invalid JSON'}}),/结果不完整/);
+ await assert.rejects(extractContractImage(png(),{config:{apiKey:'synthetic'},fetcher:async()=>new Response('',{status:429})}),/暂不可用/);
+ assert.equal((await run({finish_reason:'stop',message:{content:JSON.stringify({text:'合成合同原文',warnings:[]})}})).text,'合成合同原文');
+});
+
+test('image timeout aborts the provider request and releases the timer',async t=>{
+ t.mock.timers.enable({apis:['setTimeout']});
+ let providerSignal;
+ const pending=extractContractImage(png(),{config:{apiKey:'synthetic'},fetcher:async(_url,init)=>{
+  providerSignal=init.signal;
+  return new Promise((_resolve,reject)=>init.signal.addEventListener('abort',()=>reject(Error('aborted')),{once:true}));
+ }});
+ t.mock.timers.tick(50000);
+ await assert.rejects(pending,/等待较久/);assert.equal(providerSignal.aborted,true);
+});

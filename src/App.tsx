@@ -108,8 +108,8 @@ function Contract({ demoSeed, addQuestions, notify, onSignal,applyRequest,openLi
     } catch (e) { setError(e instanceof Error ? e.message : '读取失败，请重新选择文件或粘贴文字。'); }
     finally { setReading(false); }
   }
+  function showField(field:HTMLElement|null){field?.focus({preventScroll:true});field?.scrollIntoView({block:'center',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}
   function run() {
-    const showField=(field:HTMLElement|null)=>{field?.focus({preventScroll:true});field?.scrollIntoView({block:'center',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});};
     if (!text.trim()) { setError('请先粘贴合同文字，或使用合成示例。'); showField(textRef.current); return; }
     if (scope !== 'fulltime') { setError('请先确认用工类型。实习、劳务和非全日制协议需要其他适用规则，此版不自动套用。'); showField(scopeRef.current); return; }
     if (text.length > 60000) { setError('本次最多核对 60,000 字符，请缩短内容后重试。'); return; }
@@ -141,7 +141,7 @@ function Contract({ demoSeed, addQuestions, notify, onSignal,applyRequest,openLi
   return <>
     <PageHeading number="02" english="CONTRACT REVIEW" title="劳动合同核对" description="从照片识别或粘贴文字，校对后确认用工类型与期限，再整理询问。" right={<button className="button secondary" onClick={loadDemo}><ControlFace label="载入合成示例" icon={<FileText size={16}/>} code="DEMO"/></button>} />
     <DraftControls module="contract" value={{text,months,probation,scope,filename,sample}} disabled={reading} onRestore={saved=>{setImageEpoch(value=>value+1);setText(saved.text);setMonths(saved.months);setProbation(saved.probation);setScope(saved.scope);setFilename(saved.filename);setSample(saved.sample);setPreview(null);setFindings(null);setActive('');setError('');}}/>
-    <ContractImage key={imageEpoch} onConfirm={value=>{editText(value);setFilename('已校对的合同图片 · 第1页');setPreview(null);requestAnimationFrame(()=>{textRef.current?.focus({preventScroll:true});textRef.current?.scrollIntoView({block:"center",behavior:"smooth"});});notify("已带入校对后的文字，请确认用工类型与期限。");}}/>
+    <ContractImage key={imageEpoch} onUseText={()=>showField(textRef.current)} onConfirm={value=>{editText(value);setFilename('已校对的合同图片 · 第1页');setPreview(null);requestAnimationFrame(()=>{textRef.current?.focus({preventScroll:true});textRef.current?.scrollIntoView({block:"center",behavior:"smooth"});});notify("已带入校对后的文字，请确认用工类型与期限。");}}/>
     <div className="process-line workflow-stations"><span className={text.trim()?'current ready':'current'}><b>01</b><span><strong>准备材料</strong><small>{text.trim()?'已载入文字':'导入或粘贴'}</small></span></span><ChevronRight size={14}/><span className={findings?'current ready':''}><b>02</b><span><strong>核对约定</strong><small>{findings?'已有核对结果':'确认类型与期限'}</small></span></span><ChevronRight size={14}/><span className={unresolved.length?'available':''}><b>03</b><span><strong>整理询问</strong><small>{unresolved.length?`${unresolved.length}项可继续确认`:'带走自己的问题'}</small></span></span><Tag>本地文字规则体验</Tag></div>
     <div className="task-action-strip"><div><strong>{findings?'查看结果，带走这次核对记录':'先准备合同文字并确认期限'}</strong><span>{findings?'修改原文或确认值后，需要重新核对。':text.trim()?'原文已载入，请确认下方用工类型与期限。':'没有材料也可先载入合成示例。'}</span></div><button className="button primary" onClick={findings?exportReview:run} disabled={reading}><ControlFace label={findings?'导出核对记录':'开始核对'} icon={findings?<Download size={18}/>:<ArrowRight size={19}/>} code={findings?'TXT':'RUN'}/></button>{error&&<p className="task-action-message" role="alert">{error}</p>}</div>
     <div className="contract-grid">

@@ -1,8 +1,8 @@
-# 初程 FIRST STEP · 主动草稿与对话续接 v0.37.0
+# 初程 FIRST STEP · 检索接续与失败恢复 v0.38.0
 
 面向初入职场毕业生的八项办事工具，音乐为辅助。首页可以直接向 DeepSeek 说明问题，也可以进入工具列表自行操作。三维前景模型的文字与子选项保留点击；后排只能切换预览，拖动、跨区域和转场中的命中不会执行动作。主体和播放器回到浅蓝银色，保留抽取、旋转、单音频、鼠标反馈和入场回放。仅电脑端。
 
-版本入口：[历史版本说明](docs/VERSION_HISTORY.md)、[开发总日志](docs/DEVELOPMENT_LOG.md)、[当前自检](docs/35-v032-independent-review.md)、[后续执行计划](docs/36-next-execution-plan.md)。当前目录包含v0.37.0完整源码、测试、锁文件与所需静态资源；旧版只记录沿革，不新增多套旧源码或构建快照。已有Git提交历史保留。v0.34单图及可选账号、v0.35小范围官方检索已实现，v0.36限定合同清单关联已实现，v0.37草稿已完成，新人/低配实测仍待。桌面参赛包根“开发总日志.md”与本仓库日志同步维护。
+版本入口：[历史版本说明](docs/VERSION_HISTORY.md)、[开发总日志](docs/DEVELOPMENT_LOG.md)、[当前自检](docs/35-v032-independent-review.md)、[后续执行计划](docs/36-next-execution-plan.md)。当前目录包含v0.38.0完整源码、测试、锁文件与所需静态资源；旧版只记录沿革，不新增多套旧源码或构建快照。已有Git提交历史保留。v0.34单图及可选账号、v0.35小范围官方检索已实现，v0.36限定合同清单关联已实现，v0.37草稿已完成，新人/低配实测仍待。桌面参赛包根“开发总日志.md”与本仓库日志同步维护。
 
 先读[本轮图片与个人空间说明](docs/38-image-and-optional-account-v034.md)，双模式见[双模式与AI流程说明](docs/34-two-modes-and-guided-ai-v032.md)。前轮优化见[性能说明](docs/32-home-render-performance-v031.md)与[自评/逐步改进表](docs/33-score-and-improvement-plan-v031.md)；AI与工具范围见[31号](docs/31-light-ai-entry-and-tools-v030.md)。恢复开发运行 `npm run resume`，再读 `docs/memory/progress.json` 与 `DECISIONS.md`。源码只同步 [wadwd65/-web-](https://github.com/wadwd65/-web-)。
 
@@ -23,7 +23,7 @@ npm run build
 npm start
 ```
 
-默认 `http://127.0.0.1:5186/?v=0.37.0#/home`；工具列表 `#/tools`；音乐 `#/music`。`/__first-step-version` 可核对实际版本。参赛包仍双击“开始预览.cmd”。开发、Vite preview 与保存版都使用同一 AI 网关。
+默认 `http://127.0.0.1:5186/?v=0.38.0#/home`；工具列表 `#/tools`；音乐 `#/music`。`/__first-step-version` 可核对实际版本。参赛包仍双击“开始预览.cmd”。开发、Vite preview 与保存版都使用同一 AI 网关。
 
 ## DeepSeek 配置
 
@@ -84,3 +84,7 @@ FIRST_STEP_AI_MODEL=deepseek-flash
 ## v0.37 主动草稿
 
 见[43号实现与自检](docs/43-explicit-drafts-v037.md)。八项工具和聊天提供显式保存、恢复、清除与撤销。草稿按游客/账号分别保存在当前浏览器，文件原图需重选，恢复工具后重新处理；历史回复只供回看，继续提问重新核对。123测试/构建及合成UI检查通过，真实新人/低配验证仍待。草稿不随源码或参赛包分发。
+
+## v0.38 检索与失败恢复
+
+[本轮自检与下一步](docs/44-retrieval-and-recovery-v038.md)。口语合同检索及明确短追问接续、租房一般咨询计划冲突、识别失败回到粘贴文字已修复。130项检查与真实合成接口/图片UI复测通过。32条检索回归与7条接续检查属于开发用例，真实新人、低配与独立材料准确率仍待；内部75估计不因测试数自动上调。

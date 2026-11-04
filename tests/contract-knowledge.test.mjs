@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {CONTRACT_KNOWLEDGE,CONTRACT_EXCERPTS,searchContractKnowledge,isContractRetrieval,contractSourcesForCopy} from '../src/lib/contract-knowledge.ts';
+import {CONTRACT_KNOWLEDGE,CONTRACT_EXCERPTS,searchContractKnowledge,contractQueryFromMessages,isContractRetrieval,contractSourcesForCopy} from '../src/lib/contract-knowledge.ts';
 import {runAssistant,finalizeContractExplanation} from '../tools/assistant-gateway.mjs';
 import {validateAssistantReply} from '../src/services/assistant-client.ts';
 
@@ -32,6 +32,50 @@ test('irrelevant, inapplicable and historical requests cannot borrow current exc
   assert.equal(search('2007年版试用期原文').status,'unsupported-version');
   const correction=searchContractKnowledge('试用期多久',{today,context:'我签实习协议。\n更正，现在签的是全日制劳动合同。'});
   assert.equal(correction.status,'matched');
+});
+
+test('colloquial contract questions prioritize the matching paragraph without overriding explicit articles',()=>{
+  for(const [query,id] of [
+    ['同一家公司换岗后又要重新约试用期','LC19-2'],
+    ['离职后回原公司，又让我试用三个月','LC19-2'],
+    ['试用期三个月另加一年合同期','LC19-4'],
+    ['劳动合同的保密和商业秘密条款','LC23'],
+    ['合同说辞职就交八千违约费','LC25'],
+  ])assert.equal(search(query).excerpts[0].id,id,query);
+  const evidence=search('试用期 第十九条 合同期限一年以上三年以下，试用期包含在劳动合同期限内');
+  assert.equal(evidence.excerpts[0].id,'LC19-1');
+});
+
+test('specific follow-ups reuse one recent user topic and never assistant assertions or stale mixed topics',()=>{
+  const user=content=>({role:'user',content});
+  const query=history=>contractQueryFromMessages(history.map(user));
+  assert.equal(search(query(['试用期有次数限制吗','那第二次呢？'])).excerpts[0].id,'LC19-2');
+  assert.equal(search(query(['试用期怎么算','那一年呢？'])).excerpts[0].id,'LC19-1');
+  for(const history of [
+    ['试用期怎么算','这个呢'],
+    ['试用期怎么算','先聊工资条','哪条依据？'],
+    ['竞业限制和违约金怎么约定','哪条？'],
+    ['试用期怎么算','新问题','另一个事情','工资','哪条'],
+    ['试用期怎么算','租房合同退押金'],
+    ['试用期怎么算','那一年保修呢？'],
+    ['试用期怎么算','换个话题','那第二次呢？'],
+  ])assert.equal(query(history),history.at(-1));
+  assert.equal(contractQueryFromMessages([{role:'assistant',content:'试用期怎么算'},user('那第二次呢？')]),'那第二次呢？');
+});
+
+test('gateway feeds follow-up retrieval to the provider without inventing user facts',async()=>{
+  const requests=[];
+  const result=await runAssistant({messages:[{role:'user',content:'同一单位试用期有次数限制吗'},{role:'assistant',content:'合成历史解释'},{role:'user',content:'那第二次呢？'}]}, {
+    config:{apiKey:'synthetic',model:'synthetic'},
+    fetcher:async(_url,options)=>{
+      const request=JSON.parse(options.body);requests.push(request);
+      return requests.length===1?reply({tool_calls:[call(plan)]}):reply({content:'第十九条规定同一用人单位与同一劳动者只能约定一次试用期。'});
+    },
+  });
+  assert.equal(result.references.excerpts[0].id,'LC19-2');
+  assert.ok(result.references.query.includes('试用期'));
+  assert.equal(requests[0].messages.at(-1).content,'那第二次呢？');
+  assert.deepEqual(JSON.parse(requests[1].messages.at(-1).content).contractKnowledge,result.references);
 });
 
 test('a review deadline expires the knowledge snapshot, without claiming the law has expired',()=>{
@@ -113,4 +157,8 @@ test('unsupported assessment or pay advice falls back to exact source and keeps 
   const references=search('同一用人单位调岗后再次约定试用期');
   const result=finalizeContractExplanation('不能再试用。\n\n如果新岗位需要考察，可以约定考核目标或培训安排，也不应降低工资。',references);
   assert.equal(result.replyOrigin,'guide');assert.ok(!result.reply.includes('考核目标'));assert.ok(result.reply.includes(references.excerpts[0].text));assert.match(result.reply,/此前是否已约定过试用期/);
+  const qualification=finalizeContractExplanation('如果此前实际履行过一次试用期，第二次就不能再约定。',references);
+  assert.equal(qualification.replyOrigin,'guide');assert.ok(!qualification.reply.includes('实际履行'));
+  assert.equal(finalizeContractExplanation('试用期包含在劳动合同期限内。',references).replyOrigin,'guide');
+  assert.equal(finalizeContractExplanation('核实到底是12个月还是15个月，这决定试用期是否合法。',search('试用期三个月另加一年合同期')).replyOrigin,'guide');
 });

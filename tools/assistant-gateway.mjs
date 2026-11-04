@@ -6,7 +6,7 @@ import {randomUUID} from 'node:crypto';
 import {validateAssistantGuide} from '../src/services/assistant-guide.ts';
 import {calculatePayslip} from '../src/lib/wages.ts';
 import {analyzeContract,CONTRACT_REFERENCE} from '../src/lib/contracts.ts';
-import {searchContractKnowledge,CONTRACT_KNOWLEDGE} from '../src/lib/contract-knowledge.ts';
+import {searchContractKnowledge,contractQueryFromMessages,CONTRACT_KNOWLEDGE} from '../src/lib/contract-knowledge.ts';
 
 const ENDPOINT='https://api.deepseek.com/chat/completions';
 const MODULES={offer:'Offer对比',contract:'合同核对',salary:'工资明细',tax:'个税指引',social:'社保医保',rent:'租房核对',subsidy:'补贴匹配',leaving:'离职转接',list:'询问清单'};
@@ -51,7 +51,7 @@ const GUIDANCE=`
 - 填写提示已由程序统一为确认值/不知道，不许建议未知填0或先填估计数。用户问去哪里查，至少给出工资条或向HR索取明细等直接方法，不要只返回工具入口。不要编造地方的申报/到账周期。
 - 合同数字只能依据本次工具返回的contractKnowledge.excerpts或实际核对结果。信息不明时不由试用期倒推合同期，不凭记忆编造上限。引用时区间的含/不含边界不能省略；未获得文本不宣称已核对。资料为本地核验，不是联网检索。
 - 不要从assistant旧回复获得金额、身份或期限。表单不存在隐式上下文。若用户否定了旧事实且没给新值，先问清楚，旧值不能继续使用。
-- 租房阶段不明确时先问是签约前、居住中、准备退租还是已经发生争议。用户只说“租房押金”不代表房东不退，不要预设争议、拒退或违约已经发生。
+- 租房只问一般退押金流程或解释时仍用guidance+ready、questions=[]，先给有限说明，可在回答末尾邀请补充阶段。只有要判断个人合同或具体争议且阶段不明确时，才用review+needs-info询问签约前、居住中、准备退租或已发生争议。用户只说“租房押金”不代表房东不退，不要预设争议、拒退或违约已经发生。
 - plan_tasks的questions会成为自然语言补问和可选填写，tasks只作内部路由与可选快捷回复；不向用户解释内部状态，不要求用户完成表单才继续。纠正事项不会自动执行操作；按钮需用户点击。不要输出没有生成的导航按钮。
 `;
 
@@ -93,6 +93,7 @@ function confirmedDuration(value,key,userText){
 export function executeAssistantTool(name,args,userText){
   if(!object(args))throw new AssistantError('tool-input','工具参数不完整，请补充信息。');
   if(name==='plan_tasks'){
+    if(args.intent==='guidance'&&args.status==='needs-info')throw new AssistantError('tool-input','一般解释请用intent=guidance、status=ready、questions=[]，先回答已有范围。只有个人计算或材料核对确实缺少信息时才用calculate/review与needs-info。');
     let guide;try{guide=validateAssistantGuide(args);}catch{throw new AssistantError('tool-input','事项计划不完整，请重新确认当前事项和必要补问。');}
     if(guide.activeModule==='rent'&&guide.questions.some(q=>/不退|拒退|扣押|已退租/u.test(q.label))&&!/不退|拒退|扣押|已退租/u.test(userText))throw new AssistantError('tool-input','租房阶段尚未确认，先问签约前、居住中、准备退租还是已有争议，不能预设房东拒退。');
     return {guide,result:{guide,referenceNotes:guide.activeModule==='contract'?CONTRACT_REFERENCE:undefined,next:'请直接回答用户当前想了解的问题，不要只推荐工具或要求先进入模块。补问可直接用自然语言回复。'},label:'确认当前事项',summary:guide.activeModule?MODULES[guide.activeModule]:guide.status==='choose'?'等待选择先处理的事项':guide.status==='out-of-scope'?'不在工具范围内':'需要说明具体情况'};
@@ -147,7 +148,10 @@ export function guideReply(guide,userText=''){
 /** Keep navigation in real controls. Fall back to exact excerpts if generated file capabilities conflict. */
 export function finalizeContractExplanation(content,references){
   const reply=content.trim().split(/\n\s*\n/u).filter(paragraph=>!(/^(?:想|需要|如果你|你可以|也可以|有合同)/u.test(paragraph)&&/发我|发来|合同文字|照片|图片|PDF|工具|入口/iu.test(paragraph))).join('\n\n');
-  const unsupportedAdvice=/考核|考察|降薪|降低工资|培训期|培训安排/u.test(reply);
+  const unsupportedAdvice=/考核|考察|降薪|降低工资|培训期|培训安排/u.test(reply)
+    ||references.excerpts[0]?.id==='LC19-2'&&/实际.{0,4}(?:履行|经历)|履行过.{0,6}试用/u.test(reply)
+    ||!references.excerpts.some(excerpt=>excerpt.id==='LC19-4')&&/试用期.{0,8}(?:包含|计入)|(?:包含|计入).{0,8}合同期限/u.test(reply)
+    ||/这决定.{0,12}试用期|决定试用期是否/u.test(reply);
   if(!reply||unsupportedAdvice||/PDF.{0,40}(?:识别|OCR)|(?:识别|OCR).{0,40}PDF/iu.test(reply)){
     const first=references.excerpts[0];
     return {reply:`本次检索到的相关原文如下。\n\n${first.article}\n${first.text}${first.id==='LC19-2'?'\n\n请先确认你在同一单位此前是否已约定过试用期，签过合同本身不能证明这一点。':''}`,replyOrigin:'guide'};
@@ -222,7 +226,7 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
         const asksContract=guide?.activeModule==='contract'||(!guide?.activeModule&&/合同|试用/u.test(latestQuestion));
         const photoGuidance=guide?.intent==='guidance'&&/照片|图片|拍照|PDF/iu.test(latestQuestion);
         if(execution.guide&&guide.status!=='choose'&&asksContract&&!photoGuidance){
-          const retrieved=searchContractKnowledge(latestQuestion,{context:conversation.userText});
+          const retrieved=searchContractKnowledge(contractQueryFromMessages(conversation.messages),{context:conversation.userText});
           if(retrieved.status==='out-of-scope'){
             guide={...guide,status:'out-of-scope',tasks:[],activeModule:null,questions:[]};
             execution.result.guide=guide;
@@ -233,7 +237,7 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
             delete execution.result.referenceNotes;
             execution.result.contractKnowledge=references;
             execution.result.source=CONTRACT_KNOWLEDGE;
-            execution.result.next='请直接用命中原文回答当前问题，先给简短解释。不要只让用户打开工具，也不要重复完整条文。本次最终解释不提材料上传、图片、PDF或工具入口，界面会单独展示原文和真实入口。不要提出条文之外的考核期、培训期或工资处理建议。只有用户明确经历过试用期，才可认定这次属于重复试用；单纯签过合同不等于已有试用期，可用条件句说明。';
+            execution.result.next='请直接用命中原文回答当前问题，先给简短解释。不要只让用户打开工具，也不要重复完整条文。本次最终解释不提材料上传、图片、PDF或工具入口，界面会单独展示原文和真实入口。不要提出条文之外的考核期、培训期或工资处理建议。重复试用的原文用词为“约定”，不能另加“实际经历/履行过”这一条件；是否此前已约定不明时用条件句，单纯签过合同不等于已约定试用期。若合同总期限尚不明确，只说明包含关系并提示核实总期限，不直接认定这份合同总共12或15个月。';
             steps.push({id:'references-'+totalTools,name:'search_contract_knowledge',label:'检索官方合同资料',ok:references.status==='matched',summary:references.status==='matched'?`命中 ${references.excerpts.length} 段 · ${CONTRACT_KNOWLEDGE.version}`:references.message});
           }
         }

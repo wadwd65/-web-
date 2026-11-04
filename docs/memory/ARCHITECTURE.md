@@ -86,3 +86,9 @@ lib/checklist.ts共用Question/QuestionDraft及可选合同证据类型、持久
 ## v0.37 主动草稿
 
 lib/drafts.ts提供九模块的版本/字段验证、每账号/模块存储键和旧值校验。DraftControls负责显式读写、恢复和一次撤销，成功提示短暂保留，失败不隐去；解析用memo，无常驻循环。各原组件仅绑定当前输入与恢复回调，金额/合同结果清空再处理，社保/离职重建原导航并带回个人记录。聊天把现有规则/来源转成可读历史，只恢复role/content和未发送输入，使用负编号避免与新消息冲突，所有动作均需新回复再执行。AccountProvider新增身份就绪状态/查询序列，App在账号变化时清当前工具/对话。没有草稿上传接口或原图持久化。
+
+## v0.38 检索查询与失败恢复
+
+contractQueryFromMessages只构造检索主题查询，不改原用户证据。短追问须完整匹配，最近三条用户消息只允许单主题；换题/多主题/其他事项停止借用。searchContractKnowledge补口语及明确主题排序，原条文、适用范围、时效和显式条号优先保持。网关仍以原conversation.userText作事实校验。
+
+ContractImage新增onUseText回调，仅关闭图片区、聚焦原textarea，不改原文/期限/用工确认。图片识别端为缺少warnings的无法辨认标记加人工校对提示。无效guidance+needs-info返回明确纠正信息；一般租房guidance先答，个人核对才补问。已观察的越界模型解释按原摘录回退为guide，边界规则不是完整语义校验。

@@ -31,6 +31,23 @@ export type ContractRetrieval = {
   excerpts:ContractExcerpt[];
 };
 
+/** Reuse a single recent user topic only for specific follow-up questions. */
+export function contractQueryFromMessages(messages:readonly {role:string;content:string}[]):string {
+  const latest=messages.at(-1)?.content.trim()??'';
+  if(/合同|试用|竞业|培训|服务期|违约/u.test(latest))return latest;
+  if(/工资|扣款|社保|医保|租房|押金|个税|补贴|offer|赔偿|仲裁/iu.test(latest))return latest;
+  const shortQuestion=latest.replace(/[\s？?。！!，,]/gu,'');
+  if(!/^(?:那|那么|那如果|如果|请问|具体)?(?:第[二三234]次|再次|重复|重新|另加|包含|算在|几个月|[一二三四五六七八九十\d]+年|哪(?:一)?条(?:依据|原文)?|条文|原文|依据)(?:呢|吗|么|可以吗|行吗|怎么算|怎么说|是什么|在哪里|在哪|有吗)?$/u.test(shortQuestion))return latest;
+  const previous=messages.slice(0,-1).filter(message=>message.role==='user').slice(-3).reverse();
+  for(const message of previous){
+    if(/工资|扣款|社保|医保|租房|押金|个税|补贴|offer|先不聊|换个话题|换个问题|另一个问题|新问题/iu.test(message.content))return latest;
+    const topics=Array.from(new Set(message.content.match(/试用期|竞业限制|专项培训|服务期|违约金/gu)??[]));
+    if(topics.length>1)return latest;
+    if(topics.length===1)return `${latest}\n沿用此前用户问题的主题：${topics[0]}`;
+  }
+  return latest;
+}
+
 function scopeOutside(context:string,fullTimeConfirmed:boolean):boolean {
   const relationship = Array.from(context.matchAll(/不是全日制|非全日制|全日制|普通劳动合同|实习协议|实习合同|劳务协议|劳务合同|劳务派遣|派遣合同/gu)).at(-1)?.[0];
   const region = Array.from(context.matchAll(/中国内地|中国大陆|中国境内|香港|澳门|台湾|美国|日本|英国|新加坡|境外|海外/gu)).at(-1)?.[0];
@@ -39,7 +56,7 @@ function scopeOutside(context:string,fullTimeConfirmed:boolean):boolean {
 
 /** Rank reviewed excerpts by matched phrases. Generic words carry less weight than a specific topic. */
 export function searchContractKnowledge(query:string, options:{context?:string;fullTimeConfirmed?:boolean;today?:string}={}):ContractRetrieval {
-  const normalized=query.trim().slice(0,12000);
+  const normalized=query.trim().slice(0,12000).replaceAll('违约费','违约金');
   const result:ContractRetrieval={corpusId:CONTRACT_KNOWLEDGE.id,status:'no-match',query:normalized.slice(0,200),message:'现有资料没有检索到足够相关的条文。可换成具体的合同问题，或打开官方全文核实。',excerpts:[]};
   if(scopeOutside(options.context??normalized,options.fullTimeConfirmed===true))return {...result,status:'out-of-scope',message:'这份资料库只整理中国内地全日制劳动合同。你提到的地区或用工情形需要另查适用依据，暂不套用这里的条文。'};
   if(/2007(?:年)?.{0,8}(?:版|原文)|旧版|修正前/u.test(normalized))return {...result,status:'unsupported-version',message:'当前只收录2012年修正文本，没有收录你要查的历史版本，不能拿现行摘录代替。'};
@@ -49,9 +66,15 @@ export function searchContractKnowledge(query:string, options:{context?:string;f
   if(/仲裁|诉讼|提前.{0,6}(?:天|日|通知)|通知期|最低工资|试用期.{0,6}(?:工资|薪资)|(?:工资|薪资).{0,6}试用期|辞退|解雇|解除赔偿|补偿金|赔偿金/u.test(normalized))return {...result,message:'当前摘录尚未覆盖工资标准、解除补偿或争议处理等问题，需要补充对应依据后再解释。可先打开官方全文核实。'};
   if(!/合同|试用|竞业|专项培训|服务期|违约金|第[一二三四五六七八九十]+条/u.test(normalized))return result;
   const ranked=CONTRACT_EXCERPTS.map(excerpt=>{
-    const matchedTerms=excerpt.terms.filter(term=>normalized.includes(term));
+    const matchedTerms:string[]=excerpt.terms.filter(term=>normalized.includes(term));
+    const repeatProbation=/试用/u.test(normalized)&&/再次|第二次|二次|重复|重新|又|调岗|换岗|转岗|回原公司/u.test(normalized);
+    if(excerpt.id==='LC19-2'&&repeatProbation){
+      for(const term of ['同一家公司','同一公司','同一个单位','原公司','换岗','转岗'])if(normalized.includes(term))matchedTerms.push(term);
+    }
     const articleMatch=normalized.includes(excerpt.article)||normalized.includes(excerpt.article.replace(/第(.+)条.*/u,'第$1条'));
     let score=matchedTerms.reduce((sum,term)=>sum+(['合同','试用期','试用','工资','社保','离职','违约金'].includes(term)?1:term.length),0)+(articleMatch?10:0);
+    if(!articleMatch&&excerpt.id==='LC19-4'&&/试用/u.test(normalized)&&/另加|不计入|不包含|仅约定|只签/u.test(normalized))score+=8;
+    if(!articleMatch&&excerpt.id==='LC23'&&/保密|商业秘密|竞业/u.test(normalized))score+=8;
     if(excerpt.id==='LC17'&&/试用/u.test(normalized)&&!articleMatch&&matchedTerms.every(term=>['合同','劳动合同','签合同'].includes(term)))score=0;
     return {excerpt,matchedTerms:articleMatch?[...matchedTerms,excerpt.article]:matchedTerms,score};
   }).filter(hit=>hit.score>=2).sort((a,b)=>b.score-a.score||a.excerpt.id.localeCompare(b.excerpt.id));

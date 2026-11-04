@@ -13,7 +13,9 @@ export function validateImage(value){
 export function validateExtraction(value){
  if(!value||typeof value.text!=='string'||value.text.length>12000||!Array.isArray(value.warnings)||value.warnings.length>8||value.warnings.some(v=>typeof v!=='string'||v.length>300))throw Error('识别结果不完整，请重试或粘贴文字。');
  const text=value.text.trim();if(!text)throw Error('这张图片没有读到可核对的文字，请换清晰图片或粘贴原文。');
- return {text,warnings:value.warnings.map(v=>v.trim()).filter(Boolean),provider:'DeepSeek',page:1};
+ const warnings=value.warnings.map(v=>v.trim()).filter(Boolean);
+ if(text.includes('[无法辨认]')&&!warnings.length)warnings.push('有文字未能辨认，请对照原图补充；仍看不清的地方保留待确认。');
+ return {text,warnings,provider:'DeepSeek',page:1};
 }
 export async function extractContractImage(image,{config,fetcher=fetch,signal}={}){
  validateImage(image);if(!config?.apiKey)throw Error('图片识别尚未连接，请配置服务端模型或先粘贴文字。');

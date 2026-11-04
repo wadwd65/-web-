@@ -53,3 +53,16 @@ test('a vague rent deposit question does not presume a landlord has refused a re
  assert.throws(()=>executeAssistantTool('plan_tasks',guide,'想先处理租房押金'));
  assert.equal(executeAssistantTool('plan_tasks',guide,'房东说押金不退').guide.activeModule,'rent');
 });
+
+test('an invalid guidance follow-up gives a specific correction and can recover to the new topic',async()=>{
+ const guide={intent:'guidance',status:'needs-info',activeModule:'rent',tasks:[{module:'rent',reason:'一般退押金流程'}],questions:[{label:'租房阶段',hint:''}]};
+ assert.throws(()=>executeAssistantTool('plan_tasks',guide,'想了解退押金流程'),/guidance.*ready/);
+ let count=0;
+ const result=await runAssistant({messages:[{role:'user',content:'试用期怎么算？'},{role:'user',content:'先不聊这个，我想了解租房押金怎么退'}]},{config,fetcher:async(_url,init)=>{
+  count++;
+  if(count===1)return response({tool_calls:[call('plan_tasks',guide)]});
+  if(count===2){assert.match(JSON.parse(init.body).messages.at(-1).content,/guidance.*ready/);return response({tool_calls:[call('plan_tasks',{...guide,status:'ready',questions:[]})]});}
+  return response({content:'可以先查看合同里的押金退还约定，再核对交接记录。'});
+ }});
+ assert.equal(result.guide.activeModule,'rent');assert.equal(result.references,undefined);assert.equal(result.actions.length,0);
+});

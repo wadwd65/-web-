@@ -1,4 +1,5 @@
 import {lazy,Suspense,useCallback,useEffect,useLayoutEffect,useRef,useState} from 'react';
+import {version} from '../package.json';
 import type {ReactNode} from 'react';
 import {ArrowLeft,ArrowRight,ArrowUpRight,ChevronRight,CircleHelp,Maximize,Play,RotateCcw,SlidersHorizontal,Sparkles,X} from 'lucide-react';
 import {EXPERIENCE_MODULES} from './experience-modules.ts';
@@ -144,7 +145,7 @@ export default function ExperienceWorkspace({page,go,questionCount,signals,openS
       </section>
       <div className="experience-scene-tools" hidden={working||lightweight} inert={cinema}><p>{failed?'三维暂不可用 · 工具列表仍可使用':simple?'已减少动态 · 工具入口照常可用':'后排只预览 · 当前模型的文字与子选项可操作'}</p><details className="home-scene-settings" onKeyDown={event=>{if(event.key==='Escape'){event.preventDefault();event.stopPropagation();event.currentTarget.open=false;event.currentTarget.querySelector('summary')?.focus();}}}><summary><SlidersHorizontal size={14}/>场景设置<ChevronRight size={12}/></summary><div><button onClick={()=>setParticles(value=>!value)} aria-pressed={particles} disabled={simple||failed}><Sparkles size={14}/>{particles?'重组资料':'查看几何点云'}</button><button onClick={()=>setReset(value=>value+1)} aria-label="复位场景视角"><RotateCcw size={14}/>复位场景视角</button><button onClick={()=>setSimple(value=>!value)} aria-pressed={simple}>{simple?'开启动效':'减少动态'}</button><button onClick={()=>setCinema(value=>!value)} aria-pressed={cinema}><Maximize size={14}/>{cinema?'显示界面':'纯净观景'}</button></div></details></div>
       <footer className="experience-footer" inert={cinema}><HomeTaskDirectory onAsk={()=>ask()} onTools={openTools} onList={openList} questionCount={questionCount}/></footer>
-      <div className="experience-systemline" inert={cinema}><span><i/>FIRST STEP / 0.37.0<span>YOUR NEXT MOVE</span></span><div><button onClick={openSources}>使用范围 ↗</button></div></div>
+      <div className="experience-systemline" inert={cinema}><span><i/>FIRST STEP / {version}<span>YOUR NEXT MOVE</span></span><div><button onClick={openSources}>使用范围 ↗</button></div></div>
       {cinema&&<button className="experience-cinema-return" onClick={()=>setCinema(false)}>返回界面<ArrowLeft size={15}/><small>ESC</small></button>}
     </div>
     {modeState.notice&&<div className="experience-mode-notice" role="status"><span>{modeState.notice}</span>{lightweight&&<button onClick={()=>changeMode('full')}>切回完整</button>}<button onClick={modeState.dismiss} aria-label="关闭模式提示"><X size={14}/></button></div>}
