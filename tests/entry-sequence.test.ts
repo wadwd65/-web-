@@ -12,8 +12,8 @@ test('loading and hidden tabs cannot consume the requested opening',()=>{
  clock.advance(60000,true);assert.equal(clock.state().elapsed,250);assert.equal(clock.state().completed,false);
 });
 test('the real scene starts before curtain opening and completes only after the reveal',()=>{
- const clock=createEntrySequence();clock.start();frames(clock,110);assert.equal(clock.state().phase,2);assert.equal(clock.state().reveal,true);assert.equal(clock.state().completed,false);
- frames(clock,24);assert.equal(clock.state().phase,3);frames(clock,73);assert.equal(clock.state().phase,4);assert.equal(clock.state().completed,false);
+ const clock=createEntrySequence();clock.start();frames(clock,175);assert.equal(clock.state().phase,2);assert.equal(clock.state().reveal,true);assert.equal(clock.state().completed,false);
+ frames(clock,24);assert.equal(clock.state().phase,3);frames(clock,82);assert.equal(clock.state().phase,4);assert.equal(clock.state().completed,false);
  frames(clock,30);assert.equal(clock.state().completed,true);
 });
 test('reduced motion still waits for explicit start; skip is immediate and completion is stable',()=>{

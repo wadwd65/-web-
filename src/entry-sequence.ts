@@ -1,19 +1,45 @@
-/** Visible-time entry clock: neither loading nor an idle title screen can consume it. */
-export function createEntrySequence(reduced=false){
- let requested=false,elapsed=0,completed=false;
- function state(){
-  return {requested,elapsed,completed,phase:completed?4:!requested?0:elapsed>=3300?4:elapsed>=2100?3:elapsed>=650?2:1,reveal:requested&&(reduced||elapsed>=1750)};
- }
- return {
-  state,
-  start(){requested=true;return state();},
-  advance(delta:number,ready:boolean,visible=true){
-   if(!requested||!ready||!visible||completed)return state();
-   // Preserve timing on a slower desktop without jumping across the whole reveal.
-   elapsed+=Math.max(0,Math.min(Number.isFinite(delta)?delta:0,250));
-   if(reduced||elapsed>=3750)completed=true;
-   return state();
-  },
-  skip(){requested=true;completed=true;return state();}
- };
+/** Visible-time phases. Loading and an idle welcome screen never consume the sequence. */
+export const ENTRY_TIMING = {
+  mark: 900,
+  reveal: 2700,
+  open: 3100,
+  fade: 4450,
+  complete: 4900,
+};
+
+export function createEntrySequence(reduced = false) {
+  let requested = false;
+  let elapsed = 0;
+  let completed = false;
+
+  function state() {
+    let phase = 0;
+    if (requested) phase = 1;
+    if (elapsed >= ENTRY_TIMING.mark) phase = 2;
+    if (elapsed >= ENTRY_TIMING.open) phase = 3;
+    if (completed || elapsed >= ENTRY_TIMING.fade) phase = 4;
+    return {
+      requested, elapsed, completed, phase,
+      reveal: requested && (reduced || elapsed >= ENTRY_TIMING.reveal),
+    };
+  }
+
+  return {
+    state,
+    start() {
+      requested = true;
+      return state();
+    },
+    advance(delta: number, ready: boolean, visible = true) {
+      if (!requested || !ready || !visible || completed) return state();
+      elapsed += Math.max(0, Math.min(Number.isFinite(delta) ? delta : 0, 250));
+      if (reduced || elapsed >= ENTRY_TIMING.complete) completed = true;
+      return state();
+    },
+    skip() {
+      requested = true;
+      completed = true;
+      return state();
+    },
+  };
 }
