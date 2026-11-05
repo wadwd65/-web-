@@ -124,3 +124,7 @@ catalog是八首曲目与官方fallback白名单的共同来源，music-artwork�
 ## v0.45 标志交互与局部字体
 
 ExperienceEntry的markAwake仅负责单次页面内彩蛋状态，语义button支持鼠标/键盘且不触发start。CSS悬停/聚焦/pressed共用视觉，完整RhineMark为底层，独立trace仅交互时运行。entry-mark-symbol与trace在演出开始暂停，原入口负责统一卸载。entry-sequence.css按unicode-range注册同源官方字体两字补充，保留原大字库。
+
+## v0.46 轻量点击与工具动作
+
+PointerFeedback新增follow布尔参数，运行简易模式仅保留点击事件，原层及节点池复用。Salary的updateAmount统一重置旧结果，确认0显式触发、焦点回输入。主执行/下载由现有data-view区分，NewModules的共用Action沿用原form提交。usability.css的按钮强化限定experience-workspace，主页入口恢复45。MODULE_GUIDES只调整可见页签名称，事务id和计算API不变。

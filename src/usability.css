@@ -1,0 +1,38 @@
+/* Clear actions within the existing desktop terminal. */
+.pointer-feedback { --pointer-color: #176e9c; }
+.pointer-feedback .pointer-reticle::after { content: ''; position: absolute; width: 3px; height: 3px; left: 50%; top: 50%; border-radius: 50%; background: var(--pointer-color); transform: translate(-50%, -50%); }
+.pointer-feedback .pointer-echo { width: 32px; height: 32px; border-width: 1.5px; box-shadow: 0 0 0 5px #51a9d013; }
+.experience-shell .experience-workspace .button.primary { background: #247ead; color: #fff; border: 1px solid #247ead; border-radius: 5px; padding: 12px 18px; min-height: 48px; font-weight: 550; box-shadow: 0 3px 10px #236d9414; }
+.experience-shell .experience-workspace .button.primary:hover { background: #1b6690; border-color: #1b6690; color: #fff; }
+.experience-shell .experience-workspace .button.primary .control-action { color: inherit; }
+.experience-shell .experience-workspace .button.primary::after { display: none; }
+.experience-shell .experience-workspace .button.secondary { padding: 9px 12px; border: 1px solid #92b0c3; border-radius: 4px; background-color: #f8fcff7a; }
+.experience-shell .experience-workspace .button.secondary:hover { background-color: #e6f2fa; border-color: #4c8fb5; }
+.experience-shell .experience-workspace .task-action-strip { top: 118px; padding: 7px 0 10px; margin-bottom: 15px; }
+.experience-shell .experience-workspace .task-action-strip strong { font-size: 13px; }
+.experience-shell .experience-workspace .motion-work-nav { min-height: 64px; padding-top: 5px; padding-bottom: 5px; margin-bottom: 12px; }
+.experience-shell .experience-workspace .motion-work-nav > button { font-size: 13px; }
+.experience-shell .experience-workspace .module-method { margin: 2px 0 10px; padding-bottom: 5px; }
+.experience-shell .experience-workspace .module-method > summary > small { display: none; }
+.tool-directory-open { display: flex; align-items: center; gap: 4px; flex-shrink: 0; padding: 7px 9px; border-radius: 4px; color: #276f98; background: #e3eff7; font-size: 11px; }
+.tool-directory-question > button { display: flex; align-items: center; justify-content: center; gap: 6px; width: auto; min-width: 82px; border-radius: 5px; padding: 0 10px; font-size: 12px; }
+.salary-workbench .pay-field { display: flex; flex-direction: column; gap: 7px; padding: 0; border-bottom: 0; }
+.salary-workbench .pay-field > label { display: block; min-width: 0; }
+.salary-workbench .pay-field-title { margin-bottom: 9px; }
+.salary-workbench .pay-field .currency-input { display: flex; align-items: center; grid-column: auto; grid-row: auto; border: 1px solid #a1bdce; border-radius: 4px; background: #f9fcff; min-height: 46px; padding: 0 10px; }
+.experience-shell .salary-workbench .currency-input input { width: 100%; min-width: 0; min-height: 44px; padding: 8px; background: transparent; border: 0; box-shadow: none; font-size: 16px; }
+.salary-workbench .currency-input:focus-within { outline: 2px solid #2a86b4; outline-offset: 2px; }
+.salary-workbench .pay-field-help { display: flex; align-items: center; justify-content: space-between; gap: 6px; min-height: 27px; }
+.salary-workbench .pay-field-help > small { font-size: 10px; line-height: 1.6; color: #58768b; }
+.salary-workbench .pay-field-help > button { flex-shrink: 0; font-size: 11px; color: #226c95; padding: 5px 7px; border: 1px solid #9bbacb; border-radius: 3px; background: #eef7fc; }
+.salary-workbench .form-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 17px 26px; }
+.salary-workbench .draft-controls { padding-top: 4px; padding-bottom: 4px; margin-bottom: 8px; }
+.salary-workbench .salary-calculate { width: 100%; justify-content: space-between; margin-top: 15px; }
+.experience-shell[data-view=material] .salary-export, .experience-shell[data-view=result] .salary-calculate-top { display: none; }
+.experience-shell[data-view=material] .tool-export, .experience-shell[data-view=result] .tool-generate { display: none; }
+.salary-workbench .panel-heading { margin-bottom: 15px; }
+.salary-workbench .input-status { margin-bottom: 17px; }
+.salary-workbench .page-heading-actions .button { font-size: 12px; }
+@media (prefers-reduced-motion: reduce) {
+  .experience-shell .experience-workspace .button { transition: none; }
+}

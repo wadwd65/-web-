@@ -1,23 +1,23 @@
 {
   "schemaVersion": 1,
   "updatedAt": "2026-11-05",
-  "workingVersion": "0.45.0",
-  "releasedVersion": "0.45.0",
+  "workingVersion": "0.46.0",
+  "releasedVersion": "0.46.0",
   "workState": "reviewed_internally",
-  "objective": "v0.45标志微交互、精致字排与第二幕文案已自检、保存并推送。",
-  "latestUserRequest": "用户要求更细腻入场、第二幕去句号/调整文字、首屏莱茵标志动态和明显悬停/小彩蛋、字体优雅。",
+  "objective": "主页鼠标反馈保留，首页按钮恢复v45；工具子页主按钮更清楚、工资计算更顺手。",
+  "latestUserRequest": "用户澄清只加强工具子界面按钮；首页按钮样式/文字恢复v0.45，保留主页鼠标反馈增强。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5186/?v=0.45.0#/home",
-    "snapshot": "first-step-标志微交互与入场字排-v0.45.0",
+    "url": "http://127.0.0.1:5186/?v=0.46.0#/home",
+    "snapshot": "first-step-工具按钮与填写体验-v0.46.0",
     "state": "ready_for_user_review"
   },
   "implemented": {
     "business": "保留八项限定本地工具及共享询问清单，八工具统一迁入#/tools，支持完全不经AI手动操作。 v0.36合同问题可主动附带原文/确认值/来源，清单改写、答复、状态、搜索、导出和可选账号保存保留关联。",
     "music": "八曲/单audio；原五曲加海愿（彼端）、Everything’s Alright纯音乐、春弦。首页切歌弹菜单即播不跳页，播放器接续进度，八匣可抽取/旋转，内部滚动、真实384格波形和官方fallback白名单均按目录适配。新增盘面复用原五张署名场景。",
     "visual": "保留浅蓝银色完整主体/音乐和原三维；新增同系统的轻量阅读布局、页首/聊天模式切换，简易播放器居中目录。完整模式模型/粒子/材质/抽取/播放旋转未重做。 v0.33首页去重复入口，v0.35.1自由输入常驻、补问可选、字色/字段对比加强、返回状态放页底不遮清单。 v0.35.2本地工具页问题入口/八项首屏列表、全屏浅色对话阅读布局已实现，尚待最终QA和用户反馈。 v0.36收起工作区重复底部入口、精简合同/清单标题和空白、确认后仍可读；v0.35.2跨模式/1041桌面检查已补。 v0.40仅保留左侧入口和底部横向提问的新布局，其余恢复v0.39；轨道/蓝雾/黄金比例图形撤回，46号为事实。",
-    "interaction": "前景模型的图内/文字子选项保留，要求手势开始和结束均为稳定前景、同pointer/物体/子区域、总位移≤6px且在画布内；后排只预览，无任意双击跳页。工作区/音乐/对话共享原业务与单audio。 v0.41完整首页每次加载等待点击/Enter，不因seen跳过；页面隐藏/准备不消耗阶段，提前唤起三维，跳过/回放和单audio连续，47号为说明。 v0.42按48号拆开等待与演出，恢复原文字逐字、符号绘制、三段事务及双幕，序列4.9秒。 v0.43按49号增加入场持续环境动态及局部鼠标视差，按钮固定，入口卸载清理。 v0.45首屏标志悬停/聚焦流光与独立点击彩蛋，第二幕去句号与文案/字排/细线动画精修，52号为交接。",
+    "interaction": "前景模型的图内/文字子选项保留，要求手势开始和结束均为稳定前景、同pointer/物体/子区域、总位移≤6px且在画布内；后排只预览，无任意双击跳页。工作区/音乐/对话共享原业务与单audio。 v0.41完整首页每次加载等待点击/Enter，不因seen跳过；页面隐藏/准备不消耗阶段，提前唤起三维，跳过/回放和单audio连续，47号为说明。 v0.42按48号拆开等待与演出，恢复原文字逐字、符号绘制、三段事务及双幕，序列4.9秒。 v0.43按49号增加入场持续环境动态及局部鼠标视差，按钮固定，入口卸载清理。 v0.45首屏标志悬停/聚焦流光与独立点击彩蛋，第二幕去句号与文案/字排/细线动画精修，52号为交接。 v0.46主页鼠标可见性增强，简易仅点击反馈。工具主按钮和页签文案清楚，工资逐项确认0/示例先填后算；首页按钮强化候选按用户更正撤回，恢复45。",
     "api": "真实同源Node助手网关与DeepSeek function calling；四项白名单工具，共用工资/合同规则；取消、超时、限额、Origin/Host与输入证据校验。旧文档review客户端仍仅协议预留。 v0.39进程环境PUBLIC_ORIGIN可指定一个HTTPS站点，AI/图像/账号共用Host/Origin精确校验；serve支持PORT和显式HOST，公开指纹资源缓存。仅本地代理条件模拟验过，实际部署待。",
     "copy": "首页、目录与对话采用直接用语，区分本地规则、真实助手、单图校对和小范围检索。",
     "ai": "真实DeepSeek先plan_tasks识别意图/事项（最多3候选）、必要补问（最多3项）/先选一件/纠正/未知/超范围；原4项执行工具仍共用规则，非ready不执行。补问与选择的固定安全提示标记guide，解释/工具后的模型文字标记model。金额分次原话逐段校验、最新更正/撤回校验；新用户消息后旧应用停用，仅最新结果可显式填入工具/清单。聊天入口仍只读文字，合同单图能力见image字段；v0.35有小范围官方合同RAG，材料不自动发。 v0.33按序保留所有用户原话，仅折叠早期助手解释，约20k材料上限；不生成事实摘要。收起继续、停止可重试、旧动作停用；实际阶段NDJSON/JSON兼容。 v0.35.1直接自由回复/换题，补问可选；一般解释先答，明确打开时给入口；已说明未知的工资项给查找方法。 v0.38修一般租房咨询计划冲突，补明确的计划重试信息；已观察越界解释回退到原摘录并标guide。",
@@ -78,31 +78,31 @@
   ],
   "currentPlan": [
     {
-      "id": "entry-detail",
+      "id": "pointer-and-entry",
       "status": "complete",
-      "acceptance": "标志完整，悬停/键盘与点击反馈清楚，第二幕无句号且字体/字距协调。"
+      "acceptance": "完整跟随/点击可见，简易仅点击；首页按钮样式/文字与v45一致，八工具在子页。"
     },
     {
-      "id": "entry-review",
+      "id": "calculation-usability",
       "status": "complete",
-      "acceptance": "实际播放、截图、回放、输入保留与单audio，静态/减少动态和清理检查。"
+      "acceptance": "蓝色主操作，金额明确输入，逐项确认0，示例先填后算；数字/未知/规则保持正确。"
     },
     {
-      "id": "save-release",
+      "id": "review-save",
       "status": "complete",
-      "acceptance": "记忆/日志同步，新保存点及正确Git仓库一致。"
+      "acceptance": "实际新人路径、正常/错误/更正/模式检查，保存日志和源码包Git一致。"
     }
   ],
   "validation": {
-    "version": "0.45.0",
-    "automated": "139 tests, entry phase 4 tests, TypeScript/build passed; shared Three 583KB warning remains.",
-    "evidence": "outputs/v045-review",
-    "visualAcceptance": "1280×720首屏、纯悬停、鼠标/键盘彩蛋和第二幕逐图复核；角标位置和缺字已修。用户反馈待。",
-    "manual": "hover=true/pressed=false时trace=1、scale=1.08；Enter彩蛋仍waiting。动态dash/transform两次不同。二幕无句号、字重320、两路径offset=0；整段/回放、未发送输入保留、单audio连续；退出后入口/彩蛋0、inert解除，无溢出或warn/error。 最末CSS审查修正已激活trace的暂停选择器权重，重建通过。",
-    "performance": "CSS交互、单布尔状态，隐藏trace及演出中的标志暂停。原指针/清理逻辑共用；低配实机待。",
-    "online": "本轮AI未复跑；两字字体来自与原SHA一致的官方Noto源。",
-    "limits": "后台/系统减少动态分支代码审查，实际设备切换和新人/低配仍待。",
-    "savedPreview": "桌面保存版5186实际0.45.0，彩蛋独立触发、第二幕标题、整段播放通过；结束入口/彩蛋0、单audio、首页解除inert，无溢出或warn/error。1380字节补充字体font/woff2，实际内容与构建一致。"
+    "version": "0.46.0",
+    "automated": "139 tests, TypeScript/build passed; shared Three 583KB warning remains.",
+    "evidence": "outputs/v046-review",
+    "visualAcceptance": "最终首页三入口透明、原文案，工具填/算/下载蓝色按钮及工资输入逐图检查。首页填色候选已撤回。用户反馈待。",
+    "manual": "漏填其他扣款提示并聚焦，确认0保留焦点；8000→6534、改9000→7534及实际下载一致；个税1080/差920、返回填写执行按钮可见。单鼠标层，简易echo1/ring0，输入mode off/active0，无warn/error。",
+    "performance": "固定节点池，简易不注册组件跟随事件，按需点击；真实低配仍待。",
+    "online": "AI主线未复跑，规则/白名单未改。",
+    "limits": "真实新人/低配、公网和独立材料准确率未验。",
+    "savedPreview": "正式5186实际0.46.0，示例工资6534、单鼠标层；首页3入口透明/原文案，工资填写页白字蓝底主按钮rgb36/126/173。控制台无warn/error，当前构建index与保存版一致。"
   },
   "nextActions": [
     "用户部署支持Node的试用网址，按45号设置进程环境并核验实际HTTPS/AI/图像/账号/音乐。",
@@ -132,7 +132,7 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "published",
+    "pushStatus": "ready_to_push",
     "sourceCommit": "c6515b3dcc32a65547ff7b0977e7db676d69eed0",
     "verifiedAt": "2026-11-05",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
@@ -158,7 +158,7 @@
     "usability": "用户继续否定v0.35.1入口观感，不愿使用；v0.35.2重排后尚未反馈。",
     "acceptance": "v42内部视觉/连续过程已审，用户反馈待收集。",
     "modePolicy": "默认完整，卡顿自动切简易，允许手动恢复；覆盖助手此前建议的默认简易。",
-    "latestVisual": "本轮要求首屏莱茵标志微交互、细节彩蛋与字体，第二幕去句号调整文字；完成后待实际反馈。",
+    "latestVisual": "用户强调只加强工具子界面按钮，首页按钮恢复之前；已落实到最终源码和画面，鼠标反馈仍增强。",
     "realUsage": "用户改为先优化，之后上线网址邀新人及低配用户体验。"
   },
   "nextIteration": {
@@ -243,7 +243,7 @@
   "executionPlan": {
     "date": "2026-11-01",
     "document": "docs/36-next-execution-plan.md",
-    "state": "v045_entry_detail_saved_reviewed",
+    "state": "v046_tools_saved_reviewed",
     "nextMilestone": "Actual deployment URL verification, novice users and low-end device evidence",
     "executionHours": [
       34,
@@ -267,12 +267,12 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v045_updated_desktop_verified"
+    "status": "v046_updated_desktop_verified"
   },
   "savedWork": {
-    "version": "0.45.0",
-    "snapshot": "first-step-标志微交互与入场字排-v0.45.0",
+    "version": "0.46.0",
+    "snapshot": "first-step-工具按钮与填写体验-v0.46.0",
     "state": "saved_and_reviewed",
-    "review": "docs/52-entry-mark-and-typography-v045.md"
+    "review": "docs/53-tool-actions-and-pointer-v046.md"
   }
 }
