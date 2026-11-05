@@ -112,3 +112,7 @@ entry-sequence.ts为可测试的主动启动/可见时间阶段钟，ExperienceE
 ## v0.42 等待与演出层
 
 ExperienceEntry将entry-welcome等待构图与entry-film演出独立放置，同一可见时间时钟控制900/2700/3100/4450/4900ms节点。原父级intro与introReveal继续控制防误触和三维唤起。入场符号局部SVG采用标准化路径长度，沿用共享原路径。
+
+## v0.43 入场环境层
+
+入口装饰由entry-atmosphere及固定16点构成，CSS负责持续运动。局部pointermove只合并写入CSS变量，按钮布局独立。页面可见性同步根与子动画暂停，卸载取消RAF/监听，原阶段时钟继续负责序列进退。

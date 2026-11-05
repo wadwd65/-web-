@@ -18,11 +18,19 @@ const CHAPTERS = [
   ['06—08', '安顿生活'],
 ];
 
+const AMBIENT_POINTS = Array.from({length: 16}, (_, index) => ({
+  x: 7 + (index * 29) % 86,
+  y: 13 + (index * 19) % 71,
+  duration: 7 + index % 5,
+  delay: -index * 1.3,
+}));
+
 /** The welcome screen holds until the user starts the original staged opening. */
 export default function ExperienceEntry({ready, onComplete, onReveal, staticMode = false, onMusicToggle, musicPlaying = false}: EntryProps) {
   const [sequence] = useState(() => createEntrySequence(staticMode || matchMedia('(prefers-reduced-motion: reduce)').matches));
   const [view, setView] = useState(sequence.state);
   const [started, setStarted] = useState(false);
+  const [pageVisible, setPageVisible] = useState(() => !document.hidden);
   const callbacks = useRef({onComplete, onReveal, ready});
   const finished = useRef(false);
   const revealed = useRef(false);
@@ -52,6 +60,49 @@ export default function ExperienceEntry({ready, onComplete, onReveal, staticMode
     sequence.skip();
     finish();
   }
+
+  useEffect(() => {
+    const element = panel.current;
+    if (!element) return;
+    const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
+    let frame = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+
+    function paintPointer() {
+      frame = 0;
+      element?.style.setProperty('--entry-pan-x', `${pointerX.toFixed(2)}px`);
+      element?.style.setProperty('--entry-pan-y', `${pointerY.toFixed(2)}px`);
+    }
+    function resetPointer() {
+      cancelAnimationFrame(frame);
+      pointerX = 0;
+      pointerY = 0;
+      paintPointer();
+    }
+    function movePointer(event: PointerEvent) {
+      if (staticMode || motionPreference.matches || event.pointerType !== 'mouse') return;
+      pointerX = (event.clientX / window.innerWidth - .5) * 24;
+      pointerY = (event.clientY / window.innerHeight - .5) * 18;
+      if (!frame) frame = requestAnimationFrame(paintPointer);
+    }
+    function visibility() {
+      setPageVisible(!document.hidden);
+      if (document.hidden) resetPointer();
+    }
+
+    element.addEventListener('pointermove', movePointer, {passive: true});
+    element.addEventListener('pointerleave', resetPointer);
+    document.addEventListener('visibilitychange', visibility);
+    motionPreference.addEventListener('change', resetPointer);
+    return () => {
+      cancelAnimationFrame(frame);
+      element.removeEventListener('pointermove', movePointer);
+      element.removeEventListener('pointerleave', resetPointer);
+      document.removeEventListener('visibilitychange', visibility);
+      motionPreference.removeEventListener('change', resetPointer);
+    };
+  }, [staticMode]);
 
   useEffect(() => {
     startButton.current?.focus();
@@ -123,10 +174,25 @@ export default function ExperienceEntry({ready, onComplete, onReveal, staticMode
     ref={panel}
     className={`experience-entry ee-cinematic ee-phase-${view.phase} ${playing ? 'ee-running' : 'ee-waiting'}`}
     data-entry-state={started ? (ready ? 'playing' : 'preparing') : 'waiting'}
+    data-page-visible={pageVisible}
+    data-entry-static={staticMode}
     role="dialog" aria-modal="true" aria-labelledby="experience-entry-title" tabIndex={-1}
   >
     <div className="ee-curtain ee-curtain-left" aria-hidden="true" />
     <div className="ee-curtain ee-curtain-right" aria-hidden="true" />
+    <div className="entry-atmosphere" aria-hidden="true">
+      <div className="entry-light-sheet"/>
+      <div className="entry-ambient-points">
+        {AMBIENT_POINTS.map((point, index) => <i key={index} style={{
+          '--point-x': `${point.x}%`, '--point-y': `${point.y}%`,
+          '--point-duration': `${point.duration}s`, '--point-delay': `${point.delay}s`,
+        } as CSSProperties}/>)}
+      </div>
+      <svg className="entry-flow-lines" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+        <g className="entry-flow-base"><path d="M-40 630H230L380 480"/><path d="M1220 420L1390 250H1640"/><path d="M100 0V145L190 235"/><path d="M1410 665L1500 755V940"/></g>
+        <g className="entry-flow-traces"><path pathLength={1} d="M-40 630H230L380 480"/><path pathLength={1} d="M1220 420L1390 250H1640"/></g>
+      </svg>
+    </div>
     <div className="entry-registration" aria-hidden="true"><i/><i/><i/><i/></div>
     <header className="entry-header"><span>莱茵生命 / RHINE LAB</span><span>FIRST STEP — LIFE IN PROGRESS</span></header>
 
