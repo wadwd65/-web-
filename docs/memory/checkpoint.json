@@ -1,10 +1,10 @@
 {
-  "version": "0.43.0",
-  "recordedAt": "2026-11-05T02:50:36.923Z",
+  "version": "0.44.0",
+  "recordedAt": "2026-11-05T07:38:27.058Z",
   "workState": "reviewed_internally",
-  "validationVersion": "0.43.0",
+  "validationVersion": "0.44.0",
   "textNormalisation": "LF",
-  "sourceDigest": "950d385eefb24ccd0b779453b3c8945b1af34fc9265f109762544cc3c46c300f",
+  "sourceDigest": "f5aa97312fbcdd9aef5729bb68fde77673cdcccf5ec94bc2dcfdad6198fcfd5b",
   "files": [
     {
       "path": ".env.example",
@@ -12,35 +12,35 @@
     },
     {
       "path": "AGENTS.md",
-      "sha256": "e2420a5631479ab5502cfaf730a7a078649c9e5d9a48f6b159de6548d89962bf"
+      "sha256": "1270af70a24a36e455324ff991bd3e3088a167fd4766a2c1f0dfb5680080c651"
     },
     {
       "path": "docs/memory/ARCHITECTURE.md",
-      "sha256": "d099f43f83fef9df9836622d49053e50dc851a122a2c41188c55f86aa141c84b"
+      "sha256": "099317af2320373ea8ec04fa111d9f5202ce6c9944c5988576ff1dcac666ff88"
     },
     {
       "path": "docs/memory/BACKLOG.md",
-      "sha256": "9401f9a2059a285dafd7ed5e93d23b1bd81f06e12adbd2201651216cc12fb502"
+      "sha256": "2c6dd94b64c23a2a2eb1385cbf3902c1b152c8ade4d2b813f8a05844f2b9e8ab"
     },
     {
       "path": "docs/memory/DECISIONS.md",
-      "sha256": "e985b32e564110ce8559461c121bb8ac81e67b6d8d5cfc967ed64f06c62c7935"
+      "sha256": "9d881088df860a5546c3f7cf164bd14151cf741bb7b491829c57cacb090aad42"
     },
     {
       "path": "docs/memory/SESSIONS.md",
-      "sha256": "b9cc9a3ae560311439554f2e37bc00d4a1b18eaf66dbec083afe3dab3746def6"
+      "sha256": "fa1834c3284fe245e0bb36fc76b9da55c84c52396bc385d0be93785ee1fcdf8e"
     },
     {
       "path": "docs/memory/progress.json",
-      "sha256": "6e0c73c34dad2e7e5bb5416cf8aff6f8fbbdaea16ec3c4320a87577cc142ae30"
+      "sha256": "f22d660f76f56cad8709029050a1d318cee60cc35c4a3340851d816f5b9b39b9"
     },
     {
       "path": "package-lock.json",
-      "sha256": "4cfb11dcab0e49666cebedfb37a086f304e89fa7a9b31caea107f3ed888a7328"
+      "sha256": "da1d0daecbb8bc707eec3ff78d9ff4be1d80a76bd6ace9b8fb6f5ca94c9579d5"
     },
     {
       "path": "package.json",
-      "sha256": "a9553fa370e80d8f1206290019a919164c1b638d604eebeb145e1c2976204ee8"
+      "sha256": "0f7390268605fe2d33864b123a962cddf4eb6427797af05426155e150c1bf757"
     },
     {
       "path": "public/artwork/rhine-ascent.png",
@@ -67,8 +67,20 @@
       "sha256": "51ce1c5a61f69905026cdf645b93fe696931f322e3cc1883e0b6c1f64f694a78"
     },
     {
+      "path": "public/audio/232200-0e0a48a021.mp3",
+      "sha256": "0e0a48a021ac3641ea1da739c433cf64ab22621c8ba01e82b17f9c72f2faa0bf"
+    },
+    {
+      "path": "public/audio/232209-7a0087a6e9.mp3",
+      "sha256": "7a0087a6e9305a642d539f147260c87f6140d44492c492d3f1e80a18abc74e35"
+    },
+    {
       "path": "public/audio/232265-7f214bc96f.mp3",
       "sha256": "7f214bc96fb160db69b1cde1eed4ad6c384f7286cbf205b3dd09beb008214c45"
+    },
+    {
+      "path": "public/audio/306827-c01e0eb050.mp3",
+      "sha256": "c01e0eb050163fd3b2dae06d365f34a0ae2ef9d1c93cfc3e98263cfdf91a7ab1"
     },
     {
       "path": "public/audio/461158-839cde2a29.mp3",
@@ -88,15 +100,27 @@
     },
     {
       "path": "public/audio/catalog.json",
-      "sha256": "e6668eb6ea07db13a5059c6c921a09edf8d4d0129acfef3408b69d25f2c32bac"
+      "sha256": "9640007d689b4bbc85f1df416c6fd37ae377c8f4118a5450a89189f6caa144ae"
     },
     {
       "path": "public/audio/peaks/125074.json",
       "sha256": "fd9aa51f3804dee68e9148f7994a1f431bf1118003902528600778d918cb7a01"
     },
     {
+      "path": "public/audio/peaks/232200.json",
+      "sha256": "5878400e9af4f99341e3e1d39a18814c6e6eb487dddb2e4ab2229cd169e15242"
+    },
+    {
+      "path": "public/audio/peaks/232209.json",
+      "sha256": "c4c847a12c5a53f6e27e0dbeab5e9e51335707a2b2ba2a50b826edc01aaaa506"
+    },
+    {
       "path": "public/audio/peaks/232265.json",
       "sha256": "3b0295a8ec5b4db0925610ef20d7927c2be676490d96f08e4322abab0502fbb9"
+    },
+    {
+      "path": "public/audio/peaks/306827.json",
+      "sha256": "0352531ba27463d8e08d0c79cc0727676d39d6e3ce2c735c79542f4ce61fc81d"
     },
     {
       "path": "public/audio/peaks/461158.json",
@@ -124,7 +148,11 @@
     },
     {
       "path": "public/credits/models.html",
-      "sha256": "0a3071f60043f955923ea24e02154964915fa83a1d976f0fb93beebb330ffe1f"
+      "sha256": "606d0a9daae61a2d14ca6236cda20197225667d1eac996ddd156df094083c382"
+    },
+    {
+      "path": "public/credits/music-source.json",
+      "sha256": "a95d5d9debba0caba9e5accb817aec537eb2435dfa568802664aac976277c89e"
     },
     {
       "path": "public/favicon.svg",
@@ -184,7 +212,7 @@
     },
     {
       "path": "src/ExperienceEntry.tsx",
-      "sha256": "f6bb1faadc02085bdfb771cb3a0db65273df7e3f0663940878687848d50b3529"
+      "sha256": "4439851f1a758f6f9e0b115f598d19339c09d1fc749889f77ad02ec38643369e"
     },
     {
       "path": "src/ExperienceWorkspace.tsx",
@@ -200,15 +228,15 @@
     },
     {
       "path": "src/MusicArchiveScene.tsx",
-      "sha256": "38b9147d23c05d2c27065f98238d2f6b24df711a5a3ca0084ed8aa95b52e0f4b"
+      "sha256": "4111f3f6ac8ad602ad60c306e99deb8933e922ee36f412060eeedaf4593932a6"
     },
     {
       "path": "src/MusicPlayer.tsx",
-      "sha256": "c6c2ff3004b2749ca61fb7d6574bd1e43521bb4d30d450d04eaa07cfe8cc619d"
+      "sha256": "24225a82b03623866863e5a0a9a391c78116abee0c7117bc7e98395556038bc3"
     },
     {
       "path": "src/MusicQuickPicker.tsx",
-      "sha256": "b9ef19556d85f5d131193dd43a17c9f829d1ff86faec68e5a31159a8f2931626"
+      "sha256": "56360ef1144514e18b8d1f28ef19be34871f484153c79bbb9567df23c1bf7e2c"
     },
     {
       "path": "src/MusicSpectrum.tsx",
@@ -304,7 +332,7 @@
     },
     {
       "path": "src/entry-sequence.css",
-      "sha256": "ff338b8d9fbff359bd27cd90e2982d5031316bf41b20df86cbb41b5ba85dbde0"
+      "sha256": "9c2cf49c3bc47701d3743781eb9f7bb3b3e611ce8120c9a4e1e356301421591b"
     },
     {
       "path": "src/entry-sequence.ts",
@@ -380,11 +408,11 @@
     },
     {
       "path": "src/music-artwork.ts",
-      "sha256": "140b3d567008d572ebf12d0dd61d6ef126d4b7ff56e51fa1fe26c86e44119d8d"
+      "sha256": "292bb1651d43513af2c046661a3adfd7cb44c104703c30ce2c8a9824031f47a1"
     },
     {
       "path": "src/music-atmosphere.ts",
-      "sha256": "13130573a4a216314c7700f01b4a9f8b26a630ca793a2482cf2dbe6dfe7103d9"
+      "sha256": "983538fba63a9a1e1d80affa8d70318a9b94368570538458247e88586f1d07ed"
     },
     {
       "path": "src/music-mode.ts",
@@ -392,7 +420,7 @@
     },
     {
       "path": "src/music-player.css",
-      "sha256": "ba1c2d72797298ccb197c14e4d02448b14e225d973ebd93031105f237e42a283"
+      "sha256": "c29a88253f14f64578c9a7a960c3692cfe83e678e23b2af862911d692d680d7f"
     },
     {
       "path": "src/music-scene-loader.ts",
@@ -564,11 +592,11 @@
     },
     {
       "path": "tests/music-player.test.ts",
-      "sha256": "3af60ab8d122ea94be06604faa5ad1f275097b070abe24d280b28c3b53079017"
+      "sha256": "3de926041c4aa345a8c215754c14f7d0ec3a4169a2fea1c447922a32c21c1062"
     },
     {
       "path": "tests/performance-audio.test.ts",
-      "sha256": "407b53cf1945f6b7fbadd50160d3e4162dc8f0de287b05c822bfa0a0b15e17ca"
+      "sha256": "ae226d3a002e808aac0f91b62f76b9d20d8bcd9fa726a4e691410af22439c9c1"
     },
     {
       "path": "tests/render-cost.test.ts",
@@ -624,7 +652,7 @@
     },
     {
       "path": "tools/music-source.mjs",
-      "sha256": "f764fa0bbe43630ec5c2593c572b3bdc9311fc25900778d1f82f60d070019cef"
+      "sha256": "80bf17fa63bdd56d4b6933d7ae056b355363011f155e194a369a89ea580d0c9c"
     },
     {
       "path": "tools/project-memory.mjs",

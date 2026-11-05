@@ -2,24 +2,53 @@
  * environments. These are not the songs' official album covers. */
 const artworkFiles=['rhine-corridor.png','rhine-sky.png','rhine-ascent.png','rhine-energy.png','rhine-ecolab.png'];
 export const MUSIC_ATMOSPHERES=['扫描光','横向云流','上升星尘','扩散光环','漂浮微粒'] as const;
-const images:(HTMLImageElement|null)[]=Array(5).fill(null);
+const images:(HTMLImageElement|null)[]=Array(artworkFiles.length).fill(null);
 let artworkPromise:Promise<void>|null=null;
 export function warmArtworkAssets(){return artworkPromise??=Promise.allSettled(artworkFiles.map(async(file,index)=>{const image=new Image();image.src='/artwork/'+file;await image.decode();images[index]=image;})).then(()=>{thumbnails.clear();});}
 export const MUSIC_EDITIONS=[
- {accent:'#b4e5e6',secondary:'#8caed9',ink:'#153342',mood:'理性 · 细密 · 克制',word:'STRUCTURE',subtitle:'秩序之中，仍有回声。'},
- {accent:'#bad3ff',secondary:'#e9bba6',ink:'#253a62',mood:'辽阔 · 舒展 · 向外',word:'HORIZON',subtitle:'把目光，留给更远的地方。'},
- {accent:'#d4d4ff',secondary:'#91d8ea',ink:'#303657',mood:'空灵 · 上升 · 明亮',word:'ASCENT',subtitle:'循着微光，向上而行。'},
- {accent:'#edc5ad',secondary:'#a7c8e6',ink:'#3a394b',mood:'沉静 · 坚定 · 推进',word:'IMPULSE',subtitle:'愿望在寂静中持续生长。'},
- {accent:'#c2ded0',secondary:'#b6c8ff',ink:'#243f49',mood:'清透 · 期待 · 延展',word:'EMERGENCE',subtitle:'在此刻，听见将至的未来。'},
+ {accent:'#b4e5e6',secondary:'#8caed9',ink:'#153342',mood:'理性 · 细密 · 克制',word:'STRUCTURE',subtitle:'秩序之中，仍有回声。',artwork:0,atmosphere:0,overlay:'#5183a41a'},
+ {accent:'#bad3ff',secondary:'#e9bba6',ink:'#253a62',mood:'辽阔 · 舒展 · 向外',word:'HORIZON',subtitle:'把目光，留给更远的地方。',artwork:1,atmosphere:1,overlay:'#5183a41a'},
+ {accent:'#d4d4ff',secondary:'#91d8ea',ink:'#303657',mood:'空灵 · 上升 · 明亮',word:'ASCENT',subtitle:'循着微光，向上而行。',artwork:2,atmosphere:2,overlay:'#5183a41a'},
+ {accent:'#edc5ad',secondary:'#a7c8e6',ink:'#3a394b',mood:'沉静 · 坚定 · 推进',word:'IMPULSE',subtitle:'愿望在寂静中持续生长。',artwork:3,atmosphere:3,overlay:'#5183a41a'},
+ {accent:'#c2ded0',secondary:'#b6c8ff',ink:'#243f49',mood:'清透 · 期待 · 延展',word:'EMERGENCE',subtitle:'在此刻，听见将至的未来。',artwork:4,atmosphere:4,overlay:'#5183a41a'},
+ {
+  accent:'#9bdce1',secondary:'#91bce9',ink:'#1f4259',
+  mood:'深蓝 · 流动 · 远方',word:'BEYOND',subtitle:'彼端 · 水月与深蓝之树',
+  artwork:1,atmosphere:1,overlay:'#16528654',motif:'water',
+ },
+ {
+  accent:'#c1e6e1',secondary:'#f0d1ad',ink:'#314f5c',
+  mood:'轻快 · 松弛 · 清亮',word:'DAYLIGHT',subtitle:'放松一点，继续向前。',
+  artwork:1,atmosphere:4,overlay:'#dabf8b20',
+ },
+ {
+  accent:'#e8d3bc',secondary:'#c7dfc7',ink:'#43545d',
+  mood:'温暖 · 舒展 · 轻盈',word:'SPRING',subtitle:'春弦 · 轻轻展开的旋律',
+  artwork:2,atmosphere:2,overlay:'#c5ba8d25',
+ },
 ] as const;
-export const musicEdition=(index:number)=>MUSIC_EDITIONS[((index%5)+5)%5];
+export const musicEdition=(index:number)=>MUSIC_EDITIONS[((index%MUSIC_EDITIONS.length)+MUSIC_EDITIONS.length)%MUSIC_EDITIONS.length];
+export const musicAtmosphere=(index:number)=>MUSIC_ATMOSPHERES[musicEdition(index).atmosphere];
 
 /** A shared motif joins the physical label, cover thumbnail and listening UI. */
 export function drawEdition(canvas:HTMLCanvasElement,index:number,typography=true){
  const c=canvas.getContext('2d')!,s=canvas.width,d=musicEdition(index);c.save();c.scale(s/512,s/512);
- const image=images[index];if(image){
+ const image=images[d.artwork];if(image){
   const side=Math.min(image.naturalWidth,image.naturalHeight),left=(image.naturalWidth-side)*.5,top=(image.naturalHeight-side)*.5;c.drawImage(image,left,top,side,side,0,0,512,512);
-  c.fillStyle='#5183a41a';c.fillRect(0,0,512,512);const shade=c.createLinearGradient(0,230,0,512);shade.addColorStop(0,'#07172700');shade.addColorStop(1,'#061623dc');c.fillStyle=shade;c.fillRect(0,0,512,512);
+  c.fillStyle=d.overlay;c.fillRect(0,0,512,512);
+  if('motif' in d && d.motif==='water'){
+   c.save();c.strokeStyle='#c6f3f761';c.lineWidth=1.2;
+   for(let wave=0;wave<7;wave++){
+    c.beginPath();
+    for(let x=0;x<=512;x+=8){
+     const y=120+wave*43+Math.sin(x/85+wave*.7)*8;
+     if(x===0)c.moveTo(x,y);else c.lineTo(x,y);
+    }
+    c.stroke();
+   }
+   c.restore();
+  }
+  const shade=c.createLinearGradient(0,230,0,512);shade.addColorStop(0,'#07172700');shade.addColorStop(1,'#061623dc');c.fillStyle=shade;c.fillRect(0,0,512,512);
   if(typography){c.fillStyle='#eef8fd';c.font='500 32px Arial,sans-serif';c.fillText(d.word,29,446);c.fillStyle=d.accent;c.font='11px ui-monospace,monospace';c.fillText(`R / ${String(index+1).padStart(2,'0')}    RHINE LAB / SOUND`,31,470);}c.restore();return canvas;
  }
  c.fillStyle=d.ink;c.fillRect(0,0,512,512);

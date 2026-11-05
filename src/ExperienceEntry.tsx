@@ -196,6 +196,12 @@ export default function ExperienceEntry({ready, onComplete, onReveal, staticMode
     <div className="entry-registration" aria-hidden="true"><i/><i/><i/><i/></div>
     <header className="entry-header"><span>莱茵生命 / RHINE LAB</span><span>FIRST STEP — LIFE IN PROGRESS</span></header>
 
+    <div className="entry-side-index" aria-hidden="true">
+      <small>WORK / LIFE</small><span>08</span>
+      <div>{Array.from({length: 8}, (_, index) => <i key={index}/>)}</div>
+      <p>从眼前的问题开始</p>
+    </div>
+
     <section className="entry-welcome" aria-hidden={playing} inert={playing}>
       <div className="entry-welcome-mark" aria-hidden="true"><RhineMark/></div>
       <p className="entry-eyebrow">YOUR NEXT CHAPTER</p>

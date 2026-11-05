@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
   "updatedAt": "2026-11-05",
-  "workingVersion": "0.43.0",
-  "releasedVersion": "0.43.0",
+  "workingVersion": "0.44.0",
+  "releasedVersion": "0.44.0",
   "workState": "reviewed_internally",
-  "objective": "v43入场持续动态与局部鼠标回应已保存复核，默认5186及正确仓库同步完成。",
-  "latestUserRequest": "用户要求入场增加动态效果，当前画面偏干，须自行检查。",
+  "objective": "入场少量索引细节，新增海愿(彼端)/Everything’s Alright纯音乐/春弦，八唱片适配与实际播放自检。",
+  "latestUserRequest": "完成v0.44后推送正确仓库，进行仓库检查并记录各版本内容。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5186/?v=0.43.0#/home",
-    "snapshot": "first-step-入场动态增强-v0.43.0",
+    "url": "http://127.0.0.1:5186/?v=0.44.0#/home",
+    "snapshot": "first-step-入口细节与八首唱片-v0.44.0",
     "state": "ready_for_user_review"
   },
   "implemented": {
     "business": "保留八项限定本地工具及共享询问清单，八工具统一迁入#/tools，支持完全不经AI手动操作。 v0.36合同问题可主动附带原文/确认值/来源，清单改写、答复、状态、搜索、导出和可选账号保存保留关联。",
-    "music": "五曲/单audio；首页切歌弹小菜单点选即播不跳页，播放器进入完整三维声音档案并接续曲目/进度；v0.25抽取、旋转及逐曲环境保留。",
+    "music": "八曲/单audio；原五曲加海愿（彼端）、Everything’s Alright纯音乐、春弦。首页切歌弹菜单即播不跳页，播放器接续进度，八匣可抽取/旋转，内部滚动、真实384格波形和官方fallback白名单均按目录适配。新增盘面复用原五张署名场景。",
     "visual": "保留浅蓝银色完整主体/音乐和原三维；新增同系统的轻量阅读布局、页首/聊天模式切换，简易播放器居中目录。完整模式模型/粒子/材质/抽取/播放旋转未重做。 v0.33首页去重复入口，v0.35.1自由输入常驻、补问可选、字色/字段对比加强、返回状态放页底不遮清单。 v0.35.2本地工具页问题入口/八项首屏列表、全屏浅色对话阅读布局已实现，尚待最终QA和用户反馈。 v0.36收起工作区重复底部入口、精简合同/清单标题和空白、确认后仍可读；v0.35.2跨模式/1041桌面检查已补。 v0.40仅保留左侧入口和底部横向提问的新布局，其余恢复v0.39；轨道/蓝雾/黄金比例图形撤回，46号为事实。",
     "interaction": "前景模型的图内/文字子选项保留，要求手势开始和结束均为稳定前景、同pointer/物体/子区域、总位移≤6px且在画布内；后排只预览，无任意双击跳页。工作区/音乐/对话共享原业务与单audio。 v0.41完整首页每次加载等待点击/Enter，不因seen跳过；页面隐藏/准备不消耗阶段，提前唤起三维，跳过/回放和单audio连续，47号为说明。 v0.42按48号拆开等待与演出，恢复原文字逐字、符号绘制、三段事务及双幕，序列4.9秒。 v0.43按49号增加入场持续环境动态及局部鼠标视差，按钮固定，入口卸载清理。",
     "api": "真实同源Node助手网关与DeepSeek function calling；四项白名单工具，共用工资/合同规则；取消、超时、限额、Origin/Host与输入证据校验。旧文档review客户端仍仅协议预留。 v0.39进程环境PUBLIC_ORIGIN可指定一个HTTPS站点，AI/图像/账号共用Host/Origin精确校验；serve支持PORT和显式HOST，公开指纹资源缓存。仅本地代理条件模拟验过，实际部署待。",
@@ -78,31 +78,32 @@
   ],
   "currentPlan": [
     {
-      "id": "ambient-motion",
+      "id": "details-audio",
       "status": "complete",
-      "acceptance": "等待时可见光点/细线/标志呼吸，鼠标轻微视差，按钮命中固定。"
+      "acceptance": "少量入口注记，三首来源核对/本地音频/波形/来源可追溯。"
     },
     {
-      "id": "motion-review",
+      "id": "eight-records",
       "status": "complete",
-      "acceptance": "实查循环运动、点击转场、回放/音乐，后台暂停和减少动态。"
+      "acceptance": "快捷八曲/列表滚动/八张真三维，新增三首可抽取/播放/切换，保持单audio。"
     },
     {
       "id": "save-release",
       "status": "complete",
-      "acceptance": "构建/必要检查，更新记忆日志，新保存点与预览对应。"
+      "acceptance": "检查构建/实际播放、记忆日志和新保存点，正确仓库同步。"
     }
   ],
   "validation": {
-    "version": "0.43.0",
+    "version": "0.44.0",
     "automated": "139 tests, TypeScript/build passed; shared Three 583KB warning remains.",
-    "evidence": "outputs/v043-review",
-    "visualAcceptance": "实查持续运动/构图及完整/回放，独立审图复核通过，用户反馈待收集。",
-    "manual": "标志computed transform/opacity两次不同；鼠标panY-7.88→5.05，按钮矩形不变；点击/Enter/回放、输入保留，装饰层退出数量0，单audio，无溢出或warn/error。",
-    "performance": "16CSS光点、局部RAF合并变量写入，入口退出清理；低配实机等待。",
-    "online": "当前业务/API沿用，在线AI本轮未复跑。",
-    "limits": "IAB新标签未触发hidden；实际后台/减少动态切换、低配与新人待实机验证。",
-    "savedPreview": "localhost:5280保存版16点、等待入口与整段转场通过；退出后装饰层0、单audio/唯一输入，首页解除inert，控制台无warn/error。默认5186实际0.43.0/index匹配。"
+    "evidence": "outputs/v044-review",
+    "visualAcceptance": "入口小索引、八匣总览与三张详情逐图复核；独立只读审查通过。用户反馈待。",
+    "manual": "新增三首实际本地播放、完全抽取/旋转/环境，首页第8首就地选曲、8→1循环、暂停、单audio通过；控制台无warn/error。",
+    "performance": "八匣保持原世界范围，单audio；低配实机待验证。",
+    "online": "新增三CID官方API实际解析通过；AI主线本轮未复跑。",
+    "limits": "真实低配/新人和公网验收仍待。",
+    "savedPreview": "桌面保存版5186实际0.44.0，点击进入/八首菜单/海愿完全抽取与本地播放通过。单audio、暂停，无warn/error；八首HTTP Range均206。",
+    "repository": "仓库副本npm ci后139测试/build、npm audit 0；当前路径与648历史文本blob常见密钥模式未命中，本地文档链接无缺失。51号记录范围和缺口。"
   },
   "nextActions": [
     "用户部署支持Node的试用网址，按45号设置进程环境并核验实际HTTPS/AI/图像/账号/音乐。",
@@ -132,7 +133,7 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "published",
+    "pushStatus": "ready_to_push",
     "sourceCommit": "02e7dfbdcf5a8efaa0051d42fdbba9409254b198",
     "verifiedAt": "2026-11-05",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
@@ -158,7 +159,7 @@
     "usability": "用户继续否定v0.35.1入口观感，不愿使用；v0.35.2重排后尚未反馈。",
     "acceptance": "v42内部视觉/连续过程已审，用户反馈待收集。",
     "modePolicy": "默认完整，卡顿自动切简易，允许手动恢复；覆盖助手此前建议的默认简易。",
-    "latestVisual": "用户要求为入场加动态，自检当前偏干；v43补持续动态和局部鼠标回应。",
+    "latestVisual": "用户希望入场再加少量细节，三首新增曲第一首更正为彼端，按海愿保留双名称。",
     "realUsage": "用户改为先优化，之后上线网址邀新人及低配用户体验。"
   },
   "nextIteration": {
@@ -243,7 +244,7 @@
   "executionPlan": {
     "date": "2026-11-01",
     "document": "docs/36-next-execution-plan.md",
-    "state": "v043_entry_saved_reviewed",
+    "state": "v044_saved_and_repository_audited",
     "nextMilestone": "Actual deployment URL verification, novice users and low-end device evidence",
     "executionHours": [
       34,
@@ -267,12 +268,12 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v043_updated_desktop_verified"
+    "status": "v044_updated_sync_pending"
   },
   "savedWork": {
-    "version": "0.43.0",
-    "snapshot": "first-step-入场动态增强-v0.43.0",
+    "version": "0.44.0",
+    "snapshot": "first-step-入口细节与八首唱片-v0.44.0",
     "state": "saved_and_reviewed",
-    "review": "docs/49-entry-ambient-motion-v043.md"
+    "review": "docs/50-entry-details-and-eight-records-v044.md"
   }
 }

@@ -1,0 +1,88 @@
+{
+  "checkedAt": "2026-11-05",
+  "tracks": [
+    {
+      "cid": "779491",
+      "name": "Rhine Lab.LLC",
+      "page": "https://monster-siren.hypergryph.com/music/779491",
+      "api": "https://monster-siren.hypergryph.com/api/song/779491",
+      "sourceHost": "res01.hycdn.cn",
+      "sha256": "49f868165d242c22a31192826afbe230009173de65bf89500695df2273b979f6",
+      "duration": 77.678594,
+      "encoding": "MP3 from previous catalog"
+    },
+    {
+      "cid": "232265",
+      "name": "A World Above",
+      "page": "https://monster-siren.hypergryph.com/music/232265",
+      "api": "https://monster-siren.hypergryph.com/api/song/232265",
+      "sourceHost": "res01.hycdn.cn",
+      "sha256": "7f214bc96fb160db69b1cde1eed4ad6c384f7286cbf205b3dd09beb008214c45",
+      "duration": 226.190476,
+      "encoding": "MP3 from previous catalog"
+    },
+    {
+      "cid": "125074",
+      "name": "Ad astra",
+      "page": "https://monster-siren.hypergryph.com/music/125074",
+      "api": "https://monster-siren.hypergryph.com/api/song/125074",
+      "sourceHost": "res01.hycdn.cn",
+      "sha256": "51ce1c5a61f69905026cdf645b93fe696931f322e3cc1883e0b6c1f64f694a78",
+      "duration": 163.831179,
+      "encoding": "MP3 from previous catalog"
+    },
+    {
+      "cid": "880337",
+      "name": "Control's Wishes",
+      "page": "https://monster-siren.hypergryph.com/music/880337",
+      "api": "https://monster-siren.hypergryph.com/api/song/880337",
+      "sourceHost": "res01.hycdn.cn",
+      "sha256": "4f3857214f0a00952d93021a8f7609d205648d0bbb5c2189352e2bb8ed7d80ca",
+      "duration": 192.676054,
+      "encoding": "MP3 from previous catalog"
+    },
+    {
+      "cid": "461158",
+      "name": "The Coming of the Future",
+      "page": "https://monster-siren.hypergryph.com/music/461158",
+      "api": "https://monster-siren.hypergryph.com/api/song/461158",
+      "sourceHost": "res01.hycdn.cn",
+      "sha256": "839cde2a29b1d2a5883c5d859b5ce79e1a8c8491bd4fd9fa056d2c9c02b499bd",
+      "duration": 199.992494,
+      "encoding": "MP3 from previous catalog"
+    },
+    {
+      "cid": "306827",
+      "name": "海愿",
+      "page": "https://monster-siren.hypergryph.com/music/306827",
+      "api": "https://monster-siren.hypergryph.com/api/song/306827",
+      "sourceHost": "res01.hycdn.cn",
+      "sha256": "c01e0eb050163fd3b2dae06d365f34a0ae2ef9d1c93cfc3e98263cfdf91a7ab1",
+      "duration": 140.412375,
+      "encoding": "MP3 128 kbps stereo, 44.1 kHz"
+    },
+    {
+      "cid": "232209",
+      "name": "Everything's Alright (Instrumental)",
+      "page": "https://monster-siren.hypergryph.com/music/232209",
+      "api": "https://monster-siren.hypergryph.com/api/song/232209",
+      "sourceHost": "res01.hycdn.cn",
+      "sha256": "7a0087a6e9305a642d539f147260c87f6140d44492c492d3f1e80a18abc74e35",
+      "duration": 249.41375,
+      "encoding": "MP3 128 kbps stereo, 44.1 kHz"
+    },
+    {
+      "cid": "232200",
+      "name": "春弦",
+      "page": "https://monster-siren.hypergryph.com/music/232200",
+      "api": "https://monster-siren.hypergryph.com/api/song/232200",
+      "sourceHost": "res01.hycdn.cn",
+      "sha256": "0e0a48a021ac3641ea1da739c433cf64ab22621c8ba01e82b17f9c72f2faa0bf",
+      "duration": 197.25625,
+      "encoding": "MP3 128 kbps stereo, 44.1 kHz"
+    }
+  ],
+  "selection": "User corrected the requested first addition to 彼端, matched to official 海愿 CID 306827; other two were selected from official Arknights releases.",
+  "backgroundReference": "https://www.bilibili.com/video/BV1wv4y1p7Fc/",
+  "artwork": "Existing five attributed environment images reused in independent editions."
+}

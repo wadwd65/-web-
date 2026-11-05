@@ -1,5 +1,7 @@
 // Official online fallback only. Local MP3 files are the default source.
-const songs = new Map([['779491','Rhine Lab.LLC'],['232265','A World Above'],['125074','Ad astra'],['880337',"Control's Wishes"],['461158','The Coming of the Future']]);
+import {readFileSync} from 'node:fs';
+const catalog = JSON.parse(readFileSync(new URL('../public/audio/catalog.json', import.meta.url), 'utf8'));
+const songs = new Map(catalog.map(track => [track.cid, track]));
 const cache = new Map();
 const pending = new Map();
 
@@ -15,7 +17,7 @@ export async function officialTrack(cid) {
     const data = payload?.data;
     const source = new URL(data?.sourceUrl ?? 'about:blank');
     if (payload.code !== 0 || String(data.cid) !== cid || source.protocol !== 'https:' || !/^(?:host)?res\d+\.hycdn\.cn$/u.test(source.hostname)) throw new Error('Invalid official music metadata');
-    const track = {cid,name:songs.get(cid),artist:'塞壬唱片-MSR',source:source.href,page:`https://monster-siren.hypergryph.com/music/${cid}`};
+    const track = {cid,name:songs.get(cid).name,artist:songs.get(cid).artist,source:source.href,page:`https://monster-siren.hypergryph.com/music/${cid}`};
     cache.set(cid,{time:Date.now(),data:track});
     return track;
   })();

@@ -44,6 +44,17 @@
 .entry-registration i:nth-child(2) { right: 0; transform: rotate(90deg); }
 .entry-registration i:nth-child(3) { bottom: 0; transform: rotate(-90deg); }
 .entry-registration i:nth-child(4) { right: 0; bottom: 0; transform: rotate(180deg); }
+.entry-side-index {
+  position: absolute; left: 13%; top: 37%; color: #76909d;
+  transition: opacity .4s, transform .6s;
+}
+.entry-side-index > small { font: 7px var(--mono); letter-spacing: 2px; }
+.entry-side-index > span { display: block; font: 300 31px var(--mono); margin: 14px 0; color: #6e8b9b; }
+.entry-side-index > div { display: flex; gap: 5px; }
+.entry-side-index i { width: 2px; height: 8px; background: #b4c7d0; }
+.entry-side-index i:nth-child(3n) { height: 13px; background: #82aaba; }
+.entry-side-index > p { font-size: 9px; letter-spacing: 1px; margin-top: 14px; }
+.ee-running .entry-side-index { opacity: 0; transform: translateY(-6px); transition-duration: .2s; }
 .entry-welcome {
   position: absolute; left: 50%; top: 44%; width: 320px;
   transform: translate(-50%, -50%); text-align: center;

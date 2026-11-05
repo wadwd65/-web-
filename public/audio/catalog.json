@@ -68,5 +68,53 @@
     "sourceHost": "res01.hycdn.cn",
     "downloaded": "2026-10-29",
     "originalBytes": 57904444
+  },
+  {
+    "cid": "306827",
+    "name": "海愿",
+    "note": "水月肉鸽 · 彼端主题背景",
+    "page": "https://monster-siren.hypergryph.com/music/306827",
+    "file": "/audio/306827-c01e0eb050.mp3",
+    "duration": 140.412375,
+    "bytes": 2247827,
+    "sha256": "c01e0eb050163fd3b2dae06d365f34a0ae2ef9d1c93cfc3e98263cfdf91a7ab1",
+    "artist": "塞壬唱片-MSR",
+    "sourceHost": "res01.hycdn.cn",
+    "downloaded": "2026-11-05",
+    "originalBytes": 40440076,
+    "encoding": "MP3 128 kbps stereo, 44.1 kHz",
+    "albumCid": "1025"
+  },
+  {
+    "cid": "232209",
+    "name": "Everything's Alright (Instrumental)",
+    "note": "Everything’s Alright · 纯音乐",
+    "page": "https://monster-siren.hypergryph.com/music/232209",
+    "file": "/audio/232209-7a0087a6e9.mp3",
+    "duration": 249.41375,
+    "bytes": 3991553,
+    "sha256": "7a0087a6e9305a642d539f147260c87f6140d44492c492d3f1e80a18abc74e35",
+    "artist": "塞壬唱片-MSR / DJ Okawari",
+    "sourceHost": "res01.hycdn.cn",
+    "downloaded": "2026-11-05",
+    "originalBytes": 9981332,
+    "encoding": "MP3 128 kbps stereo, 44.1 kHz",
+    "albumCid": "2466"
+  },
+  {
+    "cid": "232200",
+    "name": "春弦",
+    "note": "春弦 · 弦乐与晨光",
+    "page": "https://monster-siren.hypergryph.com/music/232200",
+    "file": "/audio/232200-0e0a48a021.mp3",
+    "duration": 197.25625,
+    "bytes": 3157306,
+    "sha256": "0e0a48a021ac3641ea1da739c433cf64ab22621c8ba01e82b17f9c72f2faa0bf",
+    "artist": "塞壬唱片-MSR / 横山克",
+    "sourceHost": "res01.hycdn.cn",
+    "downloaded": "2026-11-05",
+    "originalBytes": 7895294,
+    "encoding": "MP3 128 kbps stereo, 44.1 kHz",
+    "albumCid": "6678"
   }
 ]

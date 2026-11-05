@@ -116,3 +116,7 @@ ExperienceEntry将entry-welcome等待构图与entry-film演出独立放置，同
 ## v0.43 入场环境层
 
 入口装饰由entry-atmosphere及固定16点构成，CSS负责持续运动。局部pointermove只合并写入CSS变量，按钮布局独立。页面可见性同步根与子动画暂停，卸载取消RAF/监听，原阶段时钟继续负责序列进退。
+
+## v0.44 八曲目录与环境映射
+
+catalog是八首曲目与官方fallback白名单的共同来源，music-artwork的八种edition通过artwork索引复用五张署名图；musicEdition(index).atmosphere向shader传0–4内的模式。新音频和384格RMS在public/audio，音乐来源在credits/music-source.json。MusicArchiveScene按实际曲目数压缩collectionStep，使首尾世界范围稳定；快捷和主目录内部滚动。入口side-index只负责装饰并随原阶段淡出。

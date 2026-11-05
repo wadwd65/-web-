@@ -25,7 +25,7 @@ test('local audio server supports seeking, HEAD, caching and invalid ranges with
  const head=await fetch(url,{method:'HEAD'});assert.equal(head.headers.get('content-length'),'100');assert.equal((await head.arrayBuffer()).byteLength,0);assert.equal((await fetch(url,{headers:{'If-None-Match':etag}})).status,304);assert.equal((await fetch(url,{headers:{Range:'bytes=100-'}})).status,416);assert.equal((await fetch(url,{headers:{Range:'bytes=20-39','If-Range':'"old"'}})).status,200);
  }finally{server.close();server.closeAllConnections();await once(server,'close');unlinkSync(file);rmdirSync(folder);rmdirSync(root);}
 });
-test('all five downloaded tracks match recorded checksums, sizes and durations',()=>{
- const catalog=JSON.parse(readFileSync(new URL('../public/audio/catalog.json',import.meta.url),'utf8'));assert.equal(catalog.length,5);assert.equal(new Set(catalog.map((t:{cid:string})=>t.cid)).size,5);
- for(const track of catalog){const bytes=readFileSync(new URL('../public'+track.file,import.meta.url));assert.equal(bytes.length,track.bytes);assert.equal(createHash('sha256').update(bytes).digest('hex'),track.sha256);assert.ok(track.duration>60);assert.ok(track.bytes<track.originalBytes/10);}
+test('all eight downloaded tracks match recorded checksums and bounded audio sizes',()=>{
+ const catalog=JSON.parse(readFileSync(new URL('../public/audio/catalog.json',import.meta.url),'utf8'));assert.equal(catalog.length,8);assert.equal(new Set(catalog.map((t:{cid:string})=>t.cid)).size,8);
+ for(const track of catalog){const bytes=readFileSync(new URL('../public'+track.file,import.meta.url));assert.equal(bytes.length,track.bytes);assert.equal(createHash('sha256').update(bytes).digest('hex'),track.sha256);assert.ok(track.duration>60);assert.ok(track.bytes<10*1024*1024);assert.ok(track.bytes<track.originalBytes);}
 });

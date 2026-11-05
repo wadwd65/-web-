@@ -5,7 +5,7 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {SOUNDTRACKS} from './Soundtrack.tsx';
 import {createAudit} from './performance-audit.ts';
 import {RHINE_SYMBOL_PATHS} from './RhineMark.tsx';
-import {drawEdition,musicEdition,warmArtworkAssets,MUSIC_ATMOSPHERES} from './music-artwork.ts';
+import {drawEdition,musicEdition,musicAtmosphere,warmArtworkAssets} from './music-artwork.ts';
 import {createMusicAtmosphere} from './music-atmosphere.ts';
 import {cdMaterial} from './cd-material.ts';
 import {archiveEase,ARCHIVE_MOTION_MS} from './archive-motion.ts';
@@ -30,7 +30,7 @@ function symbol(c:CanvasRenderingContext2D,x:number,y:number,scale:number,color:
 function labelTexture(index:number){
  const canvas=document.createElement('canvas');canvas.width=canvas.height=768;drawEdition(canvas,index,false);const c=canvas.getContext('2d')!;
  // All print stays inside the circular crop, with contrast suited to the image.
- c.fillStyle=[0,1,4].includes(index)?'#15364c':'#edfaff';c.font='500 34px Arial,sans-serif';c.fillText('RHINE LAB',155,180);c.font='17px ui-monospace,monospace';c.fillText(`SOUND / ${String(index+1).padStart(2,'0')}`,158,211);
+ c.fillStyle=[0,1,4].includes(musicEdition(index).artwork)?'#15364c':'#edfaff';c.font='500 34px Arial,sans-serif';c.fillText('RHINE LAB',155,180);c.font='17px ui-monospace,monospace';c.fillText(`SOUND / ${String(index+1).padStart(2,'0')}`,158,211);
  c.fillStyle='#f1f9ff';c.font='500 42px Arial,sans-serif';c.fillText(musicEdition(index).word,155,593);c.fillStyle='#b9dae8';c.font='14px ui-monospace,monospace';c.fillText(`R / ${String(index+1).padStart(2,'0')}   MSR / ${SOUNDTRACKS[index].cid}`,158,625);symbol(c,520,542,1.0,'#d8f7ff');
  const t=new T.CanvasTexture(canvas);t.colorSpace=T.SRGBColorSpace;return t;
 }
@@ -63,8 +63,11 @@ export default function MusicArchiveScene(props:Props){
   const bounds=new T.Box3().setFromObject(template),center=bounds.getCenter(new T.Vector3()),normalization=4.4/bounds.getSize(new T.Vector3()).y;
   const outlineGeometry=new T.EdgesGeometry((template.children.find(n=>n.name.startsWith('Ivory')) as T.Mesh).geometry,28);ownedGeometries.add(outlineGeometry);
   const sharedSolid=discSolid(),sharedRing=new T.RingGeometry(.214,1.83,128),labelRing=new T.RingGeometry(.31,1.60,128);[sharedSolid,sharedRing,labelRing].forEach(g=>ownedGeometries.add(g));
+  // Keep the collection within its original physical span as more records join it.
+  const collectionStep=Math.min(1,4/Math.max(1,SOUNDTRACKS.length-1));
   for(let i=0;i<SOUNDTRACKS.length;i++){
-   const group=new T.Group(),position=new T.Vector3(-3.6+i*2.1,.16,4-i*3.8),yaw=-.30+i*.085;scene.add(group);group.position.copy(position);group.rotation.set(.01,yaw,-.025);
+   const slot=i*collectionStep;
+   const group=new T.Group(),position=new T.Vector3(-3.6+slot*2.1,.16,4-slot*3.8),yaw=-.30+slot*.085;scene.add(group);group.position.copy(position);group.rotation.set(.01,yaw,-.025);
    const body=new T.Group(),lid=new T.Group();for(const a of [body,lid]){a.scale.setScalar(normalization);a.position.set(-center.x*normalization,-center.y*normalization,0);group.add(a);}lid.position.z=.18;
    let frameMesh:T.Mesh|null=null;
    // Geometry only: LBEILC / RhineLabUI via MikeQu223, MIT. UI and adaptations
@@ -158,7 +161,7 @@ export default function MusicArchiveScene(props:Props){
    camera.updateMatrixWorld();ambientRay.setFromCamera(ambientPointer,camera);ambientRay.ray.at((-18-ambientRay.ray.origin.z)/ambientRay.ray.direction.z,scratch);ambientWorld.set(scratch.x/31,scratch.y/17);
    atmosphere.update(dt,p.selected,ambientWorld,ambientActive,reduced);renderer.render(scene,camera);const phase=!tweenDone?(goalDetail?'extracting':'returning'):goalDetail?'detail':'collection';
    if(phase!==shownPhase){shownPhase=phase;el!.dataset.phase=phase;}if(active!==shownActive){shownActive=active;el!.dataset.active=String(active);}
-   if(debug&&now-lastDiagnostic>90){lastDiagnostic=now;el!.dataset.heights=objects.map(o=>o.group.position.y.toFixed(3)).join(',');el!.dataset.exposure=objects[active].open.toFixed(3);el!.dataset.discAngle=objects[p.current].disc.rotation.z.toFixed(4);el!.dataset.visibleRecords=String(objects.filter(o=>o.group.visible).length);el!.dataset.rippleCount=String(pulses.length);el!.dataset.waveSource=String(source);el!.dataset.lastFrame=String(Math.round(now));el!.dataset.atmosphere=MUSIC_ATMOSPHERES[p.selected];el!.dataset.atmosphereTime=atmosphere.uniforms.uTime.value.toFixed(2);el!.dataset.pointerGlow=atmosphere.uniforms.uActive.value.toFixed(2);el!.dataset.zoom=zoom.toFixed(3);}
+   if(debug&&now-lastDiagnostic>90){lastDiagnostic=now;el!.dataset.heights=objects.map(o=>o.group.position.y.toFixed(3)).join(',');el!.dataset.exposure=objects[active].open.toFixed(3);el!.dataset.discAngle=objects[p.current].disc.rotation.z.toFixed(4);el!.dataset.visibleRecords=String(objects.filter(o=>o.group.visible).length);el!.dataset.rippleCount=String(pulses.length);el!.dataset.waveSource=String(source);el!.dataset.lastFrame=String(Math.round(now));el!.dataset.atmosphere=musicAtmosphere(p.selected);el!.dataset.atmosphereTime=atmosphere.uniforms.uTime.value.toFixed(2);el!.dataset.pointerGlow=atmosphere.uniforms.uActive.value.toFixed(2);el!.dataset.zoom=zoom.toFixed(3);}
    p.onFrame?.(now,!reduced&&p.enabled&&p.revealed&&tweenDone);audit.frame({cpu:performance.now()-began,calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures});raf=requestAnimationFrame(tick);
   }
   const wakeScene=()=>{cancelAnimationFrame(raf);raf=0;last=0;if(prepared&&!disposed&&!document.hidden&&!lost&&latest.current.enabled){resize();raf=requestAnimationFrame(tick);}};wake.current=wakeScene;document.addEventListener('visibilitychange',wakeScene,{signal:abort.signal});
