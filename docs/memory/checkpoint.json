@@ -1,10 +1,10 @@
 {
   "version": "0.45.0",
-  "recordedAt": "2026-11-05T08:19:54.759Z",
+  "recordedAt": "2026-11-05T08:21:34.462Z",
   "workState": "reviewed_internally",
   "validationVersion": "0.45.0",
   "textNormalisation": "LF",
-  "sourceDigest": "9d880cb3a520ad989663fd1d90e895b53d22a26ca9c38e231c1862002d05bee0",
+  "sourceDigest": "8d8dca35d968fdf75ac619c6c82e53eec43654c9dd8bd98859171a71e9f9be41",
   "files": [
     {
       "path": ".env.example",
@@ -336,7 +336,7 @@
     },
     {
       "path": "src/entry-sequence.css",
-      "sha256": "850dbc6802156c6e2d39cdf8e1eb1d900acf4af534fbc904d0a758ef2a711680"
+      "sha256": "154159d1467c06fb9d4c4447268bea9d45676b4c959095c1f91beaa5c8f6e98b"
     },
     {
       "path": "src/entry-sequence.ts",
