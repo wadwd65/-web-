@@ -4,7 +4,7 @@
   "workingVersion": "0.44.0",
   "releasedVersion": "0.44.0",
   "workState": "reviewed_internally",
-  "objective": "入场少量索引细节，新增海愿(彼端)/Everything’s Alright纯音乐/春弦，八唱片适配与实际播放自检。",
+  "objective": "v0.44入口细节与八首唱片已保存发布，仓库检查与逐版本备注完成。",
   "latestUserRequest": "完成v0.44后推送正确仓库，进行仓库检查并记录各版本内容。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
@@ -103,7 +103,7 @@
     "online": "新增三CID官方API实际解析通过；AI主线本轮未复跑。",
     "limits": "真实低配/新人和公网验收仍待。",
     "savedPreview": "桌面保存版5186实际0.44.0，点击进入/八首菜单/海愿完全抽取与本地播放通过。单audio、暂停，无warn/error；八首HTTP Range均206。",
-    "repository": "仓库副本npm ci后139测试/build、npm audit 0；当前路径与648历史文本blob常见密钥模式未命中，本地文档链接无缺失。51号记录范围和缺口。"
+    "repository": "仓库副本npm ci后139测试/build、npm audit 0；当前提交路径与历史文本blob常见密钥模式未命中，本地文档链接无缺失。773a96d源码已推送，fetch及ls-remote一致，51号记录范围和缺口。"
   },
   "nextActions": [
     "用户部署支持Node的试用网址，按45号设置进程环境并核验实际HTTPS/AI/图像/账号/音乐。",
@@ -133,13 +133,13 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "ready_to_push",
-    "sourceCommit": "02e7dfbdcf5a8efaa0051d42fdbba9409254b198",
+    "pushStatus": "published",
+    "sourceCommit": "773a96d253d02e905aa5f47106f34cb50328dc9e",
     "verifiedAt": "2026-11-05",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "3f4d7fdb3fa49ba5690df3af188b86ed447a6bbb",
-    "publicationReceipt": "outputs/v043-review/git-publication.json",
-    "historyAndLogCommit": "02e7dfbdcf5a8efaa0051d42fdbba9409254b198"
+    "previousPublishedHead": "7cebd470c509071695f5f039ecc245bafc73da72",
+    "publicationReceipt": "outputs/v044-review/git-publication.json",
+    "historyAndLogCommit": "773a96d253d02e905aa5f47106f34cb50328dc9e"
   },
   "sideDeliverables": [
     {
@@ -268,7 +268,7 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v044_updated_sync_pending"
+    "status": "v044_updated_desktop_verified"
   },
   "savedWork": {
     "version": "0.44.0",
