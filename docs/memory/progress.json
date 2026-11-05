@@ -4,7 +4,7 @@
   "workingVersion": "0.45.0",
   "releasedVersion": "0.45.0",
   "workState": "reviewed_internally",
-  "objective": "v0.45入场标志微交互、精致字排与第二幕文案已自检并保存。",
+  "objective": "v0.45标志微交互、精致字排与第二幕文案已自检、保存并推送。",
   "latestUserRequest": "用户要求更细腻入场、第二幕去句号/调整文字、首屏莱茵标志动态和明显悬停/小彩蛋、字体优雅。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
@@ -98,7 +98,7 @@
     "automated": "139 tests, entry phase 4 tests, TypeScript/build passed; shared Three 583KB warning remains.",
     "evidence": "outputs/v045-review",
     "visualAcceptance": "1280×720首屏、纯悬停、鼠标/键盘彩蛋和第二幕逐图复核；角标位置和缺字已修。用户反馈待。",
-    "manual": "hover=true/pressed=false时trace=1、scale=1.08；Enter彩蛋仍waiting。动态dash/transform两次不同。二幕无句号、字重320、两路径offset=0；整段/回放、未发送输入保留、单audio连续；退出后入口/彩蛋0、inert解除，无溢出或warn/error。",
+    "manual": "hover=true/pressed=false时trace=1、scale=1.08；Enter彩蛋仍waiting。动态dash/transform两次不同。二幕无句号、字重320、两路径offset=0；整段/回放、未发送输入保留、单audio连续；退出后入口/彩蛋0、inert解除，无溢出或warn/error。 最末CSS审查修正已激活trace的暂停选择器权重，重建通过。",
     "performance": "CSS交互、单布尔状态，隐藏trace及演出中的标志暂停。原指针/清理逻辑共用；低配实机待。",
     "online": "本轮AI未复跑；两字字体来自与原SHA一致的官方Noto源。",
     "limits": "后台/系统减少动态分支代码审查，实际设备切换和新人/低配仍待。",
@@ -132,13 +132,13 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "ready_to_push",
-    "sourceCommit": "773a96d253d02e905aa5f47106f34cb50328dc9e",
+    "pushStatus": "published",
+    "sourceCommit": "c6515b3dcc32a65547ff7b0977e7db676d69eed0",
     "verifiedAt": "2026-11-05",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "7cebd470c509071695f5f039ecc245bafc73da72",
-    "publicationReceipt": "outputs/v044-review/git-publication.json",
-    "historyAndLogCommit": "773a96d253d02e905aa5f47106f34cb50328dc9e"
+    "previousPublishedHead": "430b5511affe7ee70618cb390985b9a60e92a816",
+    "publicationReceipt": "outputs/v045-review/git-publication.json",
+    "historyAndLogCommit": "9e2447d"
   },
   "sideDeliverables": [
     {
