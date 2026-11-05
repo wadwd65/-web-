@@ -2,15 +2,15 @@
   "schemaVersion": 1,
   "updatedAt": "2026-11-05",
   "workingVersion": "0.43.0",
-  "releasedVersion": "0.42.0",
+  "releasedVersion": "0.43.0",
   "workState": "reviewed_internally",
-  "objective": "v43入场持续动态和局部鼠标回应已内部审核，保存发布收尾。",
+  "objective": "v43入场持续动态与局部鼠标回应已保存复核，默认5186及正确仓库同步完成。",
   "latestUserRequest": "用户要求入场增加动态效果，当前画面偏干，须自行检查。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5186/?v=0.42.0#/home",
-    "snapshot": "first-step-原版序列入场优化-v0.42.0",
+    "url": "http://127.0.0.1:5186/?v=0.43.0#/home",
+    "snapshot": "first-step-入场动态增强-v0.43.0",
     "state": "ready_for_user_review"
   },
   "implemented": {
@@ -89,7 +89,7 @@
     },
     {
       "id": "save-release",
-      "status": "pending",
+      "status": "complete",
       "acceptance": "构建/必要检查，更新记忆日志，新保存点与预览对应。"
     }
   ],
@@ -102,7 +102,7 @@
     "performance": "16CSS光点、局部RAF合并变量写入，入口退出清理；低配实机等待。",
     "online": "当前业务/API沿用，在线AI本轮未复跑。",
     "limits": "IAB新标签未触发hidden；实际后台/减少动态切换、低配与新人待实机验证。",
-    "savedPreview": "保存版待复核。"
+    "savedPreview": "localhost:5280保存版16点、等待入口与整段转场通过；退出后装饰层0、单audio/唯一输入，首页解除inert，控制台无warn/error。默认5186实际0.43.0/index匹配。"
   },
   "nextActions": [
     "用户部署支持Node的试用网址，按45号设置进程环境并核验实际HTTPS/AI/图像/账号/音乐。",
@@ -132,13 +132,13 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "pending_v043",
-    "sourceCommit": "fce56692e43cb883cfcec631881df6cecbaf4101",
+    "pushStatus": "published",
+    "sourceCommit": "02e7dfbdcf5a8efaa0051d42fdbba9409254b198",
     "verifiedAt": "2026-11-05",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "5f9fea81708c3821e1430030d2b9733e26a87060",
-    "publicationReceipt": "outputs/v042-review/git-publication.json",
-    "historyAndLogCommit": "fce56692e43cb883cfcec631881df6cecbaf4101"
+    "previousPublishedHead": "3f4d7fdb3fa49ba5690df3af188b86ed447a6bbb",
+    "publicationReceipt": "outputs/v043-review/git-publication.json",
+    "historyAndLogCommit": "02e7dfbdcf5a8efaa0051d42fdbba9409254b198"
   },
   "sideDeliverables": [
     {
@@ -243,7 +243,7 @@
   "executionPlan": {
     "date": "2026-11-01",
     "document": "docs/36-next-execution-plan.md",
-    "state": "v043_entry_reviewed_save_pending",
+    "state": "v043_entry_saved_reviewed",
     "nextMilestone": "Actual deployment URL verification, novice users and low-end device evidence",
     "executionHours": [
       34,
@@ -267,12 +267,12 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v043_sync_pending"
+    "status": "v043_updated_desktop_verified"
   },
   "savedWork": {
     "version": "0.43.0",
     "snapshot": "first-step-入场动态增强-v0.43.0",
-    "state": "save_pending",
+    "state": "saved_and_reviewed",
     "review": "docs/49-entry-ambient-motion-v043.md"
   }
 }
