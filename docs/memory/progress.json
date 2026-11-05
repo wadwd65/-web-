@@ -4,7 +4,7 @@
   "workingVersion": "0.46.0",
   "releasedVersion": "0.46.0",
   "workState": "reviewed_internally",
-  "objective": "主页鼠标反馈保留，首页按钮恢复v45；工具子页主按钮更清楚、工资计算更顺手。",
+  "objective": "v0.46工具按钮/工资填写与鼠标反馈已保存、自检并推送；首页按钮按用户更正恢复45。",
   "latestUserRequest": "用户澄清只加强工具子界面按钮；首页按钮样式/文字恢复v0.45，保留主页鼠标反馈增强。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
@@ -132,13 +132,13 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "ready_to_push",
-    "sourceCommit": "c6515b3dcc32a65547ff7b0977e7db676d69eed0",
+    "pushStatus": "published",
+    "sourceCommit": "b8838db6abd25b828f4f57788bd57a08f0142963",
     "verifiedAt": "2026-11-05",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "430b5511affe7ee70618cb390985b9a60e92a816",
-    "publicationReceipt": "outputs/v045-review/git-publication.json",
-    "historyAndLogCommit": "9e2447d"
+    "previousPublishedHead": "76c1a58ccbe588c7633a42e5f8a9d51b53deab29",
+    "publicationReceipt": "outputs/v046-review/git-publication.json",
+    "historyAndLogCommit": "b8838db6abd25b828f4f57788bd57a08f0142963"
   },
   "sideDeliverables": [
     {
