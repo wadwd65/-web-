@@ -1,6 +1,6 @@
 # Third-party notices
 
-The interface bundles a character subset of Noto Sans SC from the official Google Fonts repository (https://github.com/google/fonts/tree/main/ofl/notosanssc). It is licensed under the SIL Open Font License 1.1; the full notice is included in `public/fonts/OFL-NotoSansSC.txt` and the built `dist/fonts/` directory. The subset is locally hosted, retains variable weights, and is used under the CSS family name First Step Sans. No font file from the four visual reference projects is included.
+The interface bundles a character subset of Noto Sans SC from the official Google Fonts repository (https://github.com/google/fonts/tree/main/ofl/notosanssc). It is licensed under the SIL Open Font License 1.1; the full notice is included in `public/fonts/OFL-NotoSansSC.txt` and the built `dist/fonts/` directory. A 1,380-byte entry subset supplements 世 and 奇 from the same source font and licence. The subset is locally hosted, retains variable weights, and is used under the CSS family name First Step Sans. No font file from the four visual reference projects is included.
 
 Business scenes use independent dossier geometry and shaders. The music scene reuses the attributed MIT archive model and, since v0.25, five attributed non-character Arknights environment images at the user's request. No Active Theory runtime or character cutouts are bundled. The dated sections below describe their corresponding versions.
 

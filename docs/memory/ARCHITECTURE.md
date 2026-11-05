@@ -120,3 +120,7 @@ ExperienceEntry将entry-welcome等待构图与entry-film演出独立放置，同
 ## v0.44 八曲目录与环境映射
 
 catalog是八首曲目与官方fallback白名单的共同来源，music-artwork的八种edition通过artwork索引复用五张署名图；musicEdition(index).atmosphere向shader传0–4内的模式。新音频和384格RMS在public/audio，音乐来源在credits/music-source.json。MusicArchiveScene按实际曲目数压缩collectionStep，使首尾世界范围稳定；快捷和主目录内部滚动。入口side-index只负责装饰并随原阶段淡出。
+
+## v0.45 标志交互与局部字体
+
+ExperienceEntry的markAwake仅负责单次页面内彩蛋状态，语义button支持鼠标/键盘且不触发start。CSS悬停/聚焦/pressed共用视觉，完整RhineMark为底层，独立trace仅交互时运行。entry-mark-symbol与trace在演出开始暂停，原入口负责统一卸载。entry-sequence.css按unicode-range注册同源官方字体两字补充，保留原大字库。

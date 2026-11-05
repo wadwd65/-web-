@@ -1,10 +1,10 @@
 {
-  "version": "0.44.0",
-  "recordedAt": "2026-11-05T07:40:45.706Z",
+  "version": "0.45.0",
+  "recordedAt": "2026-11-05T08:19:54.759Z",
   "workState": "reviewed_internally",
-  "validationVersion": "0.44.0",
+  "validationVersion": "0.45.0",
   "textNormalisation": "LF",
-  "sourceDigest": "d8221d3045ad95f11d6c4ca5db9bf015842349ef595453ca0a422d7a570405a2",
+  "sourceDigest": "9d880cb3a520ad989663fd1d90e895b53d22a26ca9c38e231c1862002d05bee0",
   "files": [
     {
       "path": ".env.example",
@@ -12,35 +12,35 @@
     },
     {
       "path": "AGENTS.md",
-      "sha256": "1270af70a24a36e455324ff991bd3e3088a167fd4766a2c1f0dfb5680080c651"
+      "sha256": "6cf21650fce79fe058b31ad3ac7bc1a43eb745ba733b643c9a139348fa1c8289"
     },
     {
       "path": "docs/memory/ARCHITECTURE.md",
-      "sha256": "099317af2320373ea8ec04fa111d9f5202ce6c9944c5988576ff1dcac666ff88"
+      "sha256": "7f0b0d657889703be97155b132407e126e2c7d8c3a1c405baf85827f0e602838"
     },
     {
       "path": "docs/memory/BACKLOG.md",
-      "sha256": "2c6dd94b64c23a2a2eb1385cbf3902c1b152c8ade4d2b813f8a05844f2b9e8ab"
+      "sha256": "04052d275169b200a53843e82e69089c4979a756aa852eabea3ff7ee7d795700"
     },
     {
       "path": "docs/memory/DECISIONS.md",
-      "sha256": "9d881088df860a5546c3f7cf164bd14151cf741bb7b491829c57cacb090aad42"
+      "sha256": "d1735bc2ea315bd19750561c41b2002781916bba1ca49560a588586f9b1f584d"
     },
     {
       "path": "docs/memory/SESSIONS.md",
-      "sha256": "9ba5553cab6c546bb0e2f38b476b1d9fccda27909a0a250f6c4f6307d623f86c"
+      "sha256": "69cd0880e361cf2d0f7a2d821c4a7b3b28868ef700b1424753be17b185280005"
     },
     {
       "path": "docs/memory/progress.json",
-      "sha256": "8c522d8a9bf9bc17f40d65fc05b8bfa5cff87c425619d747f84bffdf50017d65"
+      "sha256": "f74cda09b4ccb45dcc5dd71355f0aa342a4e64309eafddd61cfb1de0b88f0c20"
     },
     {
       "path": "package-lock.json",
-      "sha256": "da1d0daecbb8bc707eec3ff78d9ff4be1d80a76bd6ace9b8fb6f5ca94c9579d5"
+      "sha256": "c5cafffee0ef1c6860ba123a6fb0146b201bf9a15b5ebf9523e7430d57415233"
     },
     {
       "path": "package.json",
-      "sha256": "0f7390268605fe2d33864b123a962cddf4eb6427797af05426155e150c1bf757"
+      "sha256": "00d6b8ad66b072d8fa1cd25b87adf500a4cc215c19b8261b90392de910e2f2bf"
     },
     {
       "path": "public/artwork/rhine-ascent.png",
@@ -164,7 +164,11 @@
     },
     {
       "path": "public/fonts/README.md",
-      "sha256": "fa7be597f2daf273013e95d405d96789c66e92adf2a6597f63564aa4086f9bc4"
+      "sha256": "169f4343add830ed8e8bf52283fb4a25c5399129e308a7aadcec73e372ea8db3"
+    },
+    {
+      "path": "public/fonts/first-step-entry.woff2",
+      "sha256": "9690a7f38d3c7daa0bae15c3bdc0a880051bb801337b0618c69f53874379185f"
     },
     {
       "path": "public/fonts/first-step-ui.woff2",
@@ -212,7 +216,7 @@
     },
     {
       "path": "src/ExperienceEntry.tsx",
-      "sha256": "4439851f1a758f6f9e0b115f598d19339c09d1fc749889f77ad02ec38643369e"
+      "sha256": "31e548c3f13b3800b3931bab183ee4b506aea2f4b110ec50d8a2220f32b812ff"
     },
     {
       "path": "src/ExperienceWorkspace.tsx",
@@ -332,7 +336,7 @@
     },
     {
       "path": "src/entry-sequence.css",
-      "sha256": "9c2cf49c3bc47701d3743781eb9f7bb3b3e611ce8120c9a4e1e356301421591b"
+      "sha256": "850dbc6802156c6e2d39cdf8e1eb1d900acf4af534fbc904d0a758ef2a711680"
     },
     {
       "path": "src/entry-sequence.ts",

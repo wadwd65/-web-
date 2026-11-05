@@ -30,6 +30,7 @@ export default function ExperienceEntry({ready, onComplete, onReveal, staticMode
   const [sequence] = useState(() => createEntrySequence(staticMode || matchMedia('(prefers-reduced-motion: reduce)').matches));
   const [view, setView] = useState(sequence.state);
   const [started, setStarted] = useState(false);
+  const [markAwake, setMarkAwake] = useState(false);
   const [pageVisible, setPageVisible] = useState(() => !document.hidden);
   const callbacks = useRef({onComplete, onReveal, ready});
   const finished = useRef(false);
@@ -203,10 +204,28 @@ export default function ExperienceEntry({ready, onComplete, onReveal, staticMode
     </div>
 
     <section className="entry-welcome" aria-hidden={playing} inert={playing}>
-      <div className="entry-welcome-mark" aria-hidden="true"><RhineMark/></div>
+      <div className="entry-welcome-mark">
+        <button
+          className="entry-mark-control"
+          aria-label="莱茵生命标志，点击查看彩蛋"
+          aria-pressed={markAwake}
+          onClick={() => setMarkAwake(previous => !previous)}
+        >
+          <span className="entry-mark-calibration" aria-hidden="true"><i/><i/><i/><i/></span>
+          <span className="entry-mark-symbol" aria-hidden="true">
+            <RhineMark/>
+            <svg className="entry-mark-trace" viewBox="0 0 72 44" fill="none">
+              <path d={RHINE_SYMBOL_PATHS[0]} pathLength={1}/>
+            </svg>
+          </span>
+          <span className="entry-mark-legend" aria-live="polite">
+            {markAwake ? '保持好奇 / STAY CURIOUS' : '＋ − ＝ ∞'}
+          </span>
+        </button>
+      </div>
       <p className="entry-eyebrow">YOUR NEXT CHAPTER</p>
       <h1 id="experience-entry-title">初程<span>FIRST STEP</span></h1>
-      <p className="entry-welcome-caption">下一程，由此开始。</p>
+      <p className="entry-welcome-caption">下一程，由此开始</p>
       <button ref={startButton} className="entry-start" disabled={started} onClick={start}>
         <span>{started ? '正在准备空间' : '点击进入'}</span><span aria-hidden="true">↗</span>
       </button>
@@ -215,9 +234,9 @@ export default function ExperienceEntry({ready, onComplete, onReveal, staticMode
 
     <div className="entry-film" aria-hidden="true">
       <div className="entry-film-copy">
-        <small>EVERY JOURNEY BEGINS SOMEWHERE.</small>
-        <h2>{Array.from('世界展开。').map((glyph, index) => <span key={index} style={{'--glyph': index} as CSSProperties}>{glyph}</span>)}</h2>
-        <p>下一程，由此开始。</p>
+        <small>FROM HERE, FORWARD</small>
+        <h2>{Array.from('世界展开').map((glyph, index) => <span key={index} style={{'--glyph': index} as CSSProperties}>{glyph}</span>)}</h2>
+        <p>从眼前的事，找到下一步</p>
         <div className="entry-film-signature"><span>FIRST STEP</span><i/><span>01 / 08</span></div>
       </div>
       <div className="entry-symbol-field">
