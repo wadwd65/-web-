@@ -2,15 +2,15 @@
   "schemaVersion": 1,
   "updatedAt": "2026-11-06",
   "workingVersion": "0.49.0",
-  "releasedVersion": "0.48.0",
+  "releasedVersion": "0.49.0",
   "workState": "reviewed_internally",
-  "objective": "v0.49接口设置/引导/身份额度内部自检通过，正在保存版复核和发布；明确不部署腾讯云。",
+  "objective": "v0.49已保存、5186保存版接口与引导核验通过、源码已推送，正在同步最终回执；没有部署腾讯云。",
   "latestUserRequest": "继续；腾讯云部署由用户后续处理，本轮明确不用部署。比赛默认沿用提供者API，另补用户自备API设置入口和使用引导。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5186/?v=0.48.0#/home",
-    "snapshot": "first-step-多城市政策与官方检索-v0.48.0",
+    "url": "http://127.0.0.1:5186/?v=0.49.0#/home",
+    "snapshot": "first-step-自备API与使用引导-v0.49.0",
     "state": "ready_for_user_review"
   },
   "implemented": {
@@ -94,8 +94,8 @@
     },
     {
       "id": "save-and-release",
-      "status": "v049_final_save_pending",
-      "acceptance": "v48保存点保留；正在保存v49接口设置/引导/用量及统一服务入口并复核5186与正确仓库"
+      "status": "complete",
+      "acceptance": "v49快照、5186保存版、正确仓库源码/日志对应；旧v48及更早保留，无云端部署"
     },
     {
       "id": "multi-city-policy-record",
@@ -109,8 +109,8 @@
     },
     {
       "id": "v049-trial-api-settings",
-      "status": "internal_qa_passed",
-      "acceptance": "174检查、真实默认/自备接口、关闭清空/错误保持/嵌套引导/1280和1041通过；保存版及发布待"
+      "status": "complete",
+      "acceptance": "174检查、真实自备/默认API、错误保持/关闭清空/引导和保存版settings/usage/assistant均通过；公网、独立材料与真实试用仍待"
     }
   ],
   "validation": {
@@ -121,7 +121,7 @@
     "manual": "默认真实工资7500/差50与20→19，真实自备HTTP模型验证/问答/切回；错误Key不覆盖、关闭清空、对话内嵌套引导返回、无重复ID。保存版待。",
     "limits": "只支持官方DeepSeek；真实公网、独立准确率、新人低配/反滥用仍待。",
     "console": "一条既有Three驱动精度warn，未见error，未抑制；场景资产未重做。",
-    "savedPreview": "待本轮保存版复核"
+    "savedPreview": "实际5186为v0.49.0且index与canonical构建字节一致；统一settings/usage/assistant三个路由实测，默认provided/游客20次。保存版API/引导/空Key/唯一ID/单audio/首屏按钮及无横溢通过。临时5294已关闭，用户填写页未刷新。"
   },
   "nextActions": [
     "冻结独立合同/图片/政策材料与参考答案，做盲测和检索对照（4–6h）",
@@ -152,8 +152,8 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "publishing_v049",
-    "sourceCommit": "70168afaec708b6acb0b8a131bd3695bb7e8e05b",
+    "pushStatus": "published",
+    "sourceCommit": "6db696f33b8326c077af68ccabf2e88184c874dc",
     "verifiedAt": "2026-11-06",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
     "previousPublishedHead": "770fe577307ce5e28815508b1a7d38ee74cdb955",
@@ -280,7 +280,7 @@
   "executionPlan": {
     "date": "2026-11-01",
     "document": "docs/36-next-execution-plan.md",
-    "state": "v049_final_qa_and_save",
+    "state": "v049_saved_reviewed_published",
     "nextMilestone": "冻结独立合同/图片/政策材料与参考答案，做盲测和检索对照（4–6h）",
     "executionHours": [
       34,
@@ -304,12 +304,12 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v048_updated_desktop_verified"
+    "status": "v049_updated_desktop_verified"
   },
   "savedWork": {
     "version": "0.49.0",
     "snapshot": "first-step-自备API与使用引导-v0.49.0",
-    "state": "saving_and_final_review",
+    "state": "saved_and_reviewed",
     "review": "docs/58-api-settings-and-trial-limits-v049.md"
   },
   "futurePolicyCoverage": {

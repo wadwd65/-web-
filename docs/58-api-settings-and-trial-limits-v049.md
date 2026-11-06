@@ -54,3 +54,5 @@ UI/保存版验收与最终发布以progress及外部回执为准。自检修正
 参考：[DeepSeek官方模型列表接口](https://api-docs.deepseek.com/api/list-models/)、[Node Crypto](https://nodejs.org/docs/latest-v24.x/api/crypto.html)。
 
 本轮12个首页/入场/音乐/鼠标/业务三维/工资公式文件与v48逐字节一致。默认UI见default-chat-usage.png，自备接口表单见api-settings-desktop.png。Three驱动精度warn保留记录，不把它写成0warn或刻意抑制；无新场景美术修改。
+
+保存发布复核：v0.49快照302文件/源码262文件，旧v48全量哈希保留，私有配置/数据库排除。实际5186版本/index与本轮构建对应，新统一设置/用量/助手路由有效，保存版API表单与引导、空Key、唯一ID、单audio及首屏按钮通过。源码提交6db696f33b8326c077af68ccabf2e88184c874dc已推送正确wadwd65/-web-；最终远端HEAD和字节清单在outputs/v049-review/git-publication.json。用户明确不部署，本轮未操作腾讯云。

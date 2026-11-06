@@ -1,10 +1,10 @@
 {
   "version": "0.49.0",
-  "recordedAt": "2026-11-06T15:40:10.075Z",
+  "recordedAt": "2026-11-06T15:44:57.590Z",
   "workState": "reviewed_internally",
   "validationVersion": "0.49.0",
   "textNormalisation": "LF",
-  "sourceDigest": "ad2e9620d50afa0435e00600828900184d32ba5d8295606425cf258ba678b6cc",
+  "sourceDigest": "2bd1709d32097c6405915b30d3ee49679cfcfcd30ce748c58b6f8f714645f149",
   "files": [
     {
       "path": ".env.example",
@@ -12,11 +12,11 @@
     },
     {
       "path": "AGENTS.md",
-      "sha256": "bbe4574014b556cc02591ca22a97236f1eebcbcc4b72537529368d942ae480ce"
+      "sha256": "fcacf7f4b13757adeeb1bc3da822a8afafbd2f84d765e9effb343ed0af077288"
     },
     {
       "path": "docs/memory/ARCHITECTURE.md",
-      "sha256": "f67b03cb12068ead0cfd84dc343084d5d0dd265145e903c40278647cb09fc5fc"
+      "sha256": "7e8ad8afee42506006dda793e4d8fa36662fba0f07dfd770495e00ef9af163fc"
     },
     {
       "path": "docs/memory/BACKLOG.md",
@@ -28,11 +28,11 @@
     },
     {
       "path": "docs/memory/SESSIONS.md",
-      "sha256": "85444570ab7350cf9f3d36a55460fdf362b37526d1574c3bfa61108178197084"
+      "sha256": "80bdd38fbf3320aa687202cd36abd0037836e02932e067d897bed6ea4dd79e7d"
     },
     {
       "path": "docs/memory/progress.json",
-      "sha256": "e54068ef594f45d97fbe486742ac08d342085f3cbba51a531493ef878b58ce6b"
+      "sha256": "75693628edd6ac8c1ba803a95307bdf95e998a300042024e53d03d2dce7ee758"
     },
     {
       "path": "package-lock.json",

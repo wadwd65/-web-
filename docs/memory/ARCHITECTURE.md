@@ -136,3 +136,5 @@ PolicyHub管理城市/事项、取消和序列保护、有限本地目录、官�
 ## v0.49 接口与用量
 
 local-services.mjs统一挂载settings、usage、城市政策、账号、图像和助手，serve/Vite/保存版都走该入口。usage-service.mjs使用工程外usage.sqlite（签名密钥/不可读计数/90s短租约），真实账号identity只查ID，不读取个人记忆；默认不信任转发IP。ai-settings.mjs仅将自备Key存RAM，签名游客/真实账号绑定的HttpOnly临时会话；默认提供者配置仍私有读取。APISettings前端组件（AISettings.tsx）两个入口共用服务端状态，useId防重复标题；AIUsageHint仅打开/请求结束/设置改变时读取，无轮询和帧循环。对话和图像发送前验证/保留配额，finally释放租约；低级CLI评测runAssistant不经过HTTP试用保护，不可作为公开入口。
+
+后续浏览器QA使用localhost与正式127.0.0.1分开，或独立浏览器会话；Cookie按主机而非端口隔离。不同端口+不同私有数据库不等于浏览器Cookie隔离，不在独立QA读写真实用户Key或填写页。
