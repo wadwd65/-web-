@@ -279,3 +279,5 @@ v0.37.0源码8a9268708c43fca51e56c14fecb21931ea107487已正常推送wadwd65/-web
 ## 2026-11-06 · v0.48
 
 实施56号政策方向。57号记录实现、来源、边界和下一步。首轮政策真实合成9/10，缺城市规划重试已修；修后10/10与原28条合成回归通过。三题关闭检索只证明来源可用性，仍缺独立准确率。自动160，城市/来源UI实走，真实复制/TXT和广州原筛选保留。原始合成证据outputs/v048-review，最终发布状态以progress和snapshot/publication-receipt为准；不存密钥或个人材料。
+
+保存发布复核：本轮快照293文件/源码253文件，私有配置排除，旧v47全量清单哈希保持。实际5186为0.48.0且index与本轮构建一致；保存版城市接口和真实DeepSeek→同城市工具闭环通过，日期可正常解释；控制台0warn/error、单audio、无横向溢出。源码提交70168afaec708b6acb0b8a131bd3695bb7e8e05b已推送wadwd65/-web-，未触及campus-insight；最终文档提交与远端对应见outputs/v048-review/git-publication.json。

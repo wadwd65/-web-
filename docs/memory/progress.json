@@ -2,15 +2,15 @@
   "schemaVersion": 1,
   "updatedAt": "2026-11-06",
   "workingVersion": "0.48.0",
-  "releasedVersion": "0.47.0",
+  "releasedVersion": "0.48.0",
   "workState": "reviewed_internally",
-  "objective": "v0.48城市政策实现与内部自检通过；正在保存快照、实际保存版复核及推送，旧v47保存点保留。",
+  "objective": "v0.48已保存、5186真实保存版复核通过，源码已推送正确仓库；正在同步最终验收与回执。",
   "latestUserRequest": "继续开发，争取90；按56号先补多城市政策和可验证的AI检索。90为目标，不是评分或奖项承诺。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5186/?v=0.47.0#/home",
-    "snapshot": "first-step-自然提问与核对结果-v0.47.0",
+    "url": "http://127.0.0.1:5186/?v=0.48.0#/home",
+    "snapshot": "first-step-多城市政策与官方检索-v0.48.0",
     "state": "ready_for_user_review"
   },
   "implemented": {
@@ -94,8 +94,8 @@
     },
     {
       "id": "save-and-release",
-      "status": "v048_final_save_pending",
-      "acceptance": "v47已发布保留；正在完成v48新快照、5186保存版复核、正确仓库推送及日志同步。"
+      "status": "complete",
+      "acceptance": "新v48快照/5186保存版/源码仓库一致；旧v47及更早保留，总日志与历史文档同步。"
     },
     {
       "id": "multi-city-policy-record",
@@ -104,8 +104,8 @@
     },
     {
       "id": "v048-city-policies",
-      "status": "final_qa_and_save",
-      "acceptance": "四城有限目录与其他城市官方住宿发现、跨城边界、真实AI和来源导出；57号与outputs/v048-review，尚未发布"
+      "status": "complete",
+      "acceptance": "四城有限目录、其他城市官方住宿发现、跨城边界、真实AI/来源导出及实际保存版闭环通过，57号与outputs/v048-review；不等于独立准确率或全国覆盖。"
     }
   ],
   "validation": {
@@ -117,7 +117,7 @@
     "performance": "未加常驻帧循环或音频；成功公共来源6h/40项缓存。QA自动简易与手动恢复发生，不代替低配实机。",
     "online": "政策首轮9/10缺城市失败已修，后续及最终10/10；原28/28真实合成。三题关闭检索仅来源可用性对照，不是独立准确率。日期白名单误拦已诊断并加回归。",
     "limits": "其他现金补贴/全国维护未覆盖；公网按身份额度/HTTPS、独立材料准确率、真实新人和低配实机待。",
-    "savedPreview": "尚待本轮保存版5186最终复核。"
+    "savedPreview": "实际5186版本0.48.0与canonical dist/index.html逐字节一致；保存版POST成都政策实际命中，真实DeepSeek按来源解释并经显式按钮回同一成都工具。复制/TXT在独立QA通过；无横向溢出、单audio、控制台0warn/error。临时5293关闭，用户填写页未被刷新。"
   },
   "nextActions": [
     "公网匿名/可选账号额度隔离及实际HTTPS试用网址（4–6h，需部署环境）",
@@ -148,8 +148,8 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "publishing_v048",
-    "sourceCommit": "7e2f79f3993e7894a286143dc012dfbb1a1b31d4",
+    "pushStatus": "published",
+    "sourceCommit": "70168afaec708b6acb0b8a131bd3695bb7e8e05b",
     "verifiedAt": "2026-11-06",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
     "previousPublishedHead": "8a9659b6f102914fcea31998d1fb87379490f20e",
@@ -276,7 +276,7 @@
   "executionPlan": {
     "date": "2026-11-01",
     "document": "docs/36-next-execution-plan.md",
-    "state": "v048_final_qa_and_save",
+    "state": "v048_saved_reviewed_published",
     "nextMilestone": "公网匿名/可选账号额度隔离及实际HTTPS试用网址（4–6h，需部署环境）",
     "executionHours": [
       34,
@@ -300,22 +300,22 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v047_updated_desktop_verified"
+    "status": "v048_updated_desktop_verified"
   },
   "savedWork": {
     "version": "0.48.0",
     "snapshot": "first-step-多城市政策与官方检索-v0.48.0",
-    "state": "saving_and_final_review",
+    "state": "saved_and_reviewed",
     "review": "docs/57-city-policies-and-official-discovery-v048.md"
   },
   "futurePolicyCoverage": {
     "recordedOn": "2026-11-06",
-    "status": "implemented_pending_final_release",
+    "status": "implemented_reviewed_published",
     "document": "docs/57-city-policies-and-official-discovery-v048.md",
     "commonCityCatalog": "广州/深圳有限补贴、杭州西湖区/上海求职住宿",
     "uncoveredCityLookup": "求职住宿从固定官方目录实时发现并读正文；其他现金明确未覆盖，非全网搜索",
     "validation": "首轮9/10缺城市失败已修；修后10/10真实合成；三题检索开关仅来源可用性消融，非独立准确率",
-    "thisTurn": "新授权已开发/检索/在线测试，正在保存发布",
+    "thisTurn": "新授权完成开发/官方检索/真实合成测试与保存发布；57号和回执为证据。",
     "scopeChange": "覆盖旧广州样例扩展后置的范围约束，作为后续小范围多城市与按需检索方向；非全国维护承诺",
     "sizing": "本轮已实施；剩余公网/独立材料/试用/冻结估13–19h，加6h缓冲"
   }
