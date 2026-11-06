@@ -2,15 +2,15 @@
   "schemaVersion": 1,
   "updatedAt": "2026-11-06",
   "workingVersion": "0.47.0",
-  "releasedVersion": "0.46.0",
+  "releasedVersion": "0.47.0",
   "workState": "reviewed_internally",
-  "objective": "v0.47完成自然补问、工资差额首屏/快照、工具密度和范围/调用收束；149检查及最终28在线/离职重复3次通过，准备保存发布。",
+  "objective": "v0.47自然提问、差额首屏/金额快照、工具工作区与范围/调用边界已完成并保存推送；实际5186保存版复验通过。85–90继续为目标。",
   "latestUserRequest": "继续逐步优化到85甚至90的水平，额度充足，直接开始。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5186/?v=0.46.0#/home",
-    "snapshot": "first-step-工具按钮与填写体验-v0.46.0",
+    "url": "http://127.0.0.1:5186/?v=0.47.0#/home",
+    "snapshot": "first-step-自然提问与核对结果-v0.47.0",
     "state": "ready_for_user_review"
   },
   "implemented": {
@@ -94,7 +94,7 @@
     },
     {
       "id": "save-and-release",
-      "status": "in_progress",
+      "status": "complete",
       "acceptance": "新v47快照/默认预览/源码Git一致；旧保存点保留，日志同步。"
     }
   ],
@@ -107,7 +107,7 @@
     "performance": "QA曾自动简易，手动完整单页复核；不称低配实机验收。未降低原视觉资源参数。",
     "online": "初轮20/21范围未知误排除；后续28/28；末轮27/28离职tool-limit，收束工具后最终28/28及独立3/3重复通过。全部合成开发回归，失败原始记录保留。",
     "limits": "实际公网HTTPS/按身份额度、新人/低配、独立材料准确率未验。",
-    "savedPreview": "待保存版补验。"
+    "savedPreview": "实际5186为0.47.0/index等于本次构建；工资6534匹配，改9000/100后7500少50；租房7200；真实AI离职5问题/两步可用，单对话与控制台0warn/error。一次自动化等待超时后实际字段已可见，单步继续完成，未据此声称低配验收。"
   },
   "nextActions": [
     "按55号验证真实HTTPS网址和公开AI身份/额度边界；实际部署、图片/账号/音乐/失败恢复不能由代理模拟代替。",
@@ -137,13 +137,12 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "preparing",
-    "sourceCommit": "b8838db6abd25b828f4f57788bd57a08f0142963",
-    "verifiedAt": "2026-11-05",
+    "pushStatus": "published",
+    "sourceCommit": "7e2f79f3993e7894a286143dc012dfbb1a1b31d4",
+    "verifiedAt": "2026-11-06",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
     "previousPublishedHead": "7159986b2871ec444ce9dd3b050fd5a57e2bbc82",
-    "publicationReceipt": "outputs/v047-review/git-publication.json",
-    "historyAndLogCommit": "b8838db6abd25b828f4f57788bd57a08f0142963"
+    "publicationReceipt": "outputs/v047-review/git-publication.json"
   },
   "sideDeliverables": [
     {
@@ -248,7 +247,7 @@
   "executionPlan": {
     "date": "2026-11-01",
     "document": "docs/36-next-execution-plan.md",
-    "state": "v047_reviewed_saving",
+    "state": "v047_saved_reviewed_published",
     "nextMilestone": "公开身份/额度与实际网址、独立材料、新人/低配验证；11/14冻结。",
     "executionHours": [
       34,
@@ -272,12 +271,12 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v047_updated_sync_pending"
+    "status": "v047_updated_desktop_verified"
   },
   "savedWork": {
     "version": "0.47.0",
     "snapshot": "first-step-自然提问与核对结果-v0.47.0",
-    "state": "preparing",
+    "state": "saved_and_reviewed",
     "review": "docs/55-natural-guidance-and-pay-verdict-v047.md"
   }
 }
