@@ -1,0 +1,12 @@
+export type AIConnection={mode:'provided'|'personal'|'expired';configured:boolean;provider:'DeepSeek';model:string;expiresAt:string|null};
+export type UsageResource={used:number;limit:number;remaining:number;available:boolean};
+export type AIUsage={identity:'guest'|'account';day:string;resetAt:string;chat:UsageResource;image:UsageResource;counting:'started-attempts'};
+const object=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==='object'&&!Array.isArray(v);
+export function validConnection(v:unknown):v is AIConnection{return object(v)&&['provided','personal','expired'].includes(String(v.mode))&&typeof v.configured==='boolean'&&v.provider==='DeepSeek'&&typeof v.model==='string'&&v.model.length<=80&&(v.expiresAt===null||typeof v.expiresAt==='string'&&Number.isFinite(Date.parse(v.expiresAt)));}
+export function validUsage(v:unknown):v is AIUsage{if(!object(v)||!['guest','account'].includes(String(v.identity))||v.counting!=='started-attempts'||typeof v.day!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(v.day)||typeof v.resetAt!=='string'||!Number.isFinite(Date.parse(v.resetAt)))return false;return ['chat','image'].every(key=>{const r=v[key];return object(r)&&[r.used,r.limit,r.remaining].every(x=>typeof x==='number'&&Number.isInteger(x)&&x>=0&&x<=100000)&&r.remaining===Math.max(0,(r.limit as number)-(r.used as number))&&typeof r.available==='boolean';});}
+export async function settingsRequest(method='GET',body?:{apiKey:string;model:string},signal?:AbortSignal):Promise<AIConnection>{
+ let response:Response;try{response=await fetch('/api/v1/ai/settings',{method,credentials:'same-origin',cache:'no-store',headers:body?{'Content-Type':'application/json'}:undefined,body:body?JSON.stringify(body):undefined,signal:signal?AbortSignal.any([signal,AbortSignal.timeout(15000)]):AbortSignal.timeout(15000)});}catch{throw Error('暂时联系不上接口设置服务，请稍后重试。');}
+ let value;try{value=await response.json();}catch{throw Error('接口设置服务暂时无法读取，请稍后重试。');}
+ if(!response.ok)throw Error(typeof value.error==='string'?value.error:'设置没有完成，请重试。');if(!validConnection(value.data))throw Error('接口状态暂时无法确认。');return value.data;
+}
+export async function fetchUsage(signal:AbortSignal):Promise<AIUsage>{const response=await fetch('/api/v1/usage',{credentials:'same-origin',cache:'no-store',signal:AbortSignal.any([signal,AbortSignal.timeout(6000)])});if(!response.ok)throw Error('试用次数暂时无法读取。');const value=await response.json();if(!validUsage(value.data))throw Error('试用次数格式不完整。');return value.data;}

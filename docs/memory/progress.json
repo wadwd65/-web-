@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "updatedAt": "2026-11-06",
-  "workingVersion": "0.48.0",
+  "workingVersion": "0.49.0",
   "releasedVersion": "0.48.0",
   "workState": "reviewed_internally",
-  "objective": "v0.48已保存、5186真实保存版复核通过，源码已推送正确仓库；正在同步最终验收与回执。",
-  "latestUserRequest": "继续开发，争取90；按56号先补多城市政策和可验证的AI检索。90为目标，不是评分或奖项承诺。",
+  "objective": "v0.49接口设置/引导/身份额度内部自检通过，正在保存版复核和发布；明确不部署腾讯云。",
+  "latestUserRequest": "继续；腾讯云部署由用户后续处理，本轮明确不用部署。比赛默认沿用提供者API，另补用户自备API设置入口和使用引导。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
@@ -18,12 +18,12 @@
     "music": "八曲/单audio；原五曲加海愿（彼端）、Everything’s Alright纯音乐、春弦。首页切歌弹菜单即播不跳页，播放器接续进度，八匣可抽取/旋转，内部滚动、真实384格波形和官方fallback白名单均按目录适配。新增盘面复用原五张署名场景。",
     "visual": "保留浅蓝银色完整主体/音乐和原三维；新增同系统的轻量阅读布局、页首/聊天模式切换，简易播放器居中目录。完整模式模型/粒子/材质/抽取/播放旋转未重做。 v0.33首页去重复入口，v0.35.1自由输入常驻、补问可选、字色/字段对比加强、返回状态放页底不遮清单。 v0.35.2本地工具页问题入口/八项首屏列表、全屏浅色对话阅读布局已实现，尚待最终QA和用户反馈。 v0.36收起工作区重复底部入口、精简合同/清单标题和空白、确认后仍可读；v0.35.2跨模式/1041桌面检查已补。 v0.40仅保留左侧入口和底部横向提问的新布局，其余恢复v0.39；轨道/蓝雾/黄金比例图形撤回，46号为事实。 v0.47只收紧工作栏/页签/标题/草稿/说明，1280工资六项两行三列，差额与计算/到账首屏并列。首页/三维/音乐/入场/鼠标12原文件与v46相同。",
     "interaction": "前景模型的图内/文字子选项保留，要求手势开始和结束均为稳定前景、同pointer/物体/子区域、总位移≤6px且在画布内；后排只预览，无任意双击跳页。工作区/音乐/对话共享原业务与单audio。 v0.41完整首页每次加载等待点击/Enter，不因seen跳过；页面隐藏/准备不消耗阶段，提前唤起三维，跳过/回放和单audio连续，47号为说明。 v0.42按48号拆开等待与演出，恢复原文字逐字、符号绘制、三段事务及双幕，序列4.9秒。 v0.43按49号增加入场持续环境动态及局部鼠标视差，按钮固定，入口卸载清理。 v0.45首屏标志悬停/聚焦流光与独立点击彩蛋，第二幕去句号与文案/字排/细线动画精修，52号为交接。 v0.46主页鼠标可见性增强，简易仅点击反馈。工具主按钮和页签文案清楚，工资逐项确认0/示例先填后算；首页按钮强化候选按用户更正撤回，恢复45。 v0.47当前事项按路由、就绪在绘制前通知，避免旧结果页签闪现及快速返回被迟到状态覆盖。",
-    "api": "真实同源Node助手网关与DeepSeek function calling；四项白名单工具，共用工资/合同规则；取消、超时、限额、Origin/Host与输入证据校验。旧文档review客户端仍仅协议预留。 v0.39进程环境PUBLIC_ORIGIN可指定一个HTTPS站点，AI/图像/账号共用Host/Origin精确校验；serve支持PORT和显式HOST，公开指纹资源缓存。仅本地代理条件模拟验过，实际部署待。",
-    "copy": "首页、目录与对话采用直接用语，区分本地规则、真实助手、单图校对和小范围检索。",
+    "api": "真实同源Node助手网关与DeepSeek function calling；四项白名单工具，共用工资/合同规则；取消、超时、限额、Origin/Host与输入证据校验。旧文档review客户端仍仅协议预留。 v0.39进程环境PUBLIC_ORIGIN可指定一个HTTPS站点，AI/图像/账号共用Host/Origin精确校验；serve支持PORT和显式HOST，公开指纹资源缓存。仅本地代理条件模拟验过，实际部署待。 v0.49统一local-services入口；游客/账号/网络/全站日额度与分钟/短租约持久化、用量接口、右上角及对话内API设置；用户可临时接自备DeepSeek，默认比赛配置保留。",
+    "copy": "首页、目录与对话采用直接用语，区分本地规则、真实助手、单图校对和小范围检索。 v0.49新手三步、官方Key获取链接、当前接口类别与剩余次数可见，强制注册/配置不增加。",
     "ai": "真实DeepSeek先plan_tasks识别意图/事项（最多3候选）、必要补问（最多3项）/先选一件/纠正/未知/超范围；原4项执行工具仍共用规则，非ready不执行。补问与选择的固定安全提示标记guide，解释/工具后的模型文字标记model。金额分次原话逐段校验、最新更正/撤回校验；新用户消息后旧应用停用，仅最新结果可显式填入工具/清单。聊天入口仍只读文字，合同单图能力见image字段；v0.35有小范围官方合同RAG，材料不自动发。 v0.33按序保留所有用户原话，仅折叠早期助手解释，约20k材料上限；不生成事实摘要。收起继续、停止可重试、旧动作停用；实际阶段NDJSON/JSON兼容。 v0.35.1直接自由回复/换题，补问可选；一般解释先答，明确打开时给入口；已说明未知的工资项给查找方法。 v0.38修一般租房咨询计划冲突，补明确的计划重试信息；已观察越界解释回退到原摘录并标guide。 v0.47明确没有/没扣可作为该项0证据；未知/近似/问句/公司承担不当个人确认值，最新更正优先；按原话清理重复补问，问从哪开始先解释。有效计划不重复规划，按意图要求执行工具，成功后关闭继续调用；上游重复请求时保留已核验动作并标guide。 v0.48：search_city_policies在真实计划后读取官方来源，最新城市原话校验，来源与任务一致，显式点击返回同城市工具；未覆盖不补造。",
     "performance": "v0.31缓存实际CSS赋值、同形几何复用、静态局部矩阵固定/世界矩阵单次更新、拾取数组复用及可见过滤、脉冲实例化；播放器悬停只预取字节，实际打开才解析/建场景。未降低DPR/粒子/阴影/动画；v0.31时自动简易未实现。 v0.32简易卸载事务/音乐三维，首访简易不请求Three场景/GLB/盘面。有效RAF采样窗口、预热和排除项、自动降级/手动恢复生产控制器已实现；阈值仅帧序列模拟验证，低配实机待校准。 v0.39工具首次访问才挂载，访问后保留；清单value变化才重算高度，转场直接写采样数组。?perf=1主动下载有效窗/原因，普通入口不建记录；手动完整诊断继续采样但不自动强切。",
     "image": "单张PNG/JPEG明确发送DeepSeek，原图对照、编辑、校对确认后带入原文字规则；不自动确认关系/期限，不保存原图。 v0.38失败可点击回到粘贴区，保留原文；无法辨认但无警示时补人工校对提示。",
-    "account": "右上角可选真实本机账号；密码scrypt、会话散列/HttpOnly cookie、SQLite工程外。主动保存地区/阶段/备注/清单，AI预填不自动发；退出清当前填写/对话并回游客清单。无公网部署/找回密码/全部草稿自动同步。 v0.37登录/退出均清当前工具/对话，初始查询序列保护；本机草稿按账号在浏览器区分。",
+    "account": "右上角可选真实本机账号；密码scrypt、会话散列/HttpOnly cookie、SQLite工程外。主动保存地区/阶段/备注/清单，AI预填不自动发；退出清当前填写/对话并回游客清单。无公网部署/找回密码/全部草稿自动同步。 v0.37登录/退出均清当前工具/对话，初始查询序列保护；本机草稿按账号在浏览器区分。 v0.49仅用账号ID分配额，不读个人记忆；临时API按游客/账号绑定，身份变化不可沿用。",
     "retrieval": "小范围官方法条关键词排序检索，八摘录覆盖17/19/22/23/25条；真实计划后命中原文入模型上下文，独立来源卡、范围/版本/核验日；未命中/不适用/旧版/待核验安全返回；手动核对和复制导出共用。 v0.38口语排序、明确短追问从最近三条用户消息借单主题；换题/多主题/助手断言不借用，检索查询不作为执行事实。 v0.47未知“是不是全日制”不再当成明确的非全日制排除，仍需确认关系才能执行核对。 v0.48：四个常见城市有限资料，其他求职住宿从固定官方目录实时发现精确城市并读正文；非全国现金补贴搜索。范围/日期/未知独立，复制/下载/草稿保留。",
     "drafts": "九个独立浏览器草稿槽，用户主动保存/恢复/清除和撤销；游客/账号分开，身份未确认禁用，切账号清当前填写。八工具输入/示例标记、路线勾选备注及聊天历史/未发送输入；不保存图片或可执行旧动作，不跨设备同步。"
   },
@@ -72,7 +72,7 @@
   "missingCapabilities": [
     "检索库以外的法规/地区维护、指代召回、真实材料准确率和更完整的证据关系",
     "图像页码坐标框/真实材料准确率评测与完整多模态主线",
-    "公网实际HTTPS部署、按身份额度/滥用隔离及账号恢复（单公开来源接入已备）",
+    "腾讯云实际HTTPS/代理部署验收、真实滥用压测/共享网络限额校准与账号恢复（本机身份额度已实现）",
     "全国政策维护",
     "低配实机采样及阈值校准（控制器模拟已通过）"
   ],
@@ -94,8 +94,8 @@
     },
     {
       "id": "save-and-release",
-      "status": "complete",
-      "acceptance": "新v48快照/5186保存版/源码仓库一致；旧v47及更早保留，总日志与历史文档同步。"
+      "status": "v049_final_save_pending",
+      "acceptance": "v48保存点保留；正在保存v49接口设置/引导/用量及统一服务入口并复核5186与正确仓库"
     },
     {
       "id": "multi-city-policy-record",
@@ -106,24 +106,28 @@
       "id": "v048-city-policies",
       "status": "complete",
       "acceptance": "四城有限目录、其他城市官方住宿发现、跨城边界、真实AI/来源导出及实际保存版闭环通过，57号与outputs/v048-review；不等于独立准确率或全国覆盖。"
+    },
+    {
+      "id": "v049-trial-api-settings",
+      "status": "internal_qa_passed",
+      "acceptance": "174检查、真实默认/自备接口、关闭清空/错误保持/嵌套引导/1280和1041通过；保存版及发布待"
     }
   ],
   "validation": {
-    "version": "0.48.0",
-    "automated": "160 passed, 0 failed; TypeScript/build passed; main ~507KB and shared Three ~583KB warnings remain.",
-    "evidence": "outputs/v048-review",
-    "visualAcceptance": "政策页沿原浅蓝工作区，独立QA城市选择/来源/日期/下载及1041桌面无横向溢出；仅内部审图，非用户认可。11个首页/音乐/入场/鼠标/公式文件与v47相同，第七项文字绑定随政策范围更新。",
-    "manual": "成都/宁波实时正文、杭州区县范围、武汉未命中、真实复制/TXT下载、广州原条件筛选、工具→共享AI→同城市工具；完整/简易结果连续，单audio，控制台无warn/error。",
-    "performance": "未加常驻帧循环或音频；成功公共来源6h/40项缓存。QA自动简易与手动恢复发生，不代替低配实机。",
-    "online": "政策首轮9/10缺城市失败已修，后续及最终10/10；原28/28真实合成。三题关闭检索仅来源可用性对照，不是独立准确率。日期白名单误拦已诊断并加回归。",
-    "limits": "其他现金补贴/全国维护未覆盖；公网按身份额度/HTTPS、独立材料准确率、真实新人和低配实机待。",
-    "savedPreview": "实际5186版本0.48.0与canonical dist/index.html逐字节一致；保存版POST成都政策实际命中，真实DeepSeek按来源解释并经显式按钮回同一成都工具。复制/TXT在独立QA通过；无横向溢出、单audio、控制台0warn/error。临时5293关闭，用户填写页未被刷新。"
+    "version": "0.49.0",
+    "automated": "174 passed, TypeScript/build passed; main ~518KB/shared Three ~583KB warnings remain",
+    "evidence": "outputs/v049-review",
+    "visualAcceptance": "API设置/三步引导沿浅蓝银色，1280及1041内部审图/无横向溢出，不等于用户认可。 展开API表单在1280×720主按钮和密钥均首屏，638px无内部滚动，12个旧视觉/公式文件字节一致。",
+    "manual": "默认真实工资7500/差50与20→19，真实自备HTTP模型验证/问答/切回；错误Key不覆盖、关闭清空、对话内嵌套引导返回、无重复ID。保存版待。",
+    "limits": "只支持官方DeepSeek；真实公网、独立准确率、新人低配/反滥用仍待。",
+    "console": "一条既有Three驱动精度warn，未见error，未抑制；场景资产未重做。",
+    "savedPreview": "待本轮保存版复核"
   },
   "nextActions": [
-    "公网匿名/可选账号额度隔离及实际HTTPS试用网址（4–6h，需部署环境）",
-    "冻结独立材料与题集，做合同/图像/政策准确率与检索对照（4–6h），保留未通过项",
-    "真实新人和低配通过实际网址试用并修阻塞（3–4h，不用代理QA替代）",
-    "11/14冻结、11/17材料、11/18提交，不扩手机/音乐/全国现金政策"
+    "冻结独立合同/图片/政策材料与参考答案，做盲测和检索对照（4–6h）",
+    "用户之后腾讯云部署；收到实际网址再验HTTPS/代理/身份与重启，不擅自部署",
+    "真实新人和低配通过实际网址试用，收集完成率/耗时/有效帧并修阻塞（3–4h）",
+    "冻结与演示材料2–3h、另6h缓冲；11/14冻结，11/17材料，11/18提交"
   ],
   "visualSources": [
     {
@@ -148,12 +152,12 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "published",
+    "pushStatus": "publishing_v049",
     "sourceCommit": "70168afaec708b6acb0b8a131bd3695bb7e8e05b",
     "verifiedAt": "2026-11-06",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "8a9659b6f102914fcea31998d1fb87379490f20e",
-    "publicationReceipt": "outputs/v048-review/git-publication.json"
+    "previousPublishedHead": "770fe577307ce5e28815508b1a7d38ee74cdb955",
+    "publicationReceipt": "outputs/v049-review/git-publication.json"
   },
   "sideDeliverables": [
     {
@@ -240,7 +244,7 @@
     "scoreTarget": 90,
     "scoreMeaning": "90为新用户目标，v47内部77(73–82)尚未重评，另保留用户65–74复评；本轮不因测试数或城市数涨分。",
     "coreScope": "八工具与限定签约AI主线；已新增少量城市政策/固定官方住宿目录，非全国现金补贴维护；不扩手机或音乐。",
-    "currentReview": "docs/57-city-policies-and-official-discovery-v048.md",
+    "currentReview": "docs/58-api-settings-and-trial-limits-v049.md",
     "scoreCurrent": 77,
     "scoreRange": [
       73,
@@ -255,11 +259,11 @@
       44
     ],
     "futureWorkEstimate": [
-      13,
-      19
+      9,
+      13
     ],
     "futureContingencyHours": 6,
-    "policyRequestSizing": "v48已实施；11/7–13可用21–28h，剩余13–19h开发核验加6h缓冲；外部部署/试用等待另计。"
+    "policyRequestSizing": "v48政策及v49本机接口/额度已完成；剩余独立材料、试用及冻结9–13h+6h缓冲，腾讯云由用户后续部署，等待另计。"
   },
   "latestAudit": {
     "date": "2026-11-06",
@@ -271,13 +275,13 @@
       82
     ],
     "meaning": "implementation-based weighted internal estimate, not official score or prize promise",
-    "nextRecommendation": "公网匿名/可选账号额度隔离及实际HTTPS试用网址（4–6h，需部署环境）"
+    "nextRecommendation": "冻结独立合同/图片/政策材料与参考答案，做盲测和检索对照（4–6h）"
   },
   "executionPlan": {
     "date": "2026-11-01",
     "document": "docs/36-next-execution-plan.md",
-    "state": "v048_saved_reviewed_published",
-    "nextMilestone": "公网匿名/可选账号额度隔离及实际HTTPS试用网址（4–6h，需部署环境）",
+    "state": "v049_final_qa_and_save",
+    "nextMilestone": "冻结独立合同/图片/政策材料与参考答案，做盲测和检索对照（4–6h）",
     "executionHours": [
       34,
       46
@@ -303,10 +307,10 @@
     "status": "v048_updated_desktop_verified"
   },
   "savedWork": {
-    "version": "0.48.0",
-    "snapshot": "first-step-多城市政策与官方检索-v0.48.0",
-    "state": "saved_and_reviewed",
-    "review": "docs/57-city-policies-and-official-discovery-v048.md"
+    "version": "0.49.0",
+    "snapshot": "first-step-自备API与使用引导-v0.49.0",
+    "state": "saving_and_final_review",
+    "review": "docs/58-api-settings-and-trial-limits-v049.md"
   },
   "futurePolicyCoverage": {
     "recordedOn": "2026-11-06",
@@ -318,5 +322,12 @@
     "thisTurn": "新授权完成开发/官方检索/真实合成测试与保存发布；57号和回执为证据。",
     "scopeChange": "覆盖旧广州样例扩展后置的范围约束，作为后续小范围多城市与按需检索方向；非全国维护承诺",
     "sizing": "本轮已实施；剩余公网/独立材料/试用/冻结估13–19h，加6h缓冲"
+  },
+  "deployment": {
+    "providerIntention": "Tencent Cloud, exact product not selected",
+    "userInstruction": "用户之后自行部署，本轮明确不用部署",
+    "state": "not_deployed",
+    "prepared": "docs/58-api-settings-and-trial-limits-v049.md",
+    "publicVerification": "not_performed"
   }
 }

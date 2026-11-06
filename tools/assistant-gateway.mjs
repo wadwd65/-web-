@@ -1,3 +1,4 @@
+import {UsageError} from './usage-service.mjs';
 import {cityPolicyService} from './city-policy-service.mjs';
 import {policyCity,assertPolicyCityEvidence,isCityPolicyResult} from '../src/lib/city-policies.ts';
 import {readFileSync,existsSync} from 'node:fs';
@@ -286,18 +287,19 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
 }
 
 function json(res,status,body){res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(JSON.stringify(body));}
-function readBody(req){return new Promise((resolve,reject)=>{let size=0;const chunks=[];req.on('data',chunk=>{size+=chunk.length;if(size<=98304)chunks.push(chunk);});req.on('end',()=>{if(size>98304){reject(new AssistantError('too-large','问题内容太长，请分次发送。',413));return;}try{resolve(JSON.parse(Buffer.concat(chunks).toString('utf8')));}catch{reject(new AssistantError('invalid-input','请求内容无法读取，请重新发送。'));}});req.on('error',()=>reject(new AssistantError('aborted','请求已停止。',499)));});}
-export function createAssistantMiddleware({directory,config,fetcher,timeoutMs,policy=createRequestPolicy()}={}){
+function readBody(req){return new Promise((resolve,reject)=>{let size=0;const chunks=[];req.on('data',chunk=>{size+=chunk.length;if(size<=98304)chunks.push(chunk);});req.on('end',()=>{if(size>98304){reject(new AssistantError('too-large','问题内容太长，请分次发送。',413));return;}try{resolve(JSON.parse(Buffer.concat(chunks).toString('utf8')));}catch{reject(new AssistantError('invalid-input','请求内容无法读取，请重新发送。'));}});req.on('error',()=>reject(new AssistantError('aborted','请求已停止。',499)));req.on('aborted',()=>reject(new AssistantError('aborted','请求已停止。',499)));});}
+export function createAssistantMiddleware({directory,config,fetcher,timeoutMs,usage,credentials,policy=createRequestPolicy()}={}){
   let busy=0;const starts=[];
   return (req,res)=>{
     const path=new URL(req.url,'http://localhost').pathname;
     if(!path.startsWith('/api/v1/assistant/'))return false;
     const requestId=randomUUID();
-    const fail=error=>{if(res.destroyed||res.writableEnded)return;const e=error instanceof AssistantError?error:new AssistantError('internal','这次请求没有完成，请稍后重试。',500);if(res.headersSent){res.end(JSON.stringify({type:'error',error:{code:e.code,message:e.message}})+'\n');}else json(res,e.status,{requestId,error:{code:e.code,message:e.message}});};
+    const fail=error=>{if(res.destroyed||res.writableEnded)return;if(error instanceof UsageError&&!res.headersSent)res.setHeader('Retry-After',String(error.retryAfter));const e=error instanceof AssistantError?error:error instanceof UsageError||error?.code==='settings-expired'?new AssistantError(error.code,error.message,error.status||503):new AssistantError('internal','这次请求没有完成，请稍后重试。',500);if(res.headersSent){res.end(JSON.stringify({type:'error',error:{code:e.code,message:e.message}})+'\n');}else json(res,e.status,{requestId,error:{code:e.code,message:e.message}});};
     try{
       if(!policy.allows(req))throw new AssistantError('origin','请在本站页面中使用AI助手。',403);
-      const current=config??readAssistantConfig(directory||process.cwd());
-      if(path==='/api/v1/assistant/status'&&req.method==='GET'){json(res,200,{requestId,data:{configured:Boolean(current.apiKey),provider:'DeepSeek',model:current.model||'deepseek-flash'}});return true;}
+      const base=config??readAssistantConfig(directory||process.cwd());
+      if(path==='/api/v1/assistant/status'&&req.method==='GET'){const state=credentials?.describe(req,res);json(res,200,{requestId,data:{configured:state?.configured??Boolean(base.apiKey),provider:'DeepSeek',model:state?.model||base.model||'deepseek-flash',...(state?{connection:state.mode}:{})}});return true;}
+      const current=credentials?credentials.configuration(req,res,base):base;
       if(path!=='/api/v1/assistant/chat'){throw new AssistantError('not-found','没有找到这个AI接口。',404);}
       if(req.method!=='POST')throw new AssistantError('method','这个接口需要发送文字问题。',405);
       if(!req.headers['content-type']?.startsWith('application/json'))throw new AssistantError('content-type','请使用文字对话入口。',415);
@@ -307,7 +309,8 @@ export function createAssistantMiddleware({directory,config,fetcher,timeoutMs,po
       const abort=new AbortController();const disconnected=()=>{if(!res.writableEnded)abort.abort();};res.on('close',disconnected);
       const streaming=req.headers.accept?.includes('application/x-ndjson');
       const progress=stage=>{if(!streaming||res.destroyed||res.writableEnded)return;if(!res.headersSent){res.writeHead(200,{'Content-Type':'application/x-ndjson; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.flushHeaders();}res.write(JSON.stringify({type:'progress',stage})+'\n');};
-      void readBody(req).then(input=>runAssistant(input,{config:current,fetcher,signal:abort.signal,timeoutMs,onProgress:progress})).then(data=>{if(res.destroyed)return;if(res.headersSent)res.end(JSON.stringify({type:'result',data})+'\n');else json(res,200,{requestId,data});}).catch(fail).finally(()=>{busy--;res.removeListener('close',disconnected);});
+      let lease;
+      void readBody(req).then(input=>{validateConversation(input);if(abort.signal.aborted)throw new AssistantError('aborted','已停止回复。',499);if(!current.apiKey)throw new AssistantError('not-configured','助手暂时没有连接，可以先使用工具列表。',503);if(policy.secure&&!usage)throw new AssistantError('usage-unavailable','试用计数暂不可用，请稍后再试。',503);lease=usage?.reserve(req,res,'chat',policy.secure);return runAssistant(input,{config:current,fetcher,signal:abort.signal,timeoutMs,onProgress:progress});}).then(data=>{if(res.destroyed)return;if(res.headersSent)res.end(JSON.stringify({type:'result',data})+'\n');else json(res,200,{requestId,data});}).catch(fail).finally(()=>{lease?.release();busy--;res.removeListener('close',disconnected);});
     }catch(error){fail(error);}
     return true;
   };

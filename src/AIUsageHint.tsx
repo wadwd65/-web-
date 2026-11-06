@@ -1,0 +1,10 @@
+import {useEffect,useState} from 'react';
+import {fetchUsage} from './services/ai-settings-client.ts';
+import type {AIUsage} from './services/ai-settings-client.ts';
+export default function AIUsageHint({active,refresh,kind='chat'}:{active:boolean;refresh:boolean;kind?:'chat'|'image'}){
+ const [value,setValue]=useState<AIUsage|null>(null),[error,setError]=useState(false),[revision,setRevision]=useState(0);
+ useEffect(()=>{const changed=()=>setRevision(v=>v+1);window.addEventListener('first-step-ai-settings-changed',changed);return()=>window.removeEventListener('first-step-ai-settings-changed',changed);},[]);
+ useEffect(()=>{if(!active||refresh)return;const controller=new AbortController();void fetchUsage(controller.signal).then(v=>{setValue(v);setError(false);}).catch(()=>{if(!controller.signal.aborted)setError(true);});return()=>controller.abort();},[active,refresh,revision]);
+ if(!active)return null;const remaining=value?.[kind];
+ return <details className="ai-usage-hint"><summary>{error?'试用次数暂未确认':remaining?`今日${kind==='chat'?'提问':'识图'}剩余 ${remaining.remaining} / ${remaining.limit} 次${remaining.available?'':' · 当前暂不可用'}`:'正在读取试用次数…'}</summary><p>{value?.identity==='account'?'按当前账号计次':'游客按当前浏览器计次，无需登录'}，北京时间每日零点恢复。开始调用模型后计一次；中断或失败也会计入，以防反复请求。本站和同一网络还有请求保护，次数不代表API余额；八项手动工具不受此限。</p></details>;
+}

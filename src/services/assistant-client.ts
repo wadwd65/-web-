@@ -68,7 +68,7 @@ export function createAssistantClient(fetcher:typeof fetch=fetch){
   }finally{clearTimeout(timer);signal?.removeEventListener('abort',cancel);}
  }
  return {
-  async status(signal?:AbortSignal):Promise<AssistantStatus>{const data=await request('status',undefined,signal);if(!object(data)||typeof data.configured!=='boolean'||data.provider!=='DeepSeek'||!text(data.model,100))throw new AssistantClientError('invalid-response','AI连接状态暂不可用。');return data as unknown as AssistantStatus;},
+  async status(signal?:AbortSignal):Promise<AssistantStatus>{const data=await request('status',undefined,signal);if(!object(data)||typeof data.configured!=='boolean'||data.provider!=='DeepSeek'||!text(data.model,100)||(data.connection!==undefined&&!['provided','personal','expired'].includes(String(data.connection))))throw new AssistantClientError('invalid-response','AI连接状态暂不可用。');return data as unknown as AssistantStatus;},
   async chat(messages:AssistantMessage[],module:string,signal?:AbortSignal,onProgress?:(stage:AssistantProgress)=>void){return validateAssistantReply(await request('chat',{messages,module},signal,onProgress));},
  };
 }

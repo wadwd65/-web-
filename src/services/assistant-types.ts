@@ -16,5 +16,5 @@ export type AssistantProgress='planning'|'retrieving'|'checking'|'responding';
 export type AssistantStep={id:string;name:string;label:string;ok:boolean;summary:string};
 export type AssistantGuide={intent?:'calculate'|'review'|'guidance'|'questions';status:'choose'|'needs-info'|'ready'|'clarify'|'out-of-scope';tasks:{module:Exclude<AssistantModule,'list'>;reason:string}[];activeModule:Exclude<AssistantModule,'list'>|null;questions:{label:string;hint:string}[]};
 export type AssistantReply={reply:string;actions:AssistantAction[];steps:AssistantStep[];provider:'DeepSeek';model:string;replyOrigin?:'model'|'guide';guide?:AssistantGuide;references?:ContractRetrieval;policyReferences?:CityPolicyResult};
-export type AssistantStatus={configured:boolean;provider:'DeepSeek';model:string};
+export type AssistantStatus={configured:boolean;provider:'DeepSeek';model:string;connection?:'provided'|'personal'|'expired'};
 export type AssistantApply<T>={id:number;input:T};
