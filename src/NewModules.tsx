@@ -1,5 +1,5 @@
 import DraftControls from './DraftControls.tsx';
-import {useEffect,useRef,useState} from 'react';
+import {useEffect,useLayoutEffect,useRef,useState} from 'react';
 import {ArrowRight,ArrowUpRight,Check,ChevronDown,Download,Plus,Trash2} from 'lucide-react';
 import {cash,compareOffers,estimateAnnualTax,leavingRoute,PORTALS,rentBudget,reviewRent,socialRoute,SOURCES,TAX_BANDS,VERIFIED} from './lib/eight-tools.ts';
 import type {LeavingInput,OfferInput,RouteStep,SocialInput,Source,TaxInput} from './lib/eight-tools.ts';
@@ -10,7 +10,7 @@ import {saveText,recordTime} from './lib/download.ts';
 type Question={text:string;category:string};
 type Progress=(id:ToolId,value:ToolSignal)=>void;
 type Props={onProgress:Progress;addQuestions:(items:Question[])=>void;notify:(text:string)=>void};
-function useProgress(id:ToolId,onProgress:Progress,value:ToolSignal){const key=JSON.stringify(value);useEffect(()=>onProgress(id,value),[id,onProgress,key]);}
+function useProgress(id:ToolId,onProgress:Progress,value:ToolSignal){const key=JSON.stringify(value);useLayoutEffect(()=>onProgress(id,value),[id,onProgress,key]);}
 function Header({code,title,detail,example,sample=false}:{code:string;title:string;detail:string;example?:()=>void;sample?:boolean}){return <header className="tool-heading"><div><span className="eyebrow">{code} / LOCAL WORKSPACE</span><h1>{title}</h1>{sample&&<small className="tool-demo">由合成示例开始 · 使用前请逐项核实</small>}<p>{detail}</p></div>{example&&<button className="button secondary" type="button" onClick={example}>用示例填一遍<ArrowUpRight size={14}/></button>}</header>;}
 function SourceNotes({items}:{items:Source[]}){return <details className="tool-sources"><summary>依据与适用范围 <span>核验 {VERIFIED}</span><ChevronDown size={13}/></summary>{items.map(item=><div key={item.url}><a href={item.url} target="_blank" rel="noreferrer">{item.name}<ArrowUpRight size={12}/></a><p>{item.scope}</p></div>)}</details>;}
 function Action({form,label,done,exportRecord}:{form:string;label:string;done:boolean;exportRecord:()=>void}){return <div className="tool-action"><div><strong>{done?'结果已准备好，可以查看或下载':'填好下面的信息，再点蓝色按钮'}</strong><small>想改内容，可以切回上方填写页</small></div><button className="button primary tool-generate" form={form} type="submit">{label}<ArrowRight size={18}/></button>{done&&<button className="button primary tool-export" onClick={exportRecord}>下载这次结果<Download size={17}/></button>}</div>;}

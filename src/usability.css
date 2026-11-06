@@ -36,3 +36,70 @@
 @media (prefers-reduced-motion: reduce) {
   .experience-shell .experience-workspace .button { transition: none; }
 }
+
+/* Keep the terminal; spend its height on the actual task. Desktop only. */
+.experience-shell .experience-workbar { min-height: 36px !important; }
+.experience-shell .experience-workbar > button,
+.experience-shell .experience-workbar > div > button { min-height: 32px; }
+.experience-shell .experience-workspace .motion-work-nav { top: 36px; min-height: 46px; margin-bottom: 8px; padding: 2px 0; gap: 14px; }
+.experience-shell .experience-workspace .motion-work-nav > div { display: none; }
+.experience-shell .experience-workspace .motion-work-nav > button { min-height: 42px; padding: 5px 0; gap: 4px 6px; }
+.experience-shell .experience-workspace .task-action-strip { top: 82px; padding: 5px 0 8px; margin-bottom: 10px; gap: 6px 16px; }
+.experience-shell .experience-workspace .terminal-page-heading { min-height: 34px; margin-bottom: 7px; gap: 12px; }
+.experience-shell .experience-workspace .page-heading-copy h1 { margin: 0; }
+.experience-workspace .draft-controls { min-height: 28px; padding: 2px 0; margin-bottom: 7px; border-top: 0; gap: 3px 12px; }
+.experience-workspace .draft-caption > span { gap: 4px 8px; }
+.experience-workspace .draft-caption small { font-size: 11px; }
+.experience-workspace .draft-actions { gap: 14px; }
+.experience-workspace .draft-actions > button { padding: 4px 0; min-height: 28px; }
+.experience-workspace .tool-heading { margin: 5px 0 12px; gap: 16px; }
+.experience-workspace .tool-heading .eyebrow { display: none; }
+.experience-workspace .tool-heading h1 { margin: 0; font-size: 22px; }
+.experience-workspace .tool-heading p { margin: 5px 0 0; font-size: 12px; line-height: 1.7; color: #4c7088; }
+.experience-workspace .tool-heading > button { margin-top: 0; min-height: 34px; }
+.experience-workspace .tool-heading .tool-demo { font-size: 11px; }
+.experience-workspace .tool-action { padding: 10px 0; margin-bottom: 14px; gap: 16px; }
+.experience-workspace .tool-action small { font-size: 11px; color: #536f82; }
+.experience-workspace .task-action-strip .button.primary { min-height: 44px; padding: 10px 16px; }
+.experience-workspace .pay-field-help > small { font-size: 11px; }
+.salary-workbench .pay-field { gap: 3px; }
+.salary-workbench .pay-field-title { margin-bottom: 5px; }
+.salary-workbench .form-grid { gap: 10px 24px; }
+.salary-workbench .pay-field-help { min-height: 24px; }
+.salary-workbench .pay-field .currency-input { min-height: 42px; }
+.experience-shell .salary-workbench .currency-input input { min-height: 40px; }
+.salary-workbench .input-footnote { margin-top: 10px; font-size: 11px; }
+.salary-workbench .salary-calculate { margin-top: 8px; }
+.salary-workbench .page-heading-actions .button { padding: 7px 10px; }
+.experience-shell .salary-workbench .page-heading-actions .button { min-height: 34px; }
+.experience-shell[data-view=result] .salary-workbench { display: flex; flex-direction: column; }
+.experience-shell[data-view=result] .salary-workbench > .draft-controls { order: 5; margin-top: 12px; }
+.experience-shell .salary-workbench .instrument-glass { padding-top: 4px; }
+.experience-shell .salary-verdict h2 { margin: 14px 0 7px; font-size: 23px; line-height: 1.5; color: #224d66; font-weight: 550; }
+.experience-shell .salary-verdict[data-status=less] h2,
+.experience-shell .salary-verdict[data-status=more] h2 { color: #8e602e; }
+.salary-verdict-next { color: #526e82; font-size: 12px; line-height: 1.8; margin-bottom: 18px; }
+.salary-comparison { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 20px; padding: 13px 0 18px; border-top: 1px solid #aec8d8; border-bottom: 1px solid #aec8d8; }
+.salary-comparison > div { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.salary-comparison > div > span { font-size: 12px; color: #526f83; }
+.salary-comparison > div > strong { font: 400 clamp(19px,1.8vw,26px) var(--mono); color: #2f6687; overflow-wrap: anywhere; }
+.experience-shell .salary-comparison .pay-display-amount { margin: 0; gap: 5px; }
+.experience-shell .salary-comparison .pay-display-amount > small { font-size: 17px; }
+.experience-shell .salary-comparison .pay-display-amount > strong { font: 400 clamp(21px,2.1vw,30px) var(--mono); letter-spacing: -1px; overflow-wrap: anywhere; }
+.salary-verdict[data-status=less] .salary-comparison > div:last-child > strong,
+.salary-verdict[data-status=more] .salary-comparison > div:last-child > strong { color: #8e602e; }
+.salary-equation-line { display: flex; flex-wrap: wrap; gap: 9px 14px; margin: 14px 0; color: #416d88; font-size: 12px; line-height: 1.8; }
+.salary-allocation { display: flex; align-items: center; gap: 12px; font-size: 11px; color: #597b90; margin: 12px 0 18px; }
+.salary-allocation > i { flex: 1; height: 4px; background: #b5cedc; }
+.salary-allocation b { display: block; height: 4px; background: #338cb3; }
+.experience-shell .salary-save-question { margin: 0 0 6px; justify-content: space-between; }
+.experience-shell .salary-workbench .deduction-deck { padding: 16px 0 2px; }
+.experience-shell .salary-workbench .salary-equation { margin: 9px 0; }
+.experience-shell .salary-workbench .salary-equation > div { color: #4d7088; padding: 8px 0; }
+.salary-question-evidence blockquote { color: #365f79; font-size: 13px; line-height: 1.9; }
+@media (min-width: 1200px) {
+  .salary-workbench .form-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px 20px; }
+}
+
+.assistant-evidence p.assistant-evidence-verdict { color:#285c7a; font-size:15px; font-weight:550; margin:9px 0; }
+.assistant-evidence[data-status=less] p.assistant-evidence-verdict, .assistant-evidence[data-status=more] p.assistant-evidence-verdict { color:#8e602e; }

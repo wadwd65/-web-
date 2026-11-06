@@ -56,9 +56,9 @@ export default function ExperienceWorkspace({page,go,questionCount,signals,openS
   const soundtrack=useSoundtrack({working:working&&!musicOpen,entering:intro});
   const intent=useRef<{page:ExperiencePage;view:'material'|'result'}|null>(null);
   const [focusRequest,setFocusRequest]=useState<{page:ExperiencePage;view:'material'|'result';detail?:string;serial:number}|null>(null);
-  const task=EXPERIENCE_MODULES[selected],list=page==='list',tools=page==='tools',utility=list||tools;
+  const routeIndex=find(page),task=EXPERIENCE_MODULES[routeIndex>=0?routeIndex:selected],list=page==='list',tools=page==='tools',utility=list||tools;
   const hasResult=!!task&&resultAvailable(task.id,signals);
-  useEffect(()=>{if(intent.current){if(intent.current.page===page){setWorkView(intent.current.view);intent.current=null;}}else setWorkView(hasResult?'result':'material');},[hasResult,page]);
+  useLayoutEffect(()=>{if(intent.current){if(intent.current.page===page){setWorkView(intent.current.view);intent.current=null;}}else setWorkView(hasResult?'result':'material');},[hasResult,page]);
   useEffect(()=>{
     if(!focusRequest||!working||page!==focusRequest.page||workView!==focusRequest.view)return;
     const timer=setTimeout(()=>{

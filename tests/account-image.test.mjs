@@ -7,7 +7,7 @@ import http from 'node:http';
 import {createAccountStore,createAccountMiddleware,validateMemory} from '../tools/account-service.mjs';
 import {validateImage,validateExtraction,extractContractImage} from '../tools/contract-image.mjs';
 import {runAssistant} from '../tools/assistant-gateway.mjs';
-import {contractQuestion,isQuestion,isQuestionEvidence,sameQuestion,questionExport,evidenceSources} from '../src/lib/checklist.ts';
+import {salaryQuestion,contractQuestion,isQuestion,isQuestionEvidence,sameQuestion,questionExport,evidenceSources} from '../src/lib/checklist.ts';
 import {analyzeContract,DEMO_CONTRACT} from '../src/lib/contracts.ts';
 
 const reviewed={id:'synthetic-review',text:DEMO_CONTRACT,material:'合成材料',at:'2026-11-04T02:00:00.000Z',contractMonths:12,probationMonths:3};
@@ -114,4 +114,19 @@ test('image timeout aborts the provider request and releases the timer',async t=
  }});
  t.mock.timers.tick(50000);
  await assert.rejects(pending,/等待较久/);assert.equal(providerSignal.aborted,true);
+});
+
+
+test('an optional account preserves a salary snapshot even after the question is reworded',async()=>{
+ const store=createAccountStore({file:':memory:'});
+ try{
+  const {token}=await store.register('synthetic_salary','synthetic-pass-123');
+  const draft=salaryQuestion({gross:9000,insurance:800,fund:600,tax:100,other:0,received:7450},{id:'synthetic-pay-review',at:'2026-11-06T08:00:00Z',demo:false});
+  const question={...draft,id:'synthetic-question',done:false,text:'请核对这笔50元的差额',answer:'等工资明细'};
+  const memory=validateMemory({city:'',stage:'',notes:'',questions:[question]});
+  store.save(token,memory);
+  const saved=store.current(token).memory.questions[0];
+  assert.deepEqual(saved.evidence,question.evidence);assert.equal(saved.answer,'等工资明细');
+  assert.match(questionExport([saved]),/7,450.00/);
+ }finally{store.close();}
 });

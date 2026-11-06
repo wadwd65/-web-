@@ -162,3 +162,9 @@ test('unsupported assessment or pay advice falls back to exact source and keeps 
   assert.equal(finalizeContractExplanation('试用期包含在劳动合同期限内。',references).replyOrigin,'guide');
   assert.equal(finalizeContractExplanation('核实到底是12个月还是15个月，这决定试用期是否合法。',search('试用期三个月另加一年合同期')).replyOrigin,'guide');
 });
+
+
+test('a full-time scope question is not a declaration of unsupported employment',()=>{
+ for(const query of ['我不知道是不是全日制，原文只有试用期三个月。','不确定是否非全日制，想问试用期。','可能是实习协议，暂时不清楚。'])assert.notEqual(searchContractKnowledge(query).status,'out-of-scope',query);
+ for(const query of ['这是非全日制合同，试用期怎么约定','我签的是实习协议，想问试用期'])assert.equal(searchContractKnowledge(query).status,'out-of-scope',query);
+});

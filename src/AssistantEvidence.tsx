@@ -1,3 +1,4 @@
+import {salaryOutcome} from './lib/salary-review.ts';
 import {memo,useMemo} from 'react';
 import {calculatePayslip} from './lib/wages.ts';
 import {analyzeContract} from './lib/contracts.ts';
@@ -16,11 +17,11 @@ export function evidenceForCopy(actions:AssistantAction[]){
 export default memo(function AssistantEvidence({actions}:{actions:AssistantAction[]}){
  const summary=useMemo(()=>{
   const salary=actions.find(action=>action.kind==='apply-salary');
-  if(salary?.kind==='apply-salary'){const result=calculatePayslip(salary.input);return {kind:'salary',label:'按你提供的金额计算',value:money(result.net),unit:'元',note:`应发 ${money(salary.input.gross)} − 个人扣款 ${money(result.deductions)}`};}
+  if(salary?.kind==='apply-salary'){const result=calculatePayslip(salary.input);return {kind:'salary',verdict:salaryOutcome(salary.input).headline,status:salaryOutcome(salary.input).status,label:'按你提供的金额计算',value:money(result.net),unit:'元',note:`应发 ${money(salary.input.gross)} − 个人扣款 ${money(result.deductions)}`};}
   const contract=actions.find(action=>action.kind==='apply-contract');
-  if(contract?.kind==='apply-contract'){const findings=analyzeContract(contract.input),pending=findings.filter(item=>item.status!=='noted');return {kind:'contract',label:'合同文字核对',value:String(pending.length),unit:'项待确认',note:`对照 ${findings.length} 项 · 仅限已提供的文字与确认值`};}
+  if(contract?.kind==='apply-contract'){const findings=analyzeContract(contract.input),pending=findings.filter(item=>item.status!=='noted');return {kind:'contract',verdict:null,status:null,label:'合同文字核对',value:String(pending.length),unit:'项待确认',note:`对照 ${findings.length} 项 · 仅限已提供的文字与确认值`};}
   return null;
  },[actions]);
  const questions=actions.flatMap(action=>action.kind==='add-questions'?action.items:[]);
- return <>{summary&&<section className="assistant-evidence" aria-label={summary.kind==='salary'?'工资核对关键结果':'合同核对概览'}><small>{summary.label}</small><div><strong>{summary.value}</strong><span>{summary.unit}</span>{summary.kind==='salary'&&<em>计算实发</em>}</div><p>{summary.note}</p></section>}{!!questions.length&&<section className="assistant-question-preview" aria-label="将加入清单的问题"><small>准备问清楚的事</small><ol>{questions.map((item,index)=><li key={`${index}:${item.text}`}><span>{String(index+1).padStart(2,'0')}</span><p>{item.text}</p></li>)}</ol></section>}</>;
+ return <>{summary&&<section className="assistant-evidence" data-status={summary.status} aria-label={summary.kind==='salary'?'工资核对关键结果':'合同核对概览'}><small>{summary.label}</small>{summary.verdict&&<p className="assistant-evidence-verdict">{summary.verdict}</p>}<div><strong>{summary.value}</strong><span>{summary.unit}</span>{summary.kind==='salary'&&<em>计算实发</em>}</div><p>{summary.note}</p></section>}{!!questions.length&&<section className="assistant-question-preview" aria-label="将加入清单的问题"><small>准备问清楚的事</small><ol>{questions.map((item,index)=><li key={`${index}:${item.text}`}><span>{String(index+1).padStart(2,'0')}</span><p>{item.text}</p></li>)}</ol></section>}</>;
 });

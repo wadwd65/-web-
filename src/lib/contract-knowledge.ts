@@ -49,9 +49,13 @@ export function contractQueryFromMessages(messages:readonly {role:string;content
 }
 
 function scopeOutside(context:string,fullTimeConfirmed:boolean):boolean {
-  const relationship = Array.from(context.matchAll(/不是全日制|非全日制|全日制|普通劳动合同|实习协议|实习合同|劳务协议|劳务合同|劳务派遣|派遣合同/gu)).at(-1)?.[0];
+  const last = Array.from(context.matchAll(/不是全日制|非全日制|全日制|普通劳动合同|实习协议|实习合同|劳务协议|劳务合同|劳务派遣|派遣合同/gu)).at(-1);
+  const relationship=last?.[0];
+  const scopeClause=last?context.slice(0,last.index!).split(/[，,。；;\n]/u).at(-1)!+context.slice(last.index!).split(/[，,。；;\n]/u)[0]:'';
+  // “是不是全日制” contains “不是全日制”; a question is not a confirmed exclusion.
+  const uncertain=/是不是|是否|不知道|不确定|不清楚|待确认|可能|[？?]/u.test(scopeClause);
   const region = Array.from(context.matchAll(/中国内地|中国大陆|中国境内|香港|澳门|台湾|美国|日本|英国|新加坡|境外|海外/gu)).at(-1)?.[0];
-  return (!fullTimeConfirmed&&Boolean(relationship&&!['全日制','普通劳动合同'].includes(relationship))) || Boolean(region&&!['中国内地','中国大陆','中国境内'].includes(region));
+  return (!fullTimeConfirmed&&!uncertain&&Boolean(relationship&&!['全日制','普通劳动合同'].includes(relationship))) || Boolean(region&&!['中国内地','中国大陆','中国境内'].includes(region));
 }
 
 /** Rank reviewed excerpts by matched phrases. Generic words carry less weight than a specific topic. */

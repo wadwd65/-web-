@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-05",
-  "workingVersion": "0.46.0",
+  "updatedAt": "2026-11-06",
+  "workingVersion": "0.47.0",
   "releasedVersion": "0.46.0",
   "workState": "reviewed_internally",
-  "objective": "v0.46工具按钮/工资填写与鼠标反馈已保存、自检并推送；首页按钮按用户更正恢复45。",
-  "latestUserRequest": "用户澄清只加强工具子界面按钮；首页按钮样式/文字恢复v0.45，保留主页鼠标反馈增强。",
+  "objective": "v0.47完成自然补问、工资差额首屏/快照、工具密度和范围/调用收束；149检查及最终28在线/离职重复3次通过，准备保存发布。",
+  "latestUserRequest": "继续逐步优化到85甚至90的水平，额度充足，直接开始。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
@@ -14,17 +14,17 @@
     "state": "ready_for_user_review"
   },
   "implemented": {
-    "business": "保留八项限定本地工具及共享询问清单，八工具统一迁入#/tools，支持完全不经AI手动操作。 v0.36合同问题可主动附带原文/确认值/来源，清单改写、答复、状态、搜索、导出和可选账号保存保留关联。",
+    "business": "保留八项限定本地工具及共享询问清单，八工具统一迁入#/tools，支持完全不经AI手动操作。 v0.36合同问题可主动附带原文/确认值/来源，清单改写、答复、状态、搜索、导出和可选账号保存保留关联。 v0.47工资问题保存本次金额快照、具体差额与核对时间，问题改写/刷新/导出/主动账号保存均保留，重复加入去重，旧记录不随重算改写。",
     "music": "八曲/单audio；原五曲加海愿（彼端）、Everything’s Alright纯音乐、春弦。首页切歌弹菜单即播不跳页，播放器接续进度，八匣可抽取/旋转，内部滚动、真实384格波形和官方fallback白名单均按目录适配。新增盘面复用原五张署名场景。",
-    "visual": "保留浅蓝银色完整主体/音乐和原三维；新增同系统的轻量阅读布局、页首/聊天模式切换，简易播放器居中目录。完整模式模型/粒子/材质/抽取/播放旋转未重做。 v0.33首页去重复入口，v0.35.1自由输入常驻、补问可选、字色/字段对比加强、返回状态放页底不遮清单。 v0.35.2本地工具页问题入口/八项首屏列表、全屏浅色对话阅读布局已实现，尚待最终QA和用户反馈。 v0.36收起工作区重复底部入口、精简合同/清单标题和空白、确认后仍可读；v0.35.2跨模式/1041桌面检查已补。 v0.40仅保留左侧入口和底部横向提问的新布局，其余恢复v0.39；轨道/蓝雾/黄金比例图形撤回，46号为事实。",
-    "interaction": "前景模型的图内/文字子选项保留，要求手势开始和结束均为稳定前景、同pointer/物体/子区域、总位移≤6px且在画布内；后排只预览，无任意双击跳页。工作区/音乐/对话共享原业务与单audio。 v0.41完整首页每次加载等待点击/Enter，不因seen跳过；页面隐藏/准备不消耗阶段，提前唤起三维，跳过/回放和单audio连续，47号为说明。 v0.42按48号拆开等待与演出，恢复原文字逐字、符号绘制、三段事务及双幕，序列4.9秒。 v0.43按49号增加入场持续环境动态及局部鼠标视差，按钮固定，入口卸载清理。 v0.45首屏标志悬停/聚焦流光与独立点击彩蛋，第二幕去句号与文案/字排/细线动画精修，52号为交接。 v0.46主页鼠标可见性增强，简易仅点击反馈。工具主按钮和页签文案清楚，工资逐项确认0/示例先填后算；首页按钮强化候选按用户更正撤回，恢复45。",
+    "visual": "保留浅蓝银色完整主体/音乐和原三维；新增同系统的轻量阅读布局、页首/聊天模式切换，简易播放器居中目录。完整模式模型/粒子/材质/抽取/播放旋转未重做。 v0.33首页去重复入口，v0.35.1自由输入常驻、补问可选、字色/字段对比加强、返回状态放页底不遮清单。 v0.35.2本地工具页问题入口/八项首屏列表、全屏浅色对话阅读布局已实现，尚待最终QA和用户反馈。 v0.36收起工作区重复底部入口、精简合同/清单标题和空白、确认后仍可读；v0.35.2跨模式/1041桌面检查已补。 v0.40仅保留左侧入口和底部横向提问的新布局，其余恢复v0.39；轨道/蓝雾/黄金比例图形撤回，46号为事实。 v0.47只收紧工作栏/页签/标题/草稿/说明，1280工资六项两行三列，差额与计算/到账首屏并列。首页/三维/音乐/入场/鼠标12原文件与v46相同。",
+    "interaction": "前景模型的图内/文字子选项保留，要求手势开始和结束均为稳定前景、同pointer/物体/子区域、总位移≤6px且在画布内；后排只预览，无任意双击跳页。工作区/音乐/对话共享原业务与单audio。 v0.41完整首页每次加载等待点击/Enter，不因seen跳过；页面隐藏/准备不消耗阶段，提前唤起三维，跳过/回放和单audio连续，47号为说明。 v0.42按48号拆开等待与演出，恢复原文字逐字、符号绘制、三段事务及双幕，序列4.9秒。 v0.43按49号增加入场持续环境动态及局部鼠标视差，按钮固定，入口卸载清理。 v0.45首屏标志悬停/聚焦流光与独立点击彩蛋，第二幕去句号与文案/字排/细线动画精修，52号为交接。 v0.46主页鼠标可见性增强，简易仅点击反馈。工具主按钮和页签文案清楚，工资逐项确认0/示例先填后算；首页按钮强化候选按用户更正撤回，恢复45。 v0.47当前事项按路由、就绪在绘制前通知，避免旧结果页签闪现及快速返回被迟到状态覆盖。",
     "api": "真实同源Node助手网关与DeepSeek function calling；四项白名单工具，共用工资/合同规则；取消、超时、限额、Origin/Host与输入证据校验。旧文档review客户端仍仅协议预留。 v0.39进程环境PUBLIC_ORIGIN可指定一个HTTPS站点，AI/图像/账号共用Host/Origin精确校验；serve支持PORT和显式HOST，公开指纹资源缓存。仅本地代理条件模拟验过，实际部署待。",
     "copy": "首页、目录与对话采用直接用语，区分本地规则、真实助手、单图校对和小范围检索。",
-    "ai": "真实DeepSeek先plan_tasks识别意图/事项（最多3候选）、必要补问（最多3项）/先选一件/纠正/未知/超范围；原4项执行工具仍共用规则，非ready不执行。补问与选择的固定安全提示标记guide，解释/工具后的模型文字标记model。金额分次原话逐段校验、最新更正/撤回校验；新用户消息后旧应用停用，仅最新结果可显式填入工具/清单。聊天入口仍只读文字，合同单图能力见image字段；v0.35有小范围官方合同RAG，材料不自动发。 v0.33按序保留所有用户原话，仅折叠早期助手解释，约20k材料上限；不生成事实摘要。收起继续、停止可重试、旧动作停用；实际阶段NDJSON/JSON兼容。 v0.35.1直接自由回复/换题，补问可选；一般解释先答，明确打开时给入口；已说明未知的工资项给查找方法。 v0.38修一般租房咨询计划冲突，补明确的计划重试信息；已观察越界解释回退到原摘录并标guide。",
+    "ai": "真实DeepSeek先plan_tasks识别意图/事项（最多3候选）、必要补问（最多3项）/先选一件/纠正/未知/超范围；原4项执行工具仍共用规则，非ready不执行。补问与选择的固定安全提示标记guide，解释/工具后的模型文字标记model。金额分次原话逐段校验、最新更正/撤回校验；新用户消息后旧应用停用，仅最新结果可显式填入工具/清单。聊天入口仍只读文字，合同单图能力见image字段；v0.35有小范围官方合同RAG，材料不自动发。 v0.33按序保留所有用户原话，仅折叠早期助手解释，约20k材料上限；不生成事实摘要。收起继续、停止可重试、旧动作停用；实际阶段NDJSON/JSON兼容。 v0.35.1直接自由回复/换题，补问可选；一般解释先答，明确打开时给入口；已说明未知的工资项给查找方法。 v0.38修一般租房咨询计划冲突，补明确的计划重试信息；已观察越界解释回退到原摘录并标guide。 v0.47明确没有/没扣可作为该项0证据；未知/近似/问句/公司承担不当个人确认值，最新更正优先；按原话清理重复补问，问从哪开始先解释。有效计划不重复规划，按意图要求执行工具，成功后关闭继续调用；上游重复请求时保留已核验动作并标guide。",
     "performance": "v0.31缓存实际CSS赋值、同形几何复用、静态局部矩阵固定/世界矩阵单次更新、拾取数组复用及可见过滤、脉冲实例化；播放器悬停只预取字节，实际打开才解析/建场景。未降低DPR/粒子/阴影/动画；v0.31时自动简易未实现。 v0.32简易卸载事务/音乐三维，首访简易不请求Three场景/GLB/盘面。有效RAF采样窗口、预热和排除项、自动降级/手动恢复生产控制器已实现；阈值仅帧序列模拟验证，低配实机待校准。 v0.39工具首次访问才挂载，访问后保留；清单value变化才重算高度，转场直接写采样数组。?perf=1主动下载有效窗/原因，普通入口不建记录；手动完整诊断继续采样但不自动强切。",
     "image": "单张PNG/JPEG明确发送DeepSeek，原图对照、编辑、校对确认后带入原文字规则；不自动确认关系/期限，不保存原图。 v0.38失败可点击回到粘贴区，保留原文；无法辨认但无警示时补人工校对提示。",
     "account": "右上角可选真实本机账号；密码scrypt、会话散列/HttpOnly cookie、SQLite工程外。主动保存地区/阶段/备注/清单，AI预填不自动发；退出清当前填写/对话并回游客清单。无公网部署/找回密码/全部草稿自动同步。 v0.37登录/退出均清当前工具/对话，初始查询序列保护；本机草稿按账号在浏览器区分。",
-    "retrieval": "小范围官方法条关键词排序检索，八摘录覆盖17/19/22/23/25条；真实计划后命中原文入模型上下文，独立来源卡、范围/版本/核验日；未命中/不适用/旧版/待核验安全返回；手动核对和复制导出共用。 v0.38口语排序、明确短追问从最近三条用户消息借单主题；换题/多主题/助手断言不借用，检索查询不作为执行事实。",
+    "retrieval": "小范围官方法条关键词排序检索，八摘录覆盖17/19/22/23/25条；真实计划后命中原文入模型上下文，独立来源卡、范围/版本/核验日；未命中/不适用/旧版/待核验安全返回；手动核对和复制导出共用。 v0.38口语排序、明确短追问从最近三条用户消息借单主题；换题/多主题/助手断言不借用，检索查询不作为执行事实。 v0.47未知“是不是全日制”不再当成明确的非全日制排除，仍需确认关系才能执行核对。",
     "drafts": "九个独立浏览器草稿槽，用户主动保存/恢复/清除和撤销；游客/账号分开，身份未确认禁用，切账号清当前填写。八工具输入/示例标记、路线勾选备注及聊天历史/未发送输入；不保存图片或可执行旧动作，不跨设备同步。"
   },
   "modules": [
@@ -78,36 +78,41 @@
   ],
   "currentPlan": [
     {
-      "id": "pointer-and-entry",
+      "id": "natural-guidance",
       "status": "complete",
-      "acceptance": "完整跟随/点击可见，简易仅点击；首页按钮样式/文字与v45一致，八工具在子页。"
+      "acceptance": "相同口语没有无需再说0，未知不猜；从哪开始先解释。最终28在线+离职3重复通过。"
     },
     {
-      "id": "calculation-usability",
+      "id": "salary-verdict-and-record",
       "status": "complete",
-      "acceptance": "蓝色主操作，金额明确输入，逐项确认0，示例先填后算；数字/未知/规则保持正确。"
+      "acceptance": "计算/到账/差额首屏，快照改写导出刷新/账号；两个核对分开保存与去重。"
     },
     {
-      "id": "review-save",
+      "id": "desktop-tool-density",
       "status": "complete",
-      "acceptance": "实际新人路径、正常/错误/更正/模式检查，保存日志和源码包Git一致。"
+      "acceptance": "桌面1280六项与底部按钮首屏，1041无横向溢出；八工具各走限定流程，共同布局/状态一致。"
+    },
+    {
+      "id": "save-and-release",
+      "status": "in_progress",
+      "acceptance": "新v47快照/默认预览/源码Git一致；旧保存点保留，日志同步。"
     }
   ],
   "validation": {
-    "version": "0.46.0",
-    "automated": "139 tests, TypeScript/build passed; shared Three 583KB warning remains.",
-    "evidence": "outputs/v046-review",
-    "visualAcceptance": "最终首页三入口透明、原文案，工具填/算/下载蓝色按钮及工资输入逐图检查。首页填色候选已撤回。用户反馈待。",
-    "manual": "漏填其他扣款提示并聚焦，确认0保留焦点；8000→6534、改9000→7534及实际下载一致；个税1080/差920、返回填写执行按钮可见。单鼠标层，简易echo1/ring0，输入mode off/active0，无warn/error。",
-    "performance": "固定节点池，简易不注册组件跟随事件，按需点击；真实低配仍待。",
-    "online": "AI主线未复跑，规则/白名单未改。",
-    "limits": "真实新人/低配、公网和独立材料准确率未验。",
-    "savedPreview": "正式5186实际0.46.0，示例工资6534、单鼠标层；首页3入口透明/原文案，工资填写页白字蓝底主按钮rgb36/126/173。控制台无warn/error，当前构建index与保存版一致。"
+    "version": "0.47.0",
+    "automated": "149 passed, 0 failed; TypeScript/build passed; shared Three ~583KB warning remains.",
+    "evidence": "outputs/v047-review",
+    "visualAcceptance": "工资差额首屏及1280/1041桌面已审；八工具限定流程实际走过；首页/三维/音乐/入场/鼠标/公式12文件与v46一致。内部审核，不等于用户认可。",
+    "manual": "真实AI从哪开始先解释；相同口语没有→7500/差50→显式应用。9000与9500两记录→编辑/下载/刷新保持快照，重复不增；到账7550显示多50，空白待核对；个税1080/920、Offer117000/120000、租房7200、社保/离职路线、补贴其他地区不套用、合同7项3待确认。模式7500保留，控制台0warn/error。",
+    "performance": "QA曾自动简易，手动完整单页复核；不称低配实机验收。未降低原视觉资源参数。",
+    "online": "初轮20/21范围未知误排除；后续28/28；末轮27/28离职tool-limit，收束工具后最终28/28及独立3/3重复通过。全部合成开发回归，失败原始记录保留。",
+    "limits": "实际公网HTTPS/按身份额度、新人/低配、独立材料准确率未验。",
+    "savedPreview": "待保存版补验。"
   },
   "nextActions": [
-    "用户部署支持Node的试用网址，按45号设置进程环境并核验实际HTTPS/AI/图像/账号/音乐。",
-    "用普通网址安排2–3名新人完成三项合成任务；低配用?perf=1，补CPU/GPU型号并下载本机报告。",
-    "按真实反馈修高频卡点，补独立合同材料评测；11/14冻结、11/17材料、11/18提交。"
+    "按55号验证真实HTTPS网址和公开AI身份/额度边界；实际部署、图片/账号/音乐/失败恢复不能由代理模拟代替。",
+    "安排2–3名首次使用者和一台真实低配，按普通任务记录完成时间/错误/带走结论，低配下载?perf=1报告。",
+    "冻结独立文本/图片及检索对照材料，修高频问题；11/14冻结、11/17视频/PDF与运行包、11/18提交，不扩手机/音乐/配色。"
   ],
   "visualSources": [
     {
@@ -132,12 +137,12 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "published",
+    "pushStatus": "preparing",
     "sourceCommit": "b8838db6abd25b828f4f57788bd57a08f0142963",
     "verifiedAt": "2026-11-05",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "76c1a58ccbe588c7633a42e5f8a9d51b53deab29",
-    "publicationReceipt": "outputs/v046-review/git-publication.json",
+    "previousPublishedHead": "7159986b2871ec444ce9dd3b050fd5a57e2bbc82",
+    "publicationReceipt": "outputs/v047-review/git-publication.json",
     "historyAndLogCommit": "b8838db6abd25b828f4f57788bd57a08f0142963"
   },
   "sideDeliverables": [
@@ -206,45 +211,45 @@
     "featureFreeze": "2026-11-14",
     "packageReady": "2026-11-17",
     "scoreTarget": 85,
-    "scoreMeaning": "62（58–65）是v0.31基线内部估分；v0.32完成1/2项，不按测试数自动涨分；85仍为目标，非奖项预测。",
+    "scoreMeaning": "11/6 v47内部77（73–82），AI27/创新18/工程8/实用8.5/体验8.5/社会7；85–90仍目标，非官方结果。",
     "coreScope": "保留八工具，一条签约核对AI主线做深；不扩手机、全国政策、账号平台或音乐功能。",
-    "currentReview": "docs/45-online-trial-preparation-v039.md",
-    "scoreCurrent": 75,
+    "currentReview": "docs/55-natural-guidance-and-pay-verdict-v047.md",
+    "scoreCurrent": 77,
     "scoreRange": [
-      72,
-      80
+      73,
+      82
     ],
     "remainingDates": [
-      "2026-11-04",
+      "2026-11-07",
       "2026-11-17"
     ],
     "remainingHours": [
-      42,
-      56
+      33,
+      44
     ],
     "futureWorkEstimate": [
-      21,
-      29
+      8,
+      12
     ],
     "futureContingencyHours": 6
   },
   "latestAudit": {
-    "date": "2026-11-04",
-    "document": "docs/42-contract-evidence-loop-v036.md",
-    "scope": "current code/build/119 tests, independent desktop UI, real synthetic AI/image flow and export; low-end/new users remain untested",
-    "internalEstimate": 75,
+    "date": "2026-11-06",
+    "document": "docs/55-natural-guidance-and-pay-verdict-v047.md",
+    "scope": "eight bounded desktop paths, real salary conversation/application, snapshots/edit/export/refresh, modes and149 automated checks; final28online and3 repeated leaving checks",
+    "internalEstimate": 77,
     "range": [
-      72,
-      80
+      73,
+      82
     ],
-    "meaning": "weighted internal estimate, not official result or award forecast",
-    "nextRecommendation": "User requested v0.40 layout only; other visuals restored v0.39. Await visual feedback and actual public trial. Score unchanged."
+    "meaning": "implementation-based weighted internal estimate, not official score or prize promise",
+    "nextRecommendation": "Public trial boundary, actual novice and low-end reports, independent materials; no more homepage recolouring."
   },
   "executionPlan": {
     "date": "2026-11-01",
     "document": "docs/36-next-execution-plan.md",
-    "state": "v046_tools_saved_reviewed",
-    "nextMilestone": "Actual deployment URL verification, novice users and low-end device evidence",
+    "state": "v047_reviewed_saving",
+    "nextMilestone": "公开身份/额度与实际网址、独立材料、新人/低配验证；11/14冻结。",
     "executionHours": [
       34,
       46
@@ -267,12 +272,12 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v046_updated_desktop_verified"
+    "status": "v047_updated_sync_pending"
   },
   "savedWork": {
-    "version": "0.46.0",
-    "snapshot": "first-step-工具按钮与填写体验-v0.46.0",
-    "state": "saved_and_reviewed",
-    "review": "docs/53-tool-actions-and-pointer-v046.md"
+    "version": "0.47.0",
+    "snapshot": "first-step-自然提问与核对结果-v0.47.0",
+    "state": "preparing",
+    "review": "docs/55-natural-guidance-and-pay-verdict-v047.md"
   }
 }

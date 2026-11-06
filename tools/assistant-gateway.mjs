@@ -6,6 +6,7 @@ import {randomUUID} from 'node:crypto';
 import {createRequestPolicy} from './request-policy.mjs';
 import {validateAssistantGuide} from '../src/services/assistant-guide.ts';
 import {calculatePayslip} from '../src/lib/wages.ts';
+import {SALARY_LABELS,SALARY_REQUIRED,SALARY_FIELD_NAMES,salaryFact,salaryFacts,salaryValueGrounded,asksSalaryFirstStep} from '../src/lib/salary-evidence.ts';
 import {analyzeContract,CONTRACT_REFERENCE} from '../src/lib/contracts.ts';
 import {searchContractKnowledge,contractQueryFromMessages,CONTRACT_KNOWLEDGE} from '../src/lib/contract-knowledge.ts';
 
@@ -26,7 +27,7 @@ export function readAssistantConfig(directory){
 const planner={type:'function',function:{name:'plan_tasks',description:'每条新问题先识别当前事项、是否多事项及必需补问。只做计划，不修改表单。必须以最新用户意图和更正为准。',parameters:{type:'object',properties:{status:{type:'string',enum:['choose','needs-info','ready','clarify','out-of-scope']},intent:{type:'string',enum:['calculate','review','guidance','questions'],description:'用户当前要计算、逐条核对、了解说明，还是整理问题。只问去哪查/一般先看什么时用guidance，不能强迫补金额。'},tasks:{type:'array',maxItems:3,items:{type:'object',properties:{module:{type:'string',enum:Object.keys(MODULES).filter(id=>id!=='list')},reason:{type:'string',description:'针对用户原话的一句短理由，不声称联网或已办理。'}},required:['module','reason'],additionalProperties:false}},activeModule:{type:['string','null'],enum:[...Object.keys(MODULES).filter(id=>id!=='list'),null]},questions:{type:'array',maxItems:3,items:{type:'object',properties:{label:{type:'string',description:'当前必须补充的问题，尽量简短；金额须带应发工资/个人社保/公积金/个税/其他扣款等准确项目名'},hint:{type:'string',description:'可选的简短填写提示，不提供虚构默认值'}},required:['label','hint'],additionalProperties:false}}},required:['status','intent','tasks','activeModule','questions'],additionalProperties:false}}};
 const tools=[planner,
   {type:'function',function:{name:'open_tool',description:'用户希望打开工具，或问题需要某项工具时，提供站内入口。只能使用列出的模块。',parameters:{type:'object',properties:{module:{type:'string',enum:Object.keys(MODULES)}},required:['module'],additionalProperties:false}}},
-  {type:'function',function:{name:'calculate_salary',description:'用用户明确提供的工资条金额做算术核对。所有前五项都必须已知，不能把缺失项当0。evidence必须是逐段引用原话的数组。金额分多次提供就分别引用每次用户消息，不要合成改写的一段文字。',parameters:{type:'object',properties:{gross:{type:'number'},insurance:{type:'number'},fund:{type:'number'},tax:{type:'number'},other:{type:'number'},received:{type:['number','null']},evidence:{type:'array',items:{type:'string'},maxItems:10}},required:['gross','insurance','fund','tax','other','received','evidence'],additionalProperties:false}}},
+  {type:'function',function:{name:'calculate_salary',description:'用用户明确提供的工资条金额做算术核对。所有前五项都必须已知，不能把缺失项当0。用户明确说某项扣款没有/没扣时该项可传0，不能要求改成数字句式；不知道或没有明细仍未知。evidence必须是逐段引用原话的数组。金额分多次提供就分别引用每次用户消息，不要合成改写的一段文字。',parameters:{type:'object',properties:{gross:{type:'number'},insurance:{type:'number'},fund:{type:'number'},tax:{type:'number'},other:{type:'number'},received:{type:['number','null']},evidence:{type:'array',items:{type:'string'},maxItems:10}},required:['gross','insurance','fund','tax','other','received','evidence'],additionalProperties:false}}},
   {type:'function',function:{name:'review_contract',description:'对用户提供的文字进行本地合同规则核对。仅在用户明确说是全日制劳动合同后使用；原文必须逐字来自用户消息，期限不清楚传null，不能擅自补全。',parameters:{type:'object',properties:{text:{type:'string'},contractMonths:{type:['number','null']},probationMonths:{type:['number','null']},fullTimeConfirmed:{type:'boolean'}},required:['text','contractMonths','probationMonths','fullTimeConfirmed'],additionalProperties:false}}},
   {type:'function',function:{name:'prepare_questions',description:'把要向HR、房东或经办人核实的问题整理成清单，用户点击后加入本机清单。最多5条，不替用户确认事实。',parameters:{type:'object',properties:{module:{type:'string',enum:Object.keys(MODULES)},questions:{type:'array',items:{type:'string'}}},required:['module','questions'],additionalProperties:false}}},
 ];
@@ -41,10 +42,11 @@ const SYSTEM=`你是“初程”的办事助手，面向刚毕业、第一次工
 你只能调用下列白名单工具，不执行代码、不访问文件、不操控音乐、账号、支付或外部服务。与毕业生活事项无关的请求简单说明服务范围。回复用短段落，不写Markdown加粗或大标题。只有prepare_questions成功后才有加入清单按钮；不要编造未生成的按钮，也不要声称用户已点击。给出结果后仅提到这次工具实际生成的操作。`;
 
 const GUIDANCE=`
-每条最新用户消息的第一步必须调用plan_tasks。先判断intent，用户只想了解或查找信息时用guidance并ready，不追问计算才需要的数据。不要通过每天/每周工时自行认定全日制，须核实合同及实际用工关系。
+每条最新用户消息的第一步必须调用plan_tasks。先判断intent，用户只想了解或查找信息（包括“只知道应发，应该从哪一步开始”）时用guidance并ready，不追问计算才需要的数据。先给取得本期工资条、个人扣款与到账记录的方法，不能以索要数字开头。不要通过每天/每周工时自行认定全日制，须核实合同及实际用工关系。
 - 只处理用户现在要办的事，最新更正优先；用户明确转到租房，就不再追问之前工资的字段。
 - 两件或三件事都需要处理、用户没有说先办哪件：status=choose，tasks列出2–3件，activeModule=null，questions=[]。请用户用自己的话或可选按钮说明想先聊哪件，允许继续补充情况；不能自行决定或先算钱。用户说“先工资/先合同”时只聚焦该项，其他可保留为后续候选。
 - 缺少当前必需信息：status=needs-info，activeModule必须在tasks中，questions一次最多3项。工资要计算时前五项均需明确，缺哪项问哪项，不问已经明确的；实际到账可选，不为它阻塞计算。问句只写“应发工资/个人社保/公积金/个税/其他扣款”等短项目名，提示写单位。
+- 用户明确说“其他扣款没有”“个税没扣”等，按该项0元处理并引用这句原话；不能再次要求用户说0。没有账户、没有明细、可能没有、还不知道都不等于0。已有五项确认值时必须ready并调用calculate_salary，不能反复问已知字段。
 - 用户不确定的数不能填0。用户已明确“不知道”时，不要重复索要同一数字，解释可以到哪里查，必要时给手动工具入口；暂时只做说明时用ready且不执行计算。
 - 合同逐条核对需要用户提供合同文字并确认全日制；若用户只问一般试用期规则，可以先解释范围，不强迫上传完整合同。缺少期限可传null但明确未知。不得声称已检查照片/PDF。
 - 现在足够给出有限说明或执行对应受限工具：status=ready，聚焦一个activeModule，questions=[]。需要工资计算仍必须实际调用calculate_salary；需要原文核对仍必须调用review_contract。计划本身不是计算或核对。
@@ -67,19 +69,15 @@ export function validateConversation(input){
   return {messages,currentModule,userText:messages.filter(m=>m.role==='user').map(m=>m.content).join('\n')};
 }
 function exactEvidence(value,userText){return typeof value==='string'&&value.trim().length>0&&value.length<=12000&&userText.includes(value);}
-const MONEY_LABELS={gross:'(?:应发(?:工资)?|税前(?:工资)?)',insurance:'(?:个人)?社保(?:扣款)?',fund:'(?:个人)?公积金(?:扣款)?',tax:'(?:已扣)?(?:个人所得税|个税)',other:'(?:其他|其它)扣款',received:'(?:实际到账|到账|实发)(?:工资|金额)?'};
-function latestMoneyClause(text,key){
-  const last=Array.from(text.matchAll(new RegExp(MONEY_LABELS[key],'gu'))).at(-1);
-  return last?text.slice(last.index).split(/[，,。；;\n]/u)[0]:'';
-}
-function moneyProvided(value,evidence,key){
-  if(!finite(value)||value<0)return false;
-  const labels=MONEY_LABELS;
-  const latest=latestMoneyClause(evidence,key);
-  if(/不是|不对|不确定|不知道|不清楚|待确认|记不清|撤回|取消/u.test(latest))return false;
-  const pattern=new RegExp(`${labels[key]}[^\\d，,。；;\\n]{0,10}(\\d+(?:\\.\\d{1,2})?)(?=元|[，,。；;\\n\\s]|$)`,'gu');
-  const amounts=Array.from(evidence.replace(/[,，](?=\d{3}(?:\D|$))/g,'').matchAll(pattern),m=>Number(m[1]));
-  return amounts.length>0&&Math.abs(amounts.at(-1)-value)<.00001;
+const MONEY_LABELS=SALARY_LABELS;
+const moneyProvided=salaryValueGrounded;
+function reconcileSalaryPlan(guide,userText,latest){
+  if(guide.activeModule!=='salary'||!['ready','needs-info'].includes(guide.status))return guide;
+  if(asksSalaryFirstStep(latest))return {...guide,intent:'guidance',status:'ready',questions:[]};
+  if(guide.intent!=='calculate')return guide;
+  const facts=salaryFacts(userText),missing=SALARY_REQUIRED.filter(key=>facts[key].state!=='confirmed');
+  if(!missing.length)return {...guide,status:'ready',questions:[]};
+  return {...guide,status:'needs-info',questions:missing.slice(0,3).map(key=>({label:SALARY_FIELD_NAMES[key],hint:'填写已确认金额（元）；不清楚就写“不知道”。'}))};
 }
 function confirmedDuration(value,key,userText){
   if(value===null)return true;
@@ -91,11 +89,12 @@ function confirmedDuration(value,key,userText){
   const match=Array.from(latest.matchAll(pattern)).at(-1);
   return Boolean(match&&number(match[1])*(match[2]==='年'?12:1)===value);
 }
-export function executeAssistantTool(name,args,userText){
+export function executeAssistantTool(name,args,userText,{latestUserMessage=userText.split("\n").at(-1)??userText}={}){
   if(!object(args))throw new AssistantError('tool-input','工具参数不完整，请补充信息。');
   if(name==='plan_tasks'){
     if(args.intent==='guidance'&&args.status==='needs-info')throw new AssistantError('tool-input','一般解释请用intent=guidance、status=ready、questions=[]，先回答已有范围。只有个人计算或材料核对确实缺少信息时才用calculate/review与needs-info。');
     let guide;try{guide=validateAssistantGuide(args);}catch{throw new AssistantError('tool-input','事项计划不完整，请重新确认当前事项和必要补问。');}
+    guide=reconcileSalaryPlan(guide,userText,latestUserMessage);
     if(guide.activeModule==='rent'&&guide.questions.some(q=>/不退|拒退|扣押|已退租/u.test(q.label))&&!/不退|拒退|扣押|已退租/u.test(userText))throw new AssistantError('tool-input','租房阶段尚未确认，先问签约前、居住中、准备退租还是已有争议，不能预设房东拒退。');
     return {guide,result:{guide,referenceNotes:guide.activeModule==='contract'?CONTRACT_REFERENCE:undefined,next:'请直接回答用户当前想了解的问题，不要只推荐工具或要求先进入模块。补问可直接用自然语言回复。'},label:'确认当前事项',summary:guide.activeModule?MODULES[guide.activeModule]:guide.status==='choose'?'等待选择先处理的事项':guide.status==='out-of-scope'?'不在工具范围内':'需要说明具体情况'};
   }
@@ -109,10 +108,10 @@ export function executeAssistantTool(name,args,userText){
     const evidence=quotes.join('\n');
     const keys=['gross','insurance','fund','tax','other'];
     const grounded=(value,key)=>moneyProvided(value,evidence,key)&&moneyProvided(value,userText,key);
-    if(keys.some(key=>!grounded(args[key],key))||(args.received!==null&&!grounded(args.received,'received')))throw new AssistantError('tool-input','有金额尚未与对应项目在用户最新文字中确认，请逐项补问；没有的扣款也需用户明确填写0。');
+    if(keys.some(key=>!grounded(args[key],key))||(args.received!==null&&!grounded(args.received,'received')))throw new AssistantError('tool-input','有金额尚未与对应项目在用户最新文字中确认，请逐项补问；明确没有该项扣款可按0核对，但不知道或没有明细不能当0。');
     const input=Object.fromEntries([...keys,'received'].map(key=>[key,args[key]]));
     let value;try{value=calculatePayslip(input);}catch{throw new AssistantError('tool-input','工资金额未通过校验，请检查负数、小数精度和扣款合计。');}
-    return {result:{input,...value,boundary:'仅核对这些已知金额的算术关系，不判断费率和缴费基数是否合法。'},action:{kind:'apply-salary',input,label:'在工资工具查看结果'},label:'核对工资金额',summary:`计算实发 ${value.net.toFixed(2)} 元`};
+    return {result:{input,...value,next:'界面已显示金额、算式和到账差额。只用两句解释先核实本期明细/计薪期间，再说明只核对算术；不要重复算式，不猜餐费、工会费等未提供的扣款项目。',boundary:'仅核对这些已知金额的算术关系，不判断费率和缴费基数是否合法。'},action:{kind:'apply-salary',input,label:'在工资工具查看结果'},label:'核对工资金额',summary:`计算实发 ${value.net.toFixed(2)} 元`};
   }
   if(name==='review_contract'){
     if(!exactEvidence(args.text,userText))throw new AssistantError('tool-input','合同文字必须来自用户提供的原文，不能改写后当作引用。');
@@ -137,11 +136,11 @@ export function guideReply(guide,userText=''){
   if(guide.status==='needs-info'||guide.status==='clarify'){
     const labels=guide.questions.map(question=>question.label.replace(/[？?。]+$/u,''));
     const salary=guide.activeModule==='salary'&&guide.status==='needs-info';
-    const unknown=salary?labels.filter(label=>Object.entries(MONEY_LABELS).some(([key,pattern])=>new RegExp(pattern,'u').test(label)&&/不知道|不清楚|不确定|待确认|记不清|查不到/u.test(latestMoneyClause(userText,key)))):[];
+    const unknown=salary?labels.filter(label=>Object.entries(MONEY_LABELS).some(([key,pattern])=>new RegExp(pattern,'u').test(label)&&salaryFact(userText,key).state==='unknown')):[];
     const remaining=labels.filter(label=>!unknown.includes(label));
-    const questions=remaining.length?(salary?`工资条上的${remaining.join('、')}分别是多少？`:remaining.map(label=>label+'？').join('\n')):'';
-    const note=unknown.length?`${unknown.join('、')}还没确认，拿到金额后就能继续核对。`:'可以直接回复，不确定就说“不知道”。';
-    return [questions,note,unknown.length?'可以向HR要一份工资明细，核实后直接把金额发来。':''].filter(Boolean).join('\n\n');
+    const questions=remaining.length?(salary?`还需要工资条上的${remaining.join('、')}。`:remaining.map(label=>label+'？').join('\n')):'';
+    const note=unknown.length?`${unknown.join('、')}还没确认，先保留未知，不用猜。`:'可以直接回复，不确定就说“不知道”。';
+    return [unknown.length?'先向HR要一份本期工资明细，或在工资条中找个人扣款。':questions,note,unknown.length?questions:''].filter(Boolean).join('\n\n');
   }
   return '这件事目前超出本站工具和资料的覆盖范围。你可以继续说明与入职、工资或租房有关的情况。';
 }
@@ -173,14 +172,16 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
   const asksToOpen=/^(?:请|麻烦|帮我|带我|我想|我要|先|直接|现在|那就|可以|\s)*(?:打开|进入|跳转|去看看)/u.test(latestUserMessage);
   const namesAnEntry=Object.values(MODULES).some(name=>latestUserMessage.includes(name))||/工具|入口|页面|界面/u.test(latestUserMessage);
   const wantsEntry=asksToOpen&&namesAnEntry||/(?:工具|入口)(?:在|去)哪|(?:哪里|在哪).{0,6}(?:工具|入口)/u.test(latestUserMessage);
+  const completedReply=()=>({reply:actions.some(a=>a.kind==='add-questions')?'要核实的问题已整理好。点下方按钮才会加入清单，加入后仍可修改。':actions.some(a=>a.kind==='apply-salary'||a.kind==='apply-contract')?'本次核对已完成，可以在下方打开工具查看结果，或继续补充信息。':'点下方入口打开工具后，可以继续填写和核对。',replyOrigin:'guide',actions,steps,guide,references,provider:'DeepSeek',model:config.model||'deepseek-flash'});
   try{
     for(let round=0;round<4;round++){
       onProgress?.(guide?'responding':'planning');
       const explainingContract=guide?.activeModule==='contract'&&guide.intent==='guidance'&&references?.status==='matched';
       const explainingGuidance=guide?.intent==='guidance'&&!wantsEntry;
-      const allowTools=guide?.status==='ready'&&!explainingGuidance;
+      const allowTools=guide?.status==='ready'&&!explainingGuidance&&actions.length===0;
+      const requiredTool=allowTools&&guide.intent==='questions'?'prepare_questions':allowTools&&guide.activeModule==='salary'&&guide.intent==='calculate'?'calculate_salary':null;
       let response;
-      try{response=await fetcher(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${config.apiKey}`},body:JSON.stringify({model:config.model||'deepseek-flash',messages,tools:guide?(allowTools?tools:[]):[planner],tool_choice:guide?(allowTools?'auto':'none'):{type:'function',function:{name:'plan_tasks'}},thinking:{type:'disabled'},stream:false,max_tokens:1600,temperature:.3}),signal:controller.signal});}
+      try{response=await fetcher(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${config.apiKey}`},body:JSON.stringify({model:config.model||'deepseek-flash',messages,tools:guide?(allowTools?tools.filter(tool=>tool!==planner):[]):[planner],tool_choice:guide?(requiredTool?{type:'function',function:{name:requiredTool}}:allowTools?'auto':'none'):{type:'function',function:{name:'plan_tasks'}},thinking:{type:'disabled'},stream:false,max_tokens:1600,temperature:.3}),signal:controller.signal});}
       catch{if(controller.signal.aborted)throw new AssistantError(timedOut?'timeout':'aborted',timedOut?'DeepSeek这次回复较慢，请稍后重试。':'已停止这次回复。',timedOut?504:499);throw new AssistantError('upstream-network','暂时联系不上DeepSeek，请稍后再试。',502);}
       if(!response.ok){
         if(response.status===401||response.status===403)throw new AssistantError('upstream-auth','助手的模型服务暂不可用，请联系网站维护者，或先使用工具列表。',503);
@@ -191,6 +192,7 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
       let data;try{data=await response.json();}catch{if(controller.signal.aborted)throw new AssistantError(timedOut?'timeout':'aborted',timedOut?'DeepSeek这次回复较慢，请稍后重试。':'已停止这次回复。',timedOut?504:499);throw new AssistantError('invalid-response','AI回复格式不完整，请重试。',502);}
       const choice=data?.choices?.[0],message=choice?.message;
       if(!object(message)||choice.finish_reason==='length')throw new AssistantError('invalid-response','这次AI回复没有完成，请缩短问题后重试。',502);
+      if(actions.length&&message.tool_calls?.length)return completedReply();
       if(!message.tool_calls?.length){
         if(typeof message.content!=='string'||!message.content.trim()||message.content.length>16000)throw new AssistantError('invalid-response','AI没有给出可用回复，请重试。',502);
         if(!guide)throw new AssistantError('invalid-response','这次没有确认要处理的事项，请重试或自行选择工具。',502);
@@ -210,6 +212,7 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
         totalTools++;let execution;
         try{
           const args=JSON.parse(call.function.arguments),name=call.function.name;
+          if(guide&&name==='plan_tasks')throw new AssistantError('tool-input','本次事项已经确认，请按当前计划调用工具或说明结果，不要重复规划。');
           if(!guide&&name!=='plan_tasks')throw new AssistantError('tool-input','先确认当前事项，不能跳过补问和用户选择。');
           if(name!=='plan_tasks'){
             onProgress?.('checking');
@@ -217,7 +220,7 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
             const target=name==='calculate_salary'?'salary':name==='review_contract'?'contract':args.module;
             if(target!==guide.activeModule&&!(name==='open_tool'&&target==='list'))throw new AssistantError('tool-input','不能把其他事项的数据应用到当前事项。请先切换事项。');
           }
-          execution=executeAssistantTool(name,args,conversation.userText);
+          execution=executeAssistantTool(name,args,conversation.userText,{latestUserMessage});
           if(execution.guide){guide=execution.guide;actions.length=0;references=undefined;}
         }
         catch(error){execution={result:{error:'not-executed',message:error instanceof AssistantError?error.message:'参数无法核对，请补充信息。'},label:'需要补充信息',summary:'这一步没有执行'};}
@@ -259,6 +262,7 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
         return {reply:/PDF/iu.test(conversation.messages.at(-1).content)?'PDF目前只能在合同工具里预览。请粘贴其中的文字，或把需要核对的一页另存为PNG/JPEG图片，再用“从合同照片开始”识别并人工校对。':'在合同工具顶部打开“从合同照片开始”。选图只会预览，点击发送识别后，再对照原图校对文字。校对完成后确认用工类型与期限，再进行规则核对。',replyOrigin:'guide',actions:[entry.action],steps:[...steps,{id:String(steps.length+1),name:'open_tool',label:'提供图片校对入口',ok:true,summary:'合同工具 · 单页图片'}],guide,provider:'DeepSeek',model:config.model||'deepseek-flash'};
       }
     }
+    if(actions.length)return completedReply();
     throw new AssistantError('tool-limit','AI这次没能完成处理，请换个问法，或直接打开对应工具。',502);
   }finally{clearTimeout(timer);signal?.removeEventListener('abort',cancel);}
 }
