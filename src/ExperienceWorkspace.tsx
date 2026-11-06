@@ -31,16 +31,17 @@ function statusFor(index:number,signals:TerminalSignals){
   const task=EXPERIENCE_MODULES[index];if(!task)return '';
   if(task.id==='contract'){const value=signals.contract;return value.reviewed?`已核对 ${value.items} 项 · ${value.unresolved??0} 项待确认`:value.characters?`${value.characters.toLocaleString()} 字原文已载入`:'尚未载入合同原文';}
   if(task.id==='salary')return signals.salary.net===null?'填好金额后，点「算到手工资」':`计算实发 ¥ ${signals.salary.net.toLocaleString('zh-CN',{minimumFractionDigits:2})}`;
-  if(task.id==='subsidy'){if(!signals.subsidy.checked)return '广州政策样例 · 等待实际条件';return signals.subsidy.status==='unsupported'?'当前地区尚未维护':`已完成条件对照 · ${signals.subsidy.states.filter(item=>item==='unknown').length} 项待确认`;}
+  if(task.id==='subsidy'){if(signals.subsidy.summary)return signals.subsidy.summary;if(!signals.subsidy.checked)return '选择城市，查官方政策与求职住宿';return signals.subsidy.status==='unsupported'?'当前地区尚未维护':`已完成条件对照 · ${signals.subsidy.states.filter(item=>item==='unknown').length} 项待确认`;}
   return signals.tools[task.id as ToolId].summary;
 }
-export default function ExperienceWorkspace({page,go,questionCount,signals,openSources,covered=false,musicOpen,openMusic,closeMusic,onAssistantAction,children,accountQuestions,restoreAccountQuestions,accountEpoch}:{accountEpoch:number;accountQuestions:SavedQuestion[];restoreAccountQuestions:(items:SavedQuestion[])=>void;page:WorkspacePage;musicOpen:boolean;openMusic:()=>void;closeMusic:()=>void;go:(page:ExperiencePage)=>void;questionCount:number;signals:TerminalSignals;openSources:()=>void;demo:()=>void;onAssistantAction:(action:AssistantAction)=>void;covered?:boolean;children:ReactNode}){
+export default function ExperienceWorkspace({page,go,questionCount,signals,openSources,covered=false,musicOpen,openMusic,closeMusic,onAssistantAction,children,accountQuestions,restoreAccountQuestions,accountEpoch,policyAsk}:{policyAsk?:{id:number;text:string}|null;accountEpoch:number;accountQuestions:SavedQuestion[];restoreAccountQuestions:(items:SavedQuestion[])=>void;page:WorkspacePage;musicOpen:boolean;openMusic:()=>void;closeMusic:()=>void;go:(page:ExperiencePage)=>void;questionCount:number;signals:TerminalSignals;openSources:()=>void;demo:()=>void;onAssistantAction:(action:AssistantAction)=>void;covered?:boolean;children:ReactNode}){
   const modeState=useExperienceMode(),lightweight=modeState.mode==='simple';
   const [selected,setSelected]=useState(()=>(find(page)<0?1:find(page))),[working,setWorking]=useState(page!=='home');
   const [accountOpen,setAccountOpen]=useState(false);
   useEffect(()=>{setAssistantOpen(false);setAssistantSeed(null);setHomeQuestion('');},[accountEpoch]);
   const [assistantOpen,setAssistantOpen]=useState(false),[assistantSeed,setAssistantSeed]=useState<AssistantSeed|null>(null),[homeQuestion,setHomeQuestion]=useState('');
   function ask(text=''){setCinema(false);setAssistantSeed(text?{id:Date.now(),text,send:true}:null);setAssistantOpen(true);if(text)setHomeQuestion('');}
+  useEffect(()=>{if(policyAsk)ask(policyAsk.text);},[policyAsk]);
   function openTools(){setCinema(false);go('tools');}
   const [phase,setPhase]=useState('事务阵列');
   const [workView,setWorkView]=useState<'material'|'result'>('material');
@@ -67,9 +68,9 @@ export default function ExperienceWorkspace({page,go,questionCount,signals,openS
       if(focusRequest.view==='material'){
         if(page==='contract')target=module.querySelector('#contract-text');
         else if(page==='salary')target=module.querySelector(`input[aria-label="${focusRequest.detail==='deductions'?'个人社保扣款':'应发工资'}"]`);
-        else if(page==='subsidy')target=module.querySelectorAll<HTMLSelectElement>('select')[Number(focusRequest.detail?.split('-')[1]??0)]??null;
+        else if(page==='subsidy')target=[...module.querySelectorAll<HTMLElement>('.policy-city-choices button,select')].find(item=>item.getClientRects().length>0)??null;
         else target=module.querySelector('form input:not([type=checkbox]),form textarea,form select');
-      }else target=module.querySelector(page==='salary'?(focusRequest.detail==='deductions'?'.deduction-deck':'.pay-display'):page==='contract'?'.review-content':page==='subsidy'?'.policy-evaluation':'.tool-result');
+      }else target=module.querySelector(page==='salary'?(focusRequest.detail==='deductions'?'.deduction-deck':'.pay-display'):page==='contract'?'.review-content':page==='subsidy'?'.city-policy-sources,.policy-evaluation':'.tool-result');
       if(target){if(!target.matches('input,textarea,select,button,a'))target.tabIndex=-1;target.focus({preventScroll:true});target.scrollIntoView({block:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}
     },560);return()=>clearTimeout(timer);
   },[focusRequest,page,workView,working]);

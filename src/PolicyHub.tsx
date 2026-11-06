@@ -1,0 +1,30 @@
+import {useCallback,useEffect,useLayoutEffect,useRef,useState} from 'react';
+import type {ReactNode} from 'react';
+import {ArrowLeft,ArrowRight,Download,Search,Sparkles} from 'lucide-react';
+import {POLICY_CITIES,POLICY_TOPIC_NAMES,policyCity,policySourcesForCopy,reviewedCityPolicies} from './lib/city-policies.ts';
+import type {CityPolicyResult,PolicyTopic} from './lib/city-policies.ts';
+import {findCityPolicies} from './services/city-policy-client.ts';
+import {saveText,recordTime} from './lib/download.ts';
+import type {SubsidySignal} from './terminal-state.ts';
+import PolicySources from './PolicySources.tsx';
+export type PolicyOpenRequest={id:number;city:string;topic:PolicyTopic};
+export default function PolicyHub({onSignal,onAsk,openRequest,renderLegacy,active=true}:{active?:boolean;onSignal:(signal:SubsidySignal)=>void;onAsk:(text:string)=>void;openRequest:PolicyOpenRequest|null;renderLegacy:(signal:(v:SubsidySignal)=>void)=>ReactNode}){
+ const [choice,setChoice]=useState('广州'),[other,setOther]=useState(''),[topic,setTopic]=useState<PolicyTopic>('support'),[result,setResult]=useState<CityPolicyResult|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[legacy,setLegacy]=useState(false),[legacyVisited,setLegacyVisited]=useState(false);
+ const pending=useRef<AbortController|null>(null),serial=useRef(0),resultPanel=useRef<HTMLElement>(null);
+ useEffect(()=>()=>pending.current?.abort(),[]);
+ useEffect(()=>{if(!active){pending.current?.abort();serial.current++;setBusy(false);}},[active]);
+ useLayoutEffect(()=>{if(!legacy)onSignal({checked:result!==null,status:result?.status==='matched'?'needs-info':result?'unsupported':null,states:result?.sources.map(()=>'unknown')??[],summary:result?`${result.city} · ${result.status==='matched'?`${result.sources.length}项资料 · 资格待核实`:result.status==='not-found'?'目录未命中':result.status==='not-covered'?'当前未覆盖':'本次读取未完成'}`:'选择城市，查官方政策与求职住宿'});},[legacy,result,onSignal]);
+ const legacySignal=useCallback((v:SubsidySignal)=>{if(legacy)onSignal(v);},[legacy,onSignal]);
+ function reset(){pending.current?.abort();serial.current++;setBusy(false);setError('');setResult(null);}
+ async function load(cityValue=choice==='其他'?other:choice,chosenTopic=topic,refresh=false){
+  let city:string;try{city=policyCity(cityValue);}catch(cause){setError((cause as Error).message);return;}
+  pending.current?.abort();const controller=new AbortController(),id=++serial.current;pending.current=controller;setBusy(true);setError('');setResult(null);
+  try{const local=reviewedCityPolicies(city,chosenTopic);const data=local.length&&!refresh?{city,topic:chosenTopic,status:'matched' as const,sources:structuredClone(local),retrievedAt:new Date().toISOString(),message:'以下为已核验的官方资料；请继续核实当期申报窗口、完整条件或床位情况。'}:await findCityPolicies(city,chosenTopic,{signal:controller.signal,refresh});if(serial.current===id&&!controller.signal.aborted)setResult(data);}
+  catch(cause){if(!controller.signal.aborted&&serial.current===id)setError(cause instanceof Error?cause.message:'暂时无法完成查询，请重试。');}
+  finally{if(serial.current===id)setBusy(false);}
+ }
+ useEffect(()=>{if(!openRequest)return;reset();setLegacy(false);setChoice((POLICY_CITIES as readonly string[]).includes(openRequest.city)?openRequest.city:'其他');setOther(openRequest.city);setTopic(openRequest.topic);void load(openRequest.city,openRequest.topic);},[openRequest]);
+ useEffect(()=>{if(result&&active)resultPanel.current?.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});},[result,active]);
+ return <div className="policy-hub">{legacy?<button className="policy-back" onClick={()=>{reset();setLegacy(false);}}><ArrowLeft size={15}/>返回城市政策</button>:<><header className="tool-heading"><div><h1>看看这个城市能提供什么帮助</h1><p>先查资料，再核实条件。不确定能不能申请，也可以先看。</p></div></header><div className="tool-layout"><section className="tool-input"><form onSubmit={event=>{event.preventDefault();void load();}}><fieldset className="policy-city-choices"><legend>你想查哪个城市？</legend>{[...POLICY_CITIES,'其他'].map(city=><button key={city} type="button" aria-pressed={choice===city} onClick={()=>{reset();setChoice(city);setTopic(city==='广州'||city==='深圳'?'support':'stay');}}>{city==='其他'?'其他城市':city}</button>)}</fieldset>{choice==='其他'&&<label className="field-label">城市名称<input aria-label="政策查询城市" value={other} maxLength={12} onChange={event=>{reset();setOther(event.target.value);}} placeholder="例如：成都、宁波" autoComplete="off"/></label>}<fieldset className="policy-topic-choices"><legend>想先了解什么？</legend>{(['support','stay'] as const).map(value=><button type="button" key={value} aria-pressed={topic===value} onClick={()=>{reset();setTopic(value);}}>{POLICY_TOPIC_NAMES[value]}</button>)}</fieldset><p className="policy-search-scope">广州、深圳提供有限的已核验补贴资料；求职住宿可检索官方青年驿站目录。未覆盖的现金补贴会明确提示，不套用其他城市规则。</p><button className="button primary" disabled={busy} type="submit"><Search size={17}/>{busy?'正在读取官方资料…':'查这个城市的政策'}<ArrowRight size={16}/></button>{busy&&<button className="button secondary" type="button" onClick={reset}>停止查询</button>}{error&&<p className="form-error" role="alert">{error}</p>}</form>{choice==='广州'&&<button className="policy-legacy-entry" onClick={()=>{reset();setLegacyVisited(true);setLegacy(true);}}>已有材料？核对广州求职创业补贴条件<ArrowRight size={14}/></button>}</section><section className="tool-result" ref={resultPanel}>{result&&<><div className="policy-result-actions">{result.status==='matched'&&<button className="button primary" onClick={()=>onAsk(`请帮我解读${result.city}的${POLICY_TOPIC_NAMES[result.topic]}官方资料，先说需要核实哪些条件。`)}><Sparkles size={16}/>让AI帮我看</button>}<button className="button secondary" onClick={()=>saveText(`初程 · 城市政策查询\n生成：${recordTime()}\n\n${policySourcesForCopy(result)}`,'初程-城市政策查询.txt')}><Download size={15}/>下载资料与来源</button><button className="button secondary" onClick={()=>void load(result.city,result.topic,true)} disabled={busy}>重新查询</button></div><PolicySources result={result}/></>}</section></div></>}
+ {legacyVisited&&<div hidden={!legacy}>{renderLegacy(legacySignal)}</div>}</div>;
+}

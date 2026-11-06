@@ -1,0 +1,11 @@
+import {ArrowUpRight,Copy} from 'lucide-react';
+import {useState} from 'react';
+import {POLICY_DIRECTORY,POLICY_TOPIC_NAMES,policySourcesForCopy} from './lib/city-policies.ts';
+import type {CityPolicyResult} from './lib/city-policies.ts';
+export default function PolicySources({result,compact=false}:{result:CityPolicyResult;compact?:boolean}){
+ const [message,setMessage]=useState('');
+ return <section className={`city-policy-sources ${compact?'is-compact':''}`} aria-label={`${result.city}官方政策资料`}><div className="policy-source-heading"><div><small>{result.status==='matched'?(result.sources.some(s=>s.mode==='live')?'本次联网发现':'已核验目录'):result.status==='not-found'?'目录未命中':result.status==='not-covered'?'当前未覆盖':'本次未能读取'}{result.cached?' · 读取缓存':''}</small><h2>{result.city} · {POLICY_TOPIC_NAMES[result.topic]}</h2></div><button type="button" title="复制政策来源" aria-label="复制政策来源" onClick={()=>{void navigator.clipboard.writeText(policySourcesForCopy(result)).then(()=>setMessage('已复制资料与来源。')).catch(()=>setMessage('复制失败，可以选中文字复制。'));}}><Copy size={15}/></button></div><p className="policy-result-message">{result.message}</p>
+ {result.sources.map(source=><article key={source.id}><a href={source.url} target="_blank" rel="noreferrer"><strong>{source.title}</strong><ArrowUpRight size={14}/></a><p className="policy-geography">{source.scope}</p>{compact?<details><summary>查看官方资料摘录与日期</summary><p className="policy-excerpt">{source.text}</p><p className="policy-source-dates">公开 {source.publishedOn??'未注明'} · {source.mode==='live'?'获取':'核验'} {source.checkedOn}</p></details>:<><p className="policy-excerpt">{source.text}</p><p className="policy-source-dates">{source.authority}<br/>公开 {source.publishedOn??'未注明'} · {source.mode==='live'?'获取':'核验'} {source.checkedOn}</p></>}{source.applicationUrl&&<a className="policy-official-entry" href={source.applicationUrl} target="_blank" rel="noreferrer">到官方平台核实办理<ArrowUpRight size={13}/></a>}</article>)}
+ {!result.sources.length&&<a className="policy-official-entry button primary" href={POLICY_DIRECTORY} target="_blank" rel="noreferrer">打开官方青年驿站目录<ArrowUpRight size={13}/></a>}
+ {message&&<p role="status">{message}</p>}<p className="policy-boundary">公开日期不等于申报期或当前有床位；以上不构成个人资格或获批结论。</p></section>;
+}

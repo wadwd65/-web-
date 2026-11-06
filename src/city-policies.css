@@ -1,0 +1,27 @@
+.policy-city-choices,.policy-topic-choices{border:0;padding:0;margin:15px 0 22px;display:flex;flex-wrap:wrap;gap:10px}
+.policy-city-choices legend,.policy-topic-choices legend{font-size:14px;color:#365e78;margin-bottom:12px}
+.policy-city-choices button,.policy-topic-choices button{padding:10px 17px;border:1px solid #9dbdce;border-radius:4px;color:#426a83;background:#f8fcff66;min-height:40px;font-size:13px}
+.policy-city-choices button[aria-pressed=true],.policy-topic-choices button[aria-pressed=true]{background:#247ead;color:white;border-color:#247ead}
+.policy-hub .field-label input{max-width:340px;border:1px solid #9dbdce;border-radius:4px;min-height:43px;padding:8px 12px;background:#fbfdff}
+.policy-search-scope,.policy-boundary{font-size:12px;line-height:1.9;color:#56758b;margin:18px 0}
+.policy-result-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0 20px}
+.experience-workspace .policy-hub .button{gap:10px}
+.policy-back,.policy-legacy-entry{display:flex;align-items:center;gap:10px;color:#26759b;font-size:13px;margin:18px 0;padding:10px 0}
+.policy-legacy-entry{border-bottom:1px solid #a6c3d6}
+.policy-source-heading{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.policy-source-heading small,.policy-source-dates{font-size:11px;line-height:1.8;color:#55778f}
+.city-policy-sources h2{font-size:22px;font-weight:550;color:#254e68;margin:7px 0}
+.policy-source-heading button{padding:10px;color:#317398}
+.policy-result-message{font-size:13px;line-height:1.9;color:#466d87;margin:12px 0 18px}
+.city-policy-sources article{border-top:1px solid #acc7d8;padding:17px 0}
+.city-policy-sources article>a{display:flex;gap:9px;align-items:center;color:#256e96;font-size:14px;line-height:1.7}
+.policy-geography{font-size:12px;line-height:1.8;color:#8a6335;margin:9px 0}
+.policy-excerpt{white-space:pre-line;font-size:13px;line-height:1.95;color:#355b73;margin:12px 0}
+.city-policy-sources .policy-official-entry{display:inline-flex;margin-top:12px;font-size:12px;color:#257198;gap:7px;align-items:center}
+.city-policy-sources details>summary{cursor:pointer;color:#347898;font-size:12px;padding:8px 0}
+.city-policy-sources.is-compact{margin:15px 0 10px;padding:15px 0;border-top:1px solid #c4d9e5}
+.city-policy-sources.is-compact h2{font-size:16px}
+.city-policy-sources.is-compact article{padding:9px 0}
+.city-policy-sources.is-compact .policy-boundary{font-size:11px}
+
+.city-policy-sources .policy-official-entry.primary{color:white;padding:10px 16px;margin:12px 0;min-height:40px}

@@ -1,10 +1,10 @@
 {
-  "version": "0.47.0",
-  "recordedAt": "2026-11-06T07:08:45.925Z",
+  "version": "0.48.0",
+  "recordedAt": "2026-11-06T14:26:17.961Z",
   "workState": "reviewed_internally",
-  "validationVersion": "0.47.0",
+  "validationVersion": "0.48.0",
   "textNormalisation": "LF",
-  "sourceDigest": "f1cd46578f15e0aad10916cc7d9604db02bab50193235737a37dda295b455217",
+  "sourceDigest": "a89645cca08c131099798d29fac36e76a02ec2f524a87aac9c72e51ae0d8c417",
   "files": [
     {
       "path": ".env.example",
@@ -12,35 +12,35 @@
     },
     {
       "path": "AGENTS.md",
-      "sha256": "18d4eb532fcbdca177fc258179d811ef63fad840da8b267f33f50bc613638d3c"
+      "sha256": "d4c732c5fedf84f9adb2c72a613e1d64df16c67eb8ad9f6da99d38929eadd3ef"
     },
     {
       "path": "docs/memory/ARCHITECTURE.md",
-      "sha256": "d1194c7cdded9886ccb2535879ffc38a7d76ccd2881be9361e51369646cbe899"
+      "sha256": "d074ee67f88fd1f2394c799b493c278bc9a79f94f2f92981df86ae4bfce73662"
     },
     {
       "path": "docs/memory/BACKLOG.md",
-      "sha256": "665ad58030a91e06d82d328d73aebb119a44848753078f819e0b95c491a64cf0"
+      "sha256": "32140b56abd45612556e6dcaedfe6db882db175004323452f2775d0e6527e01c"
     },
     {
       "path": "docs/memory/DECISIONS.md",
-      "sha256": "311ca7365fb0fd8ce94b8bf2d94e0a68c560c2978ba60860c03c11a89af3de79"
+      "sha256": "665ccf117e89f1f9ce58df9b0e517a7773dfa618b5a99534e83ed1c8b7d556f2"
     },
     {
       "path": "docs/memory/SESSIONS.md",
-      "sha256": "3f3bedf5c13c58e974eccea554c6e1fc503116e53838eddc8f231413d7bc1b85"
+      "sha256": "2a9467109e8f1fd7b6cd32591898e31551f04b501c0c27f517496d6503f78eb2"
     },
     {
       "path": "docs/memory/progress.json",
-      "sha256": "37ef965c57681044f3024ccd78e25d10294cda6ae349a7a883850fee512b6503"
+      "sha256": "6d037b9e0714eb4643172848fddbda832eeaaa4ba91621c7bcb6e22d344e9ce3"
     },
     {
       "path": "package-lock.json",
-      "sha256": "257231bc1487c58e218e418bd6550fe85fa2c665ea06f307361dd3376cb6859e"
+      "sha256": "7c0db6538548ba1020680bf6189314b71ac8c2c11aface67a8e85b418620634a"
     },
     {
       "path": "package.json",
-      "sha256": "00d74f9a383f87c510e873b4ca69c995eea4de91aedbc069f91b8cbed1e54889"
+      "sha256": "2ae469df58138f6f81f1278f61422e79346eb52b920e08f822826d64af3aa404"
     },
     {
       "path": "public/artwork/rhine-ascent.png",
@@ -180,7 +180,7 @@
     },
     {
       "path": "src/AIAssistant.tsx",
-      "sha256": "124c8055dbed7793afbb0cc86a507a69ad2463c60719c300700908d229ee5b83"
+      "sha256": "352b5829b6c77e13fc9ea51f3bd4157ac0966a6eea1f087882e2642ff6512093"
     },
     {
       "path": "src/Account.tsx",
@@ -188,7 +188,7 @@
     },
     {
       "path": "src/App.tsx",
-      "sha256": "26a6bf2b69ac8b57d6913814e17cb4d0e00f098b6e98d8ff4a56984907a9dc60"
+      "sha256": "defb38332f760587eb12c818ed9564ab98e9db13631c17f2aae5e6663e50f960"
     },
     {
       "path": "src/AssistantEvidence.tsx",
@@ -220,7 +220,7 @@
     },
     {
       "path": "src/ExperienceWorkspace.tsx",
-      "sha256": "d27710fc91932ab156d955c4b78137aa6a59c6f969cfc965e053d74e997887c0"
+      "sha256": "57a89d1be772e119b9b3df9c789bf6c4cc2cd3155dd62c7e65c384969b5da7a9"
     },
     {
       "path": "src/HomeTaskDirectory.tsx",
@@ -259,6 +259,14 @@
       "sha256": "961a271562b34434368c7a8cf4b9fd98eccb0dbfeab8769108d4958b7220d6dd"
     },
     {
+      "path": "src/PolicyHub.tsx",
+      "sha256": "c57889aaf4600813daaf065f13c5cf9e6e52a1698dffaa4393954e98141b968a"
+    },
+    {
+      "path": "src/PolicySources.tsx",
+      "sha256": "f8837fab18a419214f18cc1f70564da7a3fa9ede6c41d3dfbfb60d21b85d3f95"
+    },
+    {
       "path": "src/QuestionEvidence.tsx",
       "sha256": "c1b4111fa5887f44561ec5b09960fefedc7f7cd1618378b0c1daa87fb517c1e8"
     },
@@ -280,11 +288,11 @@
     },
     {
       "path": "src/TaskArrayScene.tsx",
-      "sha256": "72f904d9a5939312c080150495eae936938c359c5fcee8db8e67b6db3e5b35fc"
+      "sha256": "28bf4542acbcfc55381e16c6227aa9ad329edf49ffb32ff84c7355361e5b6e4c"
     },
     {
       "path": "src/ToolDirectory.tsx",
-      "sha256": "b7d3eed99d9c733137c8576d55cda34897135222b88da92661d1ce84b921fa5f"
+      "sha256": "cc649844a0b7243cf6f77a4dc473a1587dc13fabd1ac6d69f2f1e866d686cd07"
     },
     {
       "path": "src/account.css",
@@ -319,6 +327,10 @@
       "sha256": "4461d8dabf08dd10e8264c463cf9d40ad252da0dc08aa95bb33b0a3815e2241e"
     },
     {
+      "path": "src/city-policies.css",
+      "sha256": "598b429fe2d1038be38c309975c31a7be3d4007117c632b4934eadc60193bc12"
+    },
+    {
       "path": "src/contract-sources.css",
       "sha256": "0c94da122ab58ec225cb1f015efca0a392bc0ada3187911e87ca5f1482fee8ad"
     },
@@ -344,7 +356,7 @@
     },
     {
       "path": "src/experience-modules.ts",
-      "sha256": "d576f9c1345c4075ba4b958e8ab774284ac27745309485a0fd71b18fdc431746"
+      "sha256": "a7fa936218930ff494ca8210f1342709619161fc15d757340d3913146876567a"
     },
     {
       "path": "src/experience-workbench.css",
@@ -369,6 +381,10 @@
     {
       "path": "src/lib/checklist.ts",
       "sha256": "3577a517272a720a56ebebca2f37a9a6acba3200b499ccdde1538aec0c194817"
+    },
+    {
+      "path": "src/lib/city-policies.ts",
+      "sha256": "525b1630ef8fdf3309deac9395a10a2a20a1fa9f0c07ca5fe409c199c2c86bd6"
     },
     {
       "path": "src/lib/contract-knowledge.ts",
@@ -408,11 +424,11 @@
     },
     {
       "path": "src/main.tsx",
-      "sha256": "5df986276b53530a2888517522bf0076d45283fc2b57da64352bd189b0ae2be2"
+      "sha256": "a3b36cc32a664972fbf8b25f0b691d20cac9d5dfceef94d2f548177994915a0e"
     },
     {
       "path": "src/module-guides.ts",
-      "sha256": "29b48141b2ee78594bc87d0999f31bdd41a7c925d9a34f3377e0184863a927cc"
+      "sha256": "ceaf8e571b26abeff2a1c591a5aafcbd46951aebabde9ca3332efca8871508d5"
     },
     {
       "path": "src/motion-terminal.css",
@@ -452,7 +468,7 @@
     },
     {
       "path": "src/scene-actions.ts",
-      "sha256": "ed7eda897a4a2488281f4d980c3def898f816f905fee00e79daba0d3c1bf537c"
+      "sha256": "b6d769afcf5b2ddc96c1b413082536c35151cbb8042ae8e8ff8a2ff581913083"
     },
     {
       "path": "src/scene-clearance.ts",
@@ -496,7 +512,7 @@
     },
     {
       "path": "src/services/assistant-client.ts",
-      "sha256": "2e36629bfcf42281276da37a3cf0c44f9986c1e01577c73376f30aa99db89861"
+      "sha256": "32231a61794590529bb14a36364e34fa9e926e1f394ea3446abd4e6df7dffe0c"
     },
     {
       "path": "src/services/assistant-context.ts",
@@ -508,7 +524,11 @@
     },
     {
       "path": "src/services/assistant-types.ts",
-      "sha256": "eb29c20c4daaddb93b25c94a15451834a3923a8115d7f4786a747c1406392896"
+      "sha256": "2a3759ad8c60f9699b02c54e13ccf63442c8df23984e43c6946f980a6461dad9"
+    },
+    {
+      "path": "src/services/city-policy-client.ts",
+      "sha256": "3f435f8bc0d8777c7eae259d0e543acdf36a53a7d29b9ce6f00cd30a9f7d024c"
     },
     {
       "path": "src/services/index.ts",
@@ -520,7 +540,7 @@
     },
     {
       "path": "src/terminal-state.ts",
-      "sha256": "7030051a604200258d2230eb4ddf89dd6959508c9d366abfc0e9c215a3623f97"
+      "sha256": "a013331f7c733d478439202197ee11da544603f956ef52568cc13c89a2adfe21"
     },
     {
       "path": "src/terminal-unity.css",
@@ -581,6 +601,10 @@
     {
       "path": "tests/assistant.test.mjs",
       "sha256": "55e1fe2e67217748833c2956435b350c34ce78275af0b1f3e2f29b77a220e2ea"
+    },
+    {
+      "path": "tests/city-policies.test.mjs",
+      "sha256": "d745e424bc706de4adeae4029b08cb159936facfecdb12723f208f14475d8d7b"
     },
     {
       "path": "tests/contract-knowledge.test.mjs",
@@ -652,7 +676,7 @@
     },
     {
       "path": "tools/assistant-gateway.mjs",
-      "sha256": "feb32718f65d36910eef1142e5e89f0ab1b51e87c6257db5b5e7a961db9891c2"
+      "sha256": "28187deeda673e94c00c1a31c789d9eab3aac9c4458de9f2c7cd37b821b41cbd"
     },
     {
       "path": "tools/audio-static.mjs",
@@ -663,12 +687,20 @@
       "sha256": "e1113c0c4859cd093552e6637d7cd65de5ef0f6467dd82c5f6642c2eabe62a27"
     },
     {
+      "path": "tools/city-policy-service.mjs",
+      "sha256": "10bc11b8788d17bc505cea00a64471da0a8da7e52c89c236b11770ea9a1a2d1b"
+    },
+    {
       "path": "tools/contract-image.mjs",
       "sha256": "78ab894b75d11f99fd546f602a2c818805c139f6ca1c2e706a280c197ab69ce8"
     },
     {
       "path": "tools/evaluate-assistant.mjs",
       "sha256": "0ce2a5ad2e22c0bc304682865b5f17f5bd49c44409f58051691a36b3cbca5383"
+    },
+    {
+      "path": "tools/evaluate-city-policies.mjs",
+      "sha256": "341cf325d08404474f61fc61b91b2bc312cffa277f9b9eaf3502ab0fcccb6f07"
     },
     {
       "path": "tools/music-source.mjs",
@@ -688,7 +720,7 @@
     },
     {
       "path": "tools/serve.mjs",
-      "sha256": "407ecf4706b1bf3fc567b298f902db1725ba0fdc67913359ccf1a8b5058ba4f3"
+      "sha256": "9781ccbbe2fc0e9a2a35ff3fb6b23e442f850c19ae6c7b57e04d2d3fc8bcb3e7"
     },
     {
       "path": "tools/sync-development-log.mjs",

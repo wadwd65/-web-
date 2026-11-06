@@ -11,7 +11,7 @@ const copy={
  tax:{title:'试算工资个税',description:'按已知全年金额做限定试算'},
  social:{title:'弄清社保怎么办',description:'按当前情况找办理路线'},
  rent:{title:'看看租房约定',description:'核对押金、费用与合同文字'},
- subsidy:{title:'看看补贴条件',description:'广州求职创业补贴样例'},
+ subsidy:{title:'查城市政策与补贴',description:'分城市看官方补贴与求职住宿资料'},
  leaving:{title:'整理离职交接',description:'记好交接事项与办理进度'},
 };
 

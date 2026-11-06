@@ -21,6 +21,8 @@ import {useAccount} from './Account.tsx';
 import { evaluateSubsidy } from './lib/policies.ts';
 import type { PolicyInput, PolicyResult } from './lib/policies.ts';
 import SpatialTerminal from './ExperienceWorkspace.tsx';
+import PolicyHub from './PolicyHub.tsx';
+import type {PolicyOpenRequest} from './PolicyHub.tsx';
 import { EXPERIENCE_MODULES,parseExperiencePage } from './experience-modules.ts';
 import type { ExperiencePage,WorkspacePage } from './experience-modules.ts';
 import { EMPTY_SIGNALS } from './terminal-state.ts';
@@ -194,7 +196,7 @@ function Subsidy({onSignal,addQuestions}:{onSignal:(signal:SubsidySignal)=>void;
   }
   return <><PageHeading number="07" english="POLICY NAVIGATOR" title="补贴条件初筛" description="先填写实际情况，再查看待确认条件与官方办理入口。" right={<Tag>政策示例地区 · 广州</Tag>} />
     <DraftControls module="subsidy" value={form} onRestore={saved=>{setForm(saved);setResult(null);}}/>
-    <div className="notice-band"><MapPin size={16} /><span>首版只维护下方一条广州政策示例。学校所在地、就业地和参保地不能混用，其他地区不会直接套用。</span></div>
+    <div className="notice-band"><MapPin size={16} /><span>此条件核对只适用于下方广州政策。学校所在地、就业地和参保地不能混用；其他城市请返回城市政策查询。</span></div>
     <div className="task-action-strip"><div><strong>{result?'保留这次条件对照，再核实办理':'填写自己的情况，再对照条件'}</strong><span>不清楚的项目可以保留“还需要确认”。</span></div>{result?<button className="button primary" onClick={exportPolicy}><ControlFace label="导出条件对照" icon={<Download size={18}/>} code="TXT"/></button>:<button className="button primary" type="submit" form="subsidy-form"><ControlFace label="看看符合哪些条件" icon={<ArrowRight size={18}/>} code="MATCH"/></button>}</div>
     <div className="two-column"><section className="panel"><div className="panel-heading"><div><Search size={17} /><h2>先确认几件事</h2></div><span className="mono">PROFILE / 01</span></div><form id="subsidy-form" className="panel-body policy-form" onSubmit={e => { e.preventDefault(); setResult(evaluateSubsidy(form)); }}>
       <label className="field-label">学校所在城市<select required value={form.schoolCity} onChange={e => change('schoolCity', e.target.value)}><option value="">请选择</option><option value="广州">广州</option><option value="其他地区">其他地区（尚未维护）</option></select><small>这条政策依据学校所在地，不是你计划工作的城市。</small></label>
@@ -236,14 +238,14 @@ function Checklist({ questions, change, add, go, notify }: { questions: Question
 function SourcesDialog({ open, close }: { open: boolean; close: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => { if (open && !ref.current?.open) ref.current?.showModal(); else if (!open && ref.current?.open) ref.current.close(); }, [open]);
-  return <dialog ref={ref} className="sources-dialog" onCancel={close} onClick={e => { if (e.target === e.currentTarget) close(); }} aria-labelledby="sources-title"><div className="dialog-inner"><div className="panel-heading"><div><ShieldCheck size={18} /><h2 id="sources-title">资料与当前能力</h2></div><button className="icon-button" onClick={close} aria-label="关闭资料说明"><X size={19} /></button></div><div className="dialog-body"><Tag tone="green">当前版本</Tag><h3>能帮你做什么，哪些还做不到</h3><p>当前有八项本地工具：条件对齐、文本规则核对、金额公式试算、办理路线和交接台账。补贴仍仅维护广州样例。AI 助手通过本机服务调用 DeepSeek，可推荐工具、核对已知工资金额、检查提供的合同文字并整理询问问题。合同工具已支持单张图片明确发送、识别和人工校对；PDF仍仅预览。合同问题已接入小范围官方资料检索，能展开原文、范围与核验日期；当前覆盖第17、19、22、23、25条。AI不会替你办理或提交申请。</p><div className="source-entry"><span>02 / 合同</span><a href={LAW} target="_blank" rel="noreferrer">《中华人民共和国劳动合同法》<ArrowUpRight size={14} /></a><p>本次关注第 17、19、22、23、25 条。规则只核对已提供文本与确认值，不代替对完整事实的法律判断。</p></div><div className="source-entry"><span>07 / 补贴</span><a href={SUBSIDY} target="_blank" rel="noreferrer">广州市求职创业补贴常见问题<ArrowUpRight size={14} /></a><p>发布于 2026-02-11，资料核验于 2026-10-26。这里只维护此条示例，不默认你身处广州。</p></div>{[SOURCES.tax,SOURCES.rates,SOURCES.rent,SOURCES.medical,SOURCES.transfer,SOURCES.card].map(source=><div className="source-entry" key={source.url}><span>扩展依据 · 核验 {VERIFIED}</span><a href={source.url} target="_blank" rel="noreferrer">{source.name}<ArrowUpRight size={14}/></a><p>{source.scope}</p></div>)}<div className="source-entry"><span>数据与保存</span><strong>由你决定发送和保存</strong><p>文件与表单不会自动上传。发送AI问题或合同图片识别时，仅发送你明确选择的文字或单图给DeepSeek。可选账号将主动保存的情况/清单留在当前服务端，合同原图与聊天不自动持久保存。游客清单保存在当前浏览器；工具和聊天草稿可主动保存到当前浏览器，各账号分别存放。退出账号清除本次填写和对话，已保存资料仍在个人空间，浏览器草稿可在对应页面清除。</p></div></div></div></dialog>;
+  return <dialog ref={ref} className="sources-dialog" onCancel={close} onClick={e => { if (e.target === e.currentTarget) close(); }} aria-labelledby="sources-title"><div className="dialog-inner"><div className="panel-heading"><div><ShieldCheck size={18} /><h2 id="sources-title">资料与当前能力</h2></div><button className="icon-button" onClick={close} aria-label="关闭资料说明"><X size={19} /></button></div><div className="dialog-body"><Tag tone="green">当前版本</Tag><h3>能帮你做什么，哪些还做不到</h3><p>当前有八项本地工具：条件对齐、文本规则核对、金额公式试算、办理路线和交接台账。城市政策提供广州、深圳有限补贴资料，以及杭州、上海求职住宿资料；其他城市求职住宿可联网检索官方青年驿站目录，未覆盖的现金补贴会明确提示。AI 助手通过本机服务调用 DeepSeek，可推荐工具、核对已知工资金额、检查提供的合同文字并整理询问问题。合同工具已支持单张图片明确发送、识别和人工校对；PDF仍仅预览。合同问题已接入小范围官方资料检索，能展开原文、范围与核验日期；当前覆盖第17、19、22、23、25条。AI不会替你办理或提交申请。</p><div className="source-entry"><span>02 / 合同</span><a href={LAW} target="_blank" rel="noreferrer">《中华人民共和国劳动合同法》<ArrowUpRight size={14} /></a><p>本次关注第 17、19、22、23、25 条。规则只核对已提供文本与确认值，不代替对完整事实的法律判断。</p></div><div className="source-entry"><span>07 / 补贴</span><a href={SUBSIDY} target="_blank" rel="noreferrer">广州市求职创业补贴常见问题<ArrowUpRight size={14} /></a><p>发布于 2026-02-11，资料核验于 2026-10-26。广州原有条件核对仍可使用；新增城市政策页按城市分开显示来源、范围与日期，不将广州条件套给其他城市。</p></div>{[SOURCES.tax,SOURCES.rates,SOURCES.rent,SOURCES.medical,SOURCES.transfer,SOURCES.card].map(source=><div className="source-entry" key={source.url}><span>扩展依据 · 核验 {VERIFIED}</span><a href={source.url} target="_blank" rel="noreferrer">{source.name}<ArrowUpRight size={14}/></a><p>{source.scope}</p></div>)}<div className="source-entry"><span>数据与保存</span><strong>由你决定发送和保存</strong><p>文件与表单不会自动上传。发送AI问题或合同图片识别时，仅发送你明确选择的文字或单图给DeepSeek。可选账号将主动保存的情况/清单留在当前服务端，合同原图与聊天不自动持久保存。游客清单保存在当前浏览器；工具和聊天草稿可主动保存到当前浏览器，各账号分别存放。退出账号清除本次填写和对话，已保存资料仍在个人空间，浏览器草稿可在对应页面清除。</p></div></div></div></dialog>;
 }
 
 export default function App() {
   const {user:accountUser,ready:accountReady}=useAccount();
   const questionOwner=useRef<string|null>(null),guestQuestions=useRef<Question[]>(initialQuestions()),previousAccount=useRef<string|null>(null);
   const [accountEpoch,setAccountEpoch]=useState(0);
-  useLayoutEffect(()=>{if(!accountReady)return;if(previousAccount.current!==(accountUser?.id??null)){setAccountEpoch(v=>v+1);setDemoSeed(0);setSignals(EMPTY_SIGNALS);setSalaryRequest(null);setContractRequest(null);}previousAccount.current=accountUser?.id??null;if(questionOwner.current&&questionOwner.current!==accountUser?.id){setQuestions(guestQuestions.current);questionOwner.current=null;}},[accountUser?.id,accountReady]);
+  useLayoutEffect(()=>{if(!accountReady)return;if(previousAccount.current!==(accountUser?.id??null)){setAccountEpoch(v=>v+1);setDemoSeed(0);setSignals(EMPTY_SIGNALS);setSalaryRequest(null);setContractRequest(null);setPolicyOpen(null);setPolicyAsk(null);}previousAccount.current=accountUser?.id??null;if(questionOwner.current&&questionOwner.current!==accountUser?.id){setQuestions(guestQuestions.current);questionOwner.current=null;}},[accountUser?.id,accountReady]);
   function restoreAccountQuestions(items:Question[]){if(!accountUser)return;if(!questionOwner.current)guestQuestions.current=questions;questionOwner.current=accountUser.id;setQuestions(items.map(item=>({...item})));}
   const [signals,setSignals]=useState(EMPTY_SIGNALS);
   const contractSignal=useCallback((value:ContractSignal)=>setSignals(previous=>({...previous,contract:value})),[]);
@@ -258,6 +260,7 @@ export default function App() {
   const [questions, setQuestions] = useState<Question[]>(initialQuestions);
   const [demoSeed, setDemoSeed] = useState(0);
   const [salaryRequest,setSalaryRequest]=useState<AssistantApply<PayslipInput>|null>(null),[contractRequest,setContractRequest]=useState<AssistantApply<ContractAssistantInput>|null>(null);
+  const [policyAsk,setPolicyAsk]=useState<{id:number;text:string}|null>(null),[policyOpen,setPolicyOpen]=useState<PolicyOpenRequest|null>(null);
   const assistantApplyId=useRef(0);
   const [sourcesOpen, setSourcesOpen] = useState(false);
   const [toast, setToast] = useState('');
@@ -293,12 +296,13 @@ export default function App() {
     if(action.kind==='open-tool'){go(action.module);return;}
     if(action.kind==='apply-salary'){setSalaryRequest({id:++assistantApplyId.current,input:action.input});go('salary');setToast('已把对话中确认的金额填入工资工具。');return;}
     if(action.kind==='apply-contract'){setContractRequest({id:++assistantApplyId.current,input:action.input});go('contract');setToast('已把对话中提供的文字填入合同工具。');return;}
+    if(action.kind==='open-city-policy'){setPolicyOpen({id:++assistantApplyId.current,city:action.city,topic:action.topic});go('subsidy');return;}
     addQuestions(action.items);
   }
-  return <><SpatialTerminal accountEpoch={accountEpoch} accountQuestions={questions} restoreAccountQuestions={restoreAccountQuestions} page={workspacePage} musicOpen={page==='music'} openMusic={openMusic} closeMusic={closeMusic} go={go} questionCount={questions.length} signals={signals} covered={sourcesOpen} openSources={() => setSourcesOpen(true)} demo={demo} onAssistantAction={applyAssistantAction}>
+  return <><SpatialTerminal policyAsk={policyAsk} accountEpoch={accountEpoch} accountQuestions={questions} restoreAccountQuestions={restoreAccountQuestions} page={workspacePage} musicOpen={page==='music'} openMusic={openMusic} closeMusic={closeMusic} go={go} questionCount={questions.length} signals={signals} covered={sourcesOpen} openSources={() => setSourcesOpen(true)} demo={demo} onAssistantAction={applyAssistantAction}>
     {visitedPages.has('contract')&&<div className="business-module module-contract" hidden={workspacePage !== 'contract'}><Contract key={accountEpoch} openList={()=>go('list')} demoSeed={demoSeed} addQuestions={addQuestions} notify={setToast} onSignal={contractSignal} applyRequest={contractRequest}/></div>}
     {visitedPages.has('salary')&&<div className="business-module module-salary" hidden={workspacePage !== 'salary'}><Salary key={accountEpoch} addQuestions={addQuestions} onSignal={salarySignal} applyRequest={salaryRequest}/></div>}
-    {visitedPages.has('subsidy')&&<div className="business-module module-subsidy" hidden={workspacePage !== 'subsidy'}><Subsidy key={accountEpoch} onSignal={subsidySignal} addQuestions={addQuestions}/></div>}
+    {visitedPages.has('subsidy')&&<div className="business-module module-subsidy" hidden={workspacePage !== 'subsidy'}><PolicyHub active={workspacePage==='subsidy'} key={accountEpoch} onSignal={subsidySignal} onAsk={text=>setPolicyAsk({id:Date.now(),text})} openRequest={policyOpen} renderLegacy={signal=><Subsidy onSignal={signal} addQuestions={addQuestions}/>}/></div>}
     <NewModules key={accountEpoch} page={workspacePage} visitedPages={visitedPages} onProgress={toolSignal} addQuestions={addQuestions} notify={setToast}/>
     {visitedPages.has('list')&&<div className="business-module module-list" hidden={workspacePage !== 'list'}><Checklist key={accountEpoch} questions={questions} change={changeQuestions} add={addQuestions} go={go} notify={setToast} /></div>}
   </SpatialTerminal><SourcesDialog open={sourcesOpen} close={() => setSourcesOpen(false)} />{toast && <div className="toast" role="status"><CheckCircle2 size={17} /><span>{toast}</span><button className="icon-button" onClick={() => setToast('')} aria-label="关闭提示"><X size={15} /></button></div>}

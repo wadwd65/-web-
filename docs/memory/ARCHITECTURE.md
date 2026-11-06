@@ -128,3 +128,7 @@ ExperienceEntry的markAwake仅负责单次页面内彩蛋状态，语义button�
 ## v0.46 轻量点击与工具动作
 
 PointerFeedback新增follow布尔参数，运行简易模式仅保留点击事件，原层及节点池复用。Salary的updateAmount统一重置旧结果，确认0显式触发、焦点回输入。主执行/下载由现有data-view区分，NewModules的共用Action沿用原form提交。usability.css的按钮强化限定experience-workspace，主页入口恢复45。MODULE_GUIDES只调整可见页签名称，事务id和计算API不变。
+
+## v0.48 城市政策
+
+PolicyHub管理城市/事项、取消和序列保护、有限本地目录、官方查询与原广州筛选的保留挂载。PolicySources在工具和同一AIAssistant共用；policyAsk通过ExperienceWorkspace原ask入口，open-city-policy通过App用户点击应用。city-policies.ts定义核验卡片、类型/URL校验及城市证据；city-policy-service.mjs通过固定官方API发现精确城市、读取受限HTTPS文章、公共缓存。serve和Vite均接同源POST政策接口。真实DeepSeek先plan_tasks再search_city_policies；消息与来源卡分开。来源为外部不可信数据，不执行其中脚本或指令；源工具之后关闭继续调用。图像/合同RAG/账号与原规则不改。

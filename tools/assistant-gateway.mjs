@@ -1,3 +1,5 @@
+import {cityPolicyService} from './city-policy-service.mjs';
+import {policyCity,assertPolicyCityEvidence,isCityPolicyResult} from '../src/lib/city-policies.ts';
 import {readFileSync,existsSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {homedir} from 'node:os';
@@ -26,6 +28,7 @@ export function readAssistantConfig(directory){
 }
 const planner={type:'function',function:{name:'plan_tasks',description:'每条新问题先识别当前事项、是否多事项及必需补问。只做计划，不修改表单。必须以最新用户意图和更正为准。',parameters:{type:'object',properties:{status:{type:'string',enum:['choose','needs-info','ready','clarify','out-of-scope']},intent:{type:'string',enum:['calculate','review','guidance','questions'],description:'用户当前要计算、逐条核对、了解说明，还是整理问题。只问去哪查/一般先看什么时用guidance，不能强迫补金额。'},tasks:{type:'array',maxItems:3,items:{type:'object',properties:{module:{type:'string',enum:Object.keys(MODULES).filter(id=>id!=='list')},reason:{type:'string',description:'针对用户原话的一句短理由，不声称联网或已办理。'}},required:['module','reason'],additionalProperties:false}},activeModule:{type:['string','null'],enum:[...Object.keys(MODULES).filter(id=>id!=='list'),null]},questions:{type:'array',maxItems:3,items:{type:'object',properties:{label:{type:'string',description:'当前必须补充的问题，尽量简短；金额须带应发工资/个人社保/公积金/个税/其他扣款等准确项目名'},hint:{type:'string',description:'可选的简短填写提示，不提供虚构默认值'}},required:['label','hint'],additionalProperties:false}}},required:['status','intent','tasks','activeModule','questions'],additionalProperties:false}}};
 const tools=[planner,
+  {type:'function',function:{name:'search_city_policies',description:'按用户明确的城市查官方政策。已核验城市资料加实时官方青年驿站目录；不是全网搜索，不自动认定资格。未知现金补贴返回未覆盖，不能套其他城市。',parameters:{type:'object',properties:{city:{type:'string',description:'用户明确说出的城市，不猜默认广州。'},topic:{type:'string',enum:['support','stay'],description:'现金补贴用support，求职住宿/青年驿站用stay。'}},required:['city','topic'],additionalProperties:false}}},
   {type:'function',function:{name:'open_tool',description:'用户希望打开工具，或问题需要某项工具时，提供站内入口。只能使用列出的模块。',parameters:{type:'object',properties:{module:{type:'string',enum:Object.keys(MODULES)}},required:['module'],additionalProperties:false}}},
   {type:'function',function:{name:'calculate_salary',description:'用用户明确提供的工资条金额做算术核对。所有前五项都必须已知，不能把缺失项当0。用户明确说某项扣款没有/没扣时该项可传0，不能要求改成数字句式；不知道或没有明细仍未知。evidence必须是逐段引用原话的数组。金额分多次提供就分别引用每次用户消息，不要合成改写的一段文字。',parameters:{type:'object',properties:{gross:{type:'number'},insurance:{type:'number'},fund:{type:'number'},tax:{type:'number'},other:{type:'number'},received:{type:['number','null']},evidence:{type:'array',items:{type:'string'},maxItems:10}},required:['gross','insurance','fund','tax','other','received','evidence'],additionalProperties:false}}},
   {type:'function',function:{name:'review_contract',description:'对用户提供的文字进行本地合同规则核对。仅在用户明确说是全日制劳动合同后使用；原文必须逐字来自用户消息，期限不清楚传null，不能擅自补全。',parameters:{type:'object',properties:{text:{type:'string'},contractMonths:{type:['number','null']},probationMonths:{type:['number','null']},fullTimeConfirmed:{type:'boolean'}},required:['text','contractMonths','probationMonths','fullTimeConfirmed'],additionalProperties:false}}},
@@ -37,12 +40,12 @@ const SYSTEM=`你是“初程”的办事助手，面向刚毕业、第一次工
 用户随时可以直接打字补充、纠正、换问题，也可以一口气说明几件事。不要要求按预设格式回答、先填完表单或先选中某模块才能继续聊。工具参数仅在实际计算/核对时需要。问解释和做法时不要索取计算字段。
 用户转去处理新问题时，专注当前问题，不追问上一事项的可选字段，也不每次催问实际到账等非必填信息。
 工资金额必须调用calculate_salary；前五项缺一项就明确问还缺哪几项，不能默认为0，也不能只丢一个入口让用户自行找。只算用户明确提供的数据，不猜地方缴费率、到手工资或退税。合同在用户确认全日制及提供文字后可用review_contract；一年可按12个月理解，但未知仍传null。不可把“本次没定位”说成完整合同违法。
-合同工具返回本地规则。合同计划ready后，程序会检索已核验的官方资料，把contractKnowledge及source交给你；这是本地资料检索，不是实时网页搜索。只有status=matched的excerpts才是本次命中依据，用这些原文解释，不能靠旧referenceNotes冒充检索。引用的适用范围、区间含/不含边界和核验日必须准确。资料之外的金额、期限或法律结论不要凭记忆补充。只解释与当前问题直接相关的一点，不额外扩展未命中的其他规定。这个聊天入口仅接收文字，不能声称你已读取照片；本站合同工具另有单张图片明确发送、识别和人工校对入口。用户问怎样上传照片时以guidance计划并用open_tool打开contract，不先要求粘贴整份原文。资料库仅收录中国内地劳动合同法第17、19、22、23、25条，未覆盖的问题说明需另查。没有实时网页搜索或官方办理权限，不可声称刚刚查了官网或提交申请。检索依据由界面单独展示，不自行生成URL、虚构条文或声称逐句审核通过。补贴只维护一条广州求职创业补贴样例；其他地区说明需核实，不虚构金额、资格、政策或官方链接。
+合同工具返回本地规则。合同计划ready后，程序会检索已核验的官方资料，把contractKnowledge及source交给你；这是本地资料检索，不是实时网页搜索。只有status=matched的excerpts才是本次命中依据，用这些原文解释，不能靠旧referenceNotes冒充检索。引用的适用范围、区间含/不含边界和核验日必须准确。资料之外的金额、期限或法律结论不要凭记忆补充。只解释与当前问题直接相关的一点，不额外扩展未命中的其他规定。这个聊天入口仅接收文字，不能声称你已读取照片；本站合同工具另有单张图片明确发送、识别和人工校对入口。用户问怎样上传照片时以guidance计划并用open_tool打开contract，不先要求粘贴整份原文。资料库仅收录中国内地劳动合同法第17、19、22、23、25条，未覆盖的问题说明需另查。合同没有实时网页搜索或官方办理权限，不可声称提交申请。检索依据由界面单独展示，不自行生成URL、虚构条文或声称逐句审核通过。地方政策使用search_city_policies。已核验目录目前有广州、深圳的有限补贴资料，杭州/上海求职住宿条目；未收录城市的求职住宿可从国家大学生就业服务平台实时发现并读取正文，现金补贴未覆盖时明确说明。先问清城市，再查询；用户说求职住宿/驿站用stay，现金补贴用support。不虚构金额、资格或链接；官方目录公开时间不代表当前申报期。杭州条目正文限西湖区，不能说杭州所有区都适用。
 用户已经有表单材料也不会自动发送给你；只根据这次聊天的用户文字和当前模块名处理。引用不得编造，工具结果不能修改。对没法确定的事项，说明还缺什么，给1到2个明确问题。准备提问用prepare_questions。
 你只能调用下列白名单工具，不执行代码、不访问文件、不操控音乐、账号、支付或外部服务。与毕业生活事项无关的请求简单说明服务范围。回复用短段落，不写Markdown加粗或大标题。只有prepare_questions成功后才有加入清单按钮；不要编造未生成的按钮，也不要声称用户已点击。给出结果后仅提到这次工具实际生成的操作。`;
 
 const GUIDANCE=`
-每条最新用户消息的第一步必须调用plan_tasks。先判断intent，用户只想了解或查找信息（包括“只知道应发，应该从哪一步开始”）时用guidance并ready，不追问计算才需要的数据。先给取得本期工资条、个人扣款与到账记录的方法，不能以索要数字开头。不要通过每天/每周工时自行认定全日制，须核实合同及实际用工关系。
+每条最新用户消息的第一步必须调用plan_tasks。政策/补贴/求职住宿按subsidy处理；城市明确则ready+guidance，用search_city_policies查询，不索要申领资格才需的隐私材料。城市未明确时必须status=clarify、tasks=[]、activeModule=null、questions仅问城市；不要用guidance+needs-info。不得从之前助手文字获取城市。先判断intent，用户只想了解或查找信息（包括“只知道应发，应该从哪一步开始”）时用guidance并ready，不追问计算才需要的数据。先给取得本期工资条、个人扣款与到账记录的方法，不能以索要数字开头。不要通过每天/每周工时自行认定全日制，须核实合同及实际用工关系。
 - 只处理用户现在要办的事，最新更正优先；用户明确转到租房，就不再追问之前工资的字段。
 - 两件或三件事都需要处理、用户没有说先办哪件：status=choose，tasks列出2–3件，activeModule=null，questions=[]。请用户用自己的话或可选按钮说明想先聊哪件，允许继续补充情况；不能自行决定或先算钱。用户说“先工资/先合同”时只聚焦该项，其他可保留为后续候选。
 - 缺少当前必需信息：status=needs-info，activeModule必须在tasks中，questions一次最多3项。工资要计算时前五项均需明确，缺哪项问哪项，不问已经明确的；实际到账可选，不为它阻塞计算。问句只写“应发工资/个人社保/公积金/个税/其他扣款”等短项目名，提示写单位。
@@ -92,6 +95,7 @@ function confirmedDuration(value,key,userText){
 export function executeAssistantTool(name,args,userText,{latestUserMessage=userText.split("\n").at(-1)??userText}={}){
   if(!object(args))throw new AssistantError('tool-input','工具参数不完整，请补充信息。');
   if(name==='plan_tasks'){
+    if(args.activeModule==='subsidy'&&args.status==='needs-info'&&Array.isArray(args.questions)&&args.questions.some(q=>/城市|地区/u.test(q?.label||''))){args={...args,intent:'guidance',status:'clarify',tasks:[],activeModule:null,questions:[{label:'你想查哪个城市',hint:''}]};}
     if(args.intent==='guidance'&&args.status==='needs-info')throw new AssistantError('tool-input','一般解释请用intent=guidance、status=ready、questions=[]，先回答已有范围。只有个人计算或材料核对确实缺少信息时才用calculate/review与needs-info。');
     let guide;try{guide=validateAssistantGuide(args);}catch{throw new AssistantError('tool-input','事项计划不完整，请重新确认当前事项和必要补问。');}
     guide=reconcileSalaryPlan(guide,userText,latestUserMessage);
@@ -159,7 +163,7 @@ export function finalizeContractExplanation(content,references){
   return {reply,replyOrigin:'model'};
 }
 
-export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=45000,onProgress}={}){
+export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=45000,onProgress,policySearch=cityPolicyService.search}={}){
   const conversation=validateConversation(input);
   if(!config?.apiKey)throw new AssistantError('not-configured','助手暂时没有连接，可以先打开工具列表自行核对。',503);
   if(signal?.aborted)throw new AssistantError('aborted','已停止这次回复。',499);
@@ -167,19 +171,20 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
   const cancel=()=>controller.abort();if(signal?.aborted)cancel();else signal?.addEventListener('abort',cancel,{once:true});
   let timedOut=false;const timer=setTimeout(()=>{timedOut=true;controller.abort();},timeoutMs);
   const messages=[{role:'system',content:SYSTEM+GUIDANCE+`\n当前所在模块仅作导航背景，不能替代用户的新意图：${MODULES[conversation.currentModule]||'首页'}。`},...conversation.messages];
-  const actions=[],steps=[];let totalTools=0,guide=null,references;
+  const actions=[],steps=[];let totalTools=0,guide=null,references,policyReferences;
   const latestUserMessage=conversation.messages.at(-1).content.trim();
   const asksToOpen=/^(?:请|麻烦|帮我|带我|我想|我要|先|直接|现在|那就|可以|\s)*(?:打开|进入|跳转|去看看)/u.test(latestUserMessage);
   const namesAnEntry=Object.values(MODULES).some(name=>latestUserMessage.includes(name))||/工具|入口|页面|界面/u.test(latestUserMessage);
   const wantsEntry=asksToOpen&&namesAnEntry||/(?:工具|入口)(?:在|去)哪|(?:哪里|在哪).{0,6}(?:工具|入口)/u.test(latestUserMessage);
-  const completedReply=()=>({reply:actions.some(a=>a.kind==='add-questions')?'要核实的问题已整理好。点下方按钮才会加入清单，加入后仍可修改。':actions.some(a=>a.kind==='apply-salary'||a.kind==='apply-contract')?'本次核对已完成，可以在下方打开工具查看结果，或继续补充信息。':'点下方入口打开工具后，可以继续填写和核对。',replyOrigin:'guide',actions,steps,guide,references,provider:'DeepSeek',model:config.model||'deepseek-flash'});
+  const completedReply=()=>({reply:actions.some(a=>a.kind==='add-questions')?'要核实的问题已整理好。点下方按钮才会加入清单，加入后仍可修改。':actions.some(a=>a.kind==='apply-salary'||a.kind==='apply-contract')?'本次核对已完成，可以在下方打开工具查看结果，或继续补充信息。':'点下方入口打开工具后，可以继续填写和核对。',replyOrigin:'guide',actions,steps,guide,references,policyReferences,provider:'DeepSeek',model:config.model||'deepseek-flash'});
   try{
     for(let round=0;round<4;round++){
       onProgress?.(guide?'responding':'planning');
       const explainingContract=guide?.activeModule==='contract'&&guide.intent==='guidance'&&references?.status==='matched';
-      const explainingGuidance=guide?.intent==='guidance'&&!wantsEntry;
+      const policyLookup=guide?.activeModule==='subsidy'&&guide.status==='ready'&&guide.intent!=='questions'&&!wantsEntry;
+      const explainingGuidance=guide?.intent==='guidance'&&!wantsEntry&&!policyLookup;
       const allowTools=guide?.status==='ready'&&!explainingGuidance&&actions.length===0;
-      const requiredTool=allowTools&&guide.intent==='questions'?'prepare_questions':allowTools&&guide.activeModule==='salary'&&guide.intent==='calculate'?'calculate_salary':null;
+      const requiredTool=allowTools&&policyLookup?'search_city_policies':allowTools&&guide.intent==='questions'?'prepare_questions':allowTools&&guide.activeModule==='salary'&&guide.intent==='calculate'?'calculate_salary':null;
       let response;
       try{response=await fetcher(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${config.apiKey}`},body:JSON.stringify({model:config.model||'deepseek-flash',messages,tools:guide?(allowTools?tools.filter(tool=>tool!==planner):[]):[planner],tool_choice:guide?(requiredTool?{type:'function',function:{name:requiredTool}}:allowTools?'auto':'none'):{type:'function',function:{name:'plan_tasks'}},thinking:{type:'disabled'},stream:false,max_tokens:1600,temperature:.3}),signal:controller.signal});}
       catch{if(controller.signal.aborted)throw new AssistantError(timedOut?'timeout':'aborted',timedOut?'DeepSeek这次回复较慢，请稍后重试。':'已停止这次回复。',timedOut?504:499);throw new AssistantError('upstream-network','暂时联系不上DeepSeek，请稍后再试。',502);}
@@ -201,8 +206,15 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
           actions.push(entry.action);
           steps.push({id:'contract-entry',name:'open_tool',label:entry.label,ok:true,summary:entry.summary});
         }
+        if(policyLookup){
+          if(!policyReferences||policyReferences.status!=='matched')return {reply:policyReferences?.message||'这次没有取得可核对的官方资料，可以换个城市或到政策工具重试。',replyOrigin:'guide',actions,steps,guide,policyReferences,provider:'DeepSeek',model:config.model||'deepseek-flash'};
+          const evidence=policyReferences.sources.map(s=>s.text+' '+s.scope+' '+s.publishedOn+' '+s.checkedOn).join(' ');
+          const numberedProse=message.content.replace(/^\s*\d+[、.)．]\s*/gmu,'');
+          const invented=(numberedProse.match(/\d+(?:\.\d+)?/gu)||[]).some(number=>!evidence.includes(number));
+          if(invented||/一定能领|肯定符合|保证(?:通过|获批)|所有毕业生都|已经(?:申请|提交)/u.test(message.content))return {reply:'官方资料已列在下方，请先核对所在区县、毕业阶段和当期办理要求。资料中的标准不代表你已符合或已获批。',replyOrigin:'guide',actions,steps,guide,policyReferences,provider:'DeepSeek',model:config.model||'deepseek-flash'};
+        }
         const explanation=explainingContract?finalizeContractExplanation(message.content,references):{reply:message.content.trim(),replyOrigin:'model'};
-        return {...explanation,actions,steps,guide,references,provider:'DeepSeek',model:config.model||'deepseek-flash'};
+        return {...explanation,actions,steps,guide,references,policyReferences,provider:'DeepSeek',model:config.model||'deepseek-flash'};
       }
       if(!Array.isArray(message.tool_calls)||message.tool_calls.length>3||totalTools+message.tool_calls.length>6)throw new AssistantError('tool-limit','这次问题涉及的步骤较多，请先选一件事处理。',502);
       const calls=message.tool_calls;
@@ -217,10 +229,16 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
           if(name!=='plan_tasks'){
             onProgress?.('checking');
             if(guide.status!=='ready')throw new AssistantError('tool-input','当前还需要用户选择或补充信息，这一步未执行。');
-            const target=name==='calculate_salary'?'salary':name==='review_contract'?'contract':args.module;
+            const target=name==='search_city_policies'?'subsidy':name==='calculate_salary'?'salary':name==='review_contract'?'contract':args.module;
             if(target!==guide.activeModule&&!(name==='open_tool'&&target==='list'))throw new AssistantError('tool-input','不能把其他事项的数据应用到当前事项。请先切换事项。');
           }
-          execution=executeAssistantTool(name,args,conversation.userText,{latestUserMessage});
+          if(name==='search_city_policies'){
+            const city=policyCity(args.city);
+            assertPolicyCityEvidence(city,conversation.messages.filter(m=>m.role==='user').map(m=>m.content));
+            onProgress?.('retrieving');policyReferences=await policySearch(city,args.topic,{signal:controller.signal});
+            if(!isCityPolicyResult(policyReferences)||policyReferences.city!==city||policyReferences.topic!==args.topic){policyReferences=undefined;throw new AssistantError('tool-input','来源城市或格式未能核对，本次不解释。');}
+            execution={result:{policyReferences,next:'只解释本次sources里的资料，保留区县、毕业学年等限制。不要额外给金额、资格保证、当前开放结论或自编链接。来源卡已展示原文和日期，简短说明下一步核实哪项。mode=live的checkedOn仅是读取日期，不是政策生效或专业审核日期；不要把旧目录说成当期开放。'},action:{kind:'open-city-policy',city,topic:args.topic,label:'在政策工具查看'+city},label:'查找官方城市政策',summary:policyReferences.status==='matched'?city+' · '+policyReferences.sources.length+'项资料':policyReferences.message};
+          }else execution=executeAssistantTool(name,args,conversation.userText,{latestUserMessage});
           if(execution.guide){guide=execution.guide;actions.length=0;references=undefined;}
         }
         catch(error){execution={result:{error:'not-executed',message:error instanceof AssistantError?error.message:'参数无法核对，请补充信息。'},label:'需要补充信息',summary:'这一步没有执行'};}
@@ -249,10 +267,10 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
         messages.push({role:'tool',tool_call_id:call.id,content:JSON.stringify(execution.result)});
       }
       if(guide?.status==='ready'&&guide.intent==='guidance'&&wantsEntry&&actions.some(action=>action.kind==='open-tool')){
-        return {reply:'点下方入口就能打开，你也可以继续在这里提问。',replyOrigin:'guide',actions,steps,guide,references,provider:'DeepSeek',model:config.model||'deepseek-flash'};
+        return {reply:'点下方入口就能打开，你也可以继续在这里提问。',replyOrigin:'guide',actions,steps,guide,references,policyReferences,provider:'DeepSeek',model:config.model||'deepseek-flash'};
       }
       if(references&&references.status!=='matched'){
-        return {reply:references.message,replyOrigin:'guide',actions:[],steps,guide,references,provider:'DeepSeek',model:config.model||'deepseek-flash'};
+        return {reply:references.message,replyOrigin:'guide',actions:[],steps,guide,references,policyReferences,provider:'DeepSeek',model:config.model||'deepseek-flash'};
       }
       if(guide&&guide.status!=='ready'){
         return {reply:guideReply(guide,conversation.userText),replyOrigin:'guide',actions:[],steps,guide,provider:'DeepSeek',model:config.model||'deepseek-flash'};

@@ -1,6 +1,6 @@
 export type ContractSignal = { characters:number; reviewed:boolean; unresolved:number|null; items:number };
 export type SalarySignal = { gross:number|null; net:number|null; deductions:number|null };
-export type SubsidySignal = { checked:boolean; status:'potential'|'not-matched'|'needs-info'|'unsupported'|null; states:('met'|'unmet'|'unknown')[] };
+export type SubsidySignal = { summary?:string; checked:boolean; status:'potential'|'not-matched'|'needs-info'|'unsupported'|null; states:('met'|'unmet'|'unknown')[] };
 export type ToolId='offer'|'tax'|'social'|'rent'|'leaving';
 export type ToolSignal={ready:boolean;items:number;pending:number;summary:string;lines:string[];values?:(number|null)[]};
 export const EMPTY_TOOL:ToolSignal={ready:false,items:0,pending:0,summary:'等待填写材料',lines:[]};

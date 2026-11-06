@@ -27,7 +27,7 @@ function content(index:number,s:TerminalSignals){
  const m=MODULES[index];if(!m.ready)return ['功能待开发',m.input,'入口预留 · 暂不生成结果'];
  if(m.id==='contract')return [s.contract.characters?`${s.contract.characters} 字合同原文`:'等待载入合同原文',s.contract.reviewed?`${s.contract.items} 项已核对 / ${s.contract.unresolved} 项待确认`:'原文定位 / 依据入口 / 询问清单','本地规则核对 · 保留不确定项'];
  if(m.id==='salary')return [`应发 ${money(s.salary.gross)}`,`扣款 ${money(s.salary.deductions)}`,`实发 ${money(s.salary.net)}`];
- if(m.id==='subsidy')return [s.subsidy.checked?'已对照个人条件':'从个人实际条件开始',s.subsidy.checked?`${s.subsidy.states.filter(v=>v==='unknown').length} 项待确认`:'地区 / 毕业 / 就业情况','广州政策示例 · 以官方审核为准'];
+ if(m.id==='subsidy')return [s.subsidy.summary|| (s.subsidy.checked?'已对照个人条件':'按城市查找官方资料'),s.subsidy.checked?`${s.subsidy.states.filter(v=>v==='unknown').length} 项待核实`:'补贴 / 求职住宿','地区和时效单独核实 · 不代表获批'];
  const value=s.tools[m.id as ToolId];return value.ready?value.lines:[m.input,m.outputs.join(' / '),'本地工具 · 材料不自动上传'];
 }
 function redraw(d:Dossier,s:TerminalSignals,active=false,hot:SceneAction|null=null){
