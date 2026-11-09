@@ -168,3 +168,53 @@ test('a full-time scope question is not a declaration of unsupported employment'
  for(const query of ['我不知道是不是全日制，原文只有试用期三个月。','不确定是否非全日制，想问试用期。','可能是实习协议，暂时不清楚。'])assert.notEqual(searchContractKnowledge(query).status,'out-of-scope',query);
  for(const query of ['这是非全日制合同，试用期怎么约定','我签的是实习协议，想问试用期'])assert.equal(searchContractKnowledge(query).status,'out-of-scope',query);
 });
+
+test('short weeks in a contract retrieve the short-term rule without treating every week count as short',()=>{
+ for(const query of ['劳动合同只管七个星期，先留十天试用。','劳动合同只有8周，试用期可以约吗？'])assert.equal(search(query).excerpts[0]?.id,'LC19-3');
+ assert.notEqual(search('劳动合同期限104周，试用期怎么定').excerpts[0]?.id,'LC19-3');
+});
+
+test('an explicit probation-only follow-up inherits one user topic, without borrowing vague or conflicting history',()=>{
+ const user=content=>({role:'user',content});
+ const query=contractQueryFromMessages([user('劳动合同只写了一段试用期，之后另签正式合同。'),{role:'assistant',content:'合成中性回复'},user('那就后一个，单独写那段算数吗？不用再问月份。')]);
+ assert.equal(search(query).excerpts[0]?.id,'LC19-4');
+ for(const earlier of ['试用期和竞业限制两件事','试用期说明。先改聊租房','新问题']){
+  const latest='那就后一个，单独写那段算数吗？';
+  assert.equal(contractQueryFromMessages([user(earlier),user(latest)]),latest);
+ }
+ const outside=search('只有住宅租赁押金问题，劳动合同摘录能作为房东扣押金的依据吗？');
+ assert.equal(outside.status,'out-of-scope');assert.deepEqual(outside.excerpts,[]);
+});
+
+test('explanation-only requests respect a declined tool entry',async()=>{
+ const content='专项技术培训服务期不知道，只解释依据，不要替我填表。';
+ let count=0;
+ const result=await runAssistant({messages:[{role:'user',content}]},{config:{apiKey:'synthetic'},fetcher:async()=>++count===1?reply({tool_calls:[call(plan)]}):reply({content:'具体数额还不能确定，先核实实际培训费、服务期和未履行部分。'})});
+ assert.equal(result.references.status,'matched');assert.deepEqual(result.actions,[]);
+});
+
+test('a review-labelled explanation cannot bypass source support checks',async()=>{
+ const content='劳动合同仅约定试用期，我只想知道这段期限是否算合同期限，不要代填。';
+ const references=search('劳动合同仅约定试用期');
+ assert.equal(finalizeContractExplanation('这段期限是劳动合同期限。另外同一单位只能约定一次试用期。',references).replyOrigin,'guide');
+ let count=0;
+ const result=await runAssistant({messages:[{role:'user',content}]},{config:{apiKey:'synthetic'},fetcher:async()=>++count===1?reply({tool_calls:[call({...plan,intent:'review'})]}):reply({content:'试用期不成立，该期限为劳动合同期限。另外同一单位只能约定一次试用期。'})});
+ assert.equal(result.replyOrigin,'guide');assert.ok(!result.reply.includes('只能约定一次'));
+ assert.ok(result.reply.includes(references.excerpts[0].text));
+ assert.equal(finalizeContractExplanation('试用名义会带来试用期工资、解除条件等规则。',search('劳动合同只管八周，试用期')).replyOrigin,'guide');
+ assert.equal(finalizeContractExplanation('如果合同里只写了十天试用，没有别的期限，试用期不成立，视为合同期限。',search('劳动合同只管八周，试用期')).replyOrigin,'guide');
+ assert.equal(finalizeContractExplanation('试用期不成立，合同本身仍然成立。',references).replyOrigin,'guide');
+ assert.equal(finalizeContractExplanation('公司不能拿试用期名义降低这段期间的待遇或随时让你走。',references).replyOrigin,'guide');
+ const training=finalizeContractExplanation('培训安排需要考察。',search('专项培训费用与服务期'));
+ assert.equal(training.replyOrigin,'guide');assert.match(training.reply,/不能.*计算|不能.*算出/);assert.match(training.reply,/违约金约定|协议约定/);assert.match(training.reply,/计算依据/);
+});
+
+test('training service fee guidance cannot bypass contract evidence through the leaving route',async()=>{
+ let count=0;
+ const wrongRoute={...plan,activeModule:'leaving',tasks:[{module:'leaving',reason:'离职时退还培训费'}]};
+ const result=await runAssistant({messages:[{role:'user',content:'专项技术培训服务期离开时要退多少钱？费用和协议都未知，只解释不要填表。'}]}, {config:{apiKey:'synthetic'},fetcher:async()=>++count===1?reply({tool_calls:[call(wrongRoute)]}):reply({content:'不能计算具体金额，需要实际培训费凭证、服务期和违约金约定，以及公司计算依据。'})});
+ assert.equal(result.guide.activeModule,'contract');assert.equal(result.references.excerpts[0].id,'LC22');assert.deepEqual(result.actions,[]);
+ count=0;
+ const processOnly=await runAssistant({messages:[{role:'user',content:'培训费服务期问题先放下，现在先看离职流程，不算费用。'}]}, {config:{apiKey:'synthetic'},fetcher:async()=>++count===1?reply({tool_calls:[call(wrongRoute)]}):reply({content:'先确认离职通知、交接事项和资料归还。'})});
+ assert.equal(processOnly.guide.activeModule,'leaving');assert.equal(processOnly.references,undefined);
+});

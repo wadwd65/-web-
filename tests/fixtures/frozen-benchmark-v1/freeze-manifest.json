@@ -1,0 +1,45 @@
+{
+  "benchmarkId": "first-step-frozen-benchmark-v1",
+  "frozenBeforeEvaluation": true,
+  "frozenAt": "2026-11-07T16:12:00+08:00",
+  "totalCases": 24,
+  "primaryCases": 16,
+  "holdoutCases": 8,
+  "files": [
+    {
+      "path": "frozen-evaluation-cases-v1.json",
+      "bytes": 30732,
+      "sha256": "adb1fefd9b52cea9708cac964ee551370da023d8d877a2d7e49170f48ee41d9f"
+    },
+    {
+      "path": "images/FZ-I01.png",
+      "bytes": 120319,
+      "sha256": "44cace7d9909b0a6de26bce3e49d20b042e1bcf6296054554f46712391d2311c"
+    },
+    {
+      "path": "images/FZ-I02.png",
+      "bytes": 76471,
+      "sha256": "694960d53194313b6100c353c3800db337da832d743957b1daf6b9bd2c386012"
+    },
+    {
+      "path": "images/FZ-I03.png",
+      "bytes": 68224,
+      "sha256": "1713c9a22e1de0dda2c8295bd1aee03ac3fb02a79cf231f3c989168ad10ffe10"
+    },
+    {
+      "path": "images/FZ-I04.png",
+      "bytes": 111505,
+      "sha256": "4d3fc5ef148496915e418bf1f34f46908ad054d7353f731e3759ca9d6f513e69"
+    },
+    {
+      "path": "images/FZ-I05.png",
+      "bytes": 2980,
+      "sha256": "ab240da459b18cee36329eeac6bbdbfdd8b5ef2cb605bb2452075ff04eb0a584"
+    },
+    {
+      "path": "images/FZ-I06.png",
+      "bytes": 92310,
+      "sha256": "b0afc2e1b9f2cc62a51aa404fca40ea65477479d85fff552557f68c400b97b59"
+    }
+  ]
+}

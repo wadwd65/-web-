@@ -37,13 +37,17 @@ export function contractQueryFromMessages(messages:readonly {role:string;content
   if(/合同|试用|竞业|培训|服务期|违约/u.test(latest))return latest;
   if(/工资|扣款|社保|医保|租房|押金|个税|补贴|offer|赔偿|仲裁/iu.test(latest))return latest;
   const shortQuestion=latest.replace(/[\s？?。！!，,]/gu,'');
-  if(!/^(?:那|那么|那如果|如果|请问|具体)?(?:第[二三234]次|再次|重复|重新|另加|包含|算在|几个月|[一二三四五六七八九十\d]+年|哪(?:一)?条(?:依据|原文)?|条文|原文|依据)(?:呢|吗|么|可以吗|行吗|怎么算|怎么说|是什么|在哪里|在哪|有吗)?$/u.test(shortQuestion))return latest;
+  const probationOnly=/(?:单独|仅|只)(?:写|约定|签).{0,6}(?:那段|这段)/u.test(shortQuestion)&&/算数|成立|有效/u.test(shortQuestion);
+  if(!probationOnly&&!/^(?:那|那么|那如果|如果|请问|具体)?(?:第[二三234]次|再次|重复|重新|另加|包含|算在|几个月|[一二三四五六七八九十\d]+年|哪(?:一)?条(?:依据|原文)?|条文|原文|依据)(?:呢|吗|么|可以吗|行吗|怎么算|怎么说|是什么|在哪里|在哪|有吗)?$/u.test(shortQuestion))return latest;
   const previous=messages.slice(0,-1).filter(message=>message.role==='user').slice(-3).reverse();
   for(const message of previous){
     if(/工资|扣款|社保|医保|租房|押金|个税|补贴|offer|先不聊|换个话题|换个问题|另一个问题|新问题/iu.test(message.content))return latest;
     const topics=Array.from(new Set(message.content.match(/试用期|竞业限制|专项培训|服务期|违约金/gu)??[]));
     if(topics.length>1)return latest;
-    if(topics.length===1)return `${latest}\n沿用此前用户问题的主题：${topics[0]}`;
+    if(topics.length===1){
+      if(probationOnly&&topics[0]!=='试用期')return latest;
+      return `${latest}\n沿用此前用户问题的主题：${probationOnly?'仅约定试用期':topics[0]}`;
+    }
   }
   return latest;
 }
@@ -62,6 +66,7 @@ function scopeOutside(context:string,fullTimeConfirmed:boolean):boolean {
 export function searchContractKnowledge(query:string, options:{context?:string;fullTimeConfirmed?:boolean;today?:string}={}):ContractRetrieval {
   const normalized=query.trim().slice(0,12000).replaceAll('违约费','违约金');
   const result:ContractRetrieval={corpusId:CONTRACT_KNOWLEDGE.id,status:'no-match',query:normalized.slice(0,200),message:'现有资料没有检索到足够相关的条文。可换成具体的合同问题，或打开官方全文核实。',excerpts:[]};
+  if(/住宅租赁|房屋租赁|退租|房东|出租人|租房|押金/u.test(normalized)&&!/(?:先|现在|只|改).{0,4}(?:问|看|聊|核对)?.{0,3}(?:劳动合同|试用期)/u.test(normalized))return {...result,status:'out-of-scope',message:'住宅租赁不是劳动用工关系，不能用这里的劳动合同法摘录判断租房押金或退租问题。'};
   if(scopeOutside(options.context??normalized,options.fullTimeConfirmed===true))return {...result,status:'out-of-scope',message:'这份资料库只整理中国内地全日制劳动合同。你提到的地区或用工情形需要另查适用依据，暂不套用这里的条文。'};
   if(/2007(?:年)?.{0,8}(?:版|原文)|旧版|修正前/u.test(normalized))return {...result,status:'unsupported-version',message:'当前只收录2012年修正文本，没有收录你要查的历史版本，不能拿现行摘录代替。'};
   const today=options.today??new Date().toISOString().slice(0,10);
@@ -69,6 +74,16 @@ export function searchContractKnowledge(query:string, options:{context?:string;f
   if(!normalized)return result;
   if(/仲裁|诉讼|提前.{0,6}(?:天|日|通知)|通知期|最低工资|试用期.{0,6}(?:工资|薪资)|(?:工资|薪资).{0,6}试用期|辞退|解雇|解除赔偿|补偿金|赔偿金/u.test(normalized))return {...result,message:'当前摘录尚未覆盖工资标准、解除补偿或争议处理等问题，需要补充对应依据后再解释。可先打开官方全文核实。'};
   if(!/合同|试用|竞业|专项培训|服务期|违约金|第[一二三四五六七八九十]+条/u.test(normalized))return result;
+  // Only a clearly stated duration below three months prioritizes this paragraph.
+  // Weeks <=12 / days <89 are safely below three calendar months; no conversion
+  // is used to fill the user's contract form or determine an unknown duration.
+  const shortTerm=Array.from(normalized.matchAll(/合同[^。；;，,\n]{0,12}?(\d+|[一二两三四五六七八九十]+)\s*个?(星期|周|天|日|月)/gu)).some(match=>{
+    if(/不是|不对|不知道|不确定|可能|大概|约/u.test(match[0]))return false;
+    const digits:Record<string,number>={一:1,二:2,两:2,三:3,四:4,五:5,六:6,七:7,八:8,九:9};
+    const token=match[1],parts=token.split('十');
+    const number=/^\d/u.test(token)?Number(token):token.includes('十')?(parts[0]?digits[parts[0]]:1)*10+(parts[1]?digits[parts[1]]:0):digits[token];
+    return number>0&&(match[2]==='月'?number<3:['周','星期'].includes(match[2])?number<=12:number<89);
+  });
   const ranked=CONTRACT_EXCERPTS.map(excerpt=>{
     const matchedTerms:string[]=excerpt.terms.filter(term=>normalized.includes(term));
     const repeatProbation=/试用/u.test(normalized)&&/再次|第二次|二次|重复|重新|又|调岗|换岗|转岗|回原公司/u.test(normalized);
@@ -77,6 +92,7 @@ export function searchContractKnowledge(query:string, options:{context?:string;f
     }
     const articleMatch=normalized.includes(excerpt.article)||normalized.includes(excerpt.article.replace(/第(.+)条.*/u,'第$1条'));
     let score=matchedTerms.reduce((sum,term)=>sum+(['合同','试用期','试用','工资','社保','离职','违约金'].includes(term)?1:term.length),0)+(articleMatch?10:0);
+    if(!articleMatch&&excerpt.id==='LC19-3'&&shortTerm&&/试用/u.test(normalized)){score+=8;matchedTerms.push('明确的短期合同期限');}
     if(!articleMatch&&excerpt.id==='LC19-4'&&/试用/u.test(normalized)&&/另加|不计入|不包含|仅约定|只签/u.test(normalized))score+=8;
     if(!articleMatch&&excerpt.id==='LC23'&&/保密|商业秘密|竞业/u.test(normalized))score+=8;
     if(excerpt.id==='LC17'&&/试用/u.test(normalized)&&!articleMatch&&matchedTerms.every(term=>['合同','劳动合同','签合同'].includes(term)))score=0;

@@ -1,0 +1,362 @@
+[
+  {
+    "id": "FH-20261109-C01",
+    "category": "contract-rag",
+    "messages": [
+      {
+        "role": "user",
+        "content": "这份劳动合同只管七个星期，老板说先留十天看看合不合拍，钱照发，这段就叫试用。我想问这种短合同里能不能放这十天，直接解释现有条文，不用帮我填表或打开工具。"
+      }
+    ],
+    "expected": {
+      "activeModule": "contract",
+      "noActions": true,
+      "noCalculation": true,
+      "emptyQuestions": true,
+      "retrievalStatus": "matched",
+      "expectedExcerptIds": [
+        "LC19-3"
+      ],
+      "humanReview": {
+        "should": [
+          "识别口语中的七个星期为不足三个月的劳动合同，并说明该类合同不得约定试用期。",
+          "将回答限制在已给出的劳动合同法摘录，引用LC19-3或其对应的第十九条第三款。"
+        ],
+        "shouldNot": [
+          "因为这十天照发工资就认可试用安排。",
+          "把七个星期误当作七个月，或套用一年以上合同的试用期区间。",
+          "擅自填写表格、生成待应用动作或追问已不影响当前条文判断的月份。"
+        ],
+        "actionsAllowed": false,
+        "followUpQuestionsAllowed": false
+      }
+    },
+    "rationale": "用七个星期和合不合拍的口语表达检验短期合同条文召回；不依赖常见的整年合同与数月试用组合。"
+  },
+  {
+    "id": "FH-20261109-C02",
+    "category": "contract-rag",
+    "messages": [
+      {
+        "role": "user",
+        "content": "我拿到的劳动合同只写了一段试用期，说通过后再另签正式合同。我想核对两个点：这段算不算合同期限，以及只写试用期能不能成立。先解释已有条文，不要代填。"
+      },
+      {
+        "role": "assistant",
+        "content": "可以先说明试用期与合同期限的关系，也可以说明只约定试用期的效力。"
+      },
+      {
+        "role": "user",
+        "content": "那就后一个，单独写那段算数吗？不用再问我月份。"
+      }
+    ],
+    "expected": {
+      "activeModule": "contract",
+      "noActions": true,
+      "noCalculation": true,
+      "emptyQuestions": true,
+      "retrievalStatus": "matched",
+      "expectedExcerptIds": [
+        "LC19-4"
+      ],
+      "humanReview": {
+        "should": [
+          "结合前文，把后一个和单独写那段解析为劳动合同仅约定试用期的效力问题。",
+          "说明仅约定试用期的，试用期不成立，该期限为劳动合同期限，并引用LC19-4或其对应的第十九条第四款。"
+        ],
+        "shouldNot": [
+          "只按最后一句无上下文回答，或追问用户说的是哪段。",
+          "把结论说成整份劳动合同当然无效、劳动关系不存在或这段时间不计入合同期。",
+          "转而只讲试用期长短上限。"
+        ],
+        "actionsAllowed": false,
+        "followUpQuestionsAllowed": false,
+        "seededAssistantTurn": "仅为固定的中性会话上下文，非待测模型生成结果。"
+      }
+    },
+    "rationale": "用不复述核心术语的短追问检验跨轮指代；所需依据为试用期与合同期限关系条文。"
+  },
+  {
+    "id": "FH-20261109-C03",
+    "category": "contract-rag",
+    "messages": [
+      {
+        "role": "user",
+        "content": "这次只有住宅租赁问题：出租人说退租要扣我一半押金。我没有劳动用工问题。你现有的劳动合同摘录能支持判断这个扣法吗？只说明覆盖边界，不要代填，也不要发起其他工具。"
+      }
+    ],
+    "expected": {
+      "noActions": true,
+      "noCalculation": true,
+      "emptyQuestions": true,
+      "expectedExcerptIds": [],
+      "humanReview": {
+        "should": [
+          "明确说明现有劳动合同摘录不能作为住宅租赁押金扣除问题的判断依据。",
+          "如果返回合同检索状态，应为out-of-scope；如果系统路由到租房模块，也应清楚说明该合同资料未覆盖此法律判断。"
+        ],
+        "shouldNot": [
+          "用LC17、LC19系列或其他劳动合同法摘录替住宅租赁押金结论背书。",
+          "编造房屋租赁法条、扣款比例或确定的违法/合法结论。",
+          "把没有劳动用工事项重新解释成劳动合同咨询，或主动启动租房计算、填表。"
+        ],
+        "actionsAllowed": false,
+        "followUpQuestionsAllowed": false,
+        "allowedPlanStatus": [
+          "out-of-scope",
+          "ready",
+          "clarify"
+        ],
+        "requiredScopeState": "住宅租赁押金法律判断不在给定劳动合同摘录覆盖范围内。",
+        "retrievalStatusIfPresent": "out-of-scope",
+        "citationsMustBeEmpty": true
+      }
+    },
+    "rationale": "只包含劳动合同资料范围外的住宅租赁问题；允许产品拥有租房工具，但禁止把劳动法引用移用于租赁纠纷。"
+  },
+  {
+    "id": "FH-20261109-C04",
+    "category": "contract-rag",
+    "messages": [
+      {
+        "role": "user",
+        "content": "公司说我离开要按专项技术培训的服务期协议退钱，但协议和培训账单我都暂时找不到，也记不清服务期从哪天到哪天。只用现有资料说明现在能不能算出我该退多少，缺什么就问，不要替我填表。"
+      }
+    ],
+    "expected": {
+      "activeModule": "contract",
+      "noActions": true,
+      "noCalculation": true,
+      "emptyQuestions": false,
+      "retrievalStatus": "matched",
+      "expectedExcerptIds": [
+        "LC22"
+      ],
+      "humanReview": {
+        "should": [
+          "说明当前信息不足，不能算出应支付的具体金额。",
+          "引用LC22或对应第二十二条，说明适用前提及培训费用和未履行服务期分摊部分的限制。",
+          "补问或列明必要资料：专项专业技术培训及实际支出证据、服务期约定与起止/已履行时长，以及违约金约定或对方计算依据。"
+        ],
+        "shouldNot": [
+          "虚构培训费、服务期长度或离职时间进行计算。",
+          "直接断定用户一定无需支付、一定全额返还或给出确定数额。",
+          "把普通入职培训当然当成已满足专项专业技术培训的条件。",
+          "生成可直接应用的合同或金额动作。"
+        ],
+        "actionsAllowed": false,
+        "followUpQuestionsAllowed": true,
+        "requiredInformationState": "培训支出与服务期事实未知；允许解释规则，具体金额不可计算。"
+      }
+    },
+    "rationale": "检验检索匹配不等于事实充分；需要区分有相关法条与可以给出个案金额。"
+  },
+  {
+    "id": "FH-20261109-S01",
+    "category": "salary",
+    "messages": [
+      {
+        "role": "user",
+        "content": "请核对本月工资并准备工资核对工具：基本工资8460元、绩效1250元、加班费470元、津贴180元、奖金340元；个人社保620元、个人公积金500元、个税210元、其他扣款100元；银行卡实际到账9020元。"
+      },
+      {
+        "role": "assistant",
+        "content": "我会依据你确认的本月项目准备核对；如果有更正，请以最新一条为准。"
+      },
+      {
+        "role": "user",
+        "content": "刚核对原表：奖金应是540元，其他扣款应是40元，到账应是9040元。470元加班费那条撤回，那是上一月的，本月明确没有加班费。其余项目不变，请用这版数据生成待应用的核对结果。"
+      }
+    ],
+    "expected": {
+      "activeModule": "salary",
+      "status": "ready",
+      "actionKind": "apply-salary",
+      "noActions": false,
+      "emptyQuestions": true,
+      "salaryInput": {
+        "gross": 10430,
+        "insurance": 620,
+        "fund": 500,
+        "tax": 210,
+        "other": 40,
+        "received": 9040
+      },
+      "net": 9060,
+      "diff": -20,
+      "humanReview": {
+        "should": [
+          "使用最新奖金540、其他扣款40、到账9040，并将明确没有的本月加班费确认为0。",
+          "按8460+1250+0+180+540得到税前合计10430，扣除620+500+210+40后得到9060。",
+          "按diff=received-net给出-20，含义为实际到账比按确认项目算出的数额少20元。",
+          "仅生成等待用户显式应用的工资动作。"
+        ],
+        "shouldNot": [
+          "沿用或叠加旧奖金340、旧加班费470、旧其他扣款100、旧到账9020。",
+          "把明确没有加班费当成未知而反复追问。",
+          "自动执行应用动作，或把差额直接定性为欠薪。"
+        ],
+        "actionsAllowed": true,
+        "allowedActionKinds": [
+          "apply-salary"
+        ],
+        "followUpQuestionsAllowed": false,
+        "confirmedComponents": {
+          "base": 8460,
+          "performance": 1250,
+          "overtime": 0,
+          "allowance": 180,
+          "bonus": 540
+        },
+        "numericConvention": "人民币元；gross为确认收入项目之和，net=gross-insurance-fund-tax-other，diff=received-net。",
+        "seededAssistantTurn": "仅为固定的中性会话上下文，非待测模型生成结果。"
+      }
+    },
+    "rationale": "同时覆盖最新数值更正、撤回旧月份项目和明确零值；所有必要金额已确认，可形成精确的待应用结果。"
+  },
+  {
+    "id": "FH-20261109-S02",
+    "category": "salary",
+    "messages": [
+      {
+        "role": "user",
+        "content": "先帮我列工资核对缺什么，不要启动计算或填表：基本工资7200元，绩效、加班费、津贴、奖金和其他扣款本月确实都没有。个人社保扣多少我没拿到，公积金也不知道，个税还没查到；银行卡到账6450元只作对照。不要把不知道当成没扣。"
+      }
+    ],
+    "expected": {
+      "activeModule": "salary",
+      "status": "needs-info",
+      "noActions": true,
+      "noCalculation": true,
+      "emptyQuestions": false,
+      "humanReview": {
+        "should": [
+          "将明确没有的绩效、加班费、津贴、奖金、其他扣款视为已确认0；确认收入合计为7200元。",
+          "将个人社保、公积金、个税保持为未知，补问这三项确认金额。",
+          "将到账6450保留为对照事实，说明在扣款未齐时不能给出确定的应到账数额或差额。"
+        ],
+        "shouldNot": [
+          "把未知社保、公积金或个税补成0。",
+          "从7200与6450的差值反推三项扣款各自金额，或直接给出核对差额。",
+          "再次询问已经明确没有的收入项目或其他扣款。",
+          "生成填表动作或显示确定的net/diff。"
+        ],
+        "actionsAllowed": false,
+        "followUpQuestionsAllowed": true,
+        "requiredQuestionTopics": [
+          "个人社保确认金额",
+          "个人公积金确认金额",
+          "个税确认金额"
+        ],
+        "confirmedValues": {
+          "gross": 7200,
+          "performance": 0,
+          "overtime": 0,
+          "allowance": 0,
+          "bonus": 0,
+          "other": 0,
+          "received": 6450
+        },
+        "unknownValues": [
+          "insurance",
+          "fund",
+          "tax"
+        ],
+        "netAndDiffMustRemainUndetermined": true
+      }
+    },
+    "rationale": "明确零值与尚未取得的扣款金额并列，防止以0或到账倒推替代用户确认。"
+  },
+  {
+    "id": "FH-20261109-P01",
+    "category": "city-policy",
+    "messages": [
+      {
+        "role": "user",
+        "content": "我毕业后准备去深圳工作，想看青年人才住宿的官方办理入口，帮我准备政策查询卡片。"
+      },
+      {
+        "role": "assistant",
+        "content": "我会按你给的城市查看住宿线索。"
+      },
+      {
+        "role": "user",
+        "content": "城市说错了，实际是上海，深圳那条撤回。仍然只看住宿入口，不涉及现金；现在直接准备上海查询，不用再问城市。"
+      }
+    ],
+    "expected": {
+      "activeModule": "subsidy",
+      "status": "ready",
+      "actionKind": "open-tool",
+      "noActions": false,
+      "noCalculation": true,
+      "emptyQuestions": true,
+      "policyCity": "上海",
+      "policyTopic": "stay",
+      "policyStatus": "matched",
+      "humanReview": {
+        "should": [
+          "仅以最新确认的上海作为目标城市，以住宿stay作为主题。",
+          "使用现有上海住宿条目及其官方入口，并保留资料范围、人群或时效核验说明。",
+          "准备等待用户显式应用的政策工具动作。"
+        ],
+        "shouldNot": [
+          "保留深圳作为当前查询城市、混用深圳来源，或再次询问已确认的城市。",
+          "把住宿入口说成上海现金补贴、保证资格或编造实时金额。",
+          "自动提交申请或自动替用户执行动作。"
+        ],
+        "actionsAllowed": true,
+        "allowedActionKinds": [
+          "open-tool"
+        ],
+        "followUpQuestionsAllowed": false,
+        "revokedCity": "深圳",
+        "monetaryAmountRequired": false,
+        "seededAssistantTurn": "仅为固定的中性会话上下文，非待测模型生成结果。"
+      }
+    },
+    "rationale": "在住宿主题保持不变时更正城市并撤回前城，检验后续政策条目和动作参数是否使用最新地点。"
+  },
+  {
+    "id": "FH-20261109-P02",
+    "category": "city-policy",
+    "messages": [
+      {
+        "role": "user",
+        "content": "我实际去杭州就业，想查毕业生能直接到账的现金支持。请只在当前有限资料里核验，没覆盖就如实说，并准备查询卡片。不要拿住宿、消费券或贷款替代现金，也不用给实时具体金额；城市和现金主题已经确定，不用再问。"
+      }
+    ],
+    "expected": {
+      "activeModule": "subsidy",
+      "status": "ready",
+      "actionKind": "open-tool",
+      "noActions": false,
+      "noCalculation": true,
+      "emptyQuestions": true,
+      "policyCity": "杭州",
+      "policyTopic": "support",
+      "policyStatus": "not-covered",
+      "humanReview": {
+        "should": [
+          "保留杭州与现金support主题，明确现有有限现金资料未覆盖该查询。",
+          "区分资料未覆盖与杭州现实中不存在该政策；允许提示另行核验当地官方渠道。",
+          "若准备查询动作，应仍为杭州现金主题，并等待用户显式应用。"
+        ],
+        "shouldNot": [
+          "用杭州住宿条目充当现金支持，或改查已有现金条目的其他城市。",
+          "声称已做全国或实时公网现金补贴搜索。",
+          "编造现金金额、到账期限、确定资格，或断言杭州没有现金支持。",
+          "反复询问已明确的城市和主题。"
+        ],
+        "actionsAllowed": true,
+        "allowedActionKinds": [
+          "open-tool"
+        ],
+        "followUpQuestionsAllowed": false,
+        "monetaryAmountRequired": false,
+        "requiredCoverageState": "not-covered表示当前资料未覆盖，不表示现实政策不存在。"
+      }
+    },
+    "rationale": "在已提供城市和现金主题的情况下检验覆盖边界；不把住宿能力或其他城市现金条目扩张为全国现金检索。"
+  }
+]

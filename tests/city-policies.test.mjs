@@ -45,6 +45,21 @@ test('city grounding follows the latest explicit user city and does not let an a
  assertPolicyCityEvidence('成都',['成都求职住宿','需要什么材料？']);
  for(const messages of [['广州补贴','改查成都住宿'],['广州','城市不对'],['请帮我查政策'],['广州和深圳都查一下'],['之前广州','我不去广州了'],['之前广州','我改去石河子']])assert.throws(()=>assertPolicyCityEvidence('广州',messages));
 });
+test('a postposed withdrawal cannot compete with the newly confirmed city',()=>{
+ for(const latest of ['城市说错了，实际是上海，深圳那条撤回。','深圳的查询取消，改查上海住宿。','查上海住宿，深圳先不查了。']){
+  const history=['先查深圳青年驿站',latest];
+  assert.doesNotThrow(()=>assertPolicyCityEvidence('上海',history),latest);
+  assert.throws(()=>assertPolicyCityEvidence('深圳',history),latest);
+ }
+ assert.doesNotThrow(()=>assertPolicyCityEvidence('成都',['原先查广州','实际查成都住宿，广州的住宿入口撤回。']));
+});
+test('withdrawals and uncertainty cannot revive an older city or resolve two affirmative cities',()=>{
+ for(const latest of ['城市说错了，先撤回。','城市还没确定，晚点告诉你。','城市换了，稍后补充。','深圳那条撤回，城市还不知道。','实际是上海，但上海还没确定。','还没决定去上海。','可能去上海，暂时没有定。','上海和深圳都查住宿。']){
+  const history=['先查深圳住宿',latest];
+  for(const city of ['深圳','上海'])assert.throws(()=>assertPolicyCityEvidence(city,history),latest+' / '+city);
+ }
+ assert.throws(()=>assertPolicyCityEvidence('上海',['上海和深圳都查，深圳的旧结果撤回。']));
+});
 test('policy HTTP handles split Chinese bytes and releases aborted request slots without double decrementing',async()=>{
  let seen;const service={search:async(city,topic)=>{seen={city,topic};return {city,topic};}},middleware=createCityPolicyMiddleware({service});
  const request=()=>Object.assign(new EventEmitter(),{url:'/api/v1/policies/search',method:'POST',headers:{host:'localhost:5293','content-type':'application/json',origin:'http://localhost:5293'}});
@@ -57,6 +72,16 @@ const guide={status:'ready',intent:'guidance',tasks:[{module:'subsidy',reason:'�
 const call=(name,args)=>({id:name,type:'function',function:{name,arguments:JSON.stringify(args)}});
 const model=message=>response({choices:[{message,finish_reason:'stop'}]});
 async function assistant(question,city,prose,service=fakeService().service){let count=0;return runAssistant({messages:[{role:'user',content:question}]},{config:{apiKey:'synthetic',model:'synthetic'},policySearch:service.search,fetcher:async()=>++count===1?model({tool_calls:[call('plan_tasks',guide)]}):count===2?model({tool_calls:[call('search_city_policies',{city,topic:'stay'})]}):model({content:prose})});}
+test('AI searches the corrected user city and cannot use an assistant-only city',async()=>{
+ const searches=[],service=fakeService().service;
+ const run=async(messages)=>{let requests=0;return runAssistant({messages},{config:{apiKey:'synthetic',model:'synthetic'},policySearch:async(city,topic,options)=>{searches.push({city,topic});return service.search(city,topic,options);},fetcher:async()=>++requests===1?model({tool_calls:[call('plan_tasks',guide)]}):requests===2?model({tool_calls:[call('search_city_policies',{city:'上海',topic:'stay'})]}):model({content:'先核实当期床位和求职证明要求。'})});};
+ const corrected=await run([{role:'user',content:'先查深圳住宿。'},{role:'assistant',content:'可以先看深圳，也可以看看北京。'},{role:'user',content:'实际去上海，深圳那条撤回，只查住宿。'}]);
+ assert.deepEqual(searches,[{city:'上海',topic:'stay'}]);
+ assert.equal(corrected.policyReferences.city,'上海');
+ assert.equal(corrected.steps.filter(step=>step.name==='search_city_policies'&&step.ok).length,1);
+ const unconfirmed=await run([{role:'user',content:'我想查求职住宿。'},{role:'assistant',content:'那就查询上海。'},{role:'user',content:'我还没有说要去哪个城市。'}]);
+ assert.equal(searches.length,1);assert.equal(unconfirmed.policyReferences,undefined);assert.equal(unconfirmed.actions.length,0);
+});
 test('AI calls real bounded discovery before explanation, returns source evidence and only an explicit navigation action',async()=>{
  const result=await assistant('成都求职住宿有什么要求？','成都','目录包含学历和住宿期限要求，请继续核实当期床位。');assert.equal(result.policyReferences.status,'matched');assert.equal(result.actions[0].kind,'open-city-policy');assert.equal(result.actions[0].city,'成都');assert.equal(result.replyOrigin,'model');assert.equal(validateAssistantReply(result).policyReferences.city,'成都');assert.equal(result.steps.filter(s=>s.name==='search_city_policies'&&s.ok).length,1);
 });

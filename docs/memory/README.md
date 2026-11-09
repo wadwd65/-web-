@@ -1,17 +1,9 @@
-# 项目长期记忆入口
+# 项目记忆入口
 
-此目录是跨会话恢复依据，独立于聊天上下文。它能在上下文压缩后重新读取，不保证模型自动回忆，也不把文件记录当成用户审美认可。
+恢复开发运行 `npm run resume`，按顺序读 [progress.json](progress.json)、[DECISIONS.md](DECISIONS.md)、[ARCHITECTURE.md](ARCHITECTURE.md)。
 
-每次开始：在项目目录执行 `npm run resume`，读当前状态和决策；工作结束：先更新progress.json的本轮事实/下一步，再执行 `npm run memory:stamp`。`npm run memory:check`核对结构、版本和关键文件。不要从归档里的“最新”“暂停”推导当前状态。
+progress 是唯一当前事实与下一步；BACKLOG 只指向同一待办，SESSIONS 只保留当前交接。历史变化统一见[开发总日志](../DEVELOPMENT_LOG.md)与[版本沿革](../VERSION_HISTORY.md)。旧零散原件在 Git 历史、冻结快照和桌面参赛包“03-开发日志/历史资料归档”。
 
-- [progress.json](progress.json)：唯一当前状态、交付版本、模块范围、验收与缺口。
-- [DECISIONS.md](DECISIONS.md)：长期约束、已否定方案、当前设计选择及其认可状态。
-- [BACKLOG.md](BACKLOG.md)：按依赖排列的未完成工作与完成条件，防止只优化一个页面。
-- [ARCHITECTURE.md](ARCHITECTURE.md)：代码职责、现存问题、如何扩展。
-- [SESSIONS.md](SESSIONS.md)：本轮记录和证据链接；只追加可证实事实。
-- checkpoint.json：程序生成的源码指纹，标记哪些改动还未经过本轮验证。
-- archive/：完整旧交接历史，保留检索，不作为当前指令入口。
+2026-11-07按用户要求另有固定的人类/AI交接入口：桌面参赛包 `00-交接文档`，含交接、官方评分及核验记录。它是本次状态摘要，不覆盖后续progress；不要每轮另建一个交接文件夹。
 
-“已实现”描述源码；“已验证”必须有本轮证据；“用户认可”只能来自用户。记录项目进度，不复制用户合同、工资、账号、密钥或其他个人材料。
-
-v0.26起文本指纹统一按LF换行计算，避免Git的CRLF/LF规范化造成跨机器恢复误报；音频、图片、模型仍按原始字节计算。
+交付时更新现有文件，运行 `npm run memory:stamp`、`npm run memory:check`，同步总日志。checkpoint 只检查文件指纹，不代表视觉或功能通过。跨会话必须重读文件，不保证模型自动回忆。

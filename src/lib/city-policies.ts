@@ -15,9 +15,17 @@ export function assertPolicyCityEvidence(city:string,userMessages:string[]){
  const names=[...new Set([city,...POLICY_CITIES,'北京','天津','重庆','成都','宁波','武汉','南京','苏州','无锡','合肥','郑州','长沙','西安','济南','青岛','福州','厦门','南昌','昆明','贵阳','南宁','海口','太原','沈阳','大连','长春','哈尔滨','石家庄','兰州','西宁','银川','呼和浩特','乌鲁木齐','拉萨','洛阳','开封','温州','绍兴','嘉兴','珠海','佛山','东莞'])];
  for(const message of [...userMessages].reverse()){
   const raw=names.filter(name=>message.includes(name));
-  const mentioned=raw.filter(name=>{const at=message.lastIndexOf(name);return !/(?:不是|不在|不去|不查|不考虑|别用|不要)[^，,。\n]{0,3}$/u.test(message.slice(Math.max(0,at-8),at))&&!/^(?:不对|不去了|不查了)/u.test(message.slice(at+name.length));});
+  const mentioned=raw.filter(name=>{
+   const at=message.lastIndexOf(name),before=message.slice(0,at).split(/[，,。；;！？!?\n]/u).at(-1)||'',after=message.slice(at+name.length).split(/[，,。；;！？!?\n]/u)[0];
+   // Cancel only an explicit city/query mention, not an unrelated old result in the same sentence.
+   const negated=/(?:不是|不在|不去|不查|不考虑|别用|不要|撤回|取消)[^，,。\n]{0,3}$/u.test(before)
+    ||/^(?:市)?(?:(?:那|这)条|的(?:查询|住宿入口|住宿查询|补贴查询))?(?:先|暂时)?(?:撤回|取消|作废|不对|不去了|不查了|不考虑了|不要了)/u.test(after);
+   const uncertain=/(?:可能|也许|是不是|是否|不确定|没确定|没决定|待确认)[^，,。\n]{0,4}$/u.test(before)
+    ||/^(?:市)?(?:还|尚|暂时)?(?:不确定|没确定|未确定|待确认|没决定|没定|不知道)/u.test(after);
+   return !negated&&!uncertain;
+  });
   if(mentioned.length){if(mentioned.length!==1||mentioned[0]!==city)throw Error('请按最新明确的一个城市查询；不要复用旧城市。');return;}
-  if(raw.length||/换个城市|城市不对|还没决定|城市不知道|城市不确定|改去|改查|换到|换成|我(?:现在)?(?:想去|要去)/u.test(message))break;
+  if(raw.length||/换个城市|城市(?:不对|(?:说|写|填)?错了?|改了|换了|(?:需要)?更正|(?:先)?撤回)|(?:更正|纠正)(?:一下)?城市|还没决定|城市(?:还|尚|暂时)?(?:不知道|不确定|没确定|未确定|没决定|没定)|改去|改查|换到|换成|我(?:现在)?(?:想去|要去)/u.test(message))break;
  }
  throw Error('请先确认要查的城市。');
 }

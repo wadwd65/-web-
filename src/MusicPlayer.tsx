@@ -80,7 +80,7 @@ export default function MusicPlayer({state,open,onClose,returnLabel,returnPage,r
     {failed&&<div className="ma-fallback"><Disc3 size={64}/><span>三维视图暂不可用</span><small>仍可通过曲目目录选歌与播放</small><button onClick={()=>{setFailed(false);setReady(false);}}>重试三维视图<ArrowUpRight size={13}/></button></div>}
     <div className="ma-scene-heading" aria-hidden="true"><i/><span>{view==='detail'?'OPTICAL RECORD / OPEN EDITION':`PHYSICAL COLLECTION / ${collectionCount} EDITIONS`}</span><span>RHINE LAB</span></div>
     <div className="ma-scene-index" aria-hidden="true"><span>{String(previewIndex+1).padStart(2,'0')}<i> / {collectionCount}</i></span><div><small>{musicEdition(previewIndex).word}</small><p>{previewTrack.name}</p></div></div>
-    <div className="ma-spatial-tools"><span><i/>{view==='detail'?'拖动查看唱片 · 滚轮缩放':'移到唱片上预览 · 点击打开'}</span><span className="ma-atmosphere-name">SCENE / {musicAtmosphere(candidate)}</span></div>
+    <div className="ma-spatial-tools"><span><i/>{view==='detail'?'按住唱片拖动 · 滚轮缩放':'按住一张唱片拖动 · 单击打开'}</span><span className="ma-atmosphere-name">SCENE / {musicAtmosphere(candidate)}</span></div>
    </div>
    <aside className="ma-information">
     <section className="ma-collection" aria-hidden={view!=='collection'} inert={view!=='collection'} aria-label="曲目目录">

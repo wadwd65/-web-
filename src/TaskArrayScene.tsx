@@ -12,9 +12,11 @@ import {createAudit,countAudit} from './performance-audit.ts';
 import {previewFromPress,actionFromPress} from './scene-pointer.ts';
 import type {ScenePress} from './scene-pointer.ts';
 import {createStyleWriter} from './scene/style-writer.ts';
+import {createRenderCadence} from './scene/render-cadence.ts';
+import {createTransformWriter} from './scene/transform-writer.ts';
 
 type Props={selected:number;working:boolean;entering:boolean;particles:boolean;paused?:boolean;suspended?:boolean;cinema?:boolean;reset:number;signals:TerminalSignals;view:string;onSelect:(index:number)=>void;onOpen:(index:number)=>void;onAction:SceneInteraction;onReady:()=>void;onFailure:()=>void;onPhase?:(phase:string)=>void;onFrame?:(now:number,eligible:boolean)=>void};
-type Dossier={group:T.Group;texture:T.CanvasTexture;canvas:HTMLCanvasElement;key:string;signal:TerminalSignals|null;active:boolean;hot:SceneAction|null;cover:T.Mesh;layers:T.Group;index:number;samples:Float32Array;meshes:{mesh:T.Mesh;opacity:number}[];bars:T.Mesh[];solid:number;hover:number;outline:T.LineSegments};
+type Dossier={group:T.Group;texture:T.CanvasTexture;canvas:HTMLCanvasElement;key:string;signal:TerminalSignals|null;active:boolean;hot:SceneAction|null;cover:T.Mesh;layers:T.Group;index:number;samples:Float32Array;meshes:{mesh:T.Mesh;opacity:number}[];bars:T.Mesh[];solid:number;hover:number;outline:T.LineSegments;materialAlpha:number;casts:boolean};
 const COUNT=10000;
 const LABEL_OFFSETS=[[0,0],[42,0],[-42,0],[84,0],[-84,0],[126,0],[-126,0],[0,34],[60,34],[-60,34],[120,34],[-120,34],[0,68],[80,68],[-80,68],[160,0],[-160,0]];
 const quarter=(n:number)=>Math.round(n*4)/4;
@@ -61,7 +63,7 @@ export default function TaskArrayScene(props:Props){
  useEffect(()=>{
   const el=host.current;if(!el)return;let renderer:T.WebGLRenderer;
   try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});}catch{latest.current.onFailure();return;}
-  const audit=createAudit('v0.31 task space');
+  const audit=createAudit('v0.31 task space'),cadence=createRenderCadence();
   let dead=false,frame=0,last=performance.now(),clock=0,work=0,result=0,yaw=0,pitch=0,zoom=1,drag=false,moved=false,downX=0,downY=0,width=1,height=1,hover=-1,oldReset=props.reset,selected=Math.max(0,props.selected),morph=1,morphStarted=0,lastShadow=-Infinity,cloud=0,boot=props.entering?0:1,contextLost=false;
   const abort=new AbortController(),reduce=matchMedia('(prefers-reduced-motion: reduce)');
   renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setClearColor(0x000000,0);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;renderer.shadowMap.enabled=true;renderer.shadowMap.autoUpdate=false;renderer.shadowMap.type=T.PCFShadowMap;renderer.domElement.setAttribute('aria-hidden','true');el.appendChild(renderer.domElement);
@@ -121,7 +123,7 @@ export default function TaskArrayScene(props:Props){
    const pieces=sampleMeshes.map(({mesh})=>{const original=mesh.geometry,flat=original.index?original.toNonIndexed():original;const piece=new T.BufferGeometry();piece.setAttribute('position',flat.getAttribute('position').clone());piece.applyMatrix4(mesh.matrixWorld);if(flat!==original)flat.dispose();return piece;});
    const merged=mergeGeometries(pieces,false)!;pieces.forEach(piece=>piece.dispose());const sampler=new MeshSurfaceSampler(new T.Mesh(merged)).build();
    for(let n=0;n<COUNT;n++){sampler.sample(p);samples.set(p.toArray(),n*3);}merged.dispose();
-   const d={group,texture,canvas,key:'',signal:null,active:false,hot:null,cover,layers,index:i,samples,meshes,bars,solid:i===selected?1:.58,hover:0,outline};dossiers.push(d);redraw(d,latest.current.signals);
+   const d={group,texture,canvas,key:'',signal:null,active:false,hot:null,cover,layers,index:i,samples,meshes,bars,solid:i===selected?1:.58,hover:0,outline,materialAlpha:-1,casts:false};dossiers.push(d);redraw(d,latest.current.signals);
   }
   metal.dispose();dark.dispose();light.dispose();accent.dispose();glow.dispose();
   document.fonts.ready.then(()=>{if(!dead)for(const d of dossiers){d.key='';redraw(d,latest.current.signals,d.index===selected);}});
@@ -144,7 +146,7 @@ export default function TaskArrayScene(props:Props){
   // Immutable local transforms are composed once; moving groups retain all world-space motion.
   const moving=new Set<T.Object3D>([root,blue,rails]);
   for(const d of dossiers){moving.add(d.group);moving.add(d.cover);moving.add(d.layers);for(const item of d.meshes)if(item.mesh.userData.sheet||item.mesh.userData.hitTarget)moving.add(item.mesh);d.bars.forEach(bar=>moving.add(bar));}
-  scene.traverse(object=>{if(!moving.has(object)){object.updateMatrix();object.matrixAutoUpdate=false;}});
+  const writeTransform=createTransformWriter();scene.traverse(object=>writeTransform(object));
   for(const mesh of pickables)if(!mesh.geometry.boundingBox)mesh.geometry.computeBoundingBox();
   // One point cloud is shared across transitions. Rapid re-selection starts at the currently rendered positions.
   const cloudGeometry=new T.BufferGeometry(),from=new Float32Array(COUNT*3),target=new Float32Array(dossiers[selected].samples),seeds=new Float32Array(COUNT);
@@ -177,7 +179,7 @@ export default function TaskArrayScene(props:Props){
   }
   function draw(now:number){
    const cpuStart=performance.now();
-   frame=0;if(dead||contextLost||document.hidden)return;const dt=Math.max(0,Math.min((now-last)/1000,.05));last=now;const s=latest.current,still=s.paused||reduce.matches,k=still?1:1-Math.exp(-dt*5.4);if(!still)clock+=dt;
+   frame=0;if(dead||contextLost||document.hidden)return;if(!cadence.due(now)){frame=requestAnimationFrame(draw);return;}const dt=Math.max(0,Math.min((now-last)/1000,.05));last=now;const s=latest.current,still=s.paused||reduce.matches,k=still?1:1-Math.exp(-dt*5.4);if(!still)clock+=dt;
    if(s.reset!==oldReset){oldReset=s.reset;yaw=pitch=0;zoom=1;}
    const next=Math.max(0,Math.min(7,s.selected));if(next!==selected){setFromCurrent(next,now);}
    morph=still||morphStarted===0?1:Math.min(1,(now-morphStarted)/1050);work=T.MathUtils.lerp(work,s.working?1:0,k);result=T.MathUtils.lerp(result,s.view==='result'&&s.working?1:0,k);cloud=T.MathUtils.lerp(cloud,s.particles?1:0,k);boot=T.MathUtils.lerp(boot,s.entering?0:1,k);
@@ -201,7 +203,8 @@ export default function TaskArrayScene(props:Props){
     if(d.index===6)d.bars.forEach((bar,b)=>{bar.visible=!s.signals.subsidy.checked||b<s.signals.subsidy.states.length;const state=s.signals.subsidy.states[b],mat=bar.material as T.MeshStandardMaterial;mat.color.set(state==='met'?'#5b99c5':state==='unmet'?'#b38a56':'#9aaebd');});
     if(d.index===3){const values=s.signals.tools.tax.values??[],max=Math.max(1,...values.map(v=>v??0));d.bars.forEach((bar,b)=>{const h=values[b]===undefined?.16:Math.max(.08,(values[b]??0)/max*1.15);bar.scale.y=T.MathUtils.lerp(bar.scale.y,h,k);bar.position.y=-.72+bar.scale.y/2;for(const target of bar.children)if(target.userData.hitTarget)target.scale.y=Math.max(1,.35/bar.scale.y);});}
     if(d.index===4||d.index===7){const value=s.signals.tools[d.index===4?'social':'leaving'];d.bars.forEach((bar,b)=>{(bar.material as T.MeshStandardMaterial).color.set(value.ready?(value.values?.[b]?'#4395bf':'#9faeb9'):'#9faeb9');});}
-    const activeAlpha=cloud>.01?1-cloud:T.MathUtils.smoothstep(morph,.28,.85);d.solid=T.MathUtils.lerp(d.solid,active?activeAlpha:(s.working?.13:.42)+d.hover*.40,k);for(const item of d.meshes){const mat=item.mesh.material as T.Material;const opacity=item.opacity*d.solid*arrival,transparent=opacity<.995;if(mat.transparent!==transparent){mat.transparent=transparent;mat.needsUpdate=true;}mat.opacity=opacity;item.mesh.castShadow=d.solid>.9&&!item.mesh.userData.noShadow;mat.depthWrite=!transparent;}
+    const activeAlpha=cloud>.01?1-cloud:T.MathUtils.smoothstep(morph,.28,.85);d.solid=T.MathUtils.lerp(d.solid,active?activeAlpha:(s.working?.13:.42)+d.hover*.40,k);const materialAlpha=d.solid*arrival,casts=d.solid>.9;
+    if(materialAlpha!==d.materialAlpha||casts!==d.casts){for(const item of d.meshes){const mat=item.mesh.material as T.Material;const opacity=item.opacity*materialAlpha,transparent=opacity<.995;if(mat.transparent!==transparent){mat.transparent=transparent;mat.needsUpdate=true;}mat.opacity=opacity;item.mesh.castShadow=casts&&!item.mesh.userData.noShadow;mat.depthWrite=!transparent;}d.materialAlpha=materialAlpha;d.casts=casts;}
     (d.outline.material as T.LineBasicMaterial).opacity=d.hover*.72*arrival;d.outline.visible=d.hover>.003;
     d.bars.forEach((bar,b)=>{const material=bar.material as T.MeshStandardMaterial;material.emissive.set('#70bcf5');material.emissiveIntensity=d.index===hover&&lastPart===b?.55:0;});
     redraw(d,s.signals,active,d.index===hover?hotAction:null);
@@ -211,7 +214,7 @@ export default function TaskArrayScene(props:Props){
    rails.rotation.y=T.MathUtils.lerp(rails.rotation.y,(selected-3)*.025,k);
    flowUniforms.uTime.value=clock;flowUniforms.uTask.value=T.MathUtils.lerp(flowUniforms.uTask.value,selected,k);flowUniforms.uWork.value=work;flowUniforms.uMotion.value=still?0:1;flowUniforms.uPointer.value.copy(pointer);
    blue.position.x=T.MathUtils.lerp(blue.position.x,6+(still?0:T.MathUtils.clamp(pointer.x,-1,1)*.9*(1-work)),k);blue.position.y=T.MathUtils.lerp(blue.position.y,3+(still?0:T.MathUtils.clamp(pointer.y,-1,1)*.35*(1-work)),k);
-   scene.updateMatrixWorld(true);
+   for(const object of moving)writeTransform(object);scene.updateMatrixWorld();
    cloudUniforms.uMorph.value=morph;cloudUniforms.uAmount.value=Math.max(cloud,Math.sin(morph*Math.PI));pointCloud.visible=cloudUniforms.uAmount.value>.003;cloudUniforms.uMatrix.value.copy(dossiers[selected].group.matrixWorld);cloudUniforms.uTime.value=clock;cloudUniforms.uMotion.value=still?0:1;
    // A continuous camera crosses the same world. Working leaves a live dossier on the left, readable controls on the right.
    const occupied:{left:number;right:number;top:number;bottom:number}[]=[{left:width*.78,right:width*.97,top:108,bottom:155}];

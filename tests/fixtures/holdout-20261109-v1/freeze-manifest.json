@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "datasetId": "holdout-20261109-v1",
+  "sourceVersion": "0.49.6",
+  "frozenAt": "2026-11-09T06:10:46.0867591Z",
+  "frozenBeforeFirstModelRun": true,
+  "modelApiCallsBeforeFreeze": 0,
+  "evaluationRunsBeforeFreeze": 0,
+  "cases": {
+    "path": "cases.json",
+    "count": 8,
+    "bytes": 15557,
+    "sha256": "9fcb27acee735754296b8464baf3e286366a9eba05c86562b394b5f8f5dc10f0"
+  },
+  "composition": {
+    "contractRag": 4,
+    "salary": 2,
+    "cityPolicy": 2
+  },
+  "declarations": {
+    "internalSyntheticHoldoutOnly": true,
+    "externalIndependentEvaluation": false,
+    "allPersonalScenariosFictional": true,
+    "containsPrivateMaterials": false,
+    "applicationModifiedByAuthor": false,
+    "evaluationExecutedByAuthor": false,
+    "freezeRule": "cases.json was written and hashed before this manifest; both files are frozen before the first tested-model run. Do not revise this version after evaluation begins.",
+    "evaluationLimit": "Eight internally authored synthetic holdout cases. This is not an external independent evaluation and does not establish general accuracy, legal correctness, nationwide policy coverage, or production reliability."
+  },
+  "independence": {
+    "existingTestsRead": false,
+    "oldDevelopmentCasesRead": false,
+    "retrievalOrGatewayImplementationRead": false,
+    "permittedSourceRead": "src/lib/contract-knowledge.ts:1-32 only, for reviewed official excerpt IDs and scope",
+    "projectInstructionsRead": "AGENTS.md",
+    "interfaceMetadataProvidedByParent": "Only field enums, salary input key conventions and arithmetic sign convention, and currently covered city/topic metadata; no existing case contents or retrieval/gateway algorithms.",
+    "neutralSeededAssistantMessages": "Authored fixed context only; not outputs from the tested model."
+  },
+  "caseIds": [
+    "FH-20261109-C01",
+    "FH-20261109-C02",
+    "FH-20261109-C03",
+    "FH-20261109-C04",
+    "FH-20261109-S01",
+    "FH-20261109-S02",
+    "FH-20261109-P01",
+    "FH-20261109-P02"
+  ]
+}

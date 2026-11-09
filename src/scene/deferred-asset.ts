@@ -5,3 +5,10 @@ export function deferredAsset<T>(read:()=>Promise<ArrayBuffer>,parse:(bytes:Arra
  const load=()=>asset??=(prefetch().then(parse).catch(error=>{asset=null;throw error;}));
  return {prefetch,load};
 }
+
+export function disposeAfterPreparation(preparation:Promise<unknown>,release:()=>void){
+ let settled=false,requested=false,released=false;
+ const finish=()=>{if(settled&&requested&&!released){released=true;release();}};
+ const ready=()=>{settled=true;finish();};preparation.then(ready,ready);
+ return()=>{requested=true;finish();};
+}

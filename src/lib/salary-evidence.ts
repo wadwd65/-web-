@@ -12,32 +12,74 @@ export const SALARY_REQUIRED: SalaryField[] = ['gross', 'insurance', 'fund', 'ta
 export const SALARY_FIELD_NAMES: Record<SalaryField, string> = {gross:'应发工资',insurance:'个人社保扣款',fund:'个人公积金扣款',tax:'已扣个税',other:'其他扣款',received:'实际到账'};
 export type SalaryFact = {value:number|null; state:'confirmed'|'unknown'|'absent'; quote:string};
 const deduction = (key:SalaryField) => ['insurance','fund','tax','other'].includes(key);
-const uncertain = /不是|不对|不确定|不知道|不清楚|待确认|未确认|记不清|不记得|撤回|取消|没查到|查不到|没出|没有明细|可能|好像|不一定|大概|大约|估计|左右|上下|差不多/u;
-const allLabels = Object.values(SALARY_LABELS).join('|');
+const uncertain = /不是|不对|不确定|不知道|不清楚|未知|待确认|未确认|没确认|记不清|不记得|撤回|取消|没查到|查不到|没出|没有明细|可能|好像|不一定|大概|大约|估计|左右|上下|差不多/u;
+// A total is supported only when every member of this fixed income checklist is confirmed.
+const INCOME_LABELS = {base:'(?:基本工资|底薪)',performance:'绩效(?:工资|奖金)?',overtime:'加班(?:费|工资)?',allowance:'津贴',bonus:'奖金'} as const;
+type EvidenceField = SalaryField | keyof typeof INCOME_LABELS;
+const evidenceLabels = {...SALARY_LABELS,...INCOME_LABELS};
+const allLabels = Object.values(evidenceLabels).join('|');
+const zeroAfter=/^(?:[:：\s]|是|为|本月|本期|当月|这月|本次|明确|确实|确认|确定|都|均)*(?:没有(?:扣款|扣钱)?|没(?:有)?扣(?:款|钱)?|未扣(?:除|款)?|不扣(?:款|钱)?|无(?:扣款)?|零(?:元)?)(?:了|的)?$/u;
+const unchangedAfter=/^(?:[:：\s]|是|为)*(?:不变|没变|未变|照旧|同上|保持不变)(?:了|的)?$/u;
 
-export function salaryFact(text:string,key:SalaryField):SalaryFact {
+function explicitFact(text:string,key:EvidenceField):SalaryFact {
   // Commas inside a conventional thousands group are formatting, not clause boundaries.
   const normalized=text.replace(/(\d)[,，](?=\d{3}(?:\D|$))/g,'$1');
-  const match=Array.from(normalized.matchAll(new RegExp(SALARY_LABELS[key],'gu'))).at(-1);
+  // Scan all labels together so “绩效奖金” cannot also invent a separate bonus fact.
+  const occurrences=Array.from(normalized.matchAll(new RegExp(allLabels,'gu')));
+  const parts=(candidate:RegExpExecArray)=>{
+    const start=candidate.index!;
+    let last=candidate;
+    // Shared absence/unknown/unchanged applies to a connected list. A shared positive
+    // amount does not: “社保、公积金600” cannot confirm both deductions as 600.
+    for(let i=occurrences.indexOf(candidate)+1;i<occurrences.length;i++){
+      const next=occurrences[i],between=normalized.slice(last.index!+last[0].length,next.index!);
+      if(!/^\s*(?:、|和|及|与|以及)\s*$/u.test(between))break;
+      last=next;
+    }
+    const tailAt=(entry:RegExpExecArray)=>{
+      const a=entry.index!+entry[0].length,t=normalized.slice(a).split(/[，,、。；;\n！？?]/u)[0];
+      const nl=t.search(new RegExp(allLabels,'u')),raw=nl<0?t:t.slice(0,nl);
+      return {body:raw.trim(),end:a+raw.length,continuation:nl<0?normalized.slice(a+t.length):''};
+    };
+    let tail=tailAt(candidate);
+    if(last!==candidate){
+      const shared=tailAt(last);
+      if(zeroAfter.test(shared.body)||uncertain.test(shared.body)||unchangedAfter.test(shared.body))tail=shared;
+    }
+    const prefix=normalized.slice(Math.max(0,start-12),start).split(/[，,。；;\n]/u).at(-1)??'';
+    return {...tail,prefix,quote:prefix+normalized.slice(start,tail.end)};
+  };
+  const matches=occurrences.filter(candidate=>new RegExp(`^(?:${evidenceLabels[key]})$`,'u').test(candidate[0])).filter(candidate=>{
+    const {body:b,prefix:p,continuation:c}=parts(candidate);
+    if(/^[？?]/u.test(c))return true;
+    const unchanged=!/不是|并非/u.test(p)&&unchangedAfter.test(b);
+    const verbMention=/(?:核对|重算|计算|算一下|算算|算出|看看|看下|查查|确认)(?:一下|下)?\s*$/u.test(p)&&!/\d/u.test(b)&&!uncertain.test(b)&&!/^(?:[:：\s]|是|为)*(?:没有|没|未|不|无|零)/u.test(b);
+    return !unchanged&&!verbMention;
+  });
+  const match=matches.at(-1);
   if(!match)return {value:null,state:'absent',quote:''};
-  const start=match.index!, after=start+match[0].length;
-  const tail=normalized.slice(after).split(/[，,、。；;\n！？?]/u)[0];
-  const nextLabel=tail.search(new RegExp(allLabels,'u'));
-  const body=(nextLabel<0?tail:tail.slice(0,nextLabel)).trim();
-  const prefix=normalized.slice(Math.max(0,start-12),start).split(/[，,。；;\n]/u).at(-1)??'';
-  const quote=prefix+match[0]+body;
-  const continuation=nextLabel<0?normalized.slice(after+tail.length):'';
+  const {body,prefix,quote,continuation}=parts(match);
   if(/^[？?]|^[，,](?:这项|这个|我)?(?:不确定|不清楚|还不知道)/u.test(continuation))return {value:null,state:'unknown',quote};
-  if(uncertain.test(body)||/(?:不确定|不知道|不清楚|可能|好像|不是|不一定|大概|估计|大约|差不多)[^，,。；;\n]{0,8}$/u.test(prefix)||/(?:公司|单位|企业)(?:承担|缴纳|缴的|交的)?\s*$/u.test(prefix))return {value:null,state:'unknown',quote};
+  if(uncertain.test(body)||/(?:不确定|不知道|不清楚|可能|好像|不是|撤回|取消|不一定|大概|估计|大约|差不多)[^，,。；;\n]{0,8}$/u.test(prefix)||/(?:公司|单位|企业)(?:承担|缴纳|缴的|交的)?\s*$/u.test(prefix))return {value:null,state:'unknown',quote};
+  if(key in INCOME_LABELS&&/(?:上(?:一|个|一个)?月|上(?:一)?期|去年)/u.test(prefix+body))return {value:null,state:'unknown',quote};
   if(body!==''&&(/没(?:有)?扣(?:除)?\s*$/u.test(prefix)||key==='other'&&/(?:没有|无)\s*$/u.test(prefix)))return {value:null,state:'unknown',quote};
   // A negative sign or a third decimal must never become a positive/rounded amount.
-  const amount=body.match(/^(?:[:：=\s¥￥]|是|为|扣了|扣除|扣的|扣|金额|本次|共|合计)*(\d+(?:\.\d{1,2})?)(?=元|块|[\s（(]|$)/u);
+  const amount=body.match(/^(?:[:：=\s¥￥]|是|为|应是|应为|更正为|改为|扣了|扣除|扣的|扣|金额|本次|共|合计)*(\d+(?:\.\d{1,2})?)(?=元|块|[\s（(]|$)/u);
   if(amount)return {value:Number(amount[1]),state:'confirmed',quote};
-  // Only explicitly denied employee deductions may be zero. No account / no payslip is not zero.
-  const zeroAfter=/^(?:[:：\s]|是|为)*(?:没有(?:扣款|扣钱)?|没(?:有)?扣(?:款|钱)?|未扣(?:除|款)?|不扣(?:款|钱)?|无(?:扣款)?|零(?:元)?)(?:了|的)?$/u.test(body);
-  const zeroBefore=/没(?:有)?扣(?:除)?\s*$/u.test(prefix)&&body==='' || key==='other'&&/(?:没有|无)\s*$/u.test(prefix)&&body==='';
-  if(deduction(key)&&(zeroAfter||zeroBefore))return {value:0,state:'confirmed',quote};
+  // Explicit absence confirms an income item or employee deduction, never gross/receipt.
+  const zeroBefore=body===''&&(/没(?:有)?扣(?:除)?\s*$/u.test(prefix)||(key==='other'||key in INCOME_LABELS)&&/(?:没有|无)\s*$/u.test(prefix));
+  if((key in INCOME_LABELS||deduction(key as SalaryField))&&(zeroAfter.test(body)||zeroBefore))return {value:0,state:'confirmed',quote};
   return {value:null,state:'unknown',quote};
+}
+
+export function salaryFact(text:string,key:SalaryField):SalaryFact {
+  const direct=explicitFact(text,key);
+  if(key!=='gross'||direct.state!=='absent')return direct;
+  const components=Object.keys(INCOME_LABELS).map(key=>explicitFact(text,key as keyof typeof INCOME_LABELS));
+  const quote=components.filter(fact=>fact.quote).map(fact=>fact.quote).join('；');
+  if(components.some(fact=>fact.state!=='confirmed'||fact.value===null||!Number.isFinite(fact.value)))return {value:null,state:quote?'unknown':'absent',quote};
+  // Sum in cents, just like the payslip calculation, without inventing a missing item.
+  return {value:components.reduce((sum,fact)=>sum+Math.round(fact.value!*100),0)/100,state:'confirmed',quote};
 }
 
 export function salaryFacts(text:string):Record<SalaryField,SalaryFact> {

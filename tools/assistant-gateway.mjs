@@ -38,7 +38,7 @@ const tools=[planner,
 const SYSTEM=`你是“初程”的办事助手，面向刚毕业、第一次工作的人。用户觉得选项麻烦，所以你负责听懂问题、只补问当前必要的信息、调用工具，再告诉他下一步。用自然、简短的中文，不用营销口号、长开场、Markdown大标题或“赋能/闭环/全方位”式文案。
 站内工具：Offer对比、合同核对、工资明细、个税限定试算、社保医保导航、租房核对、补贴匹配、离职交接，以及共享询问清单。用户不必知道模块名。用户问解释或做法时先直接回答，只有明确想打开工具时才用open_tool提供入口。界面会显示可点击按钮，不要声称已经替用户打开或修改。
 回答先给直接有用的信息，不重述用户问题，不罗列八个模块。通常控制在2到3个短段落、约200字内；复杂风险可稍长，但详细原文和依据留给对应工具。缺材料时一次列清本次必需信息，不讲大段背景。工资关键数字和待加入清单的问题已由界面直接展示，你只需解释边界和下一步，不重复整张结果表。用户问具体字段就只回答该字段；不要把简单问题扩写成完整办事教程。建议把重要约定写清以便核实，不要一概声称口头约定无效、口头说的不算或口头承诺不算数。
-用户随时可以直接打字补充、纠正、换问题，也可以一口气说明几件事。不要要求按预设格式回答、先填完表单或先选中某模块才能继续聊。工具参数仅在实际计算/核对时需要。问解释和做法时不要索取计算字段。
+用户随时可以直接打字补充、纠正、换问题，也可以一口气说明几件事。不要要求按预设格式回答、先填完表单或先选中某模块才能继续聊。工具参数仅在实际计算/核对时需要。问解释和做法时不要索取计算字段。按用户已明确给出的条件回答，不反复问这些条件是否真实。回答结束后不主动追问“需要整理清单吗/还需要什么帮助”，只在确实影响本次判断的事实缺失时补问。用户只问资料覆盖边界时说明边界就结束，不再邀请发其他合同或材料。合同能力限于已给文字与当前资料的对应核对，不承诺完整合同效力、合法性或条款“是否站得住”。
 用户转去处理新问题时，专注当前问题，不追问上一事项的可选字段，也不每次催问实际到账等非必填信息。
 工资金额必须调用calculate_salary；前五项缺一项就明确问还缺哪几项，不能默认为0，也不能只丢一个入口让用户自行找。只算用户明确提供的数据，不猜地方缴费率、到手工资或退税。合同在用户确认全日制及提供文字后可用review_contract；一年可按12个月理解，但未知仍传null。不可把“本次没定位”说成完整合同违法。
 合同工具返回本地规则。合同计划ready后，程序会检索已核验的官方资料，把contractKnowledge及source交给你；这是本地资料检索，不是实时网页搜索。只有status=matched的excerpts才是本次命中依据，用这些原文解释，不能靠旧referenceNotes冒充检索。引用的适用范围、区间含/不含边界和核验日必须准确。资料之外的金额、期限或法律结论不要凭记忆补充。只解释与当前问题直接相关的一点，不额外扩展未命中的其他规定。这个聊天入口仅接收文字，不能声称你已读取照片；本站合同工具另有单张图片明确发送、识别和人工校对入口。用户问怎样上传照片时以guidance计划并用open_tool打开contract，不先要求粘贴整份原文。资料库仅收录中国内地劳动合同法第17、19、22、23、25条，未覆盖的问题说明需另查。合同没有实时网页搜索或官方办理权限，不可声称提交申请。检索依据由界面单独展示，不自行生成URL、虚构条文或声称逐句审核通过。地方政策使用search_city_policies。已核验目录目前有广州、深圳的有限补贴资料，杭州/上海求职住宿条目；未收录城市的求职住宿可从国家大学生就业服务平台实时发现并读取正文，现金补贴未覆盖时明确说明。先问清城市，再查询；用户说求职住宿/驿站用stay，现金补贴用support。不虚构金额、资格或链接；官方目录公开时间不代表当前申报期。杭州条目正文限西湖区，不能说杭州所有区都适用。
@@ -88,7 +88,7 @@ function confirmedDuration(value,key,userText){
   const labels=key==='contractMonths'?'(?:合同期限|合同期|合同[，, ]*期限|期限)':'(?:试用期)';
   const pattern=new RegExp(`${labels}[^。；;\\n\\d一二两三四五六七八九十零〇]{0,12}(\\d+(?:\\.\\d+)?|[一二两三四五六七八九十零〇]+)\\s*(个?月|年)`,'gu');
   const number=token=>{if(/^\d/.test(token))return Number(token);const digits={零:0,〇:0,一:1,二:2,两:2,三:3,四:4,五:5,六:6,七:7,八:8,九:9};if(token==='十')return 10;if(token.includes('十')){const [a,b]=token.split('十');return (a?digits[a]:1)*10+(b?digits[b]:0);}return digits[token];};
-  const last=Array.from(userText.matchAll(new RegExp(labels,'gu'))).at(-1),latest=last?userText.slice(last.index).split(/[。；;\n]/u)[0]:'';
+  const clauses=Array.from(userText.matchAll(new RegExp(labels,'gu'))).map(m=>userText.slice(m.index).split(/[。；;\n]/u)[0]),relevant=clauses.filter(c=>new RegExp(pattern.source,'u').test(c)||(/不是|不对|不确定|不知道|不清楚|待确认|撤回/u.test(c)&&!/^(?:合同期限|合同期|期限|试用期)(?:内|满|间|届满)/u.test(c))),latest=(relevant.length?relevant:clauses).at(-1)||'';
   if(/不是|不对|不确定|不知道|不清楚|待确认|撤回/u.test(latest))return false;
   const match=Array.from(latest.matchAll(pattern)).at(-1);
   return Boolean(match&&number(match[1])*(match[2]==='年'?12:1)===value);
@@ -100,6 +100,9 @@ export function executeAssistantTool(name,args,userText,{latestUserMessage=userT
     if(args.intent==='guidance'&&args.status==='needs-info')throw new AssistantError('tool-input','一般解释请用intent=guidance、status=ready、questions=[]，先回答已有范围。只有个人计算或材料核对确实缺少信息时才用calculate/review与needs-info。');
     let guide;try{guide=validateAssistantGuide(args);}catch{throw new AssistantError('tool-input','事项计划不完整，请重新确认当前事项和必要补问。');}
     guide=reconcileSalaryPlan(guide,userText,latestUserMessage);
+    // Fee/penalty evidence remains contract work even when the user mentions leaving.
+    // Keep choices and explicit exit-process requests untouched.
+    if(guide.activeModule==='leaving'&&guide.status==='ready'&&guide.intent==='guidance'&&guide.tasks.length===1&&/专项.{0,4}培训|服务期/u.test(latestUserMessage)&&/退钱|退多少|退还|赔|违约金|培训费|费用|金额/u.test(latestUserMessage)&&!/先.{0,5}(?:离职|交接).{0,3}(?:流程|手续|清单)/u.test(latestUserMessage))guide={...guide,activeModule:'contract',tasks:guide.tasks.map(task=>({...task,module:'contract'}))};
     if(guide.activeModule==='rent'&&guide.questions.some(q=>/不退|拒退|扣押|已退租/u.test(q.label))&&!/不退|拒退|扣押|已退租/u.test(userText))throw new AssistantError('tool-input','租房阶段尚未确认，先问签约前、居住中、准备退租还是已有争议，不能预设房东拒退。');
     return {guide,result:{guide,referenceNotes:guide.activeModule==='contract'?CONTRACT_REFERENCE:undefined,next:'请直接回答用户当前想了解的问题，不要只推荐工具或要求先进入模块。补问可直接用自然语言回复。'},label:'确认当前事项',summary:guide.activeModule?MODULES[guide.activeModule]:guide.status==='choose'?'等待选择先处理的事项':guide.status==='out-of-scope'?'不在工具范围内':'需要说明具体情况'};
   }
@@ -152,14 +155,16 @@ export function guideReply(guide,userText=''){
 
 /** Keep navigation in real controls. Fall back to exact excerpts if generated file capabilities conflict. */
 export function finalizeContractExplanation(content,references){
-  const reply=content.trim().split(/\n\s*\n/u).filter(paragraph=>!(/^(?:想|需要|如果你|你可以|也可以|有合同)/u.test(paragraph)&&/发我|发来|合同文字|照片|图片|PDF|工具|入口/iu.test(paragraph))).join('\n\n');
-  const unsupportedAdvice=/考核|考察|降薪|降低工资|培训期|培训安排/u.test(reply)
+  const reply=content.trim().split(/\n\s*\n/u).filter(paragraph=>!(/^(?:想|需要|如果你|你可以|也可以|有合同|你把|请把|把)/u.test(paragraph)&&/发我|发来|合同文字|照片|图片|PDF|工具|入口/iu.test(paragraph))).join('\n\n');
+  const unsupportedAdvice=/考核|考察|降薪|降低工资|降低.{0,5}(?:待遇|报酬|薪资)|随时.{0,5}(?:走|结束|辞退|解除|解雇)|培训期|培训安排|试用期工资|解除条件|合同本身仍然成立|整份合同有效|合同本身有效/u.test(reply)
+    ||!references.excerpts.some(excerpt=>excerpt.id==='LC19-2')&&/同一.{0,12}(?:一次|再次|重复)|只能约定一次试用期/u.test(reply)
     ||references.excerpts[0]?.id==='LC19-2'&&/实际.{0,4}(?:履行|经历)|履行过.{0,6}试用/u.test(reply)
     ||!references.excerpts.some(excerpt=>excerpt.id==='LC19-4')&&/试用期.{0,8}(?:包含|计入)|(?:包含|计入).{0,8}合同期限/u.test(reply)
+    ||!references.excerpts.some(excerpt=>excerpt.id==='LC19-4')&&/(?:仅约定|只约定|只写).{0,12}试用|试用期不成立|视为合同期限/u.test(reply)
     ||/这决定.{0,12}试用期|决定试用期是否/u.test(reply);
   if(!reply||unsupportedAdvice||/PDF.{0,40}(?:识别|OCR)|(?:识别|OCR).{0,40}PDF/iu.test(reply)){
     const first=references.excerpts[0];
-    return {reply:`本次检索到的相关原文如下。\n\n${first.article}\n${first.text}${first.id==='LC19-2'?'\n\n请先确认你在同一单位此前是否已约定过试用期，签过合同本身不能证明这一点。':''}`,replyOrigin:'guide'};
+    return {reply:`本次检索到的相关原文如下。\n\n${first.article}\n${first.text}${first.id==='LC19-2'?'\n\n请先确认你在同一单位此前是否已约定过试用期，签过合同本身不能证明这一点。':first.id==='LC22'?'\n\n仅凭条文不能计算个案金额，还需对照实际培训费凭证、协议约定的违约金与服务期、已履行时长和公司计算依据。':''}`,replyOrigin:'guide'};
   }
   return {reply,replyOrigin:'model'};
 }
@@ -177,11 +182,12 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
   const asksToOpen=/^(?:请|麻烦|帮我|带我|我想|我要|先|直接|现在|那就|可以|\s)*(?:打开|进入|跳转|去看看)/u.test(latestUserMessage);
   const namesAnEntry=Object.values(MODULES).some(name=>latestUserMessage.includes(name))||/工具|入口|页面|界面/u.test(latestUserMessage);
   const wantsEntry=asksToOpen&&namesAnEntry||/(?:工具|入口)(?:在|去)哪|(?:哪里|在哪).{0,6}(?:工具|入口)/u.test(latestUserMessage);
+  const declinedEntry=!wantsEntry&&conversation.messages.filter(m=>m.role==='user').slice(-3).some(m=>/(?:不用|不要|不必|无需|别|不需要)[^。！？;\n]{0,10}(?:填表|代填|工具|入口|操作)/u.test(m.content));
   const completedReply=()=>({reply:actions.some(a=>a.kind==='add-questions')?'要核实的问题已整理好。点下方按钮才会加入清单，加入后仍可修改。':actions.some(a=>a.kind==='apply-salary'||a.kind==='apply-contract')?'本次核对已完成，可以在下方打开工具查看结果，或继续补充信息。':'点下方入口打开工具后，可以继续填写和核对。',replyOrigin:'guide',actions,steps,guide,references,policyReferences,provider:'DeepSeek',model:config.model||'deepseek-flash'});
   try{
     for(let round=0;round<4;round++){
       onProgress?.(guide?'responding':'planning');
-      const explainingContract=guide?.activeModule==='contract'&&guide.intent==='guidance'&&references?.status==='matched';
+      const explainingContract=guide?.activeModule==='contract'&&references?.status==='matched';
       const policyLookup=guide?.activeModule==='subsidy'&&guide.status==='ready'&&guide.intent!=='questions'&&!wantsEntry;
       const explainingGuidance=guide?.intent==='guidance'&&!wantsEntry&&!policyLookup;
       const allowTools=guide?.status==='ready'&&!explainingGuidance&&actions.length===0;
@@ -202,7 +208,7 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
       if(!message.tool_calls?.length){
         if(typeof message.content!=='string'||!message.content.trim()||message.content.length>16000)throw new AssistantError('invalid-response','AI没有给出可用回复，请重试。',502);
         if(!guide)throw new AssistantError('invalid-response','这次没有确认要处理的事项，请重试或自行选择工具。',502);
-        if(guide.activeModule==='contract'&&references?.status==='matched'&&guide.intent!=='questions'&&!actions.some(action=>action.kind==='apply-contract'||action.kind==='open-tool'&&action.module==='contract')){
+        if(!declinedEntry&&guide.activeModule==='contract'&&references?.status==='matched'&&guide.intent!=='questions'&&!actions.some(action=>action.kind==='apply-contract'||action.kind==='open-tool'&&action.module==='contract')){
           const entry=executeAssistantTool('open_tool',{module:'contract'},conversation.userText);
           actions.push(entry.action);
           steps.push({id:'contract-entry',name:'open_tool',label:entry.label,ok:true,summary:entry.summary});
@@ -238,7 +244,7 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
             assertPolicyCityEvidence(city,conversation.messages.filter(m=>m.role==='user').map(m=>m.content));
             onProgress?.('retrieving');policyReferences=await policySearch(city,args.topic,{signal:controller.signal});
             if(!isCityPolicyResult(policyReferences)||policyReferences.city!==city||policyReferences.topic!==args.topic){policyReferences=undefined;throw new AssistantError('tool-input','来源城市或格式未能核对，本次不解释。');}
-            execution={result:{policyReferences,next:'只解释本次sources里的资料，保留区县、毕业学年等限制。不要额外给金额、资格保证、当前开放结论或自编链接。来源卡已展示原文和日期，简短说明下一步核实哪项。mode=live的checkedOn仅是读取日期，不是政策生效或专业审核日期；不要把旧目录说成当期开放。'},action:{kind:'open-city-policy',city,topic:args.topic,label:'在政策工具查看'+city},label:'查找官方城市政策',summary:policyReferences.status==='matched'?city+' · '+policyReferences.sources.length+'项资料':policyReferences.message};
+            execution={result:{policyReferences,next:'只解释本次sources里的资料，保留区县、毕业学年等限制。不要额外给金额、资格保证、当前开放结论或自编链接。来源卡已展示原文和日期，简短说明下一步核实哪项；不在结尾追问要不要整理清单或提供其他服务。mode=live的checkedOn仅是读取日期，不是政策生效或专业审核日期；不要把旧目录说成当期开放。'},action:{kind:'open-city-policy',city,topic:args.topic,label:'在政策工具查看'+city},label:'查找官方城市政策',summary:policyReferences.status==='matched'?city+' · '+policyReferences.sources.length+'项资料':policyReferences.message};
           }else execution=executeAssistantTool(name,args,conversation.userText,{latestUserMessage});
           if(execution.guide){guide=execution.guide;actions.length=0;references=undefined;}
         }
@@ -260,7 +266,7 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
             delete execution.result.referenceNotes;
             execution.result.contractKnowledge=references;
             execution.result.source=CONTRACT_KNOWLEDGE;
-            execution.result.next='请直接用命中原文回答当前问题，先给简短解释。不要只让用户打开工具，也不要重复完整条文。本次最终解释不提材料上传、图片、PDF或工具入口，界面会单独展示原文和真实入口。不要提出条文之外的考核期、培训期或工资处理建议。重复试用的原文用词为“约定”，不能另加“实际经历/履行过”这一条件；是否此前已约定不明时用条件句，单纯签过合同不等于已约定试用期。若合同总期限尚不明确，只说明包含关系并提示核实总期限，不直接认定这份合同总共12或15个月。';
+            execution.result.next='请直接用命中原文回答当前问题，先给简短解释。不要只让用户打开工具，也不要重复完整条文。本次最终解释不提材料上传、图片、PDF或工具入口，界面会单独展示原文和真实入口。不要提出条文之外的考核期、培训期或工资处理建议。用户已给出期限时，以该期限为条件说明规则，不再追问是否真实、是否另有总期限。只问“仅约定试用期”的效力时，说明试用期不成立、该期限为合同期限即可，不再要求全文或另报月份；不能把合同本身说成不成立。只有真的问未知总期限时才提示核实，不直接认定12或15个月。培训服务期金额未知时，列出实际培训费用及凭证、服务期/已履行时长、协议中的违约金约定和公司计算依据，不算未知金额、不承诺判断完整效力。重复试用的原文用词为“约定”，不能另加“实际经历/履行过”这一条件；是否此前已约定不明时用条件句，单纯签过合同不等于已约定试用期。';
             steps.push({id:'references-'+totalTools,name:'search_contract_knowledge',label:'检索官方合同资料',ok:references.status==='matched',summary:references.status==='matched'?`命中 ${references.excerpts.length} 段 · ${CONTRACT_KNOWLEDGE.version}`:references.message});
           }
         }

@@ -1,9 +1,21 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {salaryFact,salaryValueGrounded,asksSalaryFirstStep} from '../src/lib/salary-evidence.ts';
+import {salaryFact,salaryFacts,salaryValueGrounded,asksSalaryFirstStep} from '../src/lib/salary-evidence.ts';
 import {salaryOutcome,salaryQuestionText} from '../src/lib/salary-review.ts';
 import {salaryQuestion,isQuestionEvidence,sameQuestion,questionExport} from '../src/lib/checklist.ts';
 import type {SalaryField} from '../src/lib/salary-evidence.ts';
+
+test('task mentions and unchanged references cannot replace a confirmed salary fact',()=>{
+  assert.equal(salaryFact('银行卡实际到账8600元。帮我核对实发和差额。','received').value,8600);
+  assert.equal(salaryValueGrounded(8600,'银行卡实际到账8600元。帮我核对实发和差额。','received'),true);
+  const text='个人社保950元，个人公积金800元，个税180元。\n更正：应发11500元，社保、公积金和个税不变，请重新核对实发。';
+  for(const [key,value] of [['insurance',950],['fund',800],['tax',180]] as const)assert.equal(salaryFact(text,key).value,value);
+  assert.equal(salaryFact('社保800元，确认社保不变？','insurance').value,null,'a question is not a confirmation');
+  assert.equal(salaryFact('公积金600元，公积金不确定，先撤回','fund').value,null);
+  assert.equal(salaryFact('个税180元，个税没有扣款','tax').value,0);
+  assert.equal(salaryFact('个人社保950元，后来个人社保900元','insurance').value,900);
+  assert.equal(salaryFact('个税不变','tax').value,null,'unchanged without earlier evidence is not a value');
+});
 
 test('confirmed absence, unknowns, corrections and employee amounts stay distinct',()=>{
   const cases:[string,SalaryField,number|null][]=[
@@ -21,6 +33,48 @@ test('confirmed absence, unknowns, corrections and employee amounts stay distinc
   assert.equal(salaryValueGrounded(0,'其他扣款没有','other'),true);
   assert.equal(salaryValueGrounded(0,'其他扣款不知道','other'),false);
   assert.equal(salaryValueGrounded(0,'其他扣款没有\n其他扣款还没确认','other'),false);
+});
+
+test('confirmed current income components survive corrections and explicit zero replaces a withdrawn amount',()=>{
+  const original='基本工资8460元，绩效1250元，加班费470元，津贴180元，奖金340元，个人社保620元，个人公积金500元，个税210元，其他扣款100元，实际到账9020元。';
+  const text=original+'\n更正：奖金应是540元，其他扣款应是40元，到账应是9040元。\n撤回加班费470元，那是上月的，本月明确没有加班费，其余不变。';
+  const facts=salaryFacts(text);
+  assert.equal(facts.other.value,40);
+  assert.equal(facts.received.value,9040);
+  assert.equal(facts.gross.value,10430);
+  assert.equal(salaryValueGrounded(10430,text,'gross'),true);
+  const input=Object.fromEntries(Object.entries(facts).map(([key,fact])=>[key,fact.value])) as {gross:number;insurance:number;fund:number;tax:number;other:number;received:number|null};
+  assert.equal(salaryOutcome(input).result.net,9060);
+});
+
+test('explicit shared absence completes income while unknown personal deductions stay unknown',()=>{
+  const text='基本工资7200元，绩效、加班费、津贴、奖金、其他扣款本月确实都没有，个人社保、公积金、个税未知，到账6450元仅对照。';
+  const facts=salaryFacts(text);
+  assert.equal(facts.gross.value,7200);
+  assert.equal(facts.other.value,0);
+  for(const key of ['insurance','fund','tax'] as const)assert.equal(facts[key].value,null,key);
+  assert.equal(salaryValueGrounded(6450,text,'gross'),false,'bank receipt cannot stand in for gross');
+});
+
+test('component totals require all five current facts and never override direct gross evidence',()=>{
+  const complete='基本工资5000元，绩效600元，加班费100元，津贴200元，奖金300元。';
+  assert.equal(salaryFact(complete,'gross').value,6200);
+  for(const suffix of ['绩效未知。','确认绩效未知。','绩效先撤回。','撤回绩效600元。','绩效600元是上月的。','绩效600元是上一个月的。','绩效应是600元？']){
+    assert.equal(salaryFact(complete+'\n'+suffix,'gross').value,null,suffix);
+  }
+  assert.equal(salaryFact('基本工资5000元，绩效600元，加班费100元，津贴200元。','gross').value,null,'missing bonus is not zero');
+  assert.equal(salaryFact(complete+'\n应发工资6500元。','gross').value,6500);
+  assert.equal(salaryFact(complete+'\n税前工资未知。','gross').value,null,'explicitly unknown gross is not silently replaced');
+  assert.equal(salaryFact(complete+'\n应发6200元，撤回应发6200元。','gross').value,null,'withdrawn direct gross is not resurrected');
+  assert.equal(salaryFact(complete+'\n应发工资不是6200元。','gross').value,null,'conflicting direct gross cannot use a component fallback');
+  assert.equal(salaryFact(complete+'\n绩效应是800元，其余不变。','gross').value,6400);
+  assert.equal(salaryFact(complete+'\n绩效、加班费、津贴和奖金不变。','gross').value,6200);
+  assert.equal(salaryFact(complete+'\n绩效、津贴未知。','gross').value,null,'shared unknown withdraws previous values');
+  assert.equal(salaryFact('基本工资5000元，绩效、加班费、津贴、奖金100元。','gross').value,null,'a shared positive amount is not assigned to every item');
+  assert.equal(salaryFact('基本工资5000元，绩效奖金600元，加班费100元，津贴200元。','gross').value,null,'performance bonus cannot double as the separate bonus');
+  assert.equal(salaryFact('基本工资5000.11元，绩效600.22元，加班费100.33元，津贴200.44元，奖金300.55元。','gross').value,6201.65);
+  assert.equal(salaryFact('基本工资没有，绩效、加班费、津贴和奖金均没有。','gross').value,0);
+  assert.equal(salaryFact('基本工资5000元，绩效、加班费、津贴、奖金可能都没有。','gross').value,null);
 });
 
 test('an amount difference has a direction and a missing bank amount stays unchecked',()=>{

@@ -1,6 +1,6 @@
 {
   "name": "rhine-first-step",
-  "version": "0.49.0",
+  "version": "0.49.9",
   "private": true,
   "type": "module",
   "scripts": {
@@ -14,7 +14,8 @@
     "memory:stamp": "node tools/project-memory.mjs --stamp",
     "evaluate:assistant": "node --experimental-strip-types tools/evaluate-assistant.mjs",
     "log:sync": "node tools/sync-development-log.mjs",
-    "evaluate:policies": "node --experimental-strip-types tools/evaluate-city-policies.mjs"
+    "evaluate:policies": "node --experimental-strip-types tools/evaluate-city-policies.mjs",
+    "evaluate:frozen": "node --experimental-strip-types tools/evaluate-frozen-benchmark.mjs"
   },
   "dependencies": {
     "lucide-react": "1.61.0",

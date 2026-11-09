@@ -49,7 +49,7 @@ function finding(value: Omit<Finding, 'source'>): Finding {
 /** Return an actual text fragment; never construct a quotation from form fields. */
 function locate(text: string, pattern: RegExp): string {
   const clauses = text.match(/[^\n。；;]+[。；;]?/gu) ?? [];
-  return clauses.find((clause) => pattern.test(clause))?.trim() ?? '';
+  return clauses.find((clause) => pattern.test(clause) && !/(?:未拍入|未截图|未提供|未写明|未注明|未包含|未列明|缺失|暂缺|样张|测试材料|页眉|目录)/u.test(clause))?.trim() ?? '';
 }
 
 function validMonths(value: number | null, allowZero: boolean): value is number {

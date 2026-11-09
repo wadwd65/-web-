@@ -27,12 +27,14 @@ export function createMusicAtmosphere(scene:T.Scene){
  const lightGeometry=new T.PlaneGeometry(140,82),lightMaterial=new T.ShaderMaterial({uniforms,transparent:true,depthWrite:false,depthTest:true,blending:T.AdditiveBlending,
   vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
   fragmentShader:`${common}varying vec2 vUv;void main(){vec2 q=vUv-.5;float t=uTime;
-   float scan=pow(max(0.,sin(q.y*25.-t*.70)),35.)*.32;
-   float cloud=exp(-pow((q.y+.07+sin(q.x*4.+t*.07)*.025)*19.,2.))*(.6+.3*sin(q.x*4.-t*.08));
-   float rise=pow(max(0.,sin(q.x*26.+q.y*2.+t*.10)),22.)*exp(-abs(q.x)*4.);
-   float rings=pow(max(0.,sin(length(q-vec2(.04,.0))*62.-t*.55)),16.)*exp(-length(q)*5.);
-   float drift=exp(-pow((q.y-sin(q.x*9.+t*.10)*.07)*16.,2.));
-   float field=(w(0.)*scan+w(1.)*cloud*.38+w(2.)*rise*.26+w(3.)*rings*.26+w(4.)*drift*.29)*smoothstep(.48,.03,length(q));
+   // Uniform branches: evaluate only the active field(s), not five full-screen effects.
+   float field=0.;
+   if(w(0.)>0.)field+=w(0.)*pow(max(0.,sin(q.y*25.-t*.70)),35.)*.32;
+   if(w(1.)>0.)field+=w(1.)*exp(-pow((q.y+.07+sin(q.x*4.+t*.07)*.025)*19.,2.))*(.6+.3*sin(q.x*4.-t*.08))*.38;
+   if(w(2.)>0.)field+=w(2.)*pow(max(0.,sin(q.x*26.+q.y*2.+t*.10)),22.)*exp(-abs(q.x)*4.)*.26;
+   if(w(3.)>0.)field+=w(3.)*pow(max(0.,sin(length(q-vec2(.04,.0))*62.-t*.55)),16.)*exp(-length(q)*5.)*.26;
+   if(w(4.)>0.)field+=w(4.)*exp(-pow((q.y-sin(q.x*9.+t*.10)*.07)*16.,2.))*.29;
+   field*=smoothstep(.48,.03,length(q));
    gl_FragColor=vec4(uTint,field);#include <tonemapping_fragment>\n#include <colorspace_fragment>}`.replace(';#include',';\n#include')});
  const light=new T.Mesh(lightGeometry,lightMaterial);light.position.set(3,4,-33);scene.add(light);
  const tint=new T.Color();let time=0;

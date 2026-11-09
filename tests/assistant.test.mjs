@@ -64,3 +64,27 @@ test('local middleware returns truthful status and rejects cross-origin or malfo
  const body=await fetch(base+'/api/v1/assistant/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:'not json'});assert.equal(body.status,400);
  const absent=await fetch(base+'/api/v1/assistant/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(input)});assert.equal(absent.status,503);
 });
+test('temporal references cannot replace confirmed contract durations; withdrawals still block review',()=>{
+ const text='全日制劳动合同。本合同期限为24个月，其中试用期为3个月。乙方在合同期内辞职，须支付违约金5000元。试用期满后考核。';
+ const args={text,contractMonths:24,probationMonths:3,fullTimeConfirmed:true};
+ const reviewed=executeAssistantTool('review_contract',args,text);
+ assert.equal(reviewed.action.input.contractMonths,24);
+ assert.equal(reviewed.action.input.probationMonths,3);
+ for(const correction of ['合同期限不确定，先撤回','试用期不清楚，先撤回'])assert.throws(()=>executeAssistantTool('review_contract',{...args,text:text+correction},text+correction),/期限/);
+ const corrected=text+'更正合同期限为36个月，试用期为2个月。';
+ assert.equal(executeAssistantTool('review_contract',{text:corrected,contractMonths:36,probationMonths:2,fullTimeConfirmed:true},corrected).action.input.contractMonths,36);
+});
+
+test('uncaptured-page notes cannot count as located contract clauses',()=>{
+ const text='全日制劳动合同。试用期2个月，月薪7500元。（本图仅为局部截图，合同总期限、工作地点、社会保险条款未拍入）';
+ const reviewed=executeAssistantTool('review_contract',{text,contractMonths:null,probationMonths:2,fullTimeConfirmed:true},text);
+ for(const id of ['probation','location','insurance'])assert.equal(reviewed.result.findings.find(f=>f.id===id).status,'missing',id);
+ assert.equal(reviewed.result.findings.find(f=>f.id==='pay').status,'noted');
+});
+
+test('a sample heading cannot replace the actual probation clause as evidence',()=>{
+ const text='劳动合同条款页（合成安全与零试用期样张）\n全日制劳动合同。合同期限为24个月。双方明确不约定试用期（试用期为0个月）。';
+ const reviewed=executeAssistantTool('review_contract',{text,contractMonths:24,probationMonths:0,fullTimeConfirmed:true},text);
+ const quote=reviewed.result.findings.find(f=>f.id==='probation').quote;
+ assert.match(quote,/双方明确不约定试用期/);assert.ok(!quote.includes('样张'));
+});
