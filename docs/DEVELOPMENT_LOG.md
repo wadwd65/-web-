@@ -583,3 +583,5 @@ v0.37.0源码8a9268708c43fca51e56c14fecb21931ea107487已正常推送wadwd65/-web
 补?perf=1下载诊断：实际WebGL适配器、AA采样、DPR/画布尺寸和最近帧耗保留到简易卸载后。实际下载文件核验NVIDIA3070/AA4/DPR1.5/1920x1080、active=false及帧记录，不含测试输入。普通页不读取适配器/启动报告定时器，临时GPU计时/录像/对照按钮不进入src/dist。本轮无真实LLM调用，业务/政策/8唱片轻拖与旋转不变。下一步优先取得3050前台诊断，分清适配器/像素/CPU-GPU，再选主瓶颈；后续新人、用户云网址、视频/PDF和11/14冻结/17提交仍按progress，不继续无目标美术扩张。
 
 发布：源码 085c251bd39ecc1d35f724f47ef822a18faec4c9 已正常推送wadwd65/-web- main；5302正常保存版index及5份JS/CSS与最终构建逐字一致，正常简易0canvas/0诊断HUD/无QA/单audio。目标性能仍待，不把发布当验收；最终文档HEAD见本轮外部git-publication回执。未部署腾讯云，校园行迹未改。
+
+冻结清单核对额外发现：49.1—49.8全部原哈希一致，49.9仅tools/request-policy.mjs与昨天回执不符（mtime2026-11-10T04:12:34.822Z，原因未确认），未回写旧文件/旧回执。新版本使用canonical已测试原策略，本轮src提交没有改request-policy。差异单列outputs/v04910-review/prior-snapshot-discrepancy.json，不将它静默归为本轮修改或声称旧9版全一致。目标3050另一台电脑需更新代码并沿原测试方式运行，不能直接把本机127.0.0.1:5302当远程网址。

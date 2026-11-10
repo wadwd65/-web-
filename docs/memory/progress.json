@@ -116,10 +116,15 @@
     "video": "home-drag.webm，仅真实三维层，非完整DOM录屏；录制期不作无录制性能基准。",
     "savedPreview": "5302 v49.10 saved index/all5 assets byte-identical; direct simple normal page0canvas/0HUD/noQA/singleaudio, screenshot reviewed",
     "online": "本轮无LLM调用、无AI业务变化；原49.7评测失败及语义限制保留。",
-    "limits": "未证明3050达到60或GPU占用下降；真实新人任务数据与公网HTTPS仍待，不因211检查或排版修复上调比赛分数。"
+    "limits": "未证明3050达到60或GPU占用下降；真实新人任务数据与公网HTTPS仍待，不因211检查或排版修复上调比赛分数。",
+    "priorSnapshotCheck": {
+      "v0491Through0498": "receipt hashes unchanged",
+      "v0499": "one mismatch: tools/request-policy.mjs; first detected this round, cause not established; not overwritten; old receipt retained",
+      "canonicalRequestPolicy": "not changed this round; new saved version uses canonical tested source"
+    }
   },
   "nextActions": [
-    "当前P0：请用户在3050前台打开5302的?perf=1首页，完成入场后保持完整模式15秒，再左下角下载性能记录；同时记任务管理器GPU引擎/浏览器GPU进程、系统缩放与精确FPS。新版字体已在三种桌面尺寸修复，但GPU100%不能标已解决。",
+    "当前P0：3050更新到0.49.10，按原测试方式启动，在其测试网址加?perf=1（本机5302仅本机预览，另一台机不能直接用这个127地址）。前台完整模式15秒，左下角下载性能记录，并记任务管理器GPU引擎/浏览器GPU进程、系统缩放和精确FPS；GPU100%尚未解决。",
     "拿到目标记录后再选优化：区分实际NVIDIA/集显/软件渲染、CSS/画布像素与CPU提交/实际帧耗；只修明确主瓶颈，复测同尺寸同DPR。当前不以本机165、阴影矩形0.187或少量GPU计时推断3050提速；不直接删动画或改材质来冒充保持画面。",
     "11/10—12继续真实新人主任务：先1人不教入口完成工资原话→更正金额→应用→清单导出，补足2—3人覆盖合同/城市政策，记录耗时/误点/原话。没有真人就标未测，不用AI假扮。性能卡点与任务阻塞优先，暂停播放器装饰性新增。",
     "11/11—12仅修确认的1—2个P0/P1任务阻塞，人工对照合同回复与原文；老冻结题只称回归，新题先冻结并保留失败。生成层4对ON/OFF不称生产全链路RAG增益。",
