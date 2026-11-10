@@ -14,6 +14,7 @@ import type {ScenePress} from './scene-pointer.ts';
 import {createStyleWriter} from './scene/style-writer.ts';
 import {createRenderCadence} from './scene/render-cadence.ts';
 import {createTransformWriter} from './scene/transform-writer.ts';
+import {scopeShadowReceiver} from './scene/shadow-receiver.ts';
 
 type Props={selected:number;working:boolean;entering:boolean;particles:boolean;paused?:boolean;suspended?:boolean;cinema?:boolean;reset:number;signals:TerminalSignals;view:string;onSelect:(index:number)=>void;onOpen:(index:number)=>void;onAction:SceneInteraction;onReady:()=>void;onFailure:()=>void;onPhase?:(phase:string)=>void;onFrame?:(now:number,eligible:boolean)=>void};
 type Dossier={group:T.Group;texture:T.CanvasTexture;canvas:HTMLCanvasElement;key:string;signal:TerminalSignals|null;active:boolean;hot:SceneAction|null;cover:T.Mesh;layers:T.Group;index:number;samples:Float32Array;meshes:{mesh:T.Mesh;opacity:number}[];bars:T.Mesh[];solid:number;hover:number;outline:T.LineSegments;materialAlpha:number;casts:boolean};
@@ -67,6 +68,7 @@ export default function TaskArrayScene(props:Props){
   let dead=false,frame=0,last=performance.now(),clock=0,work=0,result=0,yaw=0,pitch=0,zoom=1,drag=false,moved=false,downX=0,downY=0,width=1,height=1,hover=-1,oldReset=props.reset,selected=Math.max(0,props.selected),morph=1,morphStarted=0,lastShadow=-Infinity,cloud=0,boot=props.entering?0:1,contextLost=false;
   const abort=new AbortController(),reduce=matchMedia('(prefers-reduced-motion: reduce)');
   renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setClearColor(0x000000,0);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;renderer.shadowMap.enabled=true;renderer.shadowMap.autoUpdate=false;renderer.shadowMap.type=T.PCFShadowMap;renderer.domElement.setAttribute('aria-hidden','true');el.appendChild(renderer.domElement);
+  audit.renderer(renderer);
   renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();contextLost=true;latest.current.onFailure();},{signal:abort.signal});
   const scene=new T.Scene(),camera=new T.PerspectiveCamera(36,1,.1,100);scene.matrixWorldAutoUpdate=false;camera.position.set(8,6.4,17.8);const look=new T.Vector3(-1,0,0),cameraTarget=new T.Vector3();
   const pm=new T.PMREMGenerator(renderer),room=new RoomEnvironment(),env=pm.fromScene(room,.025);scene.environment=env.texture;scene.environmentIntensity=.95;room.dispose();pm.dispose();
@@ -126,6 +128,7 @@ export default function TaskArrayScene(props:Props){
    const d={group,texture,canvas,key:'',signal:null,active:false,hot:null,cover,layers,index:i,samples,meshes,bars,solid:i===selected?1:.58,hover:0,outline,materialAlpha:-1,casts:false};dossiers.push(d);redraw(d,latest.current.signals);
   }
   metal.dispose();dark.dispose();light.dispose();accent.dispose();glow.dispose();
+  const shadowReceiver=scopeShadowReceiver(renderer,ground,dossiers.flatMap(d=>d.meshes.map(item=>item.mesh)),sun.position,-2.5);
   document.fonts.ready.then(()=>{if(!dead)for(const d of dossiers){d.key='';redraw(d,latest.current.signals,d.index===selected);}});
   // Persistent, truly spatial currents. Module selection changes their trajectory without replacing the background.
   const count=14000,flowGeometry=new T.BufferGeometry(),flowPositions=new Float32Array(count*3),seed=new Float32Array(count);
@@ -232,7 +235,7 @@ export default function TaskArrayScene(props:Props){
    }
    PART_LABELS.forEach((part,n)=>{const label=partRefs.current[n],d=dossiers[part.module],mesh=d.bars[part.part];if(!label||!mesh)return;const visible=s.working&&selected===part.module&&!s.entering&&!s.cinema&&hover===part.module&&lastPart===part.part&&shown(mesh);hide(label,!visible);if(!visible)return;tmp.set(0,part.module===2||part.module===3?(.5*mesh.scale.y+.2)/Math.max(.01,mesh.scale.y):.22,0).applyMatrix4(mesh.matrixWorld).project(camera);style(label,'transform',`translate3d(${quarter((tmp.x*.5+.5)*width)}px,${quarter(Math.max(315,(-tmp.y*.5+.5)*height-5))}px,0) translate(-50%,-100%)`);});
    style(renderer.domElement,'cursor',drag&&!s.working?'grabbing':hover===selected&&hotAction&&settled()?'pointer':s.working?'default':'grab');
-   if(now-lastShadow>100||still){renderer.shadowMap.needsUpdate=true;lastShadow=now;countAudit('shadowRefreshes');}renderer.render(scene,camera);audit.frame({cpu:performance.now()-cpuStart,calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures});
+   if(now-lastShadow>100||still){shadowReceiver.capture();renderer.shadowMap.needsUpdate=true;lastShadow=now;countAudit('shadowRefreshes');}renderer.render(scene,camera);audit.frame({cpu:performance.now()-cpuStart,calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures});
    latest.current.onFrame?.(now,!still&&!s.suspended&&!s.entering&&morph>=.999&&Math.abs(work-(s.working?1:0))<.02);
    const phase=morph<1?'事务迁移':s.working?(s.view==='result'?'结果展开':'材料展开'):'事务轨道';data(el!,'phase',phase);data(el!,'scene',String(selected));data(el!,'motion',still?'reduced':'dynamic');data(el!,'transition',morph.toFixed(3));data(el!,'hover',String(hover));data(el!,'hoverPart',String(lastPart));data(el!,'entry',boot.toFixed(3));if(previousPhase!==phase){previousPhase=phase;latest.current.onPhase?.(phase);}
    if(!still&&!s.suspended&&!s.entering)frame=requestAnimationFrame(draw);
@@ -242,7 +245,7 @@ export default function TaskArrayScene(props:Props){
   reduce.addEventListener('change',()=>wake.current(),{signal:abort.signal});
   // Establish the initial poses before reporting that the scene is ready.
   for(const d of dossiers){const rel=(d.index-selected+8)%8;d.group.position.set(2+(rel>4?rel-8:rel)*1.45,.55,-3-Math.min(rel,8-rel)*1.2);}dossiers[selected].group.position.set(2,.55,1.1);root.updateMatrixWorld(true);for(let n=0;n<COUNT;n++){tmp.fromArray(target,n*3).applyMatrix4(dossiers[selected].group.matrixWorld);tmp.toArray(from,n*3);}frame=requestAnimationFrame(draw);latest.current.onReady();
-  return()=>{wake.current=()=>{};audit.dispose();dead=true;cancelAnimationFrame(frame);abort.abort();observer.disconnect();env.dispose();dossiers.forEach(d=>d.texture.dispose());const gs=new Set<T.BufferGeometry>(geometryCache.values()),ms=new Set<T.Material>();scene.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Points||o instanceof T.Line){gs.add(o.geometry);if(o instanceof T.InstancedMesh)o.dispose();(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>ms.add(m));}});gs.forEach(g=>g.dispose());ms.forEach(m=>m.dispose());renderer.dispose();renderer.forceContextLoss();renderer.domElement.remove();};
+  return()=>{wake.current=()=>{};shadowReceiver.dispose();audit.dispose();dead=true;cancelAnimationFrame(frame);abort.abort();observer.disconnect();env.dispose();dossiers.forEach(d=>d.texture.dispose());const gs=new Set<T.BufferGeometry>(geometryCache.values()),ms=new Set<T.Material>();scene.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Points||o instanceof T.Line){gs.add(o.geometry);if(o instanceof T.InstancedMesh)o.dispose();(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>ms.add(m));}});gs.forEach(g=>g.dispose());ms.forEach(m=>m.dispose());renderer.dispose();renderer.forceContextLoss();renderer.domElement.remove();};
  },[]);
  return <div className="exhibit-webgl" ref={host} data-geometry="task-orbit-mesh">
    <div className="scene-label-layer"><svg className="scene-label-leaders" aria-hidden="true">{MODULES.map((module,index)=><line key={module.id} ref={el=>{leaderRefs.current[index]=el;}}/>)}</svg>

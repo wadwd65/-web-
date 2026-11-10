@@ -61,6 +61,7 @@ export default function MusicArchiveScene(props:Props){
   try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});}catch{latest.current.onFailure();return;}
   renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setClearColor(0,0);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.06;renderer.shadowMap.enabled=false;renderer.domElement.setAttribute('aria-hidden','true');el.appendChild(renderer.domElement);
   const audit=createAudit('music archive'),scene=new T.Scene(),camera=new T.PerspectiveCamera(34,1,.1,100),aim=new T.Vector3();scene.matrixWorldAutoUpdate=false;scene.fog=new T.Fog('#142b42',25,58);
+  audit.renderer(renderer);
   const pm=new T.PMREMGenerator(renderer),room=new RoomEnvironment(),environment=pm.fromScene(room,.035);scene.environment=environment.texture;scene.environmentIntensity=.90;pm.dispose();room.dispose();
   scene.add(new T.HemisphereLight('#e9f5ff','#293e5a',.85));const key=new T.DirectionalLight('#fff8ef',2.65);key.position.set(-7,9,9);scene.add(key);
   const edge=new T.DirectionalLight('#a7deff',3.2);edge.position.set(8,4,-8);scene.add(edge);const fill=new T.DirectionalLight('#b3d7ed',.9);fill.position.set(-8,-1,4);scene.add(fill);

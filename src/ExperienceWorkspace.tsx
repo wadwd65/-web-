@@ -104,6 +104,7 @@ export default function ExperienceWorkspace({page,go,questionCount,signals,openS
     function paint(){frame=0;if(!hot)return;rect??=hot.getBoundingClientRect();hot.style.setProperty('--mx',`${Math.round(x-rect.left)}px`);hot.style.setProperty('--my',`${Math.round(y-rect.top)}px`);}
     target.addEventListener('pointermove',event=>{const next=(event.target as HTMLElement).closest<HTMLElement>('button,a');if(next!==hot){clear();hot=next;if(hot)hot.dataset.hovered='true';}x=event.clientX;y=event.clientY;if(hot&&!frame)frame=requestAnimationFrame(paint);},{passive:true,signal:events.signal});target.addEventListener('pointerleave',clear,{signal:events.signal});window.addEventListener('resize',()=>{rect=null;},{signal:events.signal});target.addEventListener('scroll',()=>{rect=null;},{capture:true,passive:true,signal:events.signal});return()=>{events.abort();clear();};
   },[]);
+  const homeNavigation=<footer className="experience-footer" inert={cinema}><HomeTaskDirectory onAsk={()=>ask()} onTools={openTools} onList={openList} questionCount={questionCount}/></footer>;
   return <>
     <div ref={root} className={`experience-shell ${lightweight?'is-simple':''} ${musicPresent?'has-player':''} ${working?'is-working':''} ${cinema?'is-cinema':''} ${intro?'is-intro':''} ${introReveal?'is-intro-revealing':''} ${assistantOpen||musicPresent||covered||accountOpen||apiOpen?'is-covered':''} ${simple||lightweight?'is-reduced':''}`} data-experience-mode={modeState.mode} data-music-phase={musicPhase} data-view={workView} data-stage={working?(utility?page:task?.ready?workView:'planned'):'overview'} data-module={utility?page:task?.id??'welcome'} inert={intro||musicPresent} aria-hidden={intro||musicPresent||undefined}>
       <a className="skip-link" href="#experience-content" onClick={event=>{event.preventDefault();(working?workspace:overview).current?.focus();}}>跳到主要内容</a>
@@ -119,11 +120,11 @@ export default function ExperienceWorkspace({page,go,questionCount,signals,openS
       </header>
       <main ref={overview} className="experience-overview" id={!working?'experience-content':'scene-content'} tabIndex={-1} inert={working||cinema} aria-hidden={working||cinema}>
         <div className="experience-section-label"><i/><span>初入职场，慢慢弄明白。</span></div>
-        <article className="experience-story home-ask-story">
+        <div className="home-start-column"><article className="experience-story home-ask-story">
           <div className="experience-kicker"><span>FIRST STEP / YOUR NEXT MOVE</span></div>
           <h1>遇到什么事了？</h1>
           <p>合同怎么看，工资怎么算，租房先问什么。<br/>从你眼前的这件事开始。</p>
-        </article>
+        </article>{lightweight&&homeNavigation}</div>
         <section className="home-command-dock" aria-label="直接提问">
           <form className="home-question-form" onSubmit={event=>{event.preventDefault();if(homeQuestion.trim())ask(homeQuestion);}}><label htmlFor="home-question" className="sr-only">说说你遇到的问题</label><span className="home-command-provider"><Sparkles size={18}/>DeepSeek 助手</span><textarea id="home-question" rows={1} value={homeQuestion} maxLength={6000} onChange={event=>setHomeQuestion(event.target.value)} placeholder="比如：刚收到合同，不知道该先看哪里…"/><footer><button type="submit" disabled={!homeQuestion.trim()}>发送问题<ArrowUpRight size={16}/></button></footer></form>
           <div className="home-command-foot"><div className="home-question-examples"><small>也可以问</small>{['试用期怎么算？','第一笔工资怎么核对？'].map(example=><button key={example} onClick={()=>setHomeQuestion(example)}>{example}</button>)}</div><p className="home-input-note">不清楚的信息可以先留空，我们会逐项确认。</p></div>
@@ -147,7 +148,7 @@ export default function ExperienceWorkspace({page,go,questionCount,signals,openS
         {task&&!utility&&<details className="module-method"><summary><span>这件事怎么做</span>{MODULE_GUIDES[task.id].steps.map((step,i)=><small key={step}>{String(i+1).padStart(2,'0')} {step}</small>)}<ChevronRight size={13}/></summary><p>{MODULE_GUIDES[task.id].logic}</p></details>}
       </section>
       <div className="experience-scene-tools" hidden={working||lightweight} inert={cinema}><p>{failed?'三维暂不可用 · 工具列表仍可使用':simple?'已减少动态 · 工具入口照常可用':'后排只预览 · 当前模型的文字与子选项可操作'}</p><details className="home-scene-settings" onKeyDown={event=>{if(event.key==='Escape'){event.preventDefault();event.stopPropagation();event.currentTarget.open=false;event.currentTarget.querySelector('summary')?.focus();}}}><summary><SlidersHorizontal size={14}/>场景设置<ChevronRight size={12}/></summary><div><button onClick={()=>setParticles(value=>!value)} aria-pressed={particles} disabled={simple||failed}><Sparkles size={14}/>{particles?'重组资料':'查看几何点云'}</button><button onClick={()=>setReset(value=>value+1)} aria-label="复位场景视角"><RotateCcw size={14}/>复位场景视角</button><button onClick={()=>setSimple(value=>!value)} aria-pressed={simple}>{simple?'开启动效':'减少动态'}</button><button onClick={()=>setCinema(value=>!value)} aria-pressed={cinema}><Maximize size={14}/>{cinema?'显示界面':'纯净观景'}</button></div></details></div>
-      <footer className="experience-footer" inert={cinema}><HomeTaskDirectory onAsk={()=>ask()} onTools={openTools} onList={openList} questionCount={questionCount}/></footer>
+      {!lightweight&&homeNavigation}
       <div className="experience-systemline" inert={cinema}><span><i/>FIRST STEP / {version}<span>YOUR NEXT MOVE</span></span><div><button onClick={openSources}>使用范围 ↗</button></div></div>
       {cinema&&<button className="experience-cinema-return" onClick={()=>setCinema(false)}>返回界面<ArrowLeft size={15}/><small>ESC</small></button>}
     </div>

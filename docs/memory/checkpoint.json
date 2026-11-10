@@ -1,10 +1,10 @@
 {
-  "version": "0.49.9",
-  "recordedAt": "2026-11-09T11:56:58.882Z",
+  "version": "0.49.10",
+  "recordedAt": "2026-11-10T05:20:20.184Z",
   "workState": "reviewed_internally",
-  "validationVersion": "0.49.9",
+  "validationVersion": "0.49.10",
   "textNormalisation": "LF",
-  "sourceDigest": "7e9c7c8ec18b883bf286a4cb6b22587ec6d24f52e340fe007cb5b785d570cea4",
+  "sourceDigest": "f2d37ce8d21831423f47ca5f0c7d40b3b49dd3e40702bd0334d1e5260ed3587e",
   "files": [
     {
       "path": ".env.example",
@@ -24,23 +24,23 @@
     },
     {
       "path": "docs/memory/DECISIONS.md",
-      "sha256": "4141b5a6788780a79d831b8155c0d7de9ea8012bcacd6c68c3b1f32d2bf237b4"
+      "sha256": "4df7a3556e17648a5a9c46d5dd3937fcc7a4a4d5851d53f2759822ce2c4a11ef"
     },
     {
       "path": "docs/memory/SESSIONS.md",
-      "sha256": "4a62d9a9710ec11f4c5e143753ee60d8e33289fe4b950e132324425bb1ac8857"
+      "sha256": "2a6f8c1d32637ce55afbe1c6d2799b088a4965927b85a56a48ec344fd94c106f"
     },
     {
       "path": "docs/memory/progress.json",
-      "sha256": "9af2fdbdffe3a750e07023a015aba2bc32c03c634d683d8b54ae4d0edc7b0c6b"
+      "sha256": "5c89027aaa6e221eb202348b35d7ec75aacd6643411999fa4e175657f9cae37d"
     },
     {
       "path": "package-lock.json",
-      "sha256": "1c56a425b429c0e4c3f3b21bfb6aec72925a15260196ecafbfa73e9a7414c9b7"
+      "sha256": "0388221046fc5ab5c2618d29d189b6957ca3762c44811d2b05bfd141a5fee0e0"
     },
     {
       "path": "package.json",
-      "sha256": "d8724c55f33f38831951db89b2532d2fba4eac4bb78a7cf7e9f589e390564001"
+      "sha256": "5b078e47c19a151e69e087dacad84f0e5a53a912bc9284006e4c32356eb43d22"
     },
     {
       "path": "public/artwork/rhine-ascent.png",
@@ -228,7 +228,7 @@
     },
     {
       "path": "src/ExperienceWorkspace.tsx",
-      "sha256": "5f7edce479483a503866a9c96c2f62d4d9878a6c927fae7e216e9a870cc2c59c"
+      "sha256": "3ebac132aa1392886208ac025b7cebb67fc243786ed0bb3a95d18c59a8cb7f0c"
     },
     {
       "path": "src/HomeTaskDirectory.tsx",
@@ -240,7 +240,7 @@
     },
     {
       "path": "src/MusicArchiveScene.tsx",
-      "sha256": "ee4eae78d866376aa444844238ae7fc0dd2144dd8bee1facf1cdbb3161a4458d"
+      "sha256": "62f4b3eb98fe3d7d4b2be27f0d76a9750b687d7e2fc12decced01e28fa48437e"
     },
     {
       "path": "src/MusicPlayer.tsx",
@@ -260,7 +260,7 @@
     },
     {
       "path": "src/PerformanceDiagnostics.tsx",
-      "sha256": "b4d97f14ca6c6802472facf4adefd75f646fa74a0e0d4b7995608be6bc90be40"
+      "sha256": "abe87b3de591cdac75f2d8e0457356ff07cbcb20e8b3305df30aa09a478c5665"
     },
     {
       "path": "src/PointerFeedback.tsx",
@@ -296,7 +296,7 @@
     },
     {
       "path": "src/TaskArrayScene.tsx",
-      "sha256": "334b3ea81fa1b54f353ebdb00d9c3d1a53d6f6aa6cd4b9abe86a25fe82bdd790"
+      "sha256": "f55fd7b56560d2589286279493e7ccaf9170c92aa03204d577faa19fb7afd75a"
     },
     {
       "path": "src/ToolDirectory.tsx",
@@ -380,7 +380,7 @@
     },
     {
       "path": "src/home-layout.css",
-      "sha256": "7e3a6c9a968784ad2eb1bb1ba77582d68d5988aefde144b9e4f858d97f05fd81"
+      "sha256": "d66545f726938f1d3862cc979aea159818e25acc807721a1fe55c2b8acbf9138"
     },
     {
       "path": "src/home-overview.css",
@@ -468,7 +468,7 @@
     },
     {
       "path": "src/performance-audit.ts",
-      "sha256": "4e74518e75e23db0e0d83c0ec64cbc4839554a920e15500b18d7bb18767f7a49"
+      "sha256": "e3fa0c9c68015a8beeb542f3c26fadf5a457a6bac056b44226b73e5e5c672640"
     },
     {
       "path": "src/performance-record.ts",
@@ -525,6 +525,10 @@
     {
       "path": "src/scene/render-cadence.ts",
       "sha256": "5ab31a6ba091bd867efb501fa8ef678e201e252ca0c6cbc6879768e0e48cf617"
+    },
+    {
+      "path": "src/scene/shadow-receiver.ts",
+      "sha256": "b6dd29497cc608edda5f238323ddaeafc6557191dcc68717ceb616634ee058fa"
     },
     {
       "path": "src/scene/style-writer.ts",
@@ -720,7 +724,7 @@
     },
     {
       "path": "tests/render-cost.test.ts",
-      "sha256": "b68258c90ac43796da9a493f110d47f62ccf8bc59ae95f6c058d7f418e1d7860"
+      "sha256": "49f66e99053a1b505a5819c17ed18bcf7baaaaf4e93eead79b7d5b745ae20d5f"
     },
     {
       "path": "tests/request-policy.test.mjs",

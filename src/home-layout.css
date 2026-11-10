@@ -20,7 +20,21 @@
 .home-command-foot{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:11px 2px 0;min-height:32px}
 .home-command-foot .home-question-examples{margin:0;gap:14px}
 .home-command-foot .home-input-note{font-size:10px;line-height:1.6;margin:0}
-.experience-shell.is-simple .simple-home-guide{position:absolute;right:0;top:45px;width:clamp(270px,40%,430px);pointer-events:auto}
+/* A reading layout: title, explanation and entries share normal flow, so
+   larger text cannot collide with the full scene's fixed navigation slots. */
+.experience-shell.is-simple:not(.is-working) .experience-overview{inset:115px 4.5% 34px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr);grid-template-rows:auto minmax(0,1fr) auto;gap:20px 48px;align-items:center;max-width:1440px;padding:0}
+.experience-shell.is-simple:not(.is-working) .experience-section-label{grid-column:1/-1;position:static;margin:0}
+.experience-shell.is-simple:not(.is-working) .home-start-column{grid-column:1;grid-row:2;display:flex;flex-direction:column;gap:22px;min-width:0;pointer-events:auto}
+.experience-shell.is-simple:not(.is-working) .experience-story.home-ask-story{position:static;inset:auto;width:auto;max-width:none;padding:0;transform:none}
+.experience-shell.is-simple:not(.is-working) .home-ask-story h1{font-size:clamp(32px,3vw,43px);line-height:1.3;margin:0 0 12px;letter-spacing:-1px}
+.experience-shell.is-simple:not(.is-working) .home-ask-story>p{max-width:none;margin:0;font-size:13px;line-height:1.9}
+.experience-shell.is-simple:not(.is-working) .experience-overview .experience-footer{position:static;inset:auto;width:auto;height:auto;padding:0;margin:0;border:0}
+.experience-shell.is-simple:not(.is-working) .home-primary-navigation{height:auto}
+.experience-shell.is-simple:not(.is-working) .home-primary-navigation>button{flex:none;min-height:68px;padding:12px 0}
+.experience-shell.is-simple:not(.is-working) .simple-home-guide{grid-column:2;grid-row:2;position:static;inset:auto;width:auto;min-width:0;pointer-events:auto}
+.experience-shell.is-simple:not(.is-working) .simple-home-guide>ol{gap:23px;margin:22px 0}
+.experience-shell.is-simple:not(.is-working) .home-command-dock{grid-column:1/-1;grid-row:3;position:static;inset:auto;min-width:0}
+.experience-shell.is-simple .home-command-dock .home-question-form{margin:0}
 .experience-shell.is-simple .home-command-dock .home-question-form textarea{height:44px;font-size:14px}
 @media (max-height:740px){.experience-shell:not(.is-working) .experience-footer{top:285px;height:204px}.experience-shell:not(.is-working) .experience-story.home-ask-story{top:40px}.experience-shell:not(.is-working) .home-ask-story h1{font-size:32px}.home-command-foot{padding-top:7px}}
 @media (min-width:1000px) and (max-width:1150px){.experience-shell:not(.is-working) .experience-footer{width:226px}.home-command-provider{flex-basis:140px}.home-command-foot .home-question-examples{gap:9px}}
