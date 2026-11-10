@@ -1,4 +1,4 @@
-# v0.49.9 当前架构
+# v0.49.10 当前架构
 
 |职责|代码入口|边界|
 |---|---|---|
@@ -36,3 +36,6 @@ scene/render-cadence.ts在0495使用原生显示回调；刷新率估计只用�
 
 
 0498—0499：音乐阴影由archive-shadow的单批次柔和近似投影按实际世界姿态更新，取消音乐PCF深度pass；首页阴影保持。archive-drag拥有逐唱片目标姿态与单pointer手势，MusicArchiveScene阻尼各自姿态，抓取期间冻结镜头/邻片hover偏移。转场先清手势、捕获已渲染整匣姿态，再清手动偏角，原archive-motion/遮罩/合批互斥路径保留。诊断中的recordPoses/cameraPose仅perf=1写入，正常页面不新增逐帧DOM探针。
+
+
+04910：简易首页的共用导航移入home-start-column常规流，完整模式footer保留原位置；首页scopeShadowReceiver只裁地面光栅矩形，PCF/阴影图/周期不变，捕获与原深度图同姿态的投影边界，draw后恢复scissor；近裁面不安全时回退全窗口。perf=1的performance-audit显式保留少量适配器/画布/帧耗纯数据供PerformanceDiagnostics导出，卸载清context引用，普通会话不读取硬件。临时GPU timer/录像/像素对照在系统Temp，正式构建无这些工具。
