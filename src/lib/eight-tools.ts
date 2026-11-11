@@ -18,7 +18,10 @@ export function amount(value:string,label:string,optional=false):number|null{
   const cents=Math.round(Number(clean)*100);if(!Number.isSafeInteger(cents)||cents>100_000_000_00)throw new Error(`${label}超出当前工具范围。`);return cents;
 }
 export const cash=(cents:number)=>new Intl.NumberFormat('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2}).format(cents/100);
-export type OfferInput={id:string;name:string;monthly:string;months:string;rent:string;commute:string;hours:string;probation:string;employer:string};
+export const OFFER_BENEFIT_LABELS={unknown:'还没说清楚',provided:'公司承诺缴纳',none:'公司明确不缴', 'after-probation':'称转正后才缴',partial:'只提供部分，需核实'} as const;
+export type OfferBenefitStatus=keyof typeof OFFER_BENEFIT_LABELS;
+export type OfferInput={id:string;name:string;monthly:string;months:string;rent:string;commute:string;hours:string;probation:string;employer:string;socialInsurance?:OfferBenefitStatus;housingFund?:OfferBenefitStatus;benefitNotes?:string};
+function benefitStatus(value:OfferBenefitStatus|undefined):OfferBenefitStatus{if(value===undefined)return 'unknown';if(!Object.hasOwn(OFFER_BENEFIT_LABELS,value))throw new Error('请从列表选择社保或公积金情况。');return value;}
 export function compareOffers(input:OfferInput[]){
   if(input.length<2||input.length>3)throw new Error('请保留 2–3 份机会进行对比。');
   return input.map((offer,index)=>{
@@ -28,19 +31,33 @@ export function compareOffers(input:OfferInput[]){
     const rent=amount(offer.rent,`${name}每月住房预算`,true),commute=amount(offer.commute,`${name}每月通勤预算`,true),probation=amount(offer.probation,`${name}试用月薪`,true);
     const hours=offer.hours.trim()===''?null:Number(offer.hours);if(hours!==null&&(!Number.isFinite(hours)||hours<=0||hours>168))throw new Error('每周工作时长请填 0–168 之间的已知小时数。');
     const annual=months===null?null:monthly*months,budget=annual!==null&&rent!==null&&commute!==null?annual-(rent+commute)*12:null;
-    const questions=[months===null?'请明确固定发薪月数，奖金是否另有条件？':null,probation===null?'请明确试用期工资及其组成。':null,!offer.employer||offer.employer==='unknown'?'请明确签约主体、用工单位及是否劳务派遣。':null,rent===null||commute===null?'请补齐住房和通勤预算后再比较生活负担。':null,hours===null?'请明确实际工时、休息和加班安排。':null].filter((v):v is string=>!!v);
-    return {id:offer.id,name,monthly,months,annual,baseline:monthly*12,rent,commute,budget,probation,hours,employer:offer.employer,questions};
+    const socialInsurance=benefitStatus(offer.socialInsurance),housingFund=benefitStatus(offer.housingFund),benefitNotes=offer.benefitNotes?.trim()??'';
+    if(benefitNotes.length>1000)throw new Error('福利说明请控制在1000字以内。');
+    const questions=[months===null?'请明确固定发薪月数，奖金是否另有条件？':null,probation===null?'请明确试用期工资及其组成。':null,!offer.employer||offer.employer==='unknown'?'请明确签约主体、用工单位及是否劳务派遣。':null,rent===null||commute===null?'请补齐住房和通勤预算后再比较生活负担。':null,hours===null?'请明确实际工时、休息和加班安排。':null,
+      socialInsurance!=='provided'?`社保：${OFFER_BENEFIT_LABELS[socialInsurance]}。请确认参保险种、起始月、缴费主体与基数，并核对实际记录。`:null,
+      housingFund!=='provided'?`公积金：${OFFER_BENEFIT_LABELS[housingFund]}。请确认是否缴纳、起始月、缴存基数与比例。`:null,
+      !benefitNotes?'请确认餐补、住宿、休假等其他待遇的条件和书面约定。':null].filter((v):v is string=>!!v);
+    return {id:offer.id,name,monthly,months,annual,baseline:monthly*12,rent,commute,budget,probation,hours,employer:offer.employer,socialInsurance,housingFund,benefitNotes,questions};
   });
 }
 export type TaxInput={income:string;insurance:string;additional:string;other:string;prepaid:string;resident:boolean;salaryOnly:boolean;year:string};
 export const TAX_BANDS=[{limit:36000,rate:3,quick:0},{limit:144000,rate:10,quick:2520},{limit:300000,rate:20,quick:16920},{limit:420000,rate:25,quick:31920},{limit:660000,rate:30,quick:52920},{limit:960000,rate:35,quick:85920},{limit:Infinity,rate:45,quick:181920}] as const;
-export function estimateAnnualTax(form:TaxInput){
+function annualTaxBase(form:TaxInput){
   if(!form.resident||!form.salaryOnly)throw new Error('请先确认居民个人和本次仅含工资薪金的计算范围；其他情形请使用官方申报工具。');
   if(!['2025','2026'].includes(form.year))throw new Error('当前只提供 2025/2026 年规则说明下的工资薪金试算。');
-  const income=amount(form.income,'全年工资薪金收入')!,insurance=amount(form.insurance,'全年个人社保公积金')!,additional=amount(form.additional,'全年专项附加扣除')!,other=amount(form.other,'其他依法扣除')!,prepaid=amount(form.prepaid,'已预缴税额')!;
+  const income=amount(form.income,'全年工资薪金收入')!,insurance=amount(form.insurance,'全年个人社保公积金')!,additional=amount(form.additional,'全年专项附加扣除')!,other=amount(form.other,'其他依法扣除')!;
   const taxable=Math.max(0,income-6_000_000-insurance-additional-other),band=TAX_BANDS.find(b=>taxable<=b.limit*100)!;
   const tax=Math.max(0,Math.round(taxable*band.rate/100)-band.quick*100);
-  return {income,insurance,additional,other,prepaid,taxable,tax,balance:prepaid-tax,rate:band.rate,quick:band.quick*100,year:form.year};
+  return {income,insurance,additional,other,taxable,tax,rate:band.rate,quick:band.quick*100,year:form.year};
+}
+export function estimateAnnualTax(form:TaxInput){
+  const base=annualTaxBase(form),prepaid=amount(form.prepaid,'已预缴税额')!;
+  return {...base,prepaid,balance:prepaid-base.tax};
+}
+/** Tax calculation does not require prepayment; refund comparison does. */
+export function previewAnnualTax(form:TaxInput){
+  const base=annualTaxBase(form),prepaid=amount(form.prepaid,'已预缴税额',true);
+  return {...base,prepaid,balance:prepaid===null?null:prepaid-base.tax};
 }
 export type RentFinding={id:string;label:string;status:'located'|'missing'|'confirm';quote:string;start:number;question:string;article:string};
 const RENT_RULES=[

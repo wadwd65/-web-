@@ -10,7 +10,7 @@ export function createAISettings({directory,usage,policy,config,fetcher=fetch,no
  const cleanup=setInterval(()=>{for(const [id,item] of sessions)if(item.expires<=now())sessions.delete(id);},60000);cleanup.unref();
  const base=()=>config??readAssistantConfig(directory||process.cwd());
  function personal(req,res){const owner=usage.identity(req,res,policy.secure),token=requestCookie(req,COOKIE);if(!token)return null;const session=/^[a-f0-9]{64}$/.test(token)?sessions.get(hash(token)):null;if(!session||session.owner!==owner||session.expires<=now())throw expired();return session;}
- function configuration(req,res,fallback=base()){return personal(req,res)?.config||fallback;}
+ function configuration(req,res,fallback=base()){const selected=personal(req,res);return selected?{...selected.config,usageMode:'personal'}:{...fallback,usageMode:'provided'};}
  function describe(req,res){try{const selected=personal(req,res);return {mode:selected?'personal':'provided',configured:Boolean((selected?.config||base()).apiKey),provider:'DeepSeek',model:(selected?.config||base()).model||'deepseek-flash',expiresAt:selected?new Date(selected.expires).toISOString():null};}catch(error){if(error.code!=='settings-expired')throw error;return {mode:'expired',configured:false,provider:'DeepSeek',model:'',expiresAt:null};}}
  function middleware(req,res){if(new URL(req.url,'http://localhost').pathname!=='/api/v1/ai/settings')return false;
   const send=(status,body)=>{if(!res.destroyed&&!res.writableEnded){res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(JSON.stringify(body));}};

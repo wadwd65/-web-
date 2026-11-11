@@ -39,3 +39,5 @@ scene/render-cadence.ts在0495使用原生显示回调；刷新率估计只用�
 
 
 04910：简易首页的共用导航移入home-start-column常规流，完整模式footer保留原位置；首页scopeShadowReceiver只裁地面光栅矩形，PCF/阴影图/周期不变，捕获与原深度图同姿态的投影边界，draw后恢复scissor；近裁面不安全时回退全窗口。perf=1的performance-audit显式保留少量适配器/画布/帧耗纯数据供PerformanceDiagnostics导出，卸载清context引用，普通会话不读取硬件。临时GPU timer/录像/像素对照在系统Temp，正式构建无这些工具。
+
+04914：conversation-tone仅识别普通交流/使用说明，runAssistant该路径真实模型tools=[]且不返回guide；混合事项走原证据规划。AISettings.configuration附带服务端usageMode，usage个人模式只保留minute组与lease、不写三层daily；usage状态个人字段null/provider-billed，过期available=false。聊天和识图中间件共用此可信模式，body不可信；AIUsageHint/API设置同步说明。Key仍约1h RAM，默认计数切回不清零。

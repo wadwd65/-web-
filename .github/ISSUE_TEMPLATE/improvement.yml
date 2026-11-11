@@ -1,0 +1,22 @@
+name: 使用建议
+description: 描述一个具体任务中不直观或需要改进的地方
+labels: [enhancement]
+body:
+  - type: textarea
+    id: task
+    attributes:
+      label: 你想解决什么事
+      description: 先说任务和卡点，不需要先设计整个方案；请用脱敏或合成示例。
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: 希望如何改善（选填）
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: 信息范围
+      options:
+        - label: 我没有放入密钥、密码或他人的真实材料
+          required: true

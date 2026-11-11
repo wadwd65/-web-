@@ -8,6 +8,6 @@ import {createCityPolicyMiddleware} from './city-policy-service.mjs';
 export function createLocalServices({directory,policy=createRequestPolicy(),usage:provided,accounts,config,fetcher,settingsFetcher,limits,usageFile,now}={}){
  const usage=provided??createUsageGuard({accounts,...(now?{now}:{}),...(limits?{limits}:{}),...(usageFile?{file:usageFile}:{})});
  const credentials=createAISettings({directory,usage,policy,config,fetcher:settingsFetcher,...(now?{now}:{})});
- const entries=[credentials.middleware,createUsageMiddleware({usage,policy}),createCityPolicyMiddleware({policy}),createAccountMiddleware({store:accounts,policy}),createImageMiddleware({directory,config,fetcher,usage,credentials,policy}),createAssistantMiddleware({directory,config,fetcher,usage,credentials,policy})];
+ const entries=[credentials.middleware,createUsageMiddleware({usage,credentials,policy}),createCityPolicyMiddleware({policy}),createAccountMiddleware({store:accounts,policy}),createImageMiddleware({directory,config,fetcher,usage,credentials,policy}),createAssistantMiddleware({directory,config,fetcher,usage,credentials,policy})];
  return {handle:(req,res)=>entries.some(entry=>entry(req,res)),close(){credentials.close();if(!provided)usage.close();}};
 }

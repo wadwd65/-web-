@@ -50,3 +50,12 @@ test('stale operations and quota failures preserve the saved draft and other slo
  writeDraft(storage,key,second,null);assert.equal(data.has(key),false);assert.equal(data.get(other),first);
  writeDraft(storage,key,null,second);assert.equal(data.get(key),second);
 });
+
+test('新福利字段可往返，旧Offer草稿不缺字段，未知枚举和多余键仍拒绝',()=>{
+ const form=[{...offer,socialInsurance:'none',housingFund:'after-probation',benefitNotes:'合成福利说明'},{...offer,id:'b'}];
+ const data={form,sample:false};assert.deepEqual(decodeDraft('offer',encodeDraft('offer',data)).data,data);
+ assert.deepEqual(decodeDraft('offer',encodeDraft('offer',fixtures.offer)).data,fixtures.offer);
+ assert.throws(()=>encodeDraft('offer',{...data,form:[{...form[0],housingFund:'yes'},form[1]]}));
+ assert.throws(()=>encodeDraft('offer',{...data,form:[{...form[0],benefitNotes:'x'.repeat(1001)},form[1]]}));
+ assert.throws(()=>encodeDraft('offer',{...data,form:[{...form[0],unknownField:'bad'},form[1]]}));
+});

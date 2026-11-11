@@ -7,6 +7,7 @@ const label=(id:string)=>EXPERIENCE_MODULES.find(module=>module.id===id)?.label?
 
 export default function AssistantNextStep({guide,busy,onSend}:{guide:AssistantGuide;busy:boolean;onSend:(text:string)=>void}){
  const [values,setValues]=useState<string[]>(()=>guide.questions.map(()=>''));
+ if(guide.status==='clarify')return null;
  if(guide.status!=='choose'&&!guide.questions.length)return null;
 
  function submit(){

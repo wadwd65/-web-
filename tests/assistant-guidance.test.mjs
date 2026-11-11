@@ -1,3 +1,4 @@
+import {isConversationalTurn} from '../src/lib/conversation-tone.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {validateAssistantGuide} from '../src/services/assistant-guide.ts';
@@ -65,4 +66,13 @@ test('an invalid guidance follow-up gives a specific correction and can recover 
   return response({content:'可以先查看合同里的押金退还约定，再核对交接记录。'});
  }});
  assert.equal(result.guide.activeModule,'rent');assert.equal(result.references,undefined);assert.equal(result.actions.length,0);
+});
+
+test('问候/致谢/不会用不进入办事规划；带业务的问候仍核对必要事实',()=>{
+ for(const text of ['你好','你好呀！','在吗','谢谢你','你能做什么？','我不知道怎么说','我不想填表','你的回答太死板了'])assert.equal(isConversationalTurn(text),true,text);
+ for(const text of ['你好，我工资好像少了','谢谢，那我的个税怎么算','社保不交怎么办','你好，我应发8000元','未知的一段话'])assert.equal(isConversationalTurn(text),false,text);
+});
+test('普通交流真实调用模型自然回应，不返回任务补问/表单或旧动作',async()=>{
+ let calls=0;const result=await runAssistant({module:'salary',messages:[{role:'user',content:'工资还没收到'},{role:'assistant',content:'请补充实际到账'},{role:'user',content:'你好'}]},{config,fetcher:async(_url,init)=>{calls++;const payload=JSON.parse(init.body);assert.equal(payload.tool_choice,'none');assert.deepEqual(payload.tools,[]);assert.match(payload.messages[0].content,/普通交流/);return response({content:'你好，我在。慢慢说就好。'});}});
+ assert.equal(calls,1);assert.equal(result.reply,'你好，我在。慢慢说就好。');assert.equal(result.replyOrigin,'model');assert.equal(result.guide,undefined);assert.deepEqual(result.actions,[]);assert.deepEqual(result.steps,[]);
 });

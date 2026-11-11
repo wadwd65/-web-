@@ -8,6 +8,7 @@ import {parseEnv} from 'node:util';
 import {randomUUID} from 'node:crypto';
 import {createRequestPolicy} from './request-policy.mjs';
 import {validateAssistantGuide} from '../src/services/assistant-guide.ts';
+import {isConversationalTurn} from '../src/lib/conversation-tone.ts';
 import {calculatePayslip} from '../src/lib/wages.ts';
 import {SALARY_LABELS,SALARY_REQUIRED,SALARY_FIELD_NAMES,salaryFact,salaryFacts,salaryValueGrounded,asksSalaryFirstStep} from '../src/lib/salary-evidence.ts';
 import {analyzeContract,CONTRACT_REFERENCE} from '../src/lib/contracts.ts';
@@ -176,7 +177,8 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
   const controller=new AbortController();
   const cancel=()=>controller.abort();if(signal?.aborted)cancel();else signal?.addEventListener('abort',cancel,{once:true});
   let timedOut=false;const timer=setTimeout(()=>{timedOut=true;controller.abort();},timeoutMs);
-  const messages=[{role:'system',content:SYSTEM+GUIDANCE+`\n当前所在模块仅作导航背景，不能替代用户的新意图：${MODULES[conversation.currentModule]||'首页'}。`},...conversation.messages];
+  const conversational=isConversationalTurn(conversation.messages.at(-1).content);
+  const messages=[{role:'system',content:SYSTEM+(conversational?'\n本轮是普通交流或使用方式提问，直接自然回应这句话，通常一两句就好。问候先回应问候，致谢先回应致谢；没有具体事情时不要追问“现在想办哪件事/具体情况是什么”，不列补充字段，不催选工具。用户第一次使用或不想填表时，告诉他可以直接用自己的话说。没有实际工具结果，不声称已计算、填入或执行。本轮不用规划和工具。':GUIDANCE)+`\n当前所在模块仅作导航背景，不能替代用户的新意图：${MODULES[conversation.currentModule]||'首页'}。`},...conversation.messages];
   const actions=[],steps=[];let totalTools=0,guide=null,references,policyReferences;
   const latestUserMessage=conversation.messages.at(-1).content.trim();
   const asksToOpen=/^(?:请|麻烦|帮我|带我|我想|我要|先|直接|现在|那就|可以|\s)*(?:打开|进入|跳转|去看看)/u.test(latestUserMessage);
@@ -186,14 +188,14 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
   const completedReply=()=>({reply:actions.some(a=>a.kind==='add-questions')?'要核实的问题已整理好。点下方按钮才会加入清单，加入后仍可修改。':actions.some(a=>a.kind==='apply-salary'||a.kind==='apply-contract')?'本次核对已完成，可以在下方打开工具查看结果，或继续补充信息。':'点下方入口打开工具后，可以继续填写和核对。',replyOrigin:'guide',actions,steps,guide,references,policyReferences,provider:'DeepSeek',model:config.model||'deepseek-flash'});
   try{
     for(let round=0;round<4;round++){
-      onProgress?.(guide?'responding':'planning');
+      onProgress?.(guide||conversational?'responding':'planning');
       const explainingContract=guide?.activeModule==='contract'&&references?.status==='matched';
       const policyLookup=guide?.activeModule==='subsidy'&&guide.status==='ready'&&guide.intent!=='questions'&&!wantsEntry;
       const explainingGuidance=guide?.intent==='guidance'&&!wantsEntry&&!policyLookup;
       const allowTools=guide?.status==='ready'&&!explainingGuidance&&actions.length===0;
       const requiredTool=allowTools&&policyLookup?'search_city_policies':allowTools&&guide.intent==='questions'?'prepare_questions':allowTools&&guide.activeModule==='salary'&&guide.intent==='calculate'?'calculate_salary':null;
       let response;
-      try{response=await fetcher(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${config.apiKey}`},body:JSON.stringify({model:config.model||'deepseek-flash',messages,tools:guide?(allowTools?tools.filter(tool=>tool!==planner):[]):[planner],tool_choice:guide?(requiredTool?{type:'function',function:{name:requiredTool}}:allowTools?'auto':'none'):{type:'function',function:{name:'plan_tasks'}},thinking:{type:'disabled'},stream:false,max_tokens:1600,temperature:.3}),signal:controller.signal});}
+      try{response=await fetcher(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${config.apiKey}`},body:JSON.stringify({model:config.model||'deepseek-flash',messages,tools:conversational?[]:guide?(allowTools?tools.filter(tool=>tool!==planner):[]):[planner],tool_choice:conversational?'none':guide?(requiredTool?{type:'function',function:{name:requiredTool}}:allowTools?'auto':'none'):{type:'function',function:{name:'plan_tasks'}},thinking:{type:'disabled'},stream:false,max_tokens:conversational?450:1600,temperature:.3}),signal:controller.signal});}
       catch{if(controller.signal.aborted)throw new AssistantError(timedOut?'timeout':'aborted',timedOut?'DeepSeek这次回复较慢，请稍后重试。':'已停止这次回复。',timedOut?504:499);throw new AssistantError('upstream-network','暂时联系不上DeepSeek，请稍后再试。',502);}
       if(!response.ok){
         if(response.status===401||response.status===403)throw new AssistantError('upstream-auth','助手的模型服务暂不可用，请联系网站维护者，或先使用工具列表。',503);
@@ -207,6 +209,7 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
       if(actions.length&&message.tool_calls?.length)return completedReply();
       if(!message.tool_calls?.length){
         if(typeof message.content!=='string'||!message.content.trim()||message.content.length>16000)throw new AssistantError('invalid-response','AI没有给出可用回复，请重试。',502);
+        if(conversational)return {reply:message.content.trim(),replyOrigin:'model',actions:[],steps:[],provider:'DeepSeek',model:config.model||'deepseek-flash'};
         if(!guide)throw new AssistantError('invalid-response','这次没有确认要处理的事项，请重试或自行选择工具。',502);
         if(!declinedEntry&&guide.activeModule==='contract'&&references?.status==='matched'&&guide.intent!=='questions'&&!actions.some(action=>action.kind==='apply-contract'||action.kind==='open-tool'&&action.module==='contract')){
           const entry=executeAssistantTool('open_tool',{module:'contract'},conversation.userText);
@@ -223,6 +226,7 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
         const explanation=explainingContract?finalizeContractExplanation(message.content,references):{reply:message.content.trim(),replyOrigin:'model'};
         return {...explanation,actions,steps,guide,references,policyReferences,provider:'DeepSeek',model:config.model||'deepseek-flash'};
       }
+      if(conversational)throw new AssistantError('invalid-response','这次回复没有完成，请直接继续说。',502);
       if(!Array.isArray(message.tool_calls)||message.tool_calls.length>3||totalTools+message.tool_calls.length>6)throw new AssistantError('tool-limit','这次问题涉及的步骤较多，请先选一件事处理。',502);
       const calls=message.tool_calls;
       if(calls.some(c=>!object(c)||typeof c.id!=='string'||c.id.length>100||!object(c.function)||typeof c.function.name!=='string'||typeof c.function.arguments!=='string'||c.function.arguments.length>24000))throw new AssistantError('invalid-response','AI的工具请求不完整，请重试。',502);
@@ -316,7 +320,7 @@ export function createAssistantMiddleware({directory,config,fetcher,timeoutMs,us
       const streaming=req.headers.accept?.includes('application/x-ndjson');
       const progress=stage=>{if(!streaming||res.destroyed||res.writableEnded)return;if(!res.headersSent){res.writeHead(200,{'Content-Type':'application/x-ndjson; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.flushHeaders();}res.write(JSON.stringify({type:'progress',stage})+'\n');};
       let lease;
-      void readBody(req).then(input=>{validateConversation(input);if(abort.signal.aborted)throw new AssistantError('aborted','已停止回复。',499);if(!current.apiKey)throw new AssistantError('not-configured','助手暂时没有连接，可以先使用工具列表。',503);if(policy.secure&&!usage)throw new AssistantError('usage-unavailable','试用计数暂不可用，请稍后再试。',503);lease=usage?.reserve(req,res,'chat',policy.secure);return runAssistant(input,{config:current,fetcher,signal:abort.signal,timeoutMs,onProgress:progress});}).then(data=>{if(res.destroyed)return;if(res.headersSent)res.end(JSON.stringify({type:'result',data})+'\n');else json(res,200,{requestId,data});}).catch(fail).finally(()=>{lease?.release();busy--;res.removeListener('close',disconnected);});
+      void readBody(req).then(input=>{validateConversation(input);if(abort.signal.aborted)throw new AssistantError('aborted','已停止回复。',499);if(!current.apiKey)throw new AssistantError('not-configured','助手暂时没有连接，可以先使用工具列表。',503);if(policy.secure&&!usage)throw new AssistantError('usage-unavailable','试用计数暂不可用，请稍后再试。',503);lease=usage?.reserve(req,res,'chat',policy.secure,current.usageMode);return runAssistant(input,{config:current,fetcher,signal:abort.signal,timeoutMs,onProgress:progress});}).then(data=>{if(res.destroyed)return;if(res.headersSent)res.end(JSON.stringify({type:'result',data})+'\n');else json(res,200,{requestId,data});}).catch(fail).finally(()=>{lease?.release();busy--;res.removeListener('close',disconnected);});
     }catch(error){fail(error);}
     return true;
   };

@@ -5,12 +5,12 @@ const text=(max:number):Check=>value=>typeof value==='string'&&value.length<=max
 const oneOf=(...values:string[]):Check=>value=>typeof value==='string'&&values.includes(value);
 const flag:Check=value=>typeof value==='boolean';
 function record(value:unknown):value is Record<string,unknown>{return !!value&&typeof value==='object'&&!Array.isArray(value);}
-function fields(shape:Record<string,Check>):Check {
-  return value=>record(value)&&Object.keys(value).length===Object.keys(shape).length&&Object.entries(shape).every(([key,check])=>check(value[key]));
+function fields(shape:Record<string,Check>,optional:Record<string,Check>={}):Check {
+  return value=>record(value)&&Object.keys(value).every(key=>Object.hasOwn(shape,key)||Object.hasOwn(optional,key))&&Object.entries(shape).every(([key,check])=>check(value[key]))&&Object.entries(optional).every(([key,check])=>!Object.hasOwn(value,key)||check(value[key]));
 }
 const marks:Check=value=>record(value)&&Object.keys(value).length<=30&&Object.entries(value).every(([key,item])=>key.length<=80&&flag(item));
 const notes:Check=value=>record(value)&&Object.keys(value).length<=30&&Object.entries(value).every(([key,item])=>key.length<=80&&text(1500)(item));
-const offer=fields({id:text(100),name:text(100),monthly:text(50),months:text(50),rent:text(50),commute:text(50),hours:text(50),probation:text(500),employer:text(400)});
+const offer=fields({id:text(100),name:text(100),monthly:text(50),months:text(50),rent:text(50),commute:text(50),hours:text(50),probation:text(500),employer:text(400)},{socialInsurance:oneOf('unknown','provided','none','after-probation','partial'),housingFund:oneOf('unknown','provided','none','after-probation','partial'),benefitNotes:text(1000)});
 const social=fields({scenario:oneOf('first','medical','transfer','card'),city:text(30),target:text(30),insured:oneOf('employee','resident','unknown')});
 const leaving=fields({lastDay:text(20),mode:oneOf('voluntary','agreement','other','unknown'),probation:oneOf('yes','no','unknown'),move:oneOf('same','cross','unknown'),relation:oneOf('labour','unknown'),note:text(1500)});
 const checks:Record<DraftModule,Check>={

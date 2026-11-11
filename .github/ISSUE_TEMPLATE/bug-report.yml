@@ -1,0 +1,32 @@
+name: 问题反馈
+description: 报告错误、误触、卡顿或不易使用的地方
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: 请勿上传 API Key、密码或真实合同/工资材料。复现内容先脱敏，安全问题遵循仓库安全说明。
+  - type: input
+    id: version
+    attributes:
+      label: 版本与页面
+      placeholder: 如 v0.49.14 / 工资明细 / 完整模式
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 如何遇到这个问题
+      description: 从哪个入口开始，做了什么，出现了什么？请用合成数据。
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 你原本希望怎样
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 环境或截图（选填）
+      description: 浏览器、分辨率、系统缩放；性能问题请区分实际渲染显卡与机器配置，截图先遮挡个人信息。

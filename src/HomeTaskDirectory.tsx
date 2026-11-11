@@ -4,7 +4,7 @@ export default function HomeTaskDirectory({onAsk,onTools,onList,questionCount}:{
  return <section className="home-directory" aria-labelledby="home-directory-title">
   <h2 id="home-directory-title" className="sr-only">选择使用方式</h2>
   <nav className="home-primary-navigation" aria-label="主要入口">
-   <button onClick={onAsk}><span className="home-route-number">01</span><MessageCircle size={22}/><span><strong>直接问 AI</strong><small>说说遇到的事，一起找下一步</small></span><ArrowUpRight size={18}/></button>
+   <button className="home-ai-entry" onClick={onAsk}><span className="home-route-number">01</span><MessageCircle size={22}/><span><strong>直接问 AI</strong><small>不用先选工具，直接说问题</small></span><ArrowUpRight size={18}/></button>
    <button onClick={onTools}><span className="home-route-number">02</span><FolderOpen size={22}/><span><strong>工具列表 <em>08</em></strong><small>不用 AI，也能自己核对和计算</small></span><ArrowUpRight size={18}/></button>
    <button onClick={onList}><span className="home-route-number">03</span><ListChecks size={22}/><span><strong>询问清单 <em>{questionCount}</em></strong><small>留好要问的问题，带着清单去办</small></span><ArrowUpRight size={18}/></button>
   </nav>

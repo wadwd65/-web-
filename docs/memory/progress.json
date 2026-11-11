@@ -1,28 +1,28 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-10",
-  "workingVersion": "0.49.10",
+  "updatedAt": "2026-11-11",
+  "workingVersion": "0.49.14",
   "releasedVersion": "0.49.10",
   "workState": "reviewed_internally",
-  "objective": "修复简易首页文字与入口重叠；按用户3050/1080p低帧及GPU100%反馈排查首页，保留画面并补齐实际渲染器诊断；目标机性能尚未通过。",
-  "latestUserRequest": "用户已实测：简易模式首页字体重叠，3050笔记本1080p首页仍低帧且浏览器GPU利用率100%；要求继续修复。未提供本次准确FPS/缩放比例/实际渲染适配器或确认测试版本。",
+  "objective": "修复普通问候被强制补问，自备DeepSeek免比赛日额度；整理并发布当前源码与仓库入口，保留浅色三维/八工具/旧冻结点。",
+  "latestUserRequest": "用户授权完善并推送wadwd65/-web-仓库框架与全部当前工作；实测你好被死板补问需恢复灵活对话；自己的API必须解除每日提问次数限制。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5302/?v=0.49.10#/home",
-    "snapshot": "first-step-简易排版与性能诊断-v0.49.10",
-    "state": "source_published_layout_reviewed_target_performance_pending"
+    "url": "http://127.0.0.1:5319/?v=0.49.13#/offer",
+    "snapshot": "first-step-福利整段输入与标志入口-v0.49.13",
+    "state": "local_saved_final_browser_check_unavailable"
   },
   "implemented": {
-    "business": "八项限定工具在#/tools，工资/合同规则与询问清单共用；金额快照/来源可编辑、保存与导出，主动草稿及可选账号保留。 49.6三类确证业务修复已迁回，未取回49.1其他扩展或其三维变更。",
-    "visual": "浅蓝银色主体/播放器及原布局、模型/盘面/材质灯光保持；49.8仅音乐页投影改为更柔和的近似接地效果，首页阴影未改。 49.10仅简易首页将标题/说明/三个入口合为常规流，两栏与提问区分行；完整版布局、字体资源、配色及美术保持。",
-    "interaction": "同pointer/物体/子区域、稳定前景、画布内及≤6px总位移才执行；后排预览。首页切歌就地播放，播放器才跳音乐界面。 49.9音乐列表与详情均可左键轻拖单张唱片：独立目标/阻尼姿态，按下期间固定镜头与邻片悬停波形；同一主pointer且总位移≤6px、同唱片画布内松手才打开，拖动/取消/切换不触发详情。",
+    "business": "八项限定工具在#/tools，工资/合同规则与询问清单共用；金额快照/来源可编辑、保存与导出，主动草稿及可选账号保留。 49.6三类确证业务修复已迁回，未取回49.1其他扩展或其三维变更。 49.12八工具必填/选填/条件项标注与渐进补填：Offer两份月薪先比较，其余条件收起；工资应发先整理已填/缺项，四扣款齐才给实发；个税四金额与范围确认算税额，预缴选填且未知差额为null。合同期限/租房费用/社保地区/离职情况按需收起，未知不当0；原完整工具、导出及草稿格式保持。 49.13 Offer社保/公积金分别记录未说明、承诺、不缴、转正后、部分，其他福利说明选填；结果新增福利对比视图并随TXT/草稿保留，不折算工资。新增本机保守整段提取→勾选→口径确认→指定机会；旧字段默认保留，未知不补，支持剪贴板按钮/Ctrl+V。",
+    "visual": "浅蓝银色主体/播放器及原布局、模型/盘面/材质灯光保持；49.8仅音乐页投影改为更柔和的近似接地效果，首页阴影未改。 49.10仅简易首页将标题/说明/三个入口合为常规流，两栏与提问区分行；完整版布局、字体资源、配色及美术保持。 49.11按新授权突出直接问AI图标/标题，首页提问区增加蓝色标识、浅色渐变及焦点边界；输入16px、导航标题16px/辅助12px，示例/说明/对话辅助12—13px。标题、三维场景与音乐美术不变。 49.13原左上标志略加大，轻蓝背光/边框，悬停或焦点发光，按下缩放，工作页加点击标志回首页提示；无常驻新动画循环。",
+    "interaction": "同pointer/物体/子区域、稳定前景、画布内及≤6px总位移才执行；后排预览。首页切歌就地播放，播放器才跳音乐界面。 49.9音乐列表与详情均可左键轻拖单张唱片：独立目标/阻尼姿态，按下期间固定镜头与邻片悬停波形；同一主pointer且总位移≤6px、同唱片画布内松手才打开，拖动/取消/切换不触发详情。 49.12工作区顶部返回首页、对话返回页面、播放器返回来源页强化为同系文字按钮；收起的无效选填项提交时自动展开定位。返回保留本次填写。 49.13按最新用户要求撤掉工具顶部及左侧返回首页按钮，沿用原logo链接返回；对话返回页面及音乐返回来源页保留。用户报告的新按钮模型异常没有宣称已根治或重写三维。",
     "music": "八曲/单audio/旋转保留；活动整匣同层级绘制，静置阵列合批。49.4对整匣各层使用同像素覆盖遮罩、保留原深度遮挡，避免普通透明叠加露出后排裸盘；旧唱片按真实透视退后并留到新匣遮住，取消缩至0的空档。忙碌时只接续最后意图。 49.8取消音乐页PCF阴影深度图，阴影按同帧整匣姿态投到原地面；转场仍先淡出投影、到位后淡入，拖动不再等100ms更新。 49.9列表中八张唱片各自保留轻拖角度，进入/退出详情时从实际整匣姿态接续并归零手动偏角，不把偏角加两次；单audio、播放转盘与49.8同帧投影保留。",
-    "ai": "真实DeepSeek规划与有限工具：导航、工资、合同、问题清单及城市政策。非ready安全补问，guide/model区分；未知不猜、最新更正优先，显式应用，材料不自动发送。 49.6恢复金额任务动词/不变引用过滤、期限时间状语过滤与局部图片缺项说明过滤；标题/样张不作为合同条款引用。 49.7修正固定五项明确收入合计/共享零值/金额更正、专项培训费用误路由、只解释时多余工具入口；回复审查覆盖review标签与部分未命中条文/效力/待遇扩展，安全回退标明guide。",
+    "ai": "真实DeepSeek规划与有限工具：导航、工资、合同、问题清单及城市政策。非ready安全补问，guide/model区分；未知不猜、最新更正优先，显式应用，材料不自动发送。 49.6恢复金额任务动词/不变引用过滤、期限时间状语过滤与局部图片缺项说明过滤；标题/样张不作为合同条款引用。 49.7修正固定五项明确收入合计/共享零值/金额更正、专项培训费用误路由、只解释时多余工具入口；回复审查覆盖review标签与部分未命中条文/效力/待遇扩展，安全回退标明guide。 49.13 Offer整段输入仅点发给AI才发送到现有DeepSeek对话，本机提取明确标为本机整理，不冒充AI；真实合成待遇问题已跑通，解释和清单需主动应用。 49.14普通问候/致谢/使用方式询问走一次真实模型，无规划/工具/guide；混合实际办事保持原证据规划。泛clarify不再展示按项补充表，业务必需补问仍保留。",
     "image": "单张PNG/JPEG明确发送、原图对照/编辑/人工确认后填入原工具，不保存原图；PDF仅预览。",
     "retrieval": "小范围官方合同摘录及口语/单主题短追问；四城有限资料，其他求职住宿从固定官方目录发现并读正文，不是全国现金检索；范围/核验日/来源随结果导出保留。 49.7补短周数合同的第三款召回、单主题“单独写那段”追问承接、租赁边界；撤回旧城市不再混入新城市，未知/多城仍阻断。",
-    "api": "同源Node网关，开发/预览/保存版共用local-services。取消/超时/Host-Origin/证据校验；游客/账号/网络/全站日额与分钟/短租约在工程外SQLite。",
-    "apiSettings": "默认比赛接口，右上角及对话内可选自备官方DeepSeek/模型及三步引导；自备Key仅RAM约1h，身份绑定、成功/关闭清空输入，不进入账号/浏览器长期存储/作品包。",
+    "api": "同源Node网关，开发/预览/保存版共用local-services。取消/超时/Host-Origin/证据校验；游客/账号/网络/全站日额与分钟/短租约在工程外SQLite。 49.14服务端根据已验证绑定身份的自备会话usageMode免个人/网络/全站日额，聊天与识图共用；保留minute/concurrency/lease。默认额度耗尽不阻自备，切回不清零，body不能伪造模式。",
+    "apiSettings": "默认比赛接口，右上角及对话内可选自备官方DeepSeek/模型及三步引导；自备Key仅RAM约1h，身份绑定、成功/关闭清空输入，不进入账号/浏览器长期存储/作品包。 49.14个人状态明确不限制每日提问/识图次数，null/provider-billed区别默认numeric计数；失效明确提示重连/显式切回。",
     "account": "可选本机账号，scrypt/HttpOnly会话；主动保存地区/阶段/备注/清单。九槽本机草稿按身份隔离，身份变化清当前工具/对话，不同步原图或全部表单。",
     "performance": "49.5使用原生rAF，不再对120/144/165Hz做整数分频；60Hz及GPU不足60的回调全部保留，不制造中间帧。transform-writer仅在TRS真变化时重算局部矩阵，世界变换仍由Three传递；首页缓存未变的材质透明度/投影状态，音乐详情跳过隐藏唱片的可见更新但保留其播放角度，静置批次不重新扫描，零透明度描边停止绘制。保留49.2实例化与主题背景、49.4遮罩/整匣时序、原DPR1.5上限/抗锯齿/纹理/几何/粒子。临时QA GPU时间查询和录像不进入源码/dist。 49.8音乐页关闭实时shadowMap，单个InstancedMesh最多8个柔和四边形（16三角形）跟随原主光方向；未变姿态不上传实例矩阵，隐藏/重选无旧投影。近似投影替代精细物理遮挡；原首页阴影、DPR、几何、CD shader及转场路径不变。 49.10保留首页原PCF/1024阴影图/10Hz更新、DPR及所有动画，用真实投影边界限定地面阴影fragment的scissor，绘制后恢复原裁剪状态。只减少空区域光栅化，不把约19%画布矩形等同81% GPU节省。?perf=1记录实际WebGL适配器/AA/DPR/画布尺寸/帧耗，卸载后仍可下载；普通页不读适配器或启动诊断定时器。"
   },
@@ -73,13 +73,13 @@
     "图像页码坐标框/真实材料准确率评测与完整多模态主线",
     "腾讯云实际HTTPS/代理部署验收、真实滥用压测/共享网络限额校准与账号恢复（本机身份额度已实现）",
     "全国政策维护",
-    "3050旧版实测失败反馈已收到；实际WebGL适配器、精确帧耗/缩放与新补丁性能验收仍待"
+    "原3050机器用户短测约120FPS；核显低开销/能耗与更完整长时量化验证仍待"
   ],
   "currentPlan": [
     {
       "id": "fix-simple-home-and-target-performance",
-      "status": "simple_layout_reviewed_target_performance_pending",
-      "acceptance": "简易首页三种桌面尺寸不重叠、入口/输入保持/轻量卸载及211检查已核验；首页局部绘制/正常画面核验完成，但3050低帧/GPU100%的原因与新版实机验收仍待实际渲染器和帧耗记录，不能标整体解决。"
+      "status": "layout_fixed_original3050_short_trial_user_pass_igpu_followup",
+      "acceptance": "简易首页三种桌面尺寸不重叠、入口/输入保持/轻量卸载及211检查已核验；首页局部绘制/正常画面核验完成，但3050低帧/GPU100%的原因与新版实机验收仍待实际渲染器和帧耗记录，不能标整体解决。 11/10收到49.10真实报告，WebGL实际Intel、37窗约52FPS；未触发自动简易符合阈值，NVIDIA同条件复测待。 同日另一个人3060Ti/QQ运行13窗约177FPS已验证，属于独立设备结果，不能用作原3050验收。 用户随后报告原3050机现场约120FPS，按短时用户实测记目标达成；无新JSON/长期P95，不再把原机切卡日志当继续业务开发的阻塞。"
     },
     {
       "id": "single-record-drag-and-publish",
@@ -102,35 +102,32 @@
       "id": "two-project-submission",
       "status": "planned",
       "acceptance": "11/14功能冻结、11/17提交；两件分别有同版代码/README/合规MP4/PDF/回执。校园行迹由独立账号在自身工作区处理。"
+    },
+    {
+      "id": "natural-chat-personal-quota-and-repository",
+      "status": "reviewed_publication_pending",
+      "acceptance": "232检查/构建与真实DeepSeek HTTP对照通过；README/标签/主题/CI框架完成，正确仓库推送/CI及保存点待最终回执。"
     }
   ],
   "validation": {
-    "version": "0.49.10",
-    "automated": "211 passed; TypeScript/production build passed; shared Three chunk warning retained",
-    "evidence": "outputs/v04910-review",
-    "sourceVerification": "仅简易首页导航分流/流式排版、首页地面阴影scissor、opt-in诊断及相关测试、版本文档。MusicArchiveScene仅登记诊断渲染器；单唱片轻拖/抽取/旋转、业务/LLM/资料/源资产/字体资源/默认DPR与材质不变。",
-    "manual": "1280x720、1536x864、1920x1080简易标题/说明/导航/输入框无交叠，均0个首页WebGL canvas；工具列表可进入，返回保留虚构输入后已清除。实际下载诊断保留NVIDIA3070/AA4/DPR1.5/1920x1080画布、帧耗和active=false，不含表单文字。",
-    "visual": "首页拖动10秒真实Canvas WebM及联系图检查无投影突截；原完整PCF与局部PCF暂停同姿态对照仅577像素有小差异、最大通道6/255，集中模型边缘，非严格逐像素相同。配色/模型不改。",
-    "performance": "本机3070，同1920x1080画布：旧样本GPU中位1.480ms/P95 2.671ms；跳过地面1.510/2.858ms，无明显获益。补丁重复样本2.051/3.293ms，本机均约165 renderFPS；焦点/可见呈现/频率条件不稳定，不能称提速，也不能据此归因3050。首次补丁样本被后台限1FPS后自动简易，保留而不作有效对比。局部阴影scissor约0.187画布面积，仅资源范围事实。",
-    "targetHardware": "用户报告目标3050/1080p旧当前版本失败，缺精确FPS/缩放/实际GPU；本补丁3050未复测，GPU100%仍为待解决。",
-    "video": "home-drag.webm，仅真实三维层，非完整DOM录屏；录制期不作无录制性能基准。",
-    "savedPreview": "5302 v49.10 saved index/all5 assets byte-identical; direct simple normal page0canvas/0HUD/noQA/singleaudio, screenshot reviewed",
-    "online": "本轮无LLM调用、无AI业务变化；原49.7评测失败及语义限制保留。",
-    "limits": "未证明3050达到60或GPU占用下降；真实新人任务数据与公网HTTPS仍待，不因211检查或排版修复上调比赛分数。",
-    "priorSnapshotCheck": {
-      "v0491Through0498": "receipt hashes unchanged",
-      "v0499": "one mismatch: tools/request-policy.mjs; first detected this round, cause not established; not overwritten; old receipt retained",
-      "canonicalRequestPolicy": "not changed this round; new saved version uses canonical tested source"
-    }
+    "version": "0.49.14",
+    "automated": "232 tests passed including6 new regression cases; TypeScript and production build passed; shared Three chunk warning remains",
+    "evidence": "outputs/v04914-review",
+    "liveAi": "真实HTTP旧5319你好仍强制补问，新5320自然模型回应且无guide/actions/steps；个人接口致谢和完整工资8000/800/600/66/0，真实plan_tasks+calculate_salary得6534。切回前后默认chat.used均1。",
+    "quota": "离线HTTP验证个人/网络/全站日额耗尽仍可用自备；识图默认三层日额0个人仍成功；切回计数保留；并发/分钟、伪造body、过期不静默回退均有回归。真实个人测试凭据仅RAM，证据无Key/Cookie。",
+    "visual": "本轮浏览器设置禁用，未使用其他通道绕过，最终UI未可视复核。README所用49.13实际合成截图明确标版，不伪称本轮截图。",
+    "repository": "README/封面/实际截图/CI/Issue与PR模板/参与安全说明已完成；远端description/9 topics/8 labels已核验。源码推送与CI待后续回执。 GitHub拒绝创建workflows/ci.yml：现有PAT缺workflow scope。保留被拒提交87efd7d于本地saved/v0.49.14-with-workflow，主线不含活动workflow，仅docs模板，徽标明确本地232通过，不改账号权限。",
+    "limits": "无公网/新人任务/长时低配验收；不部署腾讯云，不改校园行迹，不改三维与音频画面。"
   },
   "nextActions": [
-    "当前P0：3050更新到0.49.10，按原测试方式启动，在其测试网址加?perf=1（本机5302仅本机预览，另一台机不能直接用这个127地址）。前台完整模式15秒，左下角下载性能记录，并记任务管理器GPU引擎/浏览器GPU进程、系统缩放和精确FPS；GPU100%尚未解决。",
-    "拿到目标记录后再选优化：区分实际NVIDIA/集显/软件渲染、CSS/画布像素与CPU提交/实际帧耗；只修明确主瓶颈，复测同尺寸同DPR。当前不以本机165、阴影矩形0.187或少量GPU计时推断3050提速；不直接删动画或改材质来冒充保持画面。",
+    "先体验49.14：你好/谢谢自然回复，再用自己的Key提问，确认不显示每日次数；混合工资仍计算。浏览器设置恢复后补最终UI状态和剪贴板权限分支。",
+    "性能后续不再阻塞业务：原3050用户复测约120FPS，先保留当前画面/动画，停止盲目降画质。若整理正式证据，顺手补原机实际NVIDIA适配器/同条件30秒以上JSON或截图，不要求用户反复测试；没有就如实标口头短测。普通核显52FPS的开销仍作为单独优化项，不能要求所有用户改Windows。",
     "11/10—12继续真实新人主任务：先1人不教入口完成工资原话→更正金额→应用→清单导出，补足2—3人覆盖合同/城市政策，记录耗时/误点/原话。没有真人就标未测，不用AI假扮。性能卡点与任务阻塞优先，暂停播放器装饰性新增。",
     "11/11—12仅修确认的1—2个P0/P1任务阻塞，人工对照合同回复与原文；老冻结题只称回归，新题先冻结并保留失败。生成层4对ON/OFF不称生产全链路RAG增益。",
     "11/12左右用户腾讯云部署并给URL后验HTTPS/代理/API默认与自备/游客账号隔离/额度/刷新重启；本会话不部署，无网址就明确待。",
     "11/13—14做同版5—8分钟1080p MP4和≤30页PDF，真实AI工具/来源→确认→导出为主线，音乐只辅助；注明图片校对/PDF仅预览/政策范围与成本、素材署名。11/14冻结新增。",
-    "11/15—16干净环境npm ci/测试/构建/默认与失败恢复，代码/README/视频/PDF/作品包同版。11/17提交两件查回执，11/18留补救。每天两项目人工共3—4小时，另一账号只在校园行迹自己的目录与仓库操作。"
+    "11/15—16干净环境npm ci/测试/构建/默认与失败恢复，代码/README/视频/PDF/作品包同版。11/17提交两件查回执，11/18留补救。每天两项目人工共3—4小时，另一账号只在校园行迹自己的目录与仓库操作。",
+    "仓库CI模板已准备，GitHub现有凭据缺workflow权限而未启用；后续由维护者使用已有合适权限，在.github/workflows/ci.yml启用，不能宣称已云端通过。"
   ],
   "visualSources": [
     {
@@ -155,15 +152,16 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "published",
+    "pushStatus": "publishing",
     "sourceCommit": "085c251bd39ecc1d35f724f47ef822a18faec4c9",
     "verifiedAt": "2026-11-10",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
     "previousPublishedHead": "41d948f65fcb4d89ae7ff15f3be45145e3d321f5",
     "publicationReceipt": "outputs/v04910-review/git-publication.json",
-    "localChanges": "49.10源码已正常推送指定main；简易排版修复自检通过，3050性能仍待诊断/复测，未部署。",
-    "localWorkingVersion": "0.49.10",
-    "localUnpublishedChanges": false
+    "localChanges": "49.11—14当前源码与仓库说明待正常推送，源码/远端回执完成后更新。",
+    "localWorkingVersion": "0.49.14",
+    "localUnpublishedChanges": true,
+    "localDocumentationUpdatesOnly": false
   },
   "sideDeliverables": [
     {
@@ -212,12 +210,12 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v04910_simple_home_fixed_target_gpu_issue_pending"
+    "status": "v04914_live_ai_and_quota_passed_publication_in_progress"
   },
   "savedWork": {
-    "version": "0.49.10",
-    "snapshot": "first-step-简易排版与性能诊断-v0.49.10",
-    "state": "saved_runtime_verified",
+    "version": "0.49.13",
+    "snapshot": "first-step-福利整段输入与标志入口-v0.49.13",
+    "state": "saved_http_verified_final_browser_unavailable",
     "review": "docs/DEVELOPMENT_LOG.md"
   },
   "deployment": {
@@ -264,7 +262,7 @@
       10
     ],
     "applicationChanged": true,
-    "pushedThisTurn": true,
+    "pushedThisTurn": false,
     "validation": {
       "version": "0.49.10",
       "testsPassed": 211,
@@ -272,7 +270,7 @@
       "realNewcomer": false,
       "target3050": "user_reported_failure_new_patch_pending"
     },
-    "currentLocalFix": "简易首页重叠修复；首页只减少空投影绘制并补实际显卡诊断，不能称3050性能问题已解决。"
+    "currentLocalFix": "用户补测原3050机约120FPS，当前画面保留；此前真实JSON分别为Intel52/另一人3060Ti177。无程序/系统设置修改，下一步回到新人和业务闭环，核显适配单列。"
   },
   "rollback": {
     "date": "2026-11-07",
@@ -289,9 +287,9 @@
     "reportedPrevious0491Fps": 45,
     "localHardware": "RTX3070 Laptop",
     "localViewport": "1920x1080 / DPR1 (controlled same-viewport comparison)",
-    "actual3050Verification": false,
+    "actual3050Verification": true,
     "targetFps": 60,
-    "note": "已收到目标机失败反馈，并非没有测试过；缺少定量帧耗/实际绘图GPU和本补丁复测，不能称已达60FPS。GPU利用率100%不是显存占用100%。",
+    "note": "三类证据分开：A原始Edge/Intel核显约52FPS；B另一台QQ/3060Ti约177FPS；C用户随后口头报告原3050机约120FPS。C没有新JSON，不补造窗口/DPR/适配器/P95或GPU利用率。当前可以结束原机低帧的盲目画面削减，核显负担与长时验证仍保留。",
     "lastNormalPageCheck": {
       "version": "0.49.5",
       "viewport": "1920x1080 / DPR1",
@@ -347,7 +345,71 @@
       "testedVersion": "not explicitly confirmed; latest prior release0.49.9",
       "evidenceType": "user_report"
     },
-    "targetTestState": "prior_user_test_failed_current_patch_pending_retest"
+    "targetTestState": "original3050_short_trial_user_report_about120fps; iGPU_and_long_run_followup",
+    "receivedDiagnostic": {
+      "date": "2026-11-10",
+      "version": "0.49.10",
+      "originalEvidence": "outputs/v04910-review/target-intel-20261110/performance-record.original.json",
+      "assessment": "outputs/v04910-review/target-intel-20261110/assessment.json",
+      "sha256": "d1a7d6dbb76d3326646b073a21e89ac896c4391aeec5f4b655185572e9c02416",
+      "adapter": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009A68) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1528,
+        740
+      ],
+      "drawingBuffer": [
+        1910,
+        925
+      ],
+      "pixelRatio": 1.25,
+      "validWindows": 37,
+      "weightedFPS": 51.995763109555796,
+      "minFPS": 43.69414101290963,
+      "maxFPS": 53.26494377589291,
+      "frameP95MsLast2s": 22.1,
+      "cpuP95MsLast2s": 2.8,
+      "hardwareClass": "Intel UHD WebGL on the user-reported3050-equipped machine; not a3050 rendering measurement",
+      "gpuUtilization": "not captured; cannot attribute the earlier100% to an adapter"
+    },
+    "secondIndependentMachine": {
+      "date": "2026-11-10",
+      "evidence": "outputs/v04910-review/target-rtx3060ti-20261110",
+      "sha256": "f997e92c79df01f515203dbd44690a683f8d71597896275b1c50a33bafb4ad96",
+      "userIdentifiedAsAnotherComputer": true,
+      "version": "0.49.10",
+      "adapter": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3060 Ti (0x00002489) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "browser": "QQ embedded Chromium (QQEX/QQWebContentView)",
+      "viewport": [
+        2560,
+        1358
+      ],
+      "drawingBuffer": [
+        2560,
+        1358
+      ],
+      "pixelRatio": 1,
+      "validWindows": 13,
+      "weightedFPS": 177.2344363130937,
+      "minFPS": 166,
+      "maxFPS": 180.00994530084535,
+      "frameP95MsLast2s": 6,
+      "cpuP95MsLast2s": 1.6
+    },
+    "twoMachineComparison": "Intel A约52FPS，NVIDIA3060Ti B约177FPS，各为真实运行；硬件/浏览器/像素与交互状态不同，不能当原3050切卡前后、代码提速或功耗下降的证据。",
+    "userReportedRetest": {
+      "date": "2026-11-10",
+      "machine": "original RTX3050 Laptop4GB machine discussed by user",
+      "approximateFps": 120,
+      "source": "user live chat report",
+      "exactStatement": "刚才我实测了一下，大概帧率是120帧，他那个3050电脑",
+      "newJsonProvided": false,
+      "rendererIdentityFromNewLog": null,
+      "duration": null,
+      "viewport": null,
+      "dpr": null,
+      "interpretation": "short user trial reports frame-rate target met; not a new independently instrumented long-run benchmark"
+    },
+    "actual3050VerificationMethod": "用户原3050机器现场复测约120FPS；新适配器JSON和长时P95未提供"
   },
   "jointDeliveryPlan": {
     "date": "2026-11-09",
@@ -437,19 +499,28 @@
     "latestExecution": {
       "date": "2026-11-10",
       "version": "0.49.10",
-      "scope": "simple-home reflow reviewed; bounded PCF pass and actual renderer diagnostics; 3050 performance remains unaccepted",
+      "scope": "read two independent diagnostic files plus original3050 user-reported120fps retest; no runtime/system changes; resume business/newcomer acceptance",
       "campusModified": false,
-      "applicationChanged": true
+      "applicationChanged": false
     },
     "planningUpdateRuntimeChanges": false
   },
   "lastPreviewSession": {
-    "date": "2026-11-10",
-    "version": "0.49.10",
-    "port": 5302,
-    "pid": 30696,
-    "state": "normal_saved_simple_preview_open_for_user",
+    "date": "2026-11-11",
+    "version": "0.49.13",
+    "port": 5319,
+    "state": "saved_http_verified_final_browser_unavailable",
     "http200": true,
     "indexMatchesSavedBuild": true
+  },
+  "minimumInputs": {
+    "offer": "两份税前月薪；其他福利选填；可以每次一份整段粘贴，先本机提取/核对再填指定机会，也可显式发给AI。",
+    "salary": "应发工资即可看已填和待确认；完整实发需四项扣款，到账选填",
+    "tax": "适用范围、年度、收入与三类扣除需确认；预缴选填，只决定退补税比较",
+    "contract": "原文与确认用工类型；期限选填，只核对提供部分",
+    "rent": "至少10字原文；费用四项选填，齐全才合计",
+    "social": "事项有默认选择；地区/险种选填，未知给基础路线",
+    "subsidy": "城市与事项；无需先填个人条件，旧广州条件核对其余未知可跳过",
+    "leaving": "可直接给通用交接清单，个人情况均选填，未知不套通知天数"
   }
 }

@@ -1,3 +1,5 @@
+import {FieldMark,FormStart,OptionalFields} from './FormGuidance.tsx';
+import {reviewPartialPay} from './lib/partial-pay.ts';
 import DraftControls from './DraftControls.tsx';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
@@ -45,6 +47,8 @@ export default function Salary({ addQuestions, onSignal,applyRequest }: { addQue
   const [form, setForm] = useState<PayForm>(EMPTY);
   const [result, setResult] = useState<PayResult | null>(null);
   const [error, setError] = useState('');
+  const [partial,setPartial]=useState<ReturnType<typeof reviewPartialPay>|null>(null);
+  const partialPanel=useRef<HTMLDivElement>(null);
   const [demo, setDemo] = useState(false);
   const resultPanel = useRef<HTMLElement>(null);
   const review=useRef({id:'',at:''});
@@ -58,22 +62,26 @@ export default function Salary({ addQuestions, onSignal,applyRequest }: { addQue
   function calculate(values: PayForm) {
     setError('');
     try {
-      const missing = FIELDS.slice(0, 5).find(field => values[field.key] === '');
-      if (missing) throw new Error(`还没填「${missing.label}」。${missing.key === 'gross' ? '请按工资条填写扣款前的合计。' : '有这项就填金额，确认没有可点「填 0」。'}`);
-      review.current={id:crypto.randomUUID(),at:new Date().toISOString()};
-      setResult(calculatePayslip({ gross: Number(values.gross), insurance: Number(values.insurance), fund: Number(values.fund), tax: Number(values.tax), other: Number(values.other), received: values.received === '' ? null : Number(values.received) }));
-    } catch (e) { setResult(null); setError(e instanceof Error ? e.message : '请检查金额。');
+      const checked=reviewPartialPay(values);
+      if(!checked.result){setResult(null);setPartial(checked);return;}
+      setPartial(null);review.current={id:crypto.randomUUID(),at:new Date().toISOString()};
+      setResult(checked.result);
+    } catch (e) { setResult(null);setPartial(null); setError(e instanceof Error ? e.message : '请检查金额。');
       const missing=FIELDS.slice(0,5).find(field=>values[field.key]==='');
       if(missing){const field=amountInputs.current[missing.key];field?.focus({preventScroll:true});field?.scrollIntoView({block:'center',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}
     }
   }
+  useEffect(()=>{if(partial)partialPanel.current?.scrollIntoView({block:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});},[partial]);
+  function completeDeductions(){const key=partial?.missing[0]??'insurance';const field=amountInputs.current[key];const group=field?.closest('details');if(group)group.open=true;field?.focus({preventScroll:true});field?.scrollIntoView({block:'center',behavior:'smooth'});}
+  function exportPartial(){if(!partial)return;saveText(['初程 · 工资已填金额与待确认事项',recordTime(),`已确认应发：¥ ${money(partial.gross)}`,partial.confirmedCount?`已填写扣款小计：¥ ${money(partial.knownDeductions)}（${partial.confirmedCount}/4项）`:'扣款尚未填写（0/4项）','尚未计算实发，未填扣款没有按0处理。',...partial.missing.map(key=>`待确认：${FIELDS.find(field=>field.key===key)!.label}`)].join('\n'),'初程-工资待确认事项.txt');}
+  const calculateLabel=FIELDS.slice(0,5).every(field=>form[field.key].trim()!=='')?'算到手工资':'先看已填部分';
   function loadDemo() {
     const values = { gross: '8000', insurance: '800', fund: '600', tax: '66', other: '0', received: '6534' };
-    setForm(values); setDemo(true); setResult(null); setError('');
+    setForm(values); setDemo(true); setResult(null);setPartial(null); setError('');
   }
   function updateAmount(key: keyof PayForm, value: string) {
     setForm(previous => ({...previous, [key]: value}));
-    setResult(null); setDemo(false); setError('');
+    setResult(null);setPartial(null); setDemo(false); setError('');
   }
   function exportPay(){
     if(!result)return;
@@ -86,23 +94,27 @@ export default function Salary({ addQuestions, onSignal,applyRequest }: { addQue
       '本记录只核对填写金额的算术关系，不证明缴费基数、个人承担比例或已扣税额符合当地规定，不推算年度退税。',
       confirmedInput?`可以向 HR 确认：${salaryQuestionText(confirmedInput)}`:''].join('\n'),'初程-工资明细核对记录.txt');
   }
+  function renderField(field:typeof FIELDS[number],i:number){return <div key={field.key} className={`field-label pay-field ${field.key==='gross'?'gross-field':''}`}>
+            <label htmlFor={`salary-${field.key}`}>
+              <span className="pay-field-title"><span>{field.label}</span><FieldMark kind={field.key==='gross'?'required':field.key==='received'?'optional':'conditional'}>{field.key==='gross'?'必填':field.key==='received'?'选填':'算实发需填'}</FieldMark></span>
+              <div className="currency-input"><span>¥</span><input id={`salary-${field.key}`} ref={node=>{amountInputs.current[field.key]=node;}} type="number" required={field.key==='gross'} min="0" step="0.01" placeholder={field.key==='received'?'可不填':'请输入金额'} value={form[field.key]} onChange={e=>updateAmount(field.key,e.target.value)} aria-label={field.label}/><b aria-hidden="true"/></div>
+            </label>
+            <div className="pay-field-help"><small>{field.hint}</small>{i>0&&i<5&&form[field.key]===''&&<button type="button" aria-label={`${field.label}确认没有，填0`} onClick={()=>{updateAmount(field.key,'0');amountInputs.current[field.key]?.focus();}}>没有？填 0</button>}</div>
+          </div>;}
   return <div className="salary-workbench">
     <header className="page-heading terminal-page-heading"><div className="page-heading-stamp" aria-hidden="true"><strong>03</strong><i/><small>MODULE</small></div><div className="page-heading-copy"><div className="eyebrow">PAYSLIP EXPLAINER</div><h1>算清到手工资</h1><p>按工资条填写已知金额，核对扣款和实际到账。</p></div><div className="page-heading-actions"><button className="button secondary" onClick={loadDemo}><SalaryControl label="用示例填一遍" icon={<FileText size={16}/>} code="DEMO"/></button></div></header>
-    <DraftControls module="salary" value={{form,demo}} onRestore={saved=>{setForm(saved.form);setDemo(saved.demo);setResult(null);setError('');}}/>
-    <div className="task-action-strip"><div><strong>{result?'算好了，可修改金额重算，也可下载结果':'按工资条填金额，填完点蓝色按钮'}</strong><span>不清楚的先留空，确认没有的扣款再填 0。</span></div><button className="button primary machine-submit salary-calculate-top" type="submit" form="salary-form"><SalaryControl label="算到手工资" icon={<ArrowRight size={18}/>} code="CALC"/></button>{result&&<button className="button primary machine-submit salary-export" onClick={exportPay}><SalaryControl label="下载工资计算结果" icon={<Download size={18}/>} code="TXT"/></button>}{error&&<p className="task-action-message" role="alert">{error}</p>}</div>
+    <DraftControls module="salary" value={{form,demo}} onRestore={saved=>{setForm(saved.form);setDemo(saved.demo);setResult(null);setPartial(null);setError('');}}/>
+    <div className="task-action-strip"><div><strong>{result?'算好了，可修改金额重算，也可下载结果':'先看已填部分，不用一次填完'}</strong><span>不清楚的先留空，确认没有的扣款再填 0。</span></div><button className="button primary machine-submit salary-calculate-top" type="submit" form="salary-form"><SalaryControl label={calculateLabel} icon={<ArrowRight size={18}/>} code="CALC"/></button>{result&&<button className="button primary machine-submit salary-export" onClick={exportPay}><SalaryControl label="下载工资计算结果" icon={<Download size={18}/>} code="TXT"/></button>}{error&&<p className="task-action-message" role="alert">{error}</p>}</div>
     <div className="salary-machine">
       <section className="panel input-machine" aria-label="工资条金额">
         <form id="salary-form" className="panel-body" onSubmit={e => { e.preventDefault(); calculate(form); }}>
           <div className="input-status" hidden={!demo}><span className="tag green">合成示例</span><span>换成自己的金额后，再核对实际工资。</span></div>
-          <div className="form-grid">{FIELDS.map((field,i)=><div key={field.key} className={`field-label pay-field ${field.key==='gross'?'gross-field':''}`}>
-            <label htmlFor={`salary-${field.key}`}>
-              <span className="pay-field-title"><span>{field.label}</span><i aria-hidden="true">{String(i+1).padStart(2,'0')}</i></span>
-              <div className="currency-input"><span>¥</span><input id={`salary-${field.key}`} ref={node=>{amountInputs.current[field.key]=node;}} type="number" min="0" step="0.01" placeholder={field.key==='received'?'可不填':'请输入金额'} value={form[field.key]} onChange={e=>updateAmount(field.key,e.target.value)} aria-label={field.label}/><b aria-hidden="true"/></div>
-            </label>
-            <div className="pay-field-help"><small>{field.hint}</small>{i>0&&i<5&&form[field.key]===''&&<button type="button" aria-label={`${field.label}确认没有，填0`} onClick={()=>{updateAmount(field.key,'0');amountInputs.current[field.key]?.focus();}}>没有？填 0</button>}</div>
-          </div>)}</div>
-          <p className="input-footnote">社保和公积金只填自己缴的部分。填完后，点下面的按钮看结果。</p>
-          <button type="submit" className="button primary salary-calculate"><SalaryControl label="算到手工资" icon={<ArrowRight size={18}/>} code="CALC"/></button>
+          <FormStart><strong>先填应发工资，就能整理已知金额。</strong> 补齐四项扣款后算实发，实际到账选填。</FormStart>
+          <div className="form-grid">{FIELDS.slice(0,1).map(renderField)}</div>
+          <OptionalFields title="补充扣款和到账" hint="算实发需确认四项扣款；到账选填"><div className="form-grid">{FIELDS.slice(1).map((field,i)=>renderField(field,i+1))}</div></OptionalFields>
+          <p className="input-footnote">社保和公积金只填自己缴的部分。扣款不清楚可以先留空，确认没有才填 0。</p>
+          <button type="submit" className="button primary salary-calculate"><SalaryControl label={calculateLabel} icon={<ArrowRight size={18}/>} code="CALC"/></button>
+          {partial&&<div className="partial-pay-result" ref={partialPanel} role="status"><h2>已填部分，先核对这些</h2><dl><div><dt>应发工资</dt><dd>¥ {money(partial.gross)}</dd></div><div><dt>已填写扣款小计 · {partial.confirmedCount}/4 项</dt><dd>{partial.confirmedCount?`¥ ${money(partial.knownDeductions)}`:'尚未填写'}</dd></div></dl><p>还不能确定到手工资。以下扣款未填，没有按 0 处理：</p><ul>{partial.missing.map(key=><li key={key}>{FIELDS.find(field=>field.key===key)!.label}</li>)}</ul><div className="inline-actions"><button type="button" className="button secondary" onClick={completeDeductions}>继续补扣款<ArrowRight size={15}/></button><button type="button" className="button secondary" onClick={exportPartial}>下载已填与待确认<Download size={15}/></button></div></div>}
         </form>
       </section>
       <section className="panel output-machine" ref={resultPanel}>

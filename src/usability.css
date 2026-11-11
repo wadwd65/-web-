@@ -103,3 +103,108 @@
 
 .assistant-evidence p.assistant-evidence-verdict { color:#285c7a; font-size:15px; font-weight:550; margin:9px 0; }
 .assistant-evidence[data-status=less] p.assistant-evidence-verdict, .assistant-evidence[data-status=more] p.assistant-evidence-verdict { color:#8e602e; }
+
+/* Readable supporting copy; keep titles and decorative scene indices at their existing scale. */
+.experience-scene-tools > p { font-size: 12px; color: #466a83; }
+.home-scene-settings > summary { font-size: 12px; }
+.assistant-heading .assistant-connection { font-size: 12px; color: #526c80; }
+.assistant-context-note { font-size: 12px; line-height: 1.7; }
+.assistant-dialog-inner > footer .assistant-footnote > p { font-size: 12px; line-height: 1.8; color: #536d80; }
+.assistant-dialog-inner > header .assistant-top-actions > button { font-size: 13px; }
+.assistant-dialog-inner > footer button { font-size: 12px; }
+.assistant-turn-heading > small, .assistant-turn-heading > button { font-size: 12px; }
+.assistant-actions > small, .assistant-actions > button small { font-size: 12px; color: #4d6d83; }
+.assistant-next-step form > p { font-size: 12px; line-height: 1.8; }
+.assistant-next-step form > footer > button { font-size: 12px; }
+.tool-directory-copy > span { font-size: 13px; line-height: 1.7; color: #536c80; }
+
+/* Start with the minimum; optional details use the same light terminal language. */
+.field-mark { display:inline-flex; flex:none; align-items:center; vertical-align:middle; margin-left:8px; padding:2px 6px; border-radius:4px; font:400 11px/1.5 var(--font); letter-spacing:0; background:#edf2f6; color:#566f81; }
+.field-mark[data-kind=required] { background:#dceef9; color:#17628e; font-weight:550; }
+.field-mark[data-kind=conditional] { background:#f2eee6; color:#805c2f; }
+.field-caption { display:flex; align-items:center; flex-wrap:wrap; gap:3px 0; }
+.form-start-note { font-size:13px; line-height:1.85; color:#526d81; margin:4px 0 15px; }
+.form-start-note strong { color:#285a77; font-weight:550; }
+.optional-fields { margin:15px 0; border-top:1px solid #b8cfdf; }
+.optional-fields > summary { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:12px 0; min-height:48px; cursor:pointer; list-style:none; color:#2b6e96; font-size:13px; }
+.optional-fields > summary::-webkit-details-marker { display:none; }
+.optional-fields > summary > span { display:flex; align-items:baseline; flex-wrap:wrap; gap:5px 12px; }
+.optional-fields > summary small { font-size:12px; color:#5b768b; line-height:1.7; }
+.optional-fields > summary > svg { flex:none; transition:transform .18s; }
+.optional-fields[open] > summary > svg { transform:rotate(180deg); }
+.optional-fields > summary:hover { color:#17577f; }
+.optional-fields > summary:focus-visible { outline:2px solid #2d80ad; outline-offset:3px; border-radius:3px; }
+.optional-fields > div { padding:6px 0 8px; }
+.offer-editors .optional-fields > div { display:grid; gap:15px; }
+.offer-editors legend { overflow-wrap:anywhere; }
+.experience-shell .salary-workbench .pay-field-title { gap:8px; }
+.pay-field-title .field-mark { margin-left:auto; }
+.partial-pay-result { margin-top:20px; padding:18px 0 0; border-top:2px solid #79a7c2; color:#365e78; }
+.partial-pay-result h2 { font-size:18px; font-weight:550; margin-bottom:14px; }
+.partial-pay-result dl { display:flex; gap:30px; flex-wrap:wrap; margin:12px 0; }
+.partial-pay-result dt,.partial-pay-result p,.partial-pay-result li { font-size:13px; line-height:1.8; }
+.partial-pay-result dd { font:500 23px var(--mono); color:#2b6b92; margin:7px 0 16px; }
+.partial-pay-result ul { margin:10px 0 18px; padding-left:20px; }
+.assistant-heading .assistant-back,
+.mc-header .mc-back { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:0 13px; min-height:36px; border:1px solid #8fb5ce; border-radius:7px; background:#e7f2fa; color:#22688f; font:550 13px var(--font); white-space:nowrap; box-shadow:0 2px 6px #376d8e0b; }
+.assistant-heading .assistant-back:hover,.mc-header .mc-back:hover { background:#d9edf9; border-color:#4e94bd; color:#18597d; }
+.assistant-back:focus-visible,.mc-back:focus-visible { outline:2px solid #297eac; outline-offset:3px; }
+@media(prefers-reduced-motion:reduce){.optional-fields > summary > svg{transition:none}}
+
+.form-choice-caption { font-size:13px; color:#365d77; margin:0 0 8px; }
+.policy-form .optional-fields > div { display:grid; gap:20px; }
+
+.offer-text-entry { border-top:1px solid #a8c7db; border-bottom:1px solid #c5dae7; margin:8px 0 16px; }
+.offer-text-entry > summary { display:flex; align-items:center; gap:12px; list-style:none; cursor:pointer; padding:13px 0; color:#276f98; }
+.offer-text-entry > summary::-webkit-details-marker { display:none; }
+.offer-text-entry > summary > span { flex:1; display:flex; align-items:baseline; flex-wrap:wrap; gap:6px 15px; }
+.offer-text-entry > summary strong { font-size:14px; font-weight:550; }
+.offer-text-entry > summary small { font-size:12px; color:#59788d; }
+.offer-text-entry > summary > svg:last-child { transition:transform .18s; }
+.offer-text-entry[open] > summary > svg:last-child { transform:rotate(90deg); }
+.offer-text-entry > div { padding:12px 0 18px; }
+.experience-shell[data-view=result] .module-offer > .offer-text-entry,
+.experience-shell[data-view=result] .module-offer > .form-start-note { display:none; }
+.offer-text-target { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:15px; }
+.offer-text-target > label { display:flex; align-items:center; gap:12px; font-size:13px; color:#3d647d; }
+.offer-text-target select { max-width:270px; min-height:38px; font-size:13px; padding:7px 12px; border:1px solid #aac8db; background:#f9fcff; }
+.offer-text-target > button,.offer-text-actions > button:last-child { display:inline-flex; gap:7px; align-items:center; font-size:12px; color:#2c749d; min-height:36px; }
+.offer-text-label { display:grid; gap:9px; color:#3b6078; font-size:13px; }
+.experience-workspace .offer-text-label textarea { min-height:100px; max-height:240px; width:100%; box-sizing:border-box; padding:12px 14px; border:1px solid #9fbfd5; border-radius:7px; background:#f9fcff; color:#2c5068; font:14px/1.85 var(--font); resize:vertical; }
+.offer-text-actions { display:flex; align-items:center; flex-wrap:wrap; gap:14px; margin-top:14px; }
+.offer-text-actions > button:disabled { opacity:.45; }
+.offer-text-hint,.offer-text-message { font-size:12px; line-height:1.8; margin-top:12px; color:#55758a; }
+.offer-text-message { color:#266f94; }
+.offer-text-review { border-top:1px solid #adc9dc; margin-top:18px; padding-top:18px; }
+.offer-text-review h2 { font-size:17px; font-weight:550; color:#2b5f7e; margin-bottom:15px; }
+.offer-text-warning { border-left:2px solid #b18b51; padding-left:10px; margin:9px 0; font-size:13px; line-height:1.8; color:#805e32; }
+.offer-text-review ul { list-style:none; padding:0; margin:14px 0; }
+.offer-text-review li { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:start; gap:14px; padding:12px 0; border-bottom:1px solid #c1d7e6; }
+.offer-text-review li > label { display:flex; align-items:flex-start; gap:10px; color:#365e78; font-size:13px; line-height:1.7; }
+.offer-text-review li > label > span { display:grid; gap:4px; }
+.offer-text-review li strong { font-weight:550; }
+.offer-text-review li small { font-size:12px; color:#805e32; }
+.offer-text-review li > details { max-width:240px; font-size:12px; color:#57778e; }
+.offer-text-review li > details summary { cursor:pointer; padding:2px 0 6px; }
+.offer-text-review li > details p { line-height:1.8; overflow-wrap:anywhere; }
+.offer-text-confirm { display:flex; align-items:center; gap:10px; margin:18px 0 15px; color:#335e78; font-size:13px; line-height:1.8; }
+.offer-text-review input[type=checkbox] { width:16px; height:16px; margin-top:3px; flex:none; accent-color:#287fae; }
+.offer-benefits { margin-top:18px; padding-top:14px; border-top:1px solid #b9d0df; }
+.offer-benefits h3 { color:#345e78; font-size:14px; font-weight:550; margin-bottom:10px; }
+.offer-benefits dd[data-benefit=none],.offer-benefits dd[data-benefit=after-probation],.offer-benefits dd[data-benefit=partial] { color:#8a5d2f; }
+.offer-benefits > p { font-size:13px; line-height:1.8; color:#3c647e; white-space:pre-wrap; overflow-wrap:anywhere; }
+.offer-benefits > small { display:block; font-size:12px; line-height:1.8; color:#5c7b90; margin-top:9px; }
+
+/* The original logo link is the home route; keep the full mark intact. */
+.experience-header .experience-brand { position:relative; isolation:isolate; padding:8px 10px; margin-left:-10px; border:1px solid #8fb6cf66; border-radius:11px; background:linear-gradient(130deg,#f7fcffb3,#d8edf64d); box-shadow:0 3px 13px #315f8210,inset 0 1px #ffffff9c; transition:border-color .2s,background .2s,box-shadow .2s; }
+.experience-header .experience-brand > .rhine-mark { width:51px; height:33px; flex:none; stroke:#285d7e; stroke-width:1.65; transition:transform .25s,filter .25s,stroke .25s; }
+.experience-header .experience-brand small { font-size:10px; line-height:1.4; letter-spacing:.4px; color:#407997; margin-top:6px; }
+.experience-header .experience-brand::before { content:''; position:absolute; left:0; top:0; width:72px; height:100%; border-radius:10px; background:radial-gradient(ellipse,#8dd4f37d,transparent 72%); opacity:.2; z-index:-1; transition:opacity .25s; }
+.experience-header .experience-brand:hover,.experience-header .experience-brand:focus-visible { border-color:#4a98c2; background:#f1faffd9; box-shadow:0 4px 20px #4487ae25,inset 0 1px #fff; }
+.experience-header .experience-brand:hover::before,.experience-header .experience-brand:focus-visible::before { opacity:1; }
+.experience-header .experience-brand:hover > .rhine-mark,.experience-header .experience-brand:focus-visible > .rhine-mark { stroke:#167cae; filter:drop-shadow(0 0 5px #53b7de80); transform:translateY(-1px) rotate(-3deg); }
+.experience-header .experience-brand:active > .rhine-mark { transform:scale(.96); }
+.experience-header .experience-brand:focus-visible { outline:2px solid #2584b5; outline-offset:4px; }
+@media(prefers-reduced-motion:reduce){.experience-header .experience-brand,.experience-header .experience-brand::before,.experience-header .experience-brand>.rhine-mark,.offer-text-entry > summary > svg:last-child{transition:none}.experience-header .experience-brand:hover>.rhine-mark{transform:none}}
+
+.offer-readouts article > header > span > small { font:12px var(--font); color:#52768e; margin-right:5px; }
