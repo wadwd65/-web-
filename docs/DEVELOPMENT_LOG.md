@@ -1,10 +1,10 @@
 # 初程 · 开发总日志
 
-当前运行版本：**v0.49.6（业务证据修复；当前预览5298）**。本日志只记录已经发生的变化；下一步只维护 [memory/progress.json](memory/progress.json) 的 nextActions，约束见 [DECISIONS](memory/DECISIONS.md)。历次版本见 [VERSION_HISTORY](VERSION_HISTORY.md)。桌面参赛包根“开发总日志.md”保持同步。
+当前运行版本：**v0.49.14（自然交流与自备接口免日额；保存预览5321，源码已发布）**。本日志只记录已经发生的变化；下一步只维护 [memory/progress.json](memory/progress.json) 的 nextActions，约束见 [DECISIONS](memory/DECISIONS.md)。历次版本见 [VERSION_HISTORY](VERSION_HISTORY.md)。桌面参赛包根“开发总日志.md”保持同步。
 
-产品为毕业生八事务工具，仅桌面，莱茵生命为队名/UI、音乐为辅助。浅蓝银色完整/简易共用业务与单audio；真实DeepSeek有限工具、小范围官方检索、单图人工校对、可选账号及自备DeepSeek已实现。独立准确率、真实新人/低配与公网仍待，腾讯云由用户后续部署。
+产品为毕业生八事务工具，仅桌面，莱茵生命为队名/UI、音乐为辅助。浅蓝银色完整/简易共用业务与单audio；真实DeepSeek有限工具、小范围官方检索、单图人工校对、可选账号及自备DeepSeek已实现。独立准确率、真实新人/长期低配与公网仍待，腾讯云由用户后续部署。
 
-唯一开发目录work/first-step-experience，恢复先运行npm run resume。当前冻结保存点为参赛包06-作品仓库快照/first-step-业务证据修复-v0.49.6；旧快照和Git历史保留。只推wadwd65/-web-，不动campus-insight。私有配置和真实材料不进入日志、源码或作品包。
+唯一开发目录work/first-step-experience，恢复先运行npm run resume。当前冻结保存点为参赛包06-作品仓库快照/first-step-自然交流与自备接口-v0.49.14；旧快照和Git历史保留。只推wadwd65/-web-，不动campus-insight。私有配置和真实材料不进入日志、源码或作品包。
 
 旧条目描述当时状态，不能覆盖当前progress。旧零散说明可从冻结快照、固定Git提交或桌面03-开发日志/历史资料归档恢复；不再将每版计划复制到当前入口。
 
@@ -678,3 +678,7 @@ README由开发细节堆叠重排为用途/截图/八工具/真实AI范围/运�
 本机浏览器检查仍被Work设置禁用，未换控制通道绕过；不能把本轮HTTP、构建或旧截图称为最终UI审美验收。真实新人/公网/长期硬件仍按既有缺口保留。最终Git/CI/保存点回执将在本段补注，后续继续维护现有日志与记忆，不新建重复规划。
 
 发布限制补注：GitHub拒绝含.github/workflows/ci.yml的推送，原因是现有PAT无workflow scope。未扩大权限或绕过限制；本地完整提交87efd7d保留为saved/v0.49.14-with-workflow，正常main从原远端继续并仅发布docs/ci-workflow.example.yml待启用模板。README以实际本地232检查徽标替代活动CI徽标，明确Actions尚未启用；不是自动审批拒绝，也未把本机结果当云端结果。
+
+发布与保存收尾：当前源码675b3acb092e82e4d1055ba6f1f03f4aaccee88c已正常推送至wadwd65/-web-的main并ls-remote匹配；v0.49.14注释标签与预发布页已远端核验。49.11—13当前成果一并上传，旧冻结副本、私有文件/数据库、outputs/dist/node_modules未入库。现有原被拒提交87efd7d仍完整保留于本地saved/v0.49.14-with-workflow，无强推/改写远端历史。README的本地232徽标、9topics、8分类标签与实际图片已核验，CI仅模板未启用。
+
+新冻结点first-step-自然交流与自备接口-v0.49.14、正常5321已启动，version/snapshot、index及5个JS/CSS和最终构建逐字节一致，真实HTTP“你好”返回model自然问候、无guide/actions。最终浏览器设置禁用，未GUI。桌面启动默认49.14，保留5319旧49.13供回看，不强刷用户现有页。总日志/版本记忆与05验证目录同步；后续仍先真实新人任务与用户部署后验收，不承诺比赛分数，不因本轮修复夸大全国政策或多模态。

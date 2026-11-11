@@ -2,16 +2,16 @@
   "schemaVersion": 1,
   "updatedAt": "2026-11-11",
   "workingVersion": "0.49.14",
-  "releasedVersion": "0.49.10",
+  "releasedVersion": "0.49.14",
   "workState": "reviewed_internally",
   "objective": "修复普通问候被强制补问，自备DeepSeek免比赛日额度；整理并发布当前源码与仓库入口，保留浅色三维/八工具/旧冻结点。",
   "latestUserRequest": "用户授权完善并推送wadwd65/-web-仓库框架与全部当前工作；实测你好被死板补问需恢复灵活对话；自己的API必须解除每日提问次数限制。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5319/?v=0.49.13#/offer",
-    "snapshot": "first-step-福利整段输入与标志入口-v0.49.13",
-    "state": "local_saved_final_browser_check_unavailable"
+    "url": "http://127.0.0.1:5321/?v=0.49.14#/home",
+    "snapshot": "first-step-自然交流与自备接口-v0.49.14",
+    "state": "saved_and_source_published_final_browser_unavailable"
   },
   "implemented": {
     "business": "八项限定工具在#/tools，工资/合同规则与询问清单共用；金额快照/来源可编辑、保存与导出，主动草稿及可选账号保留。 49.6三类确证业务修复已迁回，未取回49.1其他扩展或其三维变更。 49.12八工具必填/选填/条件项标注与渐进补填：Offer两份月薪先比较，其余条件收起；工资应发先整理已填/缺项，四扣款齐才给实发；个税四金额与范围确认算税额，预缴选填且未知差额为null。合同期限/租房费用/社保地区/离职情况按需收起，未知不当0；原完整工具、导出及草稿格式保持。 49.13 Offer社保/公积金分别记录未说明、承诺、不缴、转正后、部分，其他福利说明选填；结果新增福利对比视图并随TXT/草稿保留，不折算工资。新增本机保守整段提取→勾选→口径确认→指定机会；旧字段默认保留，未知不补，支持剪贴板按钮/Ctrl+V。",
@@ -105,8 +105,8 @@
     },
     {
       "id": "natural-chat-personal-quota-and-repository",
-      "status": "reviewed_publication_pending",
-      "acceptance": "232检查/构建与真实DeepSeek HTTP对照通过；README/标签/主题/CI框架完成，正确仓库推送/CI及保存点待最终回执。"
+      "status": "complete_with_explicit_ci_permission_limit",
+      "acceptance": "232检查/构建/真实模型旧新与个人计数对照通过；指定源码/标签/发布页/5321保存版字节均核验。活动CI缺workflow权限未启用，模板保留；浏览器禁用未GUI。"
     }
   ],
   "validation": {
@@ -116,8 +116,9 @@
     "liveAi": "真实HTTP旧5319你好仍强制补问，新5320自然模型回应且无guide/actions/steps；个人接口致谢和完整工资8000/800/600/66/0，真实plan_tasks+calculate_salary得6534。切回前后默认chat.used均1。",
     "quota": "离线HTTP验证个人/网络/全站日额耗尽仍可用自备；识图默认三层日额0个人仍成功；切回计数保留；并发/分钟、伪造body、过期不静默回退均有回归。真实个人测试凭据仅RAM，证据无Key/Cookie。",
     "visual": "本轮浏览器设置禁用，未使用其他通道绕过，最终UI未可视复核。README所用49.13实际合成截图明确标版，不伪称本轮截图。",
-    "repository": "README/封面/实际截图/CI/Issue与PR模板/参与安全说明已完成；远端description/9 topics/8 labels已核验。源码推送与CI待后续回执。 GitHub拒绝创建workflows/ci.yml：现有PAT缺workflow scope。保留被拒提交87efd7d于本地saved/v0.49.14-with-workflow，主线不含活动workflow，仅docs模板，徽标明确本地232通过，不改账号权限。",
-    "limits": "无公网/新人任务/长时低配验收；不部署腾讯云，不改校园行迹，不改三维与音频画面。"
+    "repository": "正确origin/main源码675b3ac已远端逐字核验，v0.49.14标签与预发布页已发布；README/封面/两张实际合成截图/模板/description/9topics/8labels齐全。GitHub缺workflow scope拒绝活动CI，保留原被拒提交于本地saved分支，主线仅docs模板；不称Actions已运行。",
+    "limits": "无公网/新人任务/长时低配验收；不部署腾讯云，不改校园行迹，不改三维与音频画面。",
+    "savedPreview": "正常5321保存版版本/快照、index及5份JS/CSS与构建逐字节一致；真实HTTP问候为model且无guide/actions。最终浏览器禁用，未做UI视觉验收。"
   },
   "nextActions": [
     "先体验49.14：你好/谢谢自然回复，再用自己的Key提问，确认不显示每日次数；混合工资仍计算。浏览器设置恢复后补最终UI状态和剪贴板权限分支。",
@@ -152,16 +153,18 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "publishing",
-    "sourceCommit": "085c251bd39ecc1d35f724f47ef822a18faec4c9",
-    "verifiedAt": "2026-11-10",
+    "pushStatus": "published",
+    "sourceCommit": "675b3acb092e82e4d1055ba6f1f03f4aaccee88c",
+    "verifiedAt": "2026-11-11",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "41d948f65fcb4d89ae7ff15f3be45145e3d321f5",
-    "publicationReceipt": "outputs/v04910-review/git-publication.json",
-    "localChanges": "49.11—14当前源码与仓库说明待正常推送，源码/远端回执完成后更新。",
+    "previousPublishedHead": "c564526e25dd47710b138eb4bac340292a8898c6",
+    "publicationReceipt": "outputs/v04914-review/git-publication.json",
+    "localChanges": "49.11—14当前源码/README/标签/主题/版本说明已推至指定main，Git标签和预发布页已核验；只有CI活动配置因workflow权限不足改为文档模板。",
     "localWorkingVersion": "0.49.14",
-    "localUnpublishedChanges": true,
-    "localDocumentationUpdatesOnly": false
+    "localUnpublishedChanges": false,
+    "localDocumentationUpdatesOnly": false,
+    "sourceTag": "v0.49.14",
+    "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.49.14"
   },
   "sideDeliverables": [
     {
@@ -210,12 +213,12 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v04914_live_ai_and_quota_passed_publication_in_progress"
+    "status": "v04914_published_natural_chat_personal_quota_template_only"
   },
   "savedWork": {
-    "version": "0.49.13",
-    "snapshot": "first-step-福利整段输入与标志入口-v0.49.13",
-    "state": "saved_http_verified_final_browser_unavailable",
+    "version": "0.49.14",
+    "snapshot": "first-step-自然交流与自备接口-v0.49.14",
+    "state": "saved_http_and_source_verified_browser_unavailable",
     "review": "docs/DEVELOPMENT_LOG.md"
   },
   "deployment": {
@@ -507,8 +510,8 @@
   },
   "lastPreviewSession": {
     "date": "2026-11-11",
-    "version": "0.49.13",
-    "port": 5319,
+    "version": "0.49.14",
+    "port": 5321,
     "state": "saved_http_verified_final_browser_unavailable",
     "http200": true,
     "indexMatchesSavedBuild": true
