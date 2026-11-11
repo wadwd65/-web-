@@ -688,3 +688,7 @@ README由开发细节堆叠重排为用途/截图/八工具/真实AI范围/运�
 用户提供新的工程外GitHub凭据文件，明确接续初程CI。只按Token格式提取验证，不执行文件内其他文字，不打印密钥、不写入工程/证据，不替换其他项目或全局Git凭据。已核验本人账号与目标仓库可推送/含workflow权限，仓库Actions已启用。
 
 将既有docs/ci-workflow.example.yml移至.github/workflows/ci.yml，启用main推送/PR/手动运行，Windows和Ubuntu分别npm ci、232项离线回归、TypeScript与生产构建、memory:check；每项15分钟、只读contents、不读模型Key、不部署。README改真实动态CI徽标与实际工作流入口。运行源码、构建资产和既有冻结快照未改；远端结果待后续核验。
+
+CI最终回执：启用提交e932d0639e21d11ab0591bbf03b7b79079ff42d5已正常推至指定main。GitHub Actions运行42987094671为success，Windows/Ubuntu两job均成功完成npm ci、npm test、TS/生产构建、memory:check；下载原始运行日志并逐平台核实各232项测试，未向CI配置任何模型Key或真实材料。README动态徽标/工作流/首轮运行入口已接入。此前workflow权限不足仅为历史阻塞，不再是当前未完成项。
+
+本次凭据只在本地进程RAM及对GitHub的认证中使用，没有写入Git配置、源码、日志或证据，也没有覆盖校园行迹/全局凭据。应用版号仍49.14，运行代码、dist与已冻结快照均不变，不另造应用保存点或重跑同样本地测试。最终纯文档回执提交使用[skip ci]避免重复相同运行；该提交仅README和现有记忆/总日志变动，memory检查与日志同步另验。CI只证明离线测试/构建跨系统可复现，不替代真实用户、公网部署、性能或最终审美验收。运行链接：https://github.com/wadwd65/-web-/actions/runs/42987094671。
