@@ -682,3 +682,9 @@ README由开发细节堆叠重排为用途/截图/八工具/真实AI范围/运�
 发布与保存收尾：当前源码675b3acb092e82e4d1055ba6f1f03f4aaccee88c已正常推送至wadwd65/-web-的main并ls-remote匹配；v0.49.14注释标签与预发布页已远端核验。49.11—13当前成果一并上传，旧冻结副本、私有文件/数据库、outputs/dist/node_modules未入库。现有原被拒提交87efd7d仍完整保留于本地saved/v0.49.14-with-workflow，无强推/改写远端历史。README的本地232徽标、9topics、8分类标签与实际图片已核验，CI仅模板未启用。
 
 新冻结点first-step-自然交流与自备接口-v0.49.14、正常5321已启动，version/snapshot、index及5个JS/CSS和最终构建逐字节一致，真实HTTP“你好”返回model自然问候、无guide/actions。最终浏览器设置禁用，未GUI。桌面启动默认49.14，保留5319旧49.13供回看，不强刷用户现有页。总日志/版本记忆与05验证目录同步；后续仍先真实新人任务与用户部署后验收，不承诺比赛分数，不因本轮修复夸大全国政策或多模态。
+
+## 2026-11-11 / v0.49.14 CI权限接续
+
+用户提供新的工程外GitHub凭据文件，明确接续初程CI。只按Token格式提取验证，不执行文件内其他文字，不打印密钥、不写入工程/证据，不替换其他项目或全局Git凭据。已核验本人账号与目标仓库可推送/含workflow权限，仓库Actions已启用。
+
+将既有docs/ci-workflow.example.yml移至.github/workflows/ci.yml，启用main推送/PR/手动运行，Windows和Ubuntu分别npm ci、232项离线回归、TypeScript与生产构建、memory:check；每项15分钟、只读contents、不读模型Key、不部署。README改真实动态CI徽标与实际工作流入口。运行源码、构建资产和既有冻结快照未改；远端结果待后续核验。

@@ -1,10 +1,10 @@
 {
   "version": "0.49.14",
-  "recordedAt": "2026-11-11T08:05:28.868Z",
+  "recordedAt": "2026-11-11T08:25:23.045Z",
   "workState": "reviewed_internally",
   "validationVersion": "0.49.14",
   "textNormalisation": "LF",
-  "sourceDigest": "2dc97e36945833ea2c253cb84a1f2794e1cd1476f0c98caed077653940c3fe68",
+  "sourceDigest": "20aa64fd71f0a1a54cf268bbdfae3f0b08d3e3a9be1a6c7c275afb31c795f98e",
   "files": [
     {
       "path": ".env.example",
@@ -24,7 +24,7 @@
     },
     {
       "path": "docs/memory/DECISIONS.md",
-      "sha256": "eaa85f6e1810c2bda35519e775ce46fdce581f2f46dad86d4b90926cdc9fcba6"
+      "sha256": "485ecce0ba7e16c7ae08d00c827add886a3a618cc507e0e2455d5ecb1e64854f"
     },
     {
       "path": "docs/memory/SESSIONS.md",
@@ -32,7 +32,7 @@
     },
     {
       "path": "docs/memory/progress.json",
-      "sha256": "0b57ce5da94da31d0a180bf236d787d964e3b31f06054d029539137de8a3cbe0"
+      "sha256": "a4ef09aa433e1fd951d634b8a769fb2a166f4695d95bf4a3280835bb4a8d0f2f"
     },
     {
       "path": "package-lock.json",

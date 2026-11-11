@@ -1,7 +1,7 @@
 <p align="center"><img src="docs/assets/repository-cover.svg" alt="初程 First Step — 从你眼前的这件事开始" width="100%" /></p>
 <p align="center">
 <a href="https://github.com/wadwd65/-web-/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.49.14-287ead" /></a>
-<img alt="Local regression checks" src="https://img.shields.io/badge/local_checks-232_passed-3b729e" />
+<a href="https://github.com/wadwd65/-web-/actions/workflows/ci.yml"><img alt="Tests and build" src="https://github.com/wadwd65/-web-/actions/workflows/ci.yml/badge.svg" /></a>
 <img alt="Node.js" src="https://img.shields.io/badge/Node.js-%E2%89%A524.21-458559" />
 <img alt="TypeScript and React" src="https://img.shields.io/badge/TypeScript_%2B_React-3b729e" />
 <img alt="DeepSeek" src="https://img.shields.io/badge/LLM-DeepSeek-5373c7" />
@@ -109,7 +109,7 @@ HTTPS、反向代理和限额见[接口与试用说明](docs/58-api-settings-and
 
 ## 验证与已知限制
 
-- v0.49.14 本地 **232 项自动检查通过**，TypeScript、生产构建通过。离线检查无需模型 Key。双平台 CI 配置已放在 [待启用模板](docs/ci-workflow.example.yml)；当前 GitHub 凭据缺少 workflow 权限，未启用 Actions，不将本地通过写成云端通过。
+- v0.49.14 本地 **232 项自动检查通过**，TypeScript、生产构建通过。离线检查无需模型 Key。[GitHub Actions](https://github.com/wadwd65/-web-/actions/workflows/ci.yml) 在 Windows 与 Ubuntu 上分别执行锁定依赖安装、测试、TypeScript/生产构建与记忆结构检查；实际云端状态见上方徽标。
 - 覆盖未知/零值/更正、合同原文、城市撤回、身份隔离、取消、个人 Key 过期和自备接口免比赛日额。自动检查不等于独立准确率或真实新人任务完成率。
 - 用户报告原 RTX 3050 笔记本短测约 120 FPS，无该次长时日志。核显与另一台独显是独立记录，不能混作代码提速对照；低功耗和长期稳定性仍待验证。
 - 构建仍有 Three 共享块体积提示。本轮浏览器设置禁用，最终 UI 未获可视复核；公网 HTTPS、云端持久化与新人任务验证仍待。
@@ -123,7 +123,7 @@ tools/          同源服务、模型网关、评测与记忆维护
 tests/          离线回归检查
 public/         模型、音频、字体及来源记录
 docs/           版本、总日志、接口说明与持续开发记忆
-.github/        问题与 PR 模板
+.github/        双平台自动检查、问题与 PR 模板
 ```
 
 | 阅读目的 | 入口 |
@@ -131,7 +131,7 @@ docs/           版本、总日志、接口说明与持续开发记忆
 | 每版改了什么 | [版本历史](docs/VERSION_HISTORY.md) · [发布版本](https://github.com/wadwd65/-web-/releases) |
 | 证据与未完成项 | [开发总日志](docs/DEVELOPMENT_LOG.md) |
 | 接续开发 | [协作约定](AGENTS.md) · [当前记忆](docs/memory/README.md)，先执行 `npm run resume` |
-| 启用双平台自动检查 | [CI 待启用模板](docs/ci-workflow.example.yml)，需有 workflow 权限后放入 `.github/workflows/ci.yml` |
+| 双平台自动检查 | [工作流](.github/workflows/ci.yml) · [运行记录](https://github.com/wadwd65/-web-/actions/workflows/ci.yml) |
 | 配置接口与后续部署 | [接口说明](docs/58-api-settings-and-trial-limits-v049.md) · [.env.example](.env.example) |
 | 资料与素材来源 | [第三方声明](THIRD_PARTY_NOTICES.md) · [页面署名](public/credits/) |
 | 反馈与参与 | [Issues](https://github.com/wadwd65/-web-/issues) · [参与说明](CONTRIBUTING.md) |

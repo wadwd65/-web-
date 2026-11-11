@@ -1,5 +1,3 @@
-# Prepared template only; not an active GitHub Actions workflow.
-# With an authorized workflow credential, copy to .github/workflows/ci.yml.
 name: Tests and build
 
 on:
