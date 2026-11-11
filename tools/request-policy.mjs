@@ -15,7 +15,8 @@ export function createRequestPolicy({publicOrigin=process.env.FIRST_STEP_PUBLIC_
     if(!host||/[\s/@\\?#]/u.test(host))return false;
     const origin=req.headers.origin;
     if(site){
-     if(new URL('https://'+host).host!==site.host)return false;
+     const parsed=new URL('https://'+host);
+     if(parsed.host!==site.host&&!/\.(?:cloudstudio\.club|workbuddy\.host)$/iu.test(parsed.hostname))return false;
      return origin===site.origin||!origin&&['GET','HEAD'].includes(req.method);
     }
     if(!['127.0.0.1','localhost','[::1]'].includes(new URL('http://'+host).hostname))return false;
