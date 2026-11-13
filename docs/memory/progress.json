@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "updatedAt": "2026-11-13",
   "workingVersion": "0.49.16",
-  "releasedVersion": "0.49.14",
+  "releasedVersion": "0.49.16",
   "workState": "reviewed_internally",
   "objective": "用户认可音乐背景后完成八曲联动收尾、跨主题粒子直达过渡、重开/减弱动态/简易隔离，并保留现有托管Host修复，完成指定仓库同步。",
   "latestUserRequest": "用户认可49.15效果，要求剩下全部做完。本轮按已说明的音乐背景项目完成全部收尾与发布；主业务未验证事项仍如实保留，不改另一作品或执行云部署。",
@@ -11,7 +11,7 @@
   "release": {
     "url": "http://127.0.0.1:5351/?v=0.49.16#/music",
     "snapshot": "first-step-音乐联动收尾-v0.49.16",
-    "state": "saving_pending_final_check"
+    "state": "saved_gui_bytes_source_and_ci_verified"
   },
   "implemented": {
     "business": "八项限定工具在#/tools，工资/合同规则与询问清单共用；金额快照/来源可编辑、保存与导出，主动草稿及可选账号保留。 49.6三类确证业务修复已迁回，未取回49.1其他扩展或其三维变更。 49.12八工具必填/选填/条件项标注与渐进补填：Offer两份月薪先比较，其余条件收起；工资应发先整理已填/缺项，四扣款齐才给实发；个税四金额与范围确认算税额，预缴选填且未知差额为null。合同期限/租房费用/社保地区/离职情况按需收起，未知不当0；原完整工具、导出及草稿格式保持。 49.13 Offer社保/公积金分别记录未说明、承诺、不缴、转正后、部分，其他福利说明选填；结果新增福利对比视图并随TXT/草稿保留，不折算工资。新增本机保守整段提取→勾选→口径确认→指定机会；旧字段默认保留，未知不补，支持剪贴板按钮/Ctrl+V。",
@@ -110,8 +110,8 @@
     },
     {
       "id": "player-only-track-backdrop",
-      "status": "complete_local_review",
-      "acceptance": "八曲真实GUI/单audio/未播预览不误切/四连切≤2层/简易与主页0背景；232检查/构建通过；最终本地保存点另验。 最终5341保存版GUI和版本/index/5JS-CSS逐字节核验完成，未推远端/部署。"
+      "status": "complete_published",
+      "acceptance": "49.15用户认可后49.16完成离散粒子收尾；八曲/连切/关闭重开/reduced/简易/单audio/主页隔离通过，保存5351字节与GUI通过，指定源发布及双平台各237检查通过。低配新增开销仍无实机。"
     }
   ],
   "validation": {
@@ -124,11 +124,22 @@
     "effects": "25模式对归一权重及0→4不访问1/2/3、快速请求丢中间只接最新、非0初始化与reduced中断均有回归；shader只计算最多两种模式，无新增每帧对象/React或图片层。",
     "merge": "远端和镜像当前f627544，保留e5097c6入场禁止选中文字、cdcfd03交叉记录与f627544既有托管Host修复。先只读比对，再将缺失网关文件/记录迁到canonical，避免音乐发布覆盖；Origin仍严格验证。",
     "limits": "新背景低配GPU/功耗/长期性能未实测；无新真人任务/全国政策/完整多模态/公网部署结论。",
-    "savedPreview": "pending final saved preview",
-    "publication": "pending source push and cloud CI"
+    "savedPreview": "5351正常保存版版本/快照/index/5个JS-CSS逐字节匹配；实际GUI选中与当前均232265，背景1/唯一层/audio1，无console error。首次背景等待因自动低帧简易而超时，检查状态后通过可见按钮切回完整再核验；不修改降级阈值，不将此环境作目标GPU性能验收。",
+    "publication": "源码0ab4e2c已正常推指定main并API匹配；CI运行43431586350两平台237测试/安装/构建/记忆检查均成功，原始日志核实计数；密钥/数据库/outputs/dist/依赖未入库。",
+    "ci": {
+      "version": "0.49.16",
+      "runId": 43431586350,
+      "url": "https://github.com/wadwd65/-web-/actions/runs/43431586350",
+      "conclusion": "success",
+      "platforms": [
+        "windows-latest",
+        "ubuntu-latest"
+      ],
+      "testsEach": 237
+    }
   },
   "nextActions": [
-    "音乐背景已获用户认可，49.16收尾；先确认新保存版/仓库/CI回执，再回到主任务与提交证据，不继续叠加播放器功能。",
+    "音乐背景这一项已完整收尾并发布49.16，不继续叠加播放器功能；接下来回到工资/合同/政策主任务卡点与正式材料。",
     "剩余三天回到工资/合同/政策主线的实际任务卡点与失败恢复，优先打不开、误算、版本错与主流程中断；外部新人记录无则如实未测，不以自测替代。",
     "本项目的介绍文档、演示与作品包按初程正式要求和已验证版本另行准备；上一轮急做PPT/安装包已被用户纠正属于另一项目，本轮不制作、不改校园行迹。",
     "用户腾讯云部署并提供网址后，再验HTTPS/持久目录/默认与自备API/身份/额度及重启。本轮不部署。",
@@ -157,18 +168,18 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "publishing",
-    "sourceCommit": "675b3acb092e82e4d1055ba6f1f03f4aaccee88c",
-    "verifiedAt": "2026-11-11",
+    "pushStatus": "published",
+    "sourceCommit": "0ab4e2c7457347941243837d03c4d0fd3b89a11a",
+    "verifiedAt": "2026-11-13",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "c564526e25dd47710b138eb4bac340292a8898c6",
-    "publicationReceipt": "outputs/v04914-review/git-publication.json",
-    "localChanges": "49.15—16音乐联动/粒子收尾及5项回归待发布；现有同仓托管与入场修复保护。",
+    "previousPublishedHead": "f6275442cca7fe7ac66f760eb0dec34f67c5936f",
+    "publicationReceipt": "outputs/v04916-review/source-publication.json",
+    "localChanges": "49.15—16音乐联动已推送，保留此前入场/托管修复；Windows/Ubuntu各237测试及构建通过。版本标签/最终文档回执同轮收尾。",
     "localWorkingVersion": "0.49.16",
-    "localUnpublishedChanges": true,
+    "localUnpublishedChanges": false,
     "localDocumentationUpdatesOnly": false,
-    "sourceTag": "v0.49.14",
-    "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.49.14",
+    "sourceTag": "v0.49.16",
+    "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.49.16",
     "ci": {
       "workflow": ".github/workflows/ci.yml",
       "url": "https://github.com/wadwd65/-web-/actions/workflows/ci.yml",
@@ -181,19 +192,19 @@
       "secretNeeded": false,
       "scopeVerified": true,
       "persistentCredentialsChanged": false,
-      "runId": 42987094671,
-      "runUrl": "https://github.com/wadwd65/-web-/actions/runs/42987094671",
-      "commit": "e932d0639e21d11ab0591bbf03b7b79079ff42d5",
-      "testsEach": 232,
+      "runId": 43431586350,
+      "runUrl": "https://github.com/wadwd65/-web-/actions/runs/43431586350",
+      "commit": "0ab4e2c7457347941243837d03c4d0fd3b89a11a",
+      "testsEach": 237,
       "checks": [
         "npm ci",
         "npm test",
         "npm run build",
         "npm run memory:check"
       ],
-      "validatedAt": "2026-11-11",
-      "evidence": "outputs/v04914-review/ci-first-run.json",
-      "lastVerifiedAppVersion": "0.49.14"
+      "validatedAt": "2026-11-13",
+      "evidence": "outputs/v04916-review/ci.json",
+      "lastVerifiedAppVersion": "0.49.16"
     }
   },
   "sideDeliverables": [
@@ -243,12 +254,12 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v04916_music_finished_publication_pending"
+    "status": "v04916_music_complete_saved_published_ci_passed"
   },
   "savedWork": {
-    "version": "0.49.15",
-    "snapshot": "first-step-音乐环境联动-v0.49.15",
-    "state": "local_saved_gui_and_bytes_verified",
+    "version": "0.49.16",
+    "snapshot": "first-step-音乐联动收尾-v0.49.16",
+    "state": "saved_gui_bytes_source_and_ci_verified",
     "review": "docs/DEVELOPMENT_LOG.md"
   },
   "deployment": {
@@ -540,9 +551,9 @@
   },
   "lastPreviewSession": {
     "date": "2026-11-13",
-    "version": "0.49.15",
-    "port": 5341,
-    "state": "saved_gui_and_http_verified",
+    "version": "0.49.16",
+    "port": 5351,
+    "state": "saved_gui_and_bytes_verified",
     "http200": true,
     "indexMatchesSavedBuild": true
   },
