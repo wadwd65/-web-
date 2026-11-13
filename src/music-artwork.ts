@@ -29,6 +29,7 @@ export const MUSIC_EDITIONS=[
 ] as const;
 export const musicEdition=(index:number)=>MUSIC_EDITIONS[((index%MUSIC_EDITIONS.length)+MUSIC_EDITIONS.length)%MUSIC_EDITIONS.length];
 export const musicAtmosphere=(index:number)=>MUSIC_ATMOSPHERES[musicEdition(index).atmosphere];
+export const editionSceneArtwork=(index:number)=>'/artwork/'+artworkFiles[musicEdition(index).artwork];
 
 /** A shared motif joins the physical label, cover thumbnail and listening UI. */
 export function drawEdition(canvas:HTMLCanvasElement,index:number,typography=true){

@@ -1,0 +1,9 @@
+/* Player-only, existing attributed artwork. No filters, video, new canvas,
+   pointer listeners or permanent animation loops. The left reading area stays light. */
+.music-console .ma-background,.music-console .ma-background-layer{position:absolute;inset:0;pointer-events:none}
+.music-console .ma-background-layer{background:var(--scene-base);opacity:1}
+.music-console .ma-background-layer[data-incoming=true]{animation:ma-background-in var(--background-fade) cubic-bezier(.22,.61,.36,1) both}
+.music-console .ma-background-art{position:absolute;inset:0 0 0 26%;background-size:cover;background-position:var(--scene-art-position);opacity:var(--scene-art-opacity)}
+.music-console .ma-background-wash{position:absolute;inset:0;background:linear-gradient(90deg,#edf4f8 0%,#edf4f8f5 23%,#edf4f8aa 39%,#edf4f81c 66%,#edf4f80c),linear-gradient(0deg,#edf4f8 0%,#edf4f8e0 10%,transparent 37%,transparent 80%,#edf4f8cc 100%),radial-gradient(ellipse at 72% 30%,transparent 0%,var(--scene-light) 100%)}
+@keyframes ma-background-in{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.music-console .ma-background-layer[data-incoming=true]{animation:none}}

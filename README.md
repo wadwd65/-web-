@@ -1,6 +1,6 @@
 <p align="center"><img src="docs/assets/repository-cover.svg" alt="初程 First Step — 从你眼前的这件事开始" width="100%" /></p>
 <p align="center">
-<a href="https://github.com/wadwd65/-web-/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.49.14-287ead" /></a>
+<a href="https://github.com/wadwd65/-web-/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.49.16-287ead" /></a>
 <a href="https://github.com/wadwd65/-web-/actions/workflows/ci.yml"><img alt="Tests and build" src="https://github.com/wadwd65/-web-/actions/workflows/ci.yml/badge.svg" /></a>
 <img alt="Node.js" src="https://img.shields.io/badge/Node.js-%E2%89%A524.21-458559" />
 <img alt="TypeScript and React" src="https://img.shields.io/badge/TypeScript_%2B_React-3b729e" />
@@ -19,7 +19,7 @@
 
 第九届传智杯 AI Web 参赛作品，团队名「莱茵生命」。浅蓝银色三维终端是界面表达，音乐是辅助；主线始终是**说明情况 → 核对信息 → 确认结果 → 带走清单**。
 
-> 当前 **v0.49.14**，仍在完善与验收。未提供已验收的公网地址，腾讯云由维护者后续部署。自检不代表比赛评分、专业意见或奖项保证。
+> 当前 **v0.49.16**，仍在完善与验收。未提供已验收的公网地址，腾讯云由维护者后续部署。自检不代表比赛评分、专业意见或奖项保证。
 
 ## 从一件具体的事开始
 
@@ -43,7 +43,7 @@ Offer 段落整理是**本机保守规则提取**，需要勾选和确认，不�
 
 ## 界面预览
 
-以下为 v0.49.13 的实际截图，金额与待遇是合成测试数据；v0.49.14 保持这套视觉，主要修复对话与自备接口限额。
+以下为 v0.49.13 的实际截图，金额与待遇是合成测试数据；首页与工具继续保持这套视觉。v0.49.15—16 在播放器内加入随当前曲目淡入的场景背景，其他页面不随音乐换色。
 
 ![浅色三维首页与直接提问入口](docs/assets/home-preview.jpg)
 
@@ -107,12 +107,14 @@ FIRST_STEP_AI_MODEL=deepseek-flash
 
 HTTPS、反向代理和限额见[接口与试用说明](docs/58-api-settings-and-trial-limits-v049.md)。本轮不部署腾讯云。
 
+播放器背景仅跟随当前曲目，悬停或翻看未播放的唱片不改变环境。快速连切时最多叠加两层，接续最新曲目；简易模式不加载这层背景，单音频和原唱片交互保留。粒子效果也只在原主题、新主题之间过渡，跨曲切换不会依次经过无关主题；重新打开播放器直接使用当前曲目的环境。
+
 ## 验证与已知限制
 
-- v0.49.14 本地 **232 项自动检查通过**，TypeScript、生产构建通过。离线检查无需模型 Key。[GitHub Actions](https://github.com/wadwd65/-web-/actions/workflows/ci.yml) 在 Windows 与 Ubuntu 上分别执行锁定依赖安装、测试、TypeScript/生产构建与记忆结构检查；[首次运行](https://github.com/wadwd65/-web-/actions/runs/42987094671) 两个平台均通过，各232项测试；后续云端状态见上方徽标。
+- v0.49.16 本地 **237 项自动检查通过**，TypeScript、生产构建通过。离线检查无需模型 Key。[GitHub Actions](https://github.com/wadwd65/-web-/actions/workflows/ci.yml) 在 Windows 与 Ubuntu 上分别执行锁定依赖安装、测试、TypeScript/生产构建与记忆结构检查；[首次运行](https://github.com/wadwd65/-web-/actions/runs/42987094671) 两个平台均通过，各232项测试（v0.49.14）；本版新增至237项，本次云端结果以动态徽标和最新运行记录为准。
 - 覆盖未知/零值/更正、合同原文、城市撤回、身份隔离、取消、个人 Key 过期和自备接口免比赛日额。自动检查不等于独立准确率或真实新人任务完成率。
 - 用户报告原 RTX 3050 笔记本短测约 120 FPS，无该次长时日志。核显与另一台独显是独立记录，不能混作代码提速对照；低功耗和长期稳定性仍待验证。
-- 构建仍有 Three 共享块体积提示。本轮浏览器设置禁用，最终 UI 未获可视复核；公网 HTTPS、云端持久化与新人任务验证仍待。
+- 构建仍有 Three 共享块体积提示。本轮播放器八曲/快速切歌/简易/主页隔离已做桌面浏览器检查，尚无新增背景的低配实机结果；公网 HTTPS、云端持久化与新人任务验证仍待。
 - 法律、税务、政策只帮助核对与准备问题，应以官方当期资料或窗口为准。素材权利和模型许可分别记录，**不将整个作品或全部素材声明为 MIT**。
 
 ## 仓库导航

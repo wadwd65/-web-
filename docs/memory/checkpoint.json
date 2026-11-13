@@ -1,10 +1,10 @@
 {
-  "version": "0.49.14",
-  "recordedAt": "2026-11-11T08:30:26.363Z",
+  "version": "0.49.16",
+  "recordedAt": "2026-11-13T13:10:12.671Z",
   "workState": "reviewed_internally",
-  "validationVersion": "0.49.14",
+  "validationVersion": "0.49.16",
   "textNormalisation": "LF",
-  "sourceDigest": "cb657bd9cc6a2c58775188a87528de1cf1f874cbc7fc9c7ebe24ac1e426a5cf5",
+  "sourceDigest": "fb7a7ee0b9b1a85d20195e55959fee33e6521c9139f00a484263c569f25df39a",
   "files": [
     {
       "path": ".env.example",
@@ -16,7 +16,7 @@
     },
     {
       "path": "docs/memory/ARCHITECTURE.md",
-      "sha256": "e015f6ec5e2f230068f7ea6537ff6cfe318ddef89516582cafa65b29f1d742dc"
+      "sha256": "7627e29735225789de301ef138a85e4db9836015e0e4fd47852abcbe01346067"
     },
     {
       "path": "docs/memory/BACKLOG.md",
@@ -24,7 +24,7 @@
     },
     {
       "path": "docs/memory/DECISIONS.md",
-      "sha256": "485ecce0ba7e16c7ae08d00c827add886a3a618cc507e0e2455d5ecb1e64854f"
+      "sha256": "c084cf4367739c82cfcbaab30e4e3fa19e5f9c73d4ae3f48d19f46ce11e3f403"
     },
     {
       "path": "docs/memory/SESSIONS.md",
@@ -32,15 +32,15 @@
     },
     {
       "path": "docs/memory/progress.json",
-      "sha256": "c24d7d59ed227bd22768d25191cd611a25f0efff6aa909fb4f9e785e6fab7090"
+      "sha256": "4c171d8e367d951b0cbf9b99ac1933619ba7b22083052379d4c2a703efc60952"
     },
     {
       "path": "package-lock.json",
-      "sha256": "3e00805d4058c0d96c08da57093699e34a92cec6904172910d80cf2a5f52013a"
+      "sha256": "9f3c5a54d63683f42713b49b492aa1b0fa11c0444da62b80e1561d17cc635903"
     },
     {
       "path": "package.json",
-      "sha256": "1f71cde21fda4f33c558385bb2e2eb0c119b299da239bc665687104151bcd3e8"
+      "sha256": "c4467031fa030beafbd415e94bb254646d29193be4df174160a220f1fc038192"
     },
     {
       "path": "public/artwork/rhine-ascent.png",
@@ -244,11 +244,15 @@
     },
     {
       "path": "src/MusicArchiveScene.tsx",
-      "sha256": "62f4b3eb98fe3d7d4b2be27f0d76a9750b687d7e2fc12decced01e28fa48437e"
+      "sha256": "0e0aa82382d060f2ea72351d88b83e7716f1e7bc2869693cac3f8ad9d5a5086a"
+    },
+    {
+      "path": "src/MusicBackdrop.tsx",
+      "sha256": "6c7cfdc646ade73e57357b65cf463688a227f22036527e0bc517fa3ac3bb97c7"
     },
     {
       "path": "src/MusicPlayer.tsx",
-      "sha256": "bc3142c8f3a7af37b5a6408a89025cfe5d0945de0e22d7b73a49c32ce94ce27d"
+      "sha256": "84a752aa8bdc06f903823d031a9bf5a21dd42174f42aa0897b3318af311a5f57"
     },
     {
       "path": "src/MusicQuickPicker.tsx",
@@ -384,7 +388,7 @@
     },
     {
       "path": "src/experience.css",
-      "sha256": "f07943763f0d8fcddcf024f279b7e432284eb789b55ebad4558b118c38409228"
+      "sha256": "53ca4650e55cd78160cd89ad124d53288a46ac800a7181dd23e8280c748b1eeb"
     },
     {
       "path": "src/home-layout.css",
@@ -468,11 +472,19 @@
     },
     {
       "path": "src/music-artwork.ts",
-      "sha256": "292bb1651d43513af2c046661a3adfd7cb44c104703c30ce2c8a9824031f47a1"
+      "sha256": "78c3fe650ae80ca4dd1038cfbf70e199427e068b846dd2b0c47424b58f9167cc"
+    },
+    {
+      "path": "src/music-atmosphere-blend.ts",
+      "sha256": "7c037710d010a9a00f9c66551106bccaff87306ff23c18f968f92eae42d47343"
     },
     {
       "path": "src/music-atmosphere.ts",
-      "sha256": "5ad7544af9e33ef54d93d39de47612ef01314e27a81883b7279edd6d55e2da1f"
+      "sha256": "8518300d0655a531e8f13c28c28f1b818bb72c17512c4815d92149188b5a8ac6"
+    },
+    {
+      "path": "src/music-background.css",
+      "sha256": "0777ae394c37c73cfe8eb0658671d0a69ae619696c0ec33217b784e621324ee8"
     },
     {
       "path": "src/music-mode.ts",
@@ -736,7 +748,7 @@
     },
     {
       "path": "tests/music-player.test.ts",
-      "sha256": "3de926041c4aa345a8c215754c14f7d0ec3a4169a2fea1c447922a32c21c1062"
+      "sha256": "b7c62c9fe41a3328f102d3956492f866c6b15ce52d38156a7074536c79211342"
     },
     {
       "path": "tests/performance-audio.test.ts",
@@ -748,7 +760,7 @@
     },
     {
       "path": "tests/request-policy.test.mjs",
-      "sha256": "ed3d33f309afaf2003c41991596f5890d04a3c8c52bd2f8fa767b5770bca3323"
+      "sha256": "ba2933868840b376a012dabd5f81fad6a58204e67c9b924d72c6e15b69df68af"
     },
     {
       "path": "tests/runtime-mode.test.ts",
@@ -832,7 +844,7 @@
     },
     {
       "path": "tools/request-policy.mjs",
-      "sha256": "7e531765e63b6798a010be5db369149bcd7eeeb7c3cc46fb63d4c1b728957871"
+      "sha256": "7079a595465e49c8bb5c36cbd5ecf5e647e8986d126494a184500d6de200b041"
     },
     {
       "path": "tools/review-desktop.html",

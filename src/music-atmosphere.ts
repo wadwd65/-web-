@@ -1,10 +1,12 @@
 import * as T from 'three';
 import {musicEdition} from './music-artwork.ts';
+import {createAtmosphereBlend} from './music-atmosphere-blend.ts';
 /** A fixed particle buffer and one light plane; changing editions only changes
  * uniforms. No video, new renderer, frame-by-frame texture or React updates. */
-export function createMusicAtmosphere(scene:T.Scene){
- const uniforms={uTime:{value:0},uMode:{value:0},uTint:{value:new T.Color(musicEdition(0).accent)},uPointer:{value:new T.Vector2()},uActive:{value:0},uClick:{value:10},uClickPoint:{value:new T.Vector2()}};
- const common=`uniform float uTime;uniform float uMode;uniform vec3 uTint;uniform vec2 uPointer;uniform float uActive;uniform float uClick;uniform vec2 uClickPoint;float w(float n){return max(0.,1.-abs(uMode-n));}`;
+export function createMusicAtmosphere(scene:T.Scene,initialIndex=0){
+ const initial=musicEdition(initialIndex),blend=createAtmosphereBlend(initial.atmosphere);
+ const uniforms={uTime:{value:0},uFromMode:{value:blend.from},uToMode:{value:blend.to},uBlend:{value:1},uTint:{value:new T.Color(initial.accent)},uPointer:{value:new T.Vector2()},uActive:{value:0},uClick:{value:10},uClickPoint:{value:new T.Vector2()}};
+ const common=`uniform float uTime;uniform float uFromMode;uniform float uToMode;uniform float uBlend;uniform vec3 uTint;uniform vec2 uPointer;uniform float uActive;uniform float uClick;uniform vec2 uClickPoint;float w(float n){return (abs(uFromMode-n)<.5?1.-uBlend:0.)+(abs(uToMode-n)<.5?uBlend:0.);}`;
  const count=1040,positions=new Float32Array(count*3),seeds=new Float32Array(count);let seed=51243;
  const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
  for(let n=0;n<count;n++){positions[n*3]=(random()-.5)*66;positions[n*3+1]=(random()-.5)*34+4;positions[n*3+2]=-7-random()*28;seeds[n]=random();}
@@ -38,5 +40,5 @@ export function createMusicAtmosphere(scene:T.Scene){
    gl_FragColor=vec4(uTint,field);#include <tonemapping_fragment>\n#include <colorspace_fragment>}`.replace(';#include',';\n#include')});
  const light=new T.Mesh(lightGeometry,lightMaterial);light.position.set(3,4,-33);scene.add(light);
  const tint=new T.Color();let time=0;
- return {uniforms,update(dt:number,index:number,pointer:T.Vector2,active:boolean,reduced:boolean){time+=reduced?0:dt;uniforms.uTime.value=time;uniforms.uMode.value=T.MathUtils.damp(uniforms.uMode.value,musicEdition(index).atmosphere,3.8,dt);uniforms.uTint.value.lerp(tint.set(musicEdition(index).accent),1-Math.exp(-3*dt));uniforms.uPointer.value.lerp(pointer,1-Math.exp(-6*dt));uniforms.uActive.value=T.MathUtils.damp(uniforms.uActive.value,active&&!reduced?1:0,6,dt);uniforms.uClick.value+=reduced?10:dt;},click(pointer:T.Vector2){uniforms.uClick.value=0;uniforms.uClickPoint.value.copy(pointer);},dispose(){scene.remove(particles,light);geometry.dispose();material.dispose();lightGeometry.dispose();lightMaterial.dispose();}};
+ return {uniforms,update(dt:number,index:number,pointer:T.Vector2,active:boolean,reduced:boolean){time+=reduced?0:dt;uniforms.uTime.value=time;blend.update(dt,musicEdition(index).atmosphere,reduced);uniforms.uFromMode.value=blend.from;uniforms.uToMode.value=blend.to;uniforms.uBlend.value=blend.mix;uniforms.uTint.value.lerp(tint.set(musicEdition(index).accent),reduced?1:1-Math.exp(-3*dt));uniforms.uPointer.value.lerp(pointer,1-Math.exp(-6*dt));uniforms.uActive.value=T.MathUtils.damp(uniforms.uActive.value,active&&!reduced?1:0,6,dt);uniforms.uClick.value+=reduced?10:dt;},click(pointer:T.Vector2){uniforms.uClick.value=0;uniforms.uClickPoint.value.copy(pointer);},dispose(){scene.remove(particles,light);geometry.dispose();material.dispose();lightGeometry.dispose();lightMaterial.dispose();}};
 }

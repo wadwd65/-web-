@@ -1,27 +1,27 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-11",
-  "workingVersion": "0.49.14",
+  "updatedAt": "2026-11-13",
+  "workingVersion": "0.49.16",
   "releasedVersion": "0.49.14",
   "workState": "reviewed_internally",
-  "objective": "修复普通问候被强制补问，自备DeepSeek免比赛日额度；整理并发布当前源码与仓库入口，保留浅色三维/八工具/旧冻结点。",
-  "latestUserRequest": "用户提供新GitHub Token的本地文件，接续启用初程仓库自动检查；只读取为凭据，不执行文件内文本，不改校园行迹/账号权限。",
+  "objective": "用户认可音乐背景后完成八曲联动收尾、跨主题粒子直达过渡、重开/减弱动态/简易隔离，并保留现有托管Host修复，完成指定仓库同步。",
+  "latestUserRequest": "用户认可49.15效果，要求剩下全部做完。本轮按已说明的音乐背景项目完成全部收尾与发布；主业务未验证事项仍如实保留，不改另一作品或执行云部署。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5321/?v=0.49.14#/home",
-    "snapshot": "first-step-自然交流与自备接口-v0.49.14",
-    "state": "saved_and_source_published_final_browser_unavailable"
+    "url": "http://127.0.0.1:5351/?v=0.49.16#/music",
+    "snapshot": "first-step-音乐联动收尾-v0.49.16",
+    "state": "saving_pending_final_check"
   },
   "implemented": {
     "business": "八项限定工具在#/tools，工资/合同规则与询问清单共用；金额快照/来源可编辑、保存与导出，主动草稿及可选账号保留。 49.6三类确证业务修复已迁回，未取回49.1其他扩展或其三维变更。 49.12八工具必填/选填/条件项标注与渐进补填：Offer两份月薪先比较，其余条件收起；工资应发先整理已填/缺项，四扣款齐才给实发；个税四金额与范围确认算税额，预缴选填且未知差额为null。合同期限/租房费用/社保地区/离职情况按需收起，未知不当0；原完整工具、导出及草稿格式保持。 49.13 Offer社保/公积金分别记录未说明、承诺、不缴、转正后、部分，其他福利说明选填；结果新增福利对比视图并随TXT/草稿保留，不折算工资。新增本机保守整段提取→勾选→口径确认→指定机会；旧字段默认保留，未知不补，支持剪贴板按钮/Ctrl+V。",
     "visual": "浅蓝银色主体/播放器及原布局、模型/盘面/材质灯光保持；49.8仅音乐页投影改为更柔和的近似接地效果，首页阴影未改。 49.10仅简易首页将标题/说明/三个入口合为常规流，两栏与提问区分行；完整版布局、字体资源、配色及美术保持。 49.11按新授权突出直接问AI图标/标题，首页提问区增加蓝色标识、浅色渐变及焦点边界；输入16px、导航标题16px/辅助12px，示例/说明/对话辅助12—13px。标题、三维场景与音乐美术不变。 49.13原左上标志略加大，轻蓝背光/边框，悬停或焦点发光，按下缩放，工作页加点击标志回首页提示；无常驻新动画循环。",
     "interaction": "同pointer/物体/子区域、稳定前景、画布内及≤6px总位移才执行；后排预览。首页切歌就地播放，播放器才跳音乐界面。 49.9音乐列表与详情均可左键轻拖单张唱片：独立目标/阻尼姿态，按下期间固定镜头与邻片悬停波形；同一主pointer且总位移≤6px、同唱片画布内松手才打开，拖动/取消/切换不触发详情。 49.12工作区顶部返回首页、对话返回页面、播放器返回来源页强化为同系文字按钮；收起的无效选填项提交时自动展开定位。返回保留本次填写。 49.13按最新用户要求撤掉工具顶部及左侧返回首页按钮，沿用原logo链接返回；对话返回页面及音乐返回来源页保留。用户报告的新按钮模型异常没有宣称已根治或重写三维。",
-    "music": "八曲/单audio/旋转保留；活动整匣同层级绘制，静置阵列合批。49.4对整匣各层使用同像素覆盖遮罩、保留原深度遮挡，避免普通透明叠加露出后排裸盘；旧唱片按真实透视退后并留到新匣遮住，取消缩至0的空档。忙碌时只接续最后意图。 49.8取消音乐页PCF阴影深度图，阴影按同帧整匣姿态投到原地面；转场仍先淡出投影、到位后淡入，拖动不再等100ms更新。 49.9列表中八张唱片各自保留轻拖角度，进入/退出详情时从实际整匣姿态接续并归零手动偏角，不把偏角加两次；单audio、播放转盘与49.8同帧投影保留。",
+    "music": "八曲/单audio/旋转保留；活动整匣同层级绘制，静置阵列合批。49.4对整匣各层使用同像素覆盖遮罩、保留原深度遮挡，避免普通透明叠加露出后排裸盘；旧唱片按真实透视退后并留到新匣遮住，取消缩至0的空档。忙碌时只接续最后意图。 49.8取消音乐页PCF阴影深度图，阴影按同帧整匣姿态投到原地面；转场仍先淡出投影、到位后淡入，拖动不再等100ms更新。 49.9列表中八张唱片各自保留轻拖角度，进入/退出详情时从实际整匣姿态接续并归零手动偏角，不把偏角加两次；单audio、播放转盘与49.8同帧投影保留。 49.15完整播放器复用既有五张非角色场景，八曲各自环境色；背景跟实际当前曲目，不跟hover或未播放预览。850ms淡入，最多两层并只接续最新连切；原GPU粒子也改跟current曲目。关闭卸载背景，简易不挂载，单audio/唱片旋转/模型转场不改。 49.16 GPU粒子不再对主题编号做连续插值，旧/新两个模式按同一850ms过渡，途中只接最后当前曲目；初次打开直接用实际current初始化，减弱动态直接完成。保留单audio与49.15背景/布局。",
     "ai": "真实DeepSeek规划与有限工具：导航、工资、合同、问题清单及城市政策。非ready安全补问，guide/model区分；未知不猜、最新更正优先，显式应用，材料不自动发送。 49.6恢复金额任务动词/不变引用过滤、期限时间状语过滤与局部图片缺项说明过滤；标题/样张不作为合同条款引用。 49.7修正固定五项明确收入合计/共享零值/金额更正、专项培训费用误路由、只解释时多余工具入口；回复审查覆盖review标签与部分未命中条文/效力/待遇扩展，安全回退标明guide。 49.13 Offer整段输入仅点发给AI才发送到现有DeepSeek对话，本机提取明确标为本机整理，不冒充AI；真实合成待遇问题已跑通，解释和清单需主动应用。 49.14普通问候/致谢/使用方式询问走一次真实模型，无规划/工具/guide；混合实际办事保持原证据规划。泛clarify不再展示按项补充表，业务必需补问仍保留。",
     "image": "单张PNG/JPEG明确发送、原图对照/编辑/人工确认后填入原工具，不保存原图；PDF仅预览。",
     "retrieval": "小范围官方合同摘录及口语/单主题短追问；四城有限资料，其他求职住宿从固定官方目录发现并读正文，不是全国现金检索；范围/核验日/来源随结果导出保留。 49.7补短周数合同的第三款召回、单主题“单独写那段”追问承接、租赁边界；撤回旧城市不再混入新城市，未知/多城仍阻断。",
-    "api": "同源Node网关，开发/预览/保存版共用local-services。取消/超时/Host-Origin/证据校验；游客/账号/网络/全站日额与分钟/短租约在工程外SQLite。 49.14服务端根据已验证绑定身份的自备会话usageMode免个人/网络/全站日额，聊天与识图共用；保留minute/concurrency/lease。默认额度耗尽不阻自备，切回不清零，body不能伪造模式。",
+    "api": "同源Node网关，开发/预览/保存版共用local-services。取消/超时/Host-Origin/证据校验；游客/账号/网络/全站日额与分钟/短租约在工程外SQLite。 49.14服务端根据已验证绑定身份的自备会话usageMode免个人/网络/全站日额，聊天与识图共用；保留minute/concurrency/lease。默认额度耗尽不阻自备，切回不清零，body不能伪造模式。 本轮从目标仓库既有f627544同步托管Host别名修复到唯一源码，继续严格核对配置Origin，增加后缀伪造/无Origin写入拒绝回归；没有部署。",
     "apiSettings": "默认比赛接口，右上角及对话内可选自备官方DeepSeek/模型及三步引导；自备Key仅RAM约1h，身份绑定、成功/关闭清空输入，不进入账号/浏览器长期存储/作品包。 49.14个人状态明确不限制每日提问/识图次数，null/provider-billed区别默认numeric计数；失效明确提示重连/显式切回。",
     "account": "可选本机账号，scrypt/HttpOnly会话；主动保存地区/阶段/备注/清单。九槽本机草稿按身份隔离，身份变化清当前工具/对话，不同步原图或全部表单。",
     "performance": "49.5使用原生rAF，不再对120/144/165Hz做整数分频；60Hz及GPU不足60的回调全部保留，不制造中间帧。transform-writer仅在TRS真变化时重算局部矩阵，世界变换仍由Three传递；首页缓存未变的材质透明度/投影状态，音乐详情跳过隐藏唱片的可见更新但保留其播放角度，静置批次不重新扫描，零透明度描边停止绘制。保留49.2实例化与主题背景、49.4遮罩/整匣时序、原DPR1.5上限/抗锯齿/纹理/几何/粒子。临时QA GPU时间查询和录像不进入源码/dist。 49.8音乐页关闭实时shadowMap，单个InstancedMesh最多8个柔和四边形（16三角形）跟随原主光方向；未变姿态不上传实例矩阵，隐藏/重选无旧投影。近似投影替代精细物理遮挡；原首页阴影、DPR、几何、CD shader及转场路径不变。 49.10保留首页原PCF/1024阴影图/10Hz更新、DPR及所有动画，用真实投影边界限定地面阴影fragment的scissor，绘制后恢复原裁剪状态。只减少空区域光栅化，不把约19%画布矩形等同81% GPU节省。?perf=1记录实际WebGL适配器/AA/DPR/画布尺寸/帧耗，卸载后仍可下载；普通页不读适配器或启动诊断定时器。"
@@ -107,40 +107,32 @@
       "id": "natural-chat-personal-quota-and-repository",
       "status": "complete",
       "acceptance": "232本地检查/构建/真实模型及个人计数对照、指定源码/标签/保存版通过；同日CI正式启用，Windows/Ubuntu各232测试与构建/记忆检查云端通过。浏览器禁用未最终GUI，原其他验收缺口保留。"
+    },
+    {
+      "id": "player-only-track-backdrop",
+      "status": "complete_local_review",
+      "acceptance": "八曲真实GUI/单audio/未播预览不误切/四连切≤2层/简易与主页0背景；232检查/构建通过；最终本地保存点另验。 最终5341保存版GUI和版本/index/5JS-CSS逐字节核验完成，未推远端/部署。"
     }
   ],
   "validation": {
-    "version": "0.49.14",
-    "automated": "232 tests passed including6 new regression cases; TypeScript and production build passed; shared Three chunk warning remains",
-    "evidence": "outputs/v04914-review",
-    "liveAi": "真实HTTP旧5319你好仍强制补问，新5320自然模型回应且无guide/actions/steps；个人接口致谢和完整工资8000/800/600/66/0，真实plan_tasks+calculate_salary得6534。切回前后默认chat.used均1。",
-    "quota": "离线HTTP验证个人/网络/全站日额耗尽仍可用自备；识图默认三层日额0个人仍成功；切回计数保留；并发/分钟、伪造body、过期不静默回退均有回归。真实个人测试凭据仅RAM，证据无Key/Cookie。",
-    "visual": "本轮浏览器设置禁用，未使用其他通道绕过，最终UI未可视复核。README所用49.13实际合成截图明确标版，不伪称本轮截图。",
-    "repository": "原应用源码675b3ac/标签v0.49.14、框架与当前文档已在指定仓库；同日CI提交e932d06成功推送，新Key未写入源码/日志/证据、未覆盖全局或其他项目凭据。GitHub Actions run42987094671两平台success，原workflow权限阻塞已解除。",
-    "limits": "无公网/新人任务/长时低配验收；不部署腾讯云，不改校园行迹，不改三维与音频画面。",
-    "savedPreview": "正常5321保存版版本/快照、index及5份JS/CSS与构建逐字节一致；真实HTTP问候为model且无guide/actions。最终浏览器禁用，未做UI视觉验收。",
-    "ci": {
-      "head": "e932d0639e21d11ab0591bbf03b7b79079ff42d5",
-      "runId": 42987094671,
-      "url": "https://github.com/wadwd65/-web-/actions/runs/42987094671",
-      "conclusion": "success",
-      "platforms": [
-        "windows-latest",
-        "ubuntu-latest"
-      ],
-      "testsEach": 232,
-      "logsDownloaded": true,
-      "keysOrLlmNeeded": false
-    }
+    "version": "0.49.16",
+    "automated": "237 tests passed (232 existing +4 direct discrete effect-transition regressions +1 existing proxy-host policy regression); TypeScript and production build passed; shared Three chunk warning retained",
+    "evidence": "outputs/v04916-review",
+    "browser": "独立5350实际GUI八曲逐一背景cid/index一致、单audio；快速4连切≤2背景层。关回主页0层/audio1，重新打开当前4且播放时间继续18.68→18.87秒；简易0背景0canvas/audio1且仍播放，切回完整背景恢复。",
+    "reduced": "真实QA页通过支持的CDP临时模拟prefers-reduced-motion，data-reduced=true；切当前5后唯一背景层且animation:none。之后恢复原媒体设置，不改OS或用户偏好。",
+    "visual": "保留用户已认可的49.15配色/图片/布局；实际WebGL重新编译无console error，截图beyond-candidate.png。没有修改唱片模型/盘面/材质/阴影/拖动/切换几何。",
+    "effects": "25模式对归一权重及0→4不访问1/2/3、快速请求丢中间只接最新、非0初始化与reduced中断均有回归；shader只计算最多两种模式，无新增每帧对象/React或图片层。",
+    "merge": "远端和镜像当前f627544，保留e5097c6入场禁止选中文字、cdcfd03交叉记录与f627544既有托管Host修复。先只读比对，再将缺失网关文件/记录迁到canonical，避免音乐发布覆盖；Origin仍严格验证。",
+    "limits": "新背景低配GPU/功耗/长期性能未实测；无新真人任务/全国政策/完整多模态/公网部署结论。",
+    "savedPreview": "pending final saved preview",
+    "publication": "pending source push and cloud CI"
   },
   "nextActions": [
-    "先体验49.14：你好/谢谢自然回复，再用自己的Key提问，确认不显示每日次数；混合工资仍计算。浏览器设置恢复后补最终UI状态和剪贴板权限分支。",
-    "性能后续不再阻塞业务：原3050用户复测约120FPS，先保留当前画面/动画，停止盲目降画质。若整理正式证据，顺手补原机实际NVIDIA适配器/同条件30秒以上JSON或截图，不要求用户反复测试；没有就如实标口头短测。普通核显52FPS的开销仍作为单独优化项，不能要求所有用户改Windows。",
-    "11/10—12继续真实新人主任务：先1人不教入口完成工资原话→更正金额→应用→清单导出，补足2—3人覆盖合同/城市政策，记录耗时/误点/原话。没有真人就标未测，不用AI假扮。性能卡点与任务阻塞优先，暂停播放器装饰性新增。",
-    "11/11—12仅修确认的1—2个P0/P1任务阻塞，人工对照合同回复与原文；老冻结题只称回归，新题先冻结并保留失败。生成层4对ON/OFF不称生产全链路RAG增益。",
-    "11/12左右用户腾讯云部署并给URL后验HTTPS/代理/API默认与自备/游客账号隔离/额度/刷新重启；本会话不部署，无网址就明确待。",
-    "11/13—14做同版5—8分钟1080p MP4和≤30页PDF，真实AI工具/来源→确认→导出为主线，音乐只辅助；注明图片校对/PDF仅预览/政策范围与成本、素材署名。11/14冻结新增。",
-    "11/15—16干净环境npm ci/测试/构建/默认与失败恢复，代码/README/视频/PDF/作品包同版。11/17提交两件查回执，11/18留补救。每天两项目人工共3—4小时，另一账号只在校园行迹自己的目录与仓库操作。"
+    "音乐背景已获用户认可，49.16收尾；先确认新保存版/仓库/CI回执，再回到主任务与提交证据，不继续叠加播放器功能。",
+    "剩余三天回到工资/合同/政策主线的实际任务卡点与失败恢复，优先打不开、误算、版本错与主流程中断；外部新人记录无则如实未测，不以自测替代。",
+    "本项目的介绍文档、演示与作品包按初程正式要求和已验证版本另行准备；上一轮急做PPT/安装包已被用户纠正属于另一项目，本轮不制作、不改校园行迹。",
+    "用户腾讯云部署并提供网址后，再验HTTPS/持久目录/默认与自备API/身份/额度及重启。本轮不部署。",
+    "保留原3050用户短测约120FPS与核显/另一独显独立日志，新背景新增开销尚无目标机数据；不以本机或截图承诺性能。"
   ],
   "visualSources": [
     {
@@ -165,15 +157,15 @@
     "branch": "main",
     "sourceRoot": ".",
     "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "published",
+    "pushStatus": "publishing",
     "sourceCommit": "675b3acb092e82e4d1055ba6f1f03f4aaccee88c",
     "verifiedAt": "2026-11-11",
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
     "previousPublishedHead": "c564526e25dd47710b138eb4bac340292a8898c6",
     "publicationReceipt": "outputs/v04914-review/git-publication.json",
-    "localChanges": "49.11—14当前源码和仓库框架已发布；同日获新凭据后启用双平台CI，e932d06首次运行Windows/Ubuntu各232检查及构建/记忆检查均通过。应用源码与旧冻结点不变。",
-    "localWorkingVersion": "0.49.14",
-    "localUnpublishedChanges": false,
+    "localChanges": "49.15—16音乐联动/粒子收尾及5项回归待发布；现有同仓托管与入场修复保护。",
+    "localWorkingVersion": "0.49.16",
+    "localUnpublishedChanges": true,
     "localDocumentationUpdatesOnly": false,
     "sourceTag": "v0.49.14",
     "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.49.14",
@@ -200,7 +192,8 @@
         "npm run memory:check"
       ],
       "validatedAt": "2026-11-11",
-      "evidence": "outputs/v04914-review/ci-first-run.json"
+      "evidence": "outputs/v04914-review/ci-first-run.json",
+      "lastVerifiedAppVersion": "0.49.14"
     }
   },
   "sideDeliverables": [
@@ -250,12 +243,12 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v04914_published_ci_both_platforms_passed"
+    "status": "v04916_music_finished_publication_pending"
   },
   "savedWork": {
-    "version": "0.49.14",
-    "snapshot": "first-step-自然交流与自备接口-v0.49.14",
-    "state": "saved_http_and_source_verified_browser_unavailable",
+    "version": "0.49.15",
+    "snapshot": "first-step-音乐环境联动-v0.49.15",
+    "state": "local_saved_gui_and_bytes_verified",
     "review": "docs/DEVELOPMENT_LOG.md"
   },
   "deployment": {
@@ -546,10 +539,10 @@
     "planningUpdateRuntimeChanges": false
   },
   "lastPreviewSession": {
-    "date": "2026-11-11",
-    "version": "0.49.14",
-    "port": 5321,
-    "state": "saved_http_verified_final_browser_unavailable",
+    "date": "2026-11-13",
+    "version": "0.49.15",
+    "port": 5341,
+    "state": "saved_gui_and_http_verified",
     "http200": true,
     "indexMatchesSavedBuild": true
   },

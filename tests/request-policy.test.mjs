@@ -57,3 +57,13 @@ test('the assistant, image and account HTTP entries all use the configured site 
   assert.doesNotMatch(JSON.stringify(await response.json()),/password|token/);
  }finally{server.closeAllConnections();await new Promise(resolve=>server.close(resolve));store.close();}
 });
+
+test('existing hosted proxy aliases still require the configured Origin and reject suffix lookalikes',()=>{
+ const policy=createRequestPolicy({publicOrigin:'https://trial.example'});
+ for(const host of ['preview.cloudstudio.club','project.workbuddy.host','project.workbuddy.host:443']){
+  assert.equal(policy.allows(req(host,'https://trial.example')),true);
+  assert.equal(policy.allows(req(host,'https://evil.example')),false);
+  assert.equal(policy.allows(req(host)),false);
+ }
+ for(const host of ['cloudstudio.club.evil.example','project.workbuddy.host.evil','workbuddy.host','localhost'])assert.equal(policy.allows(req(host,'https://trial.example')),false);
+});

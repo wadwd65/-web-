@@ -12,6 +12,7 @@ import type {MusicModePhase} from './music-mode.ts';
 import {MUSIC_MODE_MOTION} from './music-mode.ts';
 import {editionArtwork,musicEdition,musicAtmosphere,warmArtworkAssets} from './music-artwork.ts';
 import MusicSpectrum from './MusicSpectrum.tsx';
+import MusicBackdrop from './MusicBackdrop.tsx';
 const ArchiveScene=lazy(loadMusicScene);
 const time=(seconds:number)=>Number.isFinite(seconds)?`${Math.floor(Math.max(0,seconds)/60)}:${String(Math.floor(Math.max(0,seconds)%60)).padStart(2,'0')}`:'0:00';
 
@@ -64,7 +65,7 @@ export default function MusicPlayer({state,open,onClose,returnLabel,returnPage,r
  const edition=musicEdition(candidate),previewIndex=hovered>=0?hovered:candidate,previewTrack=SOUNDTRACKS[previewIndex];
  const collectionCount=String(SOUNDTRACKS.length).padStart(2,'0');
  return <dialog className="music-console" ref={dialog} aria-labelledby="music-console-title" onCancel={event=>{event.preventDefault();back();}} data-lightweight={lightweight} data-art-ready={artReady||lightweight} data-view={view} data-mode-phase={mode.phase} data-reduced={mode.reduced} data-playing={state.playing} data-track={state.track.cid} data-selected={selected.cid} style={{'--music-enter':`${MUSIC_MODE_MOTION.enter}ms`,'--music-leave':`${MUSIC_MODE_MOTION.leave}ms`,'--edition-accent':edition.accent} as CSSProperties}>
-  <div className="ma-environment" aria-hidden="true"><div className="ma-horizon"/><div className="ma-light-column"/></div>
+  <div className="ma-environment" aria-hidden="true">{mode.present&&!lightweight&&<MusicBackdrop index={state.index} reduced={mode.reduced} artReady={artReady}/>}<div className="ma-horizon"/><div className="ma-light-column"/></div>
   <header className="mc-header">
    <a className="mc-brand" href={`#/${returnPage}`} onClick={event=>{event.preventDefault();exit();}} aria-label={`返回${returnLabel}`}><RhineMark/><span>初程<small>FIRST STEP</small></span></a>
    <div className="ma-header-title"><h1 id="music-console-title" tabIndex={-1} ref={heading}>背景音乐</h1><small>FIRST STEP / BACKGROUND MUSIC</small></div>
@@ -80,7 +81,7 @@ export default function MusicPlayer({state,open,onClose,returnLabel,returnPage,r
     {failed&&<div className="ma-fallback"><Disc3 size={64}/><span>三维视图暂不可用</span><small>仍可通过曲目目录选歌与播放</small><button onClick={()=>{setFailed(false);setReady(false);}}>重试三维视图<ArrowUpRight size={13}/></button></div>}
     <div className="ma-scene-heading" aria-hidden="true"><i/><span>{view==='detail'?'OPTICAL RECORD / OPEN EDITION':`PHYSICAL COLLECTION / ${collectionCount} EDITIONS`}</span><span>RHINE LAB</span></div>
     <div className="ma-scene-index" aria-hidden="true"><span>{String(previewIndex+1).padStart(2,'0')}<i> / {collectionCount}</i></span><div><small>{musicEdition(previewIndex).word}</small><p>{previewTrack.name}</p></div></div>
-    <div className="ma-spatial-tools"><span><i/>{view==='detail'?'按住唱片拖动 · 滚轮缩放':'按住一张唱片拖动 · 单击打开'}</span><span className="ma-atmosphere-name">SCENE / {musicAtmosphere(candidate)}</span></div>
+    <div className="ma-spatial-tools"><span><i/>{view==='detail'?'按住唱片拖动 · 滚轮缩放':'按住一张唱片拖动 · 单击打开'}</span><span className="ma-atmosphere-name">随当前曲目 / {musicAtmosphere(state.index)}</span></div>
    </div>
    <aside className="ma-information">
     <section className="ma-collection" aria-hidden={view!=='collection'} inert={view!=='collection'} aria-label="曲目目录">
