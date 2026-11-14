@@ -2,26 +2,34 @@
   "schemaVersion": 1,
   "updatedAt": "2026-11-15",
   "workingVersion": "0.51.0",
-  "releasedVersion": "0.50.0",
+  "releasedVersion": "0.51.0",
   "workState": "reviewed_internally",
   "objective": "核心AI与证据修复完成，内部约82分；验收即用包后冻结录制，85目标仍需外部证据。",
   "latestUserRequest": "继续以85为目标补质量并准备录制；用户提供校园行迹43号提交包参考，允许借鉴交付组织，不改该项目。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "version": "0.50.0",
-    "url": "http://127.0.0.1:5371/?v=0.50.0#/home",
-    "snapshot": "first-step-九项易用性与PDF政策-v0.50.0",
-    "state": "published_source_ci_and_saved_preview_verified",
+    "version": "0.51.0",
+    "url": "http://127.0.0.1:5374/?v=0.51.0#/home",
+    "snapshot": "first-step-质量与交付-v0.51.0",
+    "state": "published_source_ci_saved_preview_verified",
+    "sourceCommit": "ddd3a90559fe8bc891370a8d27bfad38443f71e0",
+    "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.51.0",
     "previousRelease": {
-      "url": "http://127.0.0.1:5367/?v=0.49.20#/home",
-      "snapshot": "first-step-录制前收尾-v0.49.20",
+      "version": "0.50.0",
+      "url": "http://127.0.0.1:5371/?v=0.50.0#/home",
+      "snapshot": "first-step-九项易用性与PDF政策-v0.50.0",
       "state": "published_source_ci_and_saved_preview_verified",
-      "sourceCommit": "9e4240bca9079417abc72d83f18a196f67db0c55",
-      "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.49.20"
-    },
-    "sourceCommit": "d676c22c1d7f2c7d430df2908c99f0774b0aace9",
-    "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.50.0"
+      "previousRelease": {
+        "url": "http://127.0.0.1:5367/?v=0.49.20#/home",
+        "snapshot": "first-step-录制前收尾-v0.49.20",
+        "state": "published_source_ci_and_saved_preview_verified",
+        "sourceCommit": "9e4240bca9079417abc72d83f18a196f67db0c55",
+        "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.49.20"
+      },
+      "sourceCommit": "d676c22c1d7f2c7d430df2908c99f0774b0aace9",
+      "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.50.0"
+    }
   },
   "implemented": {
     "business": "八项限定工具在#/tools，工资/合同规则与询问清单共用；金额快照/来源可编辑、保存与导出，主动草稿及可选账号保留。 49.6三类确证业务修复已迁回，未取回49.1其他扩展或其三维变更。 49.12八工具必填/选填/条件项标注与渐进补填：Offer两份月薪先比较，其余条件收起；工资应发先整理已填/缺项，四扣款齐才给实发；个税四金额与范围确认算税额，预缴选填且未知差额为null。合同期限/租房费用/社保地区/离职情况按需收起，未知不当0；原完整工具、导出及草稿格式保持。 49.13 Offer社保/公积金分别记录未说明、承诺、不缴、转正后、部分，其他福利说明选填；结果新增福利对比视图并随TXT/草稿保留，不折算工资。新增本机保守整段提取→勾选→口径确认→指定机会；旧字段默认保留，未知不补，支持剪贴板按钮/Ctrl+V。 49.19社保/离职将生成时的情况与正在编辑的情况分开：同条件生成保留勾选/备注并回到结果；修改情况先保留旧记录，可下载或撤销修改，有记录时需明确确认才新建清空。草稿可同时保存编辑值与旧清单上下文，旧草稿兼容。 49.20Offer先显示当前维度已知差额；缺年薪/预算/工时时不作整组排名，不把未知当0。最多三个优先沟通主题，相同缺项合并询问；明确不缴保留事实，不再问是否缴纳。完整核实点折叠保留并导出，可将三件事加入询问清单。 0.50九项：三工具标题/草稿/示例、输入示例Badge和当前视图文案；四城三类12资料、工具阶段分组；PDF本机提取后人工带入；单项话术先确认并独立上下文预填、主动发送。",
@@ -135,13 +143,15 @@
     "ui": "新手交流→中文工资应用/下载/清单导出；合同口语检索；上海三类资料与工具来源下载",
     "cleanBuild": "独立中文空格目录npm ci/build通过，211文件一致；生产audit0",
     "evidence": "outputs/v051-review",
-    "portablePackage": "Chinese/space path + bundled Node/no global Node PATH; manifest/corrupt/occupied/restart/unconfigured503/local assets passed; final ZIP equality pending",
-    "external": "newcomers, sustained low-power hardware, Tencent HTTPS/persistence pending"
+    "portablePackage": "已实启验收；最终源码/便携ZIP字节和CRC核验记录见outputs/v051-review/final-package-verification.json，不含Key",
+    "external": "newcomers, sustained low-power hardware, Tencent HTTPS/persistence pending",
+    "repository": "exact local commit/tree published force=false; Windows/Ubuntu CI success",
+    "savedFiles": 650
   },
   "nextActions": [
-    "只同步wadwd65/-web-源码、日志与CI，保护旧快照/共享依赖/校园行迹；不部署腾讯云。",
-    "冻结录制版，按官方5–8分钟1080p制作视频和≤30页PDF/PPT；只用合成数据，不展示Key。",
-    "安排2–3真实新人和低功耗长测；收到腾讯云网址后验HTTPS/持久化/重启。"
+    "先确认v0.51.0保存版；正式整理≤30页PDF/PPT、5–8分钟1080p普通话视频和有效网盘链接，不再扩音乐或重做主页。",
+    "安排2–3名真实新人完成同口径任务与低功耗长测，记录失败/耗时；内部82分不冒称稳85/90。",
+    "腾讯云由用户后续部署，收到网址后验HTTPS/Origin/身份/重启/数据库持久化及配额。"
   ],
   "visualSources": [
     {
@@ -166,19 +176,20 @@
     "branch": "main",
     "sourceRoot": ".",
     "previousPublishedHead": "fd15605fcc4fa73ff72c2459736504d8047a4a4f",
-    "pushStatus": "local_verified_pending_push",
+    "pushStatus": "published_and_ci_verified",
     "localWorkingVersion": "0.51.0",
-    "localUnpublishedChanges": true,
+    "localUnpublishedChanges": false,
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
     "previousReleaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.49.20",
-    "sourceCommit": "d676c22c1d7f2c7d430df2908c99f0774b0aace9",
-    "sourceTag": "v0.50.0",
-    "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.50.0",
-    "publicationReceipt": "outputs/v050-review/source-publication.json",
+    "sourceCommit": "ddd3a90559fe8bc891370a8d27bfad38443f71e0",
+    "sourceTag": "v0.51.0",
+    "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.51.0",
+    "publicationReceipt": "outputs/v051-review/source-publication.json",
     "ci": {
-      "sourceCommit": "d676c22c1d7f2c7d430df2908c99f0774b0aace9",
-      "runId": 43598524453,
-      "url": "https://github.com/wadwd65/-web-/actions/runs/43598524453",
+      "runId": 43616297020,
+      "url": "https://github.com/wadwd65/-web-/actions/runs/43616297020",
+      "status": "completed",
+      "conclusion": "success",
       "jobs": [
         {
           "name": "Node 24 / ubuntu-latest",
@@ -190,8 +201,7 @@
           "status": "completed",
           "conclusion": "success"
         }
-      ],
-      "notHardwareOrNewcomerEvidence": true
+      ]
     }
   },
   "sideDeliverables": [
@@ -284,11 +294,11 @@
     "history": "docs/VERSION_HISTORY.md",
     "syncCommand": "npm run log:sync -- --contest-dir=\"ABSOLUTE_CONTEST_PATH\"",
     "policy": "Append facts and verification each delivery, sync and --check; no secrets/personal materials; older snapshots stay local, Git history preserved.",
-    "status": "v04916_music_complete_saved_published_ci_passed"
+    "status": "v051_quality_and_delivery"
   },
   "savedWork": {
-    "version": "0.49.16",
-    "snapshot": "first-step-音乐联动收尾-v0.49.16",
+    "version": "0.51.0",
+    "snapshot": "first-step-质量与交付-v0.51.0",
     "state": "saved_gui_bytes_source_and_ci_verified",
     "review": "docs/DEVELOPMENT_LOG.md"
   },
@@ -580,10 +590,10 @@
     "planningUpdateRuntimeChanges": false
   },
   "lastPreviewSession": {
-    "date": "2026-11-14",
-    "version": "0.50.0",
-    "port": 5371,
-    "state": "saved_gui_and_bytes_verified",
+    "date": "2026-11-15",
+    "version": "0.51.0",
+    "port": 5374,
+    "state": "saved_gui_verified",
     "http200": true,
     "indexMatchesSavedBuild": true
   },
@@ -600,7 +610,7 @@
   "latestImprovement": {
     "date": "2026-11-15",
     "version": "0.51.0",
-    "status": "本地质量回归完成，即用包验收/发布接续",
+    "status": "质量修复、258检查、38题模型回归、双平台CI与保存版通过；提交预备包核验后封存",
     "evidence": "outputs/v051-review"
   },
   "latestSelfAssessment": {
@@ -628,7 +638,8 @@
     "requestedDelayMinutes": 40,
     "scope": "本聊天接续实际开发；以85为目标，之后准备视频",
     "quotaReset": "用户预计，未由工具核实",
-    "runtimeChangedThisTurn": false
+    "runtimeChangedThisTurn": false,
+    "state": "resumed_work_completed"
   },
   "submissionReference": {
     "path": "C:/Users/123/Desktop/传智杯VibeCoding参赛包/43-今天可提交-无视频-20261113",
