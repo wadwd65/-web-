@@ -92,27 +92,34 @@ async function evaluate(item){
   }else{
    result=await runAssistant({messages:item.messages,module:'home'},{config,fetcher});
    const guide=result.guide,actions=result.actions||[];
+   if(expected.conversational){check(!guide,'ordinary conversation must not become a task form');check(!result.steps.length,'ordinary conversation must not invoke tools');check(result.replyOrigin==='model','ordinary conversation must be a real model reply');}
+   if(expected.module)check(guide?.activeModule===expected.module,'active task mismatch: '+expected.module);
+   if(expected.noQuestions)check(!guide?.questions?.length,'unnecessary follow-up fields');
    for(const key of ['activeModule','status','intent'])if(expected[key]!==undefined)check(guide?.[key]===expected[key],`guide.${key}: expected ${expected[key]}, got ${guide?.[key]}`);
    if(expected.actionKind)check(actions.some(a=>a.kind===expected.actionKind),'missing '+expected.actionKind);
    if(expected.noActions)check(actions.length===0,'unexpected action');
    if(expected.noCalculation)check(!actions.some(a=>a.kind==='apply-salary'),'unexpected salary calculation');
    if(expected.noContractAction)check(!actions.some(a=>a.kind==='apply-contract'),'unexpected contract review');
+   if(expected.net!==undefined||Object.hasOwn(expected,'received')){const action=actions.find(a=>a.kind==='apply-salary');check(!!action,'missing salary calculation');if(action){calculation=calculatePayslip(action.input);if(expected.net!==undefined)check(calculation.net===expected.net,'salary net mismatch');if(Object.hasOwn(expected,'received'))check(action.input.received===expected.received,'received amount was not preserved/retracted');}}
    if(expected.emptyQuestions)check(!guide?.questions?.length,'unnecessary questions');
    if(expected.salaryInput){const input=actions.find(a=>a.kind==='apply-salary')?.input;for(const [k,v] of Object.entries(expected.salaryInput))check(input?.[k]===v,'salary input mismatch: '+k);if(input){calculation=calculatePayslip(input);if(expected.net!==undefined)check(calculation.net===expected.net,'salary net mismatch');if(expected.diff!==undefined)check(calculation.difference===expected.diff,'salary difference mismatch');}}
    if(expected.contractInput){const input=actions.find(a=>a.kind==='apply-contract')?.input;for(const [k,v] of Object.entries(expected.contractInput))check(input?.[k]===v,'contract input mismatch: '+k);if(input){findings=analyzeContract(input);for(const id of expected.expectedAttentionIds||[])check(findings.find(f=>f.id===id)?.status==='attention','contract finding: '+id);}}
    const references=result.references;
+   if(expected.references)check(references?.status===expected.references,'contract references mismatch');
    if(expected.retrievalStatus)check(references?.status===expected.retrievalStatus,'contract retrieval status');
    for(const id of expected.expectedExcerptIds||[])check(references?.excerpts?.some(e=>e.id===id),'missing excerpt '+id);
    if(expected.expectedTopExcerptId)check(references?.excerpts?.[0]?.id===expected.expectedTopExcerptId,'top contract excerpt');
    for(const pattern of expected.prohibitedReplyPatterns||[])check(!result.reply.includes(pattern),'prohibited reply pattern: '+pattern);
    const policy=result.policyReferences;
+   for(const key of ['city','topic'])if(expected[key])check(policy?.[key]===expected[key],'policy '+key+' mismatch');
+   if(expected.sourceCount!==undefined)check(policy?.sources?.length===expected.sourceCount,'policy source count mismatch');
    for(const [key,actual] of [['policyCity','city'],['policyTopic','topic'],['policyStatus','status']])if(expected[key]!==undefined)check(policy?.[actual]===expected[key],`${key}: expected ${expected[key]}, got ${policy?.[actual]}`);
    if(expected.sourceMode)check(policy?.sources?.some(s=>s.mode===expected.sourceMode),'policy source mode');
    if(expected.noPolicyReferences)check(!policy,'unexpected policy references');
    if(expected.mustAskCity)check(/城市|哪个市|哪里/u.test(result.reply+' '+JSON.stringify(guide?.questions||[])),'city not requested');
   }
  }catch(cause){error={code:cause.code||cause.name||'error',message:cause.message};failures.push(error.code);}
- return {id:item.id,category:item.category,originalSplit:item.split,passed:!failures.length,failures,requests,elapsedMs:Math.round(performance.now()-started),result,extraction,findings,calculation,error};
+ return {id:item.id,category:item.category,originalSplit:item.split,expected,humanReview:item.humanReview,passed:!failures.length,failures,requests,elapsedMs:Math.round(performance.now()-started),result,extraction,findings,calculation,error};
 }
 if(ablation){
  const results=[];

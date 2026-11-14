@@ -79,6 +79,11 @@ const MONEY_LABELS=SALARY_LABELS;
 const moneyProvided=salaryValueGrounded;
 function reconcileSalaryPlan(guide,userText,latest){
   if(guide.activeModule!=='salary'||!['ready','needs-info'].includes(guide.status))return guide;
+  // A request to explain the missing items is not permission to resume calculation
+  // or show the same unknown fields again. A later explicit request may reverse it.
+  const deferred=Array.from(latest.matchAll(/(?:先|暂时|这次|现在)?(?:别|不要|不用|不必|暂不|不想)(?:再|继续)?(?:算|计算|重算)/gu)).at(-1);
+  const resume=Array.from(latest.matchAll(/(?:请|帮我|开始|现在|还是)(?:算|计算|重算)/gu)).at(-1);
+  if(deferred&&(!resume||deferred.index>resume.index))return {...guide,intent:'guidance',status:'ready',questions:[]};
   if(asksSalaryFirstStep(latest))return {...guide,intent:'guidance',status:'ready',questions:[]};
   if(guide.intent!=='calculate')return guide;
   const facts=salaryFacts(userText),missing=SALARY_REQUIRED.filter(key=>facts[key].state!=='confirmed');
@@ -205,7 +210,7 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
   const asksToOpen=/^(?:请|麻烦|帮我|带我|我想|我要|先|直接|现在|那就|可以|\s)*(?:打开|进入|跳转|去看看)/u.test(latestUserMessage);
   const namesAnEntry=Object.values(MODULES).some(name=>latestUserMessage.includes(name))||/工具|入口|页面|界面/u.test(latestUserMessage);
   const wantsEntry=asksToOpen&&namesAnEntry||/(?:工具|入口)(?:在|去)哪|(?:哪里|在哪).{0,6}(?:工具|入口)/u.test(latestUserMessage);
-  const declinedEntry=!wantsEntry&&conversation.messages.filter(m=>m.role==='user').slice(-3).some(m=>/(?:不用|不要|不必|无需|别|不需要)[^。！？;\n]{0,10}(?:填表|代填|工具|入口|操作)/u.test(m.content));
+  const declinedEntry=!wantsEntry&&conversation.messages.filter(m=>m.role==='user').slice(-3).some(m=>/(?:不用|不要|不必|无需|别|不需要|不想开|不开)[^。！？;\n]{0,10}(?:填表|代填|工具|入口|操作)/u.test(m.content));
   const completedReply=()=>({reply:actions.some(a=>a.kind==='add-questions')?'要核实的问题已整理好。点下方按钮才会加入清单，加入后仍可修改。':actions.some(a=>a.kind==='apply-salary'||a.kind==='apply-contract')?'本次核对已完成，可以在下方打开工具查看结果，或继续补充信息。':'点下方入口打开工具后，可以继续填写和核对。',replyOrigin:'guide',actions,steps,guide,references,policyReferences,provider:'DeepSeek',model:config.model||'deepseek-flash'});
   try{
     for(let round=0;round<4;round++){

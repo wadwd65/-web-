@@ -1,0 +1,244 @@
+[
+  {
+    "id": "AC-META-01",
+    "category": "conversation",
+    "messages": [
+      {
+        "role": "user",
+        "content": "你好，我第一次用，想知道你能帮我做什么？"
+      }
+    ],
+    "expected": {
+      "conversational": true,
+      "noActions": true,
+      "noQuestions": true
+    },
+    "humanReview": "应先自然回应并说明可以自由描述问题，不出现选事项/情况补填表。"
+  },
+  {
+    "id": "AC-META-02",
+    "category": "conversation",
+    "messages": [
+      {
+        "role": "user",
+        "content": "您好，我刚毕业，不太会用这个网站，可以先告诉我怎么开始吗？"
+      }
+    ],
+    "expected": {
+      "conversational": true,
+      "noActions": true,
+      "noQuestions": true
+    },
+    "humanReview": "应说明直接说自己的问题即可，不代编材料或要求先选八类。"
+  },
+  {
+    "id": "AC-META-03",
+    "category": "conversation",
+    "messages": [
+      {
+        "role": "user",
+        "content": "我不想填表，我就想直接说。你能帮我吗？"
+      }
+    ],
+    "expected": {
+      "conversational": true,
+      "noActions": true,
+      "noQuestions": true
+    },
+    "humanReview": "允许自由表达，不能继续重复事项表格式追问。"
+  },
+  {
+    "id": "AC-SAL-01",
+    "category": "salary",
+    "messages": [
+      {
+        "role": "user",
+        "content": "你好，帮我核对工资：应发8500元，个人社保700元，公积金500元，个税80元，其他扣款没有，到账7220元。"
+      }
+    ],
+    "expected": {
+      "module": "salary",
+      "net": 7220,
+      "received": 7220
+    },
+    "humanReview": "混合问候和真实计算必须保留工具，已确认没有视为0。"
+  },
+  {
+    "id": "AC-SAL-02",
+    "category": "salary",
+    "messages": [
+      {
+        "role": "user",
+        "content": "只帮我列缺什么，先别算：应发7200元，其他扣款本月确实没有；个人社保、公积金、个税都不知道，到账6450元只作对照。不要重复问这些金额。"
+      }
+    ],
+    "expected": {
+      "module": "salary",
+      "noCalculation": true,
+      "noActions": true,
+      "noQuestions": true
+    },
+    "humanReview": "说明缺三项和取得方式，不反推扣款，不启动计算。"
+  },
+  {
+    "id": "AC-SAL-03",
+    "category": "salary",
+    "messages": [
+      {
+        "role": "user",
+        "content": "应发8000元，个人社保800元，公积金600元，个税66元，其他扣款0元，到账6534元。"
+      },
+      {
+        "role": "assistant",
+        "content": "按这些确认值计算实发6534元。"
+      },
+      {
+        "role": "user",
+        "content": "实际到账我说错了，现在还不知道，只算理论实发，其他金额不变。"
+      }
+    ],
+    "expected": {
+      "module": "salary",
+      "net": 6534,
+      "received": null
+    },
+    "humanReview": "撤回到账必须保留null，不能回填6534或0。"
+  },
+  {
+    "id": "AC-SAL-04",
+    "category": "salary",
+    "messages": [
+      {
+        "role": "user",
+        "content": "应发八千五百元，个人社保七百元，公积金五百元，个税八十元，其他扣款没有，到账七千二百二十元。请算一下。"
+      }
+    ],
+    "expected": {
+      "module": "salary",
+      "net": 7220,
+      "received": 7220
+    },
+    "humanReview": "完整明确中文金额可核对，不接受口语省略的歧义金额。"
+  },
+  {
+    "id": "AC-SAL-05",
+    "category": "salary",
+    "messages": [
+      {
+        "role": "user",
+        "content": "应发8.5k，个人社保0.7千元，公积金500元，个税80元，其他扣款没有，帮我算一下实发。"
+      }
+    ],
+    "expected": {
+      "module": "salary",
+      "net": 7220,
+      "received": null
+    },
+    "humanReview": "k/千为明确数量单位，需要金额证据守卫支持，不绕过确认。"
+  },
+  {
+    "id": "AC-SAL-06",
+    "category": "salary",
+    "messages": [
+      {
+        "role": "user",
+        "content": "应发八千五，个人社保700元，公积金500元，个税80元，其他扣款没有。帮我算一下。"
+      }
+    ],
+    "expected": {
+      "module": "salary",
+      "noCalculation": true
+    },
+    "humanReview": "八千五有口语省略歧义，需确认完整金额，不能默默按8500或8005。"
+  },
+  {
+    "id": "AC-SAL-07",
+    "category": "salary",
+    "messages": [
+      {
+        "role": "user",
+        "content": "应发8000元到9000元，个人社保700元，公积金500元，个税80元，其他扣款没有，帮我核对。"
+      }
+    ],
+    "expected": {
+      "module": "salary",
+      "noCalculation": true
+    },
+    "humanReview": "区间不是本期确认额，禁止截取8000当确定值。"
+  },
+  {
+    "id": "AC-CON-01",
+    "category": "contract",
+    "messages": [
+      {
+        "role": "user",
+        "content": "请帮我拟一段给HR的礼貌沟通文字：相关条款写“普通离职需付违约金8000元”。只针对这一项先问清适用条件，不判断整份合同违法，不需要填表或打开工具。"
+      }
+    ],
+    "expected": {
+      "module": "contract",
+      "noActions": true,
+      "noQuestions": true,
+      "references": "matched"
+    },
+    "humanReview": "输出可复制短话术，不能变成只贴法条或追问完整合同。"
+  },
+  {
+    "id": "AC-REN-01",
+    "category": "rent",
+    "messages": [
+      {
+        "role": "user",
+        "content": "房东让我先付钱再看租房合同。我只想要一段微信文字，礼貌地先索要合同和费用说明，不要替我答应付款，也不用打开工具。"
+      }
+    ],
+    "expected": {
+      "module": "rent",
+      "noActions": true,
+      "noQuestions": true
+    },
+    "humanReview": "给明确可发的短话术，不承诺付款、不编付款法律结论。"
+  },
+  {
+    "id": "AC-POL-01",
+    "category": "policy",
+    "messages": [
+      {
+        "role": "user",
+        "content": "想看深圳补贴。"
+      },
+      {
+        "role": "assistant",
+        "content": "可以按城市查资料。"
+      },
+      {
+        "role": "user",
+        "content": "不是深圳，改成上海；给我三类官方资料总览，不用核定个人资格。"
+      }
+    ],
+    "expected": {
+      "module": "subsidy",
+      "city": "上海",
+      "topic": "overview",
+      "sourceCount": 3
+    },
+    "humanReview": "最新城市更正优先，三类来源均上海，不认定资格。"
+  },
+  {
+    "id": "AC-POL-02",
+    "category": "policy",
+    "messages": [
+      {
+        "role": "user",
+        "content": "杭州是不是每个毕业生入职就直接领钱？只查你现有的毕业和安居补贴资料，不要把青年驿站住宿当成现金。"
+      }
+    ],
+    "expected": {
+      "module": "subsidy",
+      "city": "杭州",
+      "topic": "support",
+      "sourceCount": 2
+    },
+    "humanReview": "只依据两条限定支持资料，保留院校/学历/参保/申请期，不承诺所有人享有。"
+  }
+]

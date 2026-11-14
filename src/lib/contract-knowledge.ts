@@ -77,7 +77,11 @@ export function searchContractKnowledge(query:string, options:{context?:string;f
   // Only a clearly stated duration below three months prioritizes this paragraph.
   // Weeks <=12 / days <89 are safely below three calendar months; no conversion
   // is used to fill the user's contract form or determine an unknown duration.
-  const shortTerm=Array.from(normalized.matchAll(/合同[^。；;，,\n]{0,12}?(\d+|[一二两三四五六七八九十]+)\s*个?(星期|周|天|日|月)/gu)).some(match=>{
+  const durations=[
+    ...normalized.matchAll(/合同[^。；;，,\n]{0,12}?(\d+|[一二两三四五六七八九十]+)\s*个?(星期|周|天|日|月)/gu),
+    ...normalized.matchAll(/(?:签(?:了|的是|的)?|一份|为期)\s*(\d+|[一二两三四五六七八九十]+)\s*个?(星期|周|天|日|月)的?(?:全日制)?(?:劳动)?合同/gu),
+  ];
+  const shortTerm=durations.some(match=>{
     if(/不是|不对|不知道|不确定|可能|大概|约/u.test(match[0]))return false;
     const digits:Record<string,number>={一:1,二:2,两:2,三:3,四:4,五:5,六:6,七:7,八:8,九:9};
     const token=match[1],parts=token.split('十');

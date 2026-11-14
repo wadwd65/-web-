@@ -183,7 +183,7 @@ test('a full-time scope question is not a declaration of unsupported employment'
 });
 
 test('short weeks in a contract retrieve the short-term rule without treating every week count as short',()=>{
- for(const query of ['劳动合同只管七个星期，先留十天试用。','劳动合同只有8周，试用期可以约吗？'])assert.equal(search(query).excerpts[0]?.id,'LC19-3');
+ for(const query of ['劳动合同只管七个星期，先留十天试用。','劳动合同只有8周，试用期可以约吗？','我签七周的全日制劳动合同，公司写带薪试用十天，一般规则允许这样约定吗？'])assert.equal(search(query).excerpts[0]?.id,'LC19-3');
  assert.notEqual(search('劳动合同期限104周，试用期怎么定').excerpts[0]?.id,'LC19-3');
 });
 
@@ -200,10 +200,11 @@ test('an explicit probation-only follow-up inherits one user topic, without borr
 });
 
 test('explanation-only requests respect a declined tool entry',async()=>{
- const content='专项技术培训服务期不知道，只解释依据，不要替我填表。';
+ for(const content of ['专项技术培训服务期不知道，只解释依据，不要替我填表。','专项技术培训服务期不知道，只解释依据，不开工具。']){
  let count=0;
  const result=await runAssistant({messages:[{role:'user',content}]},{config:{apiKey:'synthetic'},fetcher:async()=>++count===1?reply({tool_calls:[call(plan)]}):reply({content:'具体数额还不能确定，先核实实际培训费、服务期和未履行部分。'})});
  assert.equal(result.references.status,'matched');assert.deepEqual(result.actions,[]);
+ }
 });
 
 test('a review-labelled explanation cannot bypass source support checks',async()=>{

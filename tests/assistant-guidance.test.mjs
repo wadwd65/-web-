@@ -44,6 +44,16 @@ test('unknown facts never receive a zero default from a model-written hint',()=>
  assert.ok(!guide.questions[0].hint.includes('填0'));assert.match(guide.questions[0].hint,/不知道/);
  assert.throws(()=>validateAssistantGuide({...guide,intent:'guidance'}));
 });
+
+test('explicitly deferring salary calculation does not repeat unknown fields, and a later request can resume',async()=>{
+ const missing={...ready,status:'needs-info',intent:'calculate',questions:[{label:'个人社保',hint:''}]};
+ let calls=0;
+ const result=await runAssistant({messages:[{role:'user',content:'应发7200元，个人社保、公积金、个税不知道，其他扣款没有。先别算，也不要再问我数字，只说要去哪里查。'}]},{config,fetcher:async()=>++calls===1?response({tool_calls:[call('plan_tasks',missing)]}):response({content:'可以先向HR索取本期工资条，再核对三项个人扣款。'})});
+ assert.equal(result.guide.status,'ready');assert.equal(result.guide.intent,'guidance');assert.deepEqual(result.guide.questions,[]);assert.deepEqual(result.actions,[]);
+ calls=0;
+ const resumed=await runAssistant({messages:[{role:'user',content:'先别算。现在算工资，应发7200元，其他扣款没有，社保还不知道。'}]},{config,fetcher:async()=>{calls++;return response({tool_calls:[call('plan_tasks',missing)]});}});
+ assert.equal(resumed.guide.status,'needs-info');assert.equal(resumed.guide.intent,'calculate');
+});
 test('missing-information replies use the verified plan without asking the model for speculative prose',async()=>{
  let calls=0;const guide={...ready,status:'needs-info',intent:'calculate',questions:[{label:'个税',hint:'填0'}]};
  const result=await runAssistant({messages:[{role:'user',content:'个税不知道，不猜'}]},{config,fetcher:async()=>{calls++;return response({tool_calls:[call('plan_tasks',guide)]});}});
@@ -69,8 +79,8 @@ test('an invalid guidance follow-up gives a specific correction and can recover 
 });
 
 test('问候/致谢/不会用不进入办事规划；带业务的问候仍核对必要事实',()=>{
- for(const text of ['你好','你好呀！','在吗','谢谢你','你能做什么？','我不知道怎么说','我不想填表','你的回答太死板了'])assert.equal(isConversationalTurn(text),true,text);
- for(const text of ['你好，我工资好像少了','谢谢，那我的个税怎么算','社保不交怎么办','你好，我应发8000元','未知的一段话'])assert.equal(isConversationalTurn(text),false,text);
+ for(const text of ['你好','你好呀！','在吗','谢谢你','你能做什么？','我不知道怎么说','我不想填表','你的回答太死板了','你好，我第一次用，想知道你能帮我做什么？','您好，我刚毕业，不太会用这个网站，可以先告诉我怎么开始吗？','我不想填表，我就想直接说。你能帮我吗？'])assert.equal(isConversationalTurn(text),true,text);
+ for(const text of ['你好，我工资好像少了','谢谢，那我的个税怎么算','社保不交怎么办','你好，我应发8000元','未知的一段话','我不想填表，应发8.5k，社保700，公积金500，个税80，其他扣款没有','第一次用，合同试用期三个月可以吗','你好，我刚毕业，想了解上海求职补贴'])assert.equal(isConversationalTurn(text),false,text);
 });
 test('普通交流真实调用模型自然回应，不返回任务补问/表单或旧动作',async()=>{
  let calls=0;const result=await runAssistant({module:'salary',messages:[{role:'user',content:'工资还没收到'},{role:'assistant',content:'请补充实际到账'},{role:'user',content:'你好'}]},{config,fetcher:async(_url,init)=>{calls++;const payload=JSON.parse(init.body);assert.equal(payload.tool_choice,'none');assert.deepEqual(payload.tools,[]);assert.match(payload.messages[0].content,/普通交流/);return response({content:'你好，我在。慢慢说就好。'});}});

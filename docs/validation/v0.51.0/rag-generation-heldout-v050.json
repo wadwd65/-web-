@@ -1,0 +1,637 @@
+{
+  "version": "0.50.0",
+  "benchmarkId": "holdout-20261109-v1",
+  "date": "2026-11-14T15:57:48.081Z",
+  "purpose": "Generation-layer controlled probe, NOT production end-to-end RAG ablation",
+  "protocol": {
+    "id": "contract-generation-reference-availability-v1",
+    "scope": "Generation-layer controlled probe, NOT production end-to-end RAG ablation",
+    "system": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。",
+    "parameters": {
+      "temperature": 0.3,
+      "thinking": {
+        "type": "disabled"
+      },
+      "stream": false,
+      "max_tokens": 1600
+    },
+    "variable": "Only referenceExcerpts changes; history, prompt, model and parameters are identical within a pair.",
+    "order": "Sequential within pairs; alternate ON-first/OFF-first by frozen case order.",
+    "scoring": [
+      "Human review against pre-frozen expected/humanReview; do not edit the cases after observing answers.",
+      "Judge direct factual correctness, preservation of unknown facts, relevance and unnecessary follow-up separately.",
+      "Citation availability/support is a separate dimension, not part of a claimed factual accuracy gain.",
+      "No-match or out-of-scope pairs have identical empty references; they are negative controls, not positive RAG-gain cases."
+    ],
+    "limitations": [
+      "One sample per arm/case at temperature .3; no statistical significance claim.",
+      "Raw model output only: production planner/tools/scope refusal and final safety filter are not measured in this probe.",
+      "Internal synthetic cases, not external independent or real-user validation."
+    ]
+  },
+  "protocolSha256": "3a8fff6f7e7546868d7e66b7ec776949d9d7c5b597990f23cb4a2b73b9632316",
+  "fixtureFiles": [
+    {
+      "path": "cases.json",
+      "count": 8,
+      "bytes": 15557,
+      "sha256": "9fcb27acee735754296b8464baf3e286366a9eba05c86562b394b5f8f5dc10f0"
+    }
+  ],
+  "fixtureHashesVerified": true,
+  "dataset": "holdout-20261109-v1",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "pairs": 4,
+  "errors": 0,
+  "grading": "Pending explicit human review; no automatic accuracy or RAG improvement claim",
+  "results": [
+    {
+      "id": "FH-20261109-C01",
+      "category": "contract-rag",
+      "expected": {
+        "activeModule": "contract",
+        "noActions": true,
+        "noCalculation": true,
+        "emptyQuestions": true,
+        "retrievalStatus": "matched",
+        "expectedExcerptIds": [
+          "LC19-3"
+        ],
+        "humanReview": {
+          "should": [
+            "识别口语中的七个星期为不足三个月的劳动合同，并说明该类合同不得约定试用期。",
+            "将回答限制在已给出的劳动合同法摘录，引用LC19-3或其对应的第十九条第三款。"
+          ],
+          "shouldNot": [
+            "因为这十天照发工资就认可试用安排。",
+            "把七个星期误当作七个月，或套用一年以上合同的试用期区间。",
+            "擅自填写表格、生成待应用动作或追问已不影响当前条文判断的月份。"
+          ],
+          "actionsAllowed": false,
+          "followUpQuestionsAllowed": false
+        }
+      },
+      "humanReview": {
+        "should": [
+          "识别口语中的七个星期为不足三个月的劳动合同，并说明该类合同不得约定试用期。",
+          "将回答限制在已给出的劳动合同法摘录，引用LC19-3或其对应的第十九条第三款。"
+        ],
+        "shouldNot": [
+          "因为这十天照发工资就认可试用安排。",
+          "把七个星期误当作七个月，或套用一年以上合同的试用期区间。",
+          "擅自填写表格、生成待应用动作或追问已不影响当前条文判断的月份。"
+        ],
+        "actionsAllowed": false,
+        "followUpQuestionsAllowed": false
+      },
+      "retrieval": {
+        "corpusId": "labor-contract-2012-v1",
+        "status": "matched",
+        "query": "这份劳动合同只管七个星期，老板说先留十天看看合不合拍，钱照发，这段就叫试用。我想问这种短合同里能不能放这十天，直接解释现有条文，不用帮我填表或打开工具。",
+        "message": "检索自已核验的官方条文摘录。请结合完整原文与实际情况理解。",
+        "excerpts": [
+          {
+            "id": "LC19-3",
+            "article": "第十九条第三款",
+            "title": "短期或任务期限合同的试用期",
+            "text": "以完成一定工作任务为期限的劳动合同或者劳动合同期限不满三个月的，不得约定试用期。",
+            "matchedTerms": [
+              "试用",
+              "明确的短期合同期限"
+            ]
+          }
+        ]
+      },
+      "arms": {
+        "on": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[{\"id\":\"LC19-3\",\"article\":\"第十九条第三款\",\"title\":\"短期或任务期限合同的试用期\",\"text\":\"以完成一定工作任务为期限的劳动合同或者劳动合同期限不满三个月的，不得约定试用期。\"}]}"
+              },
+              {
+                "role": "user",
+                "content": "这份劳动合同只管七个星期，老板说先留十天看看合不合拍，钱照发，这段就叫试用。我想问这种短合同里能不能放这十天，直接解释现有条文，不用帮我填表或打开工具。"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "不能。依据你给的《劳动合同法》第十九条第三款，劳动合同期限不满三个月的，不得约定试用期。七个星期不满三个月，所以这十天不能作为试用期约定。老板说“钱照发”不影响这个禁止性规定；这十天可以按正常用工履行，但不宜写成试用期。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 227,
+            "completion_tokens": 66,
+            "total_tokens": 293,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 227
+          },
+          "elapsedMs": 1027,
+          "finishReason": "stop"
+        },
+        "off": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[]}"
+              },
+              {
+                "role": "user",
+                "content": "这份劳动合同只管七个星期，老板说先留十天看看合不合拍，钱照发，这段就叫试用。我想问这种短合同里能不能放这十天，直接解释现有条文，不用帮我填表或打开工具。"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "可以放，但性质要说清。短合同里约定“先做十天看看、钱照发”，一般属于双方约定的试用期或考察期；关键看合同是否明确写了这十天是试用期、工资标准、考核和解除条件。若合同期限只有七周，试用期长短还受法律对试用期上限的限制，不能仅凭老板口头说法。具体是否合法，需看合同期限、岗位和约定内容，现有资料不足，不能替你下结论。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 180,
+            "completion_tokens": 101,
+            "total_tokens": 281,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 180
+          },
+          "elapsedMs": 1448,
+          "finishReason": "stop"
+        }
+      },
+      "emptyReferenceControl": false,
+      "requestParityVerified": true
+    },
+    {
+      "id": "FH-20261109-C02",
+      "category": "contract-rag",
+      "expected": {
+        "activeModule": "contract",
+        "noActions": true,
+        "noCalculation": true,
+        "emptyQuestions": true,
+        "retrievalStatus": "matched",
+        "expectedExcerptIds": [
+          "LC19-4"
+        ],
+        "humanReview": {
+          "should": [
+            "结合前文，把后一个和单独写那段解析为劳动合同仅约定试用期的效力问题。",
+            "说明仅约定试用期的，试用期不成立，该期限为劳动合同期限，并引用LC19-4或其对应的第十九条第四款。"
+          ],
+          "shouldNot": [
+            "只按最后一句无上下文回答，或追问用户说的是哪段。",
+            "把结论说成整份劳动合同当然无效、劳动关系不存在或这段时间不计入合同期。",
+            "转而只讲试用期长短上限。"
+          ],
+          "actionsAllowed": false,
+          "followUpQuestionsAllowed": false,
+          "seededAssistantTurn": "仅为固定的中性会话上下文，非待测模型生成结果。"
+        }
+      },
+      "humanReview": {
+        "should": [
+          "结合前文，把后一个和单独写那段解析为劳动合同仅约定试用期的效力问题。",
+          "说明仅约定试用期的，试用期不成立，该期限为劳动合同期限，并引用LC19-4或其对应的第十九条第四款。"
+        ],
+        "shouldNot": [
+          "只按最后一句无上下文回答，或追问用户说的是哪段。",
+          "把结论说成整份劳动合同当然无效、劳动关系不存在或这段时间不计入合同期。",
+          "转而只讲试用期长短上限。"
+        ],
+        "actionsAllowed": false,
+        "followUpQuestionsAllowed": false,
+        "seededAssistantTurn": "仅为固定的中性会话上下文，非待测模型生成结果。"
+      },
+      "retrieval": {
+        "corpusId": "labor-contract-2012-v1",
+        "status": "matched",
+        "query": "那就后一个，单独写那段算数吗？不用再问我月份。\n沿用此前用户问题的主题：仅约定试用期",
+        "message": "检索自已核验的官方条文摘录。请结合完整原文与实际情况理解。",
+        "excerpts": [
+          {
+            "id": "LC19-4",
+            "article": "第十九条第四款",
+            "title": "试用期包含在合同期限内",
+            "text": "试用期包含在劳动合同期限内。劳动合同仅约定试用期的，试用期不成立，该期限为劳动合同期限。",
+            "matchedTerms": [
+              "试用期",
+              "试用",
+              "单独",
+              "仅约定"
+            ]
+          }
+        ]
+      },
+      "arms": {
+        "off": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[]}"
+              },
+              {
+                "role": "user",
+                "content": "我拿到的劳动合同只写了一段试用期，说通过后再另签正式合同。我想核对两个点：这段算不算合同期限，以及只写试用期能不能成立。先解释已有条文，不要代填。"
+              },
+              {
+                "role": "assistant",
+                "content": "可以先说明试用期与合同期限的关系，也可以说明只约定试用期的效力。"
+              },
+              {
+                "role": "user",
+                "content": "那就后一个，单独写那段算数吗？不用再问我月份。"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "只写试用期、不写合同期限的约定，一般不能单独成立为一份“试用期合同”；法律上通常把该试用期视为劳动合同期限。也就是说，这段试用期本身算合同期限，不能只靠“通过后再签正式合同”把试用期独立出去。具体到你的合同是否还有其他条款、是否已实际履行，需看全文才能判断。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 215,
+            "completion_tokens": 79,
+            "total_tokens": 294,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 215
+          },
+          "elapsedMs": 1246,
+          "finishReason": "stop"
+        },
+        "on": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[{\"id\":\"LC19-4\",\"article\":\"第十九条第四款\",\"title\":\"试用期包含在合同期限内\",\"text\":\"试用期包含在劳动合同期限内。劳动合同仅约定试用期的，试用期不成立，该期限为劳动合同期限。\"}]}"
+              },
+              {
+                "role": "user",
+                "content": "我拿到的劳动合同只写了一段试用期，说通过后再另签正式合同。我想核对两个点：这段算不算合同期限，以及只写试用期能不能成立。先解释已有条文，不要代填。"
+              },
+              {
+                "role": "assistant",
+                "content": "可以先说明试用期与合同期限的关系，也可以说明只约定试用期的效力。"
+              },
+              {
+                "role": "user",
+                "content": "那就后一个，单独写那段算数吗？不用再问我月份。"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "不算数。按《劳动合同法》第十九条第四款：劳动合同仅约定试用期的，试用期不成立，该期限直接视为劳动合同期限。也就是说，你签的这段“试用期”不能当试用期用，而是被认定为合同期限。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 265,
+            "completion_tokens": 53,
+            "total_tokens": 318,
+            "prompt_tokens_details": {
+              "cached_tokens": 128
+            },
+            "prompt_cache_hit_tokens": 128,
+            "prompt_cache_miss_tokens": 137
+          },
+          "elapsedMs": 612,
+          "finishReason": "stop"
+        }
+      },
+      "emptyReferenceControl": false,
+      "requestParityVerified": true
+    },
+    {
+      "id": "FH-20261109-C03",
+      "category": "contract-rag",
+      "expected": {
+        "noActions": true,
+        "noCalculation": true,
+        "emptyQuestions": true,
+        "expectedExcerptIds": [],
+        "humanReview": {
+          "should": [
+            "明确说明现有劳动合同摘录不能作为住宅租赁押金扣除问题的判断依据。",
+            "如果返回合同检索状态，应为out-of-scope；如果系统路由到租房模块，也应清楚说明该合同资料未覆盖此法律判断。"
+          ],
+          "shouldNot": [
+            "用LC17、LC19系列或其他劳动合同法摘录替住宅租赁押金结论背书。",
+            "编造房屋租赁法条、扣款比例或确定的违法/合法结论。",
+            "把没有劳动用工事项重新解释成劳动合同咨询，或主动启动租房计算、填表。"
+          ],
+          "actionsAllowed": false,
+          "followUpQuestionsAllowed": false,
+          "allowedPlanStatus": [
+            "out-of-scope",
+            "ready",
+            "clarify"
+          ],
+          "requiredScopeState": "住宅租赁押金法律判断不在给定劳动合同摘录覆盖范围内。",
+          "retrievalStatusIfPresent": "out-of-scope",
+          "citationsMustBeEmpty": true
+        }
+      },
+      "humanReview": {
+        "should": [
+          "明确说明现有劳动合同摘录不能作为住宅租赁押金扣除问题的判断依据。",
+          "如果返回合同检索状态，应为out-of-scope；如果系统路由到租房模块，也应清楚说明该合同资料未覆盖此法律判断。"
+        ],
+        "shouldNot": [
+          "用LC17、LC19系列或其他劳动合同法摘录替住宅租赁押金结论背书。",
+          "编造房屋租赁法条、扣款比例或确定的违法/合法结论。",
+          "把没有劳动用工事项重新解释成劳动合同咨询，或主动启动租房计算、填表。"
+        ],
+        "actionsAllowed": false,
+        "followUpQuestionsAllowed": false,
+        "allowedPlanStatus": [
+          "out-of-scope",
+          "ready",
+          "clarify"
+        ],
+        "requiredScopeState": "住宅租赁押金法律判断不在给定劳动合同摘录覆盖范围内。",
+        "retrievalStatusIfPresent": "out-of-scope",
+        "citationsMustBeEmpty": true
+      },
+      "retrieval": {
+        "corpusId": "labor-contract-2012-v1",
+        "status": "out-of-scope",
+        "query": "这次只有住宅租赁问题：出租人说退租要扣我一半押金。我没有劳动用工问题。你现有的劳动合同摘录能支持判断这个扣法吗？只说明覆盖边界，不要代填，也不要发起其他工具。",
+        "message": "住宅租赁不是劳动用工关系，不能用这里的劳动合同法摘录判断租房押金或退租问题。",
+        "excerpts": []
+      },
+      "arms": {
+        "on": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[]}"
+              },
+              {
+                "role": "user",
+                "content": "这次只有住宅租赁问题：出租人说退租要扣我一半押金。我没有劳动用工问题。你现有的劳动合同摘录能支持判断这个扣法吗？只说明覆盖边界，不要代填，也不要发起其他工具。"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "不能。劳动合同摘录与住宅租赁不是同一法律关系，不能用来判断出租人扣一半押金是否合法。\n\n租赁押金能否扣、扣多少，要看租赁合同约定、实际损失和当地租赁规则；仅凭“退租扣一半押金”这一句，无法判断。建议查看合同中押金条款、房屋交接记录和损失凭证。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 181,
+            "completion_tokens": 75,
+            "total_tokens": 256,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 181
+          },
+          "elapsedMs": 806,
+          "finishReason": "stop"
+        },
+        "off": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[]}"
+              },
+              {
+                "role": "user",
+                "content": "这次只有住宅租赁问题：出租人说退租要扣我一半押金。我没有劳动用工问题。你现有的劳动合同摘录能支持判断这个扣法吗？只说明覆盖边界，不要代填，也不要发起其他工具。"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "不能。劳动合同摘录不适用于住宅租赁押金纠纷，无法据此判断出租人扣一半押金是否合法。租赁问题应看租赁合同约定及当地租赁相关规则；具体能否扣、扣多少，需结合合同条款和实际损失等事实，不能代填或猜测。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 181,
+            "completion_tokens": 61,
+            "total_tokens": 242,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 181
+          },
+          "elapsedMs": 928,
+          "finishReason": "stop"
+        }
+      },
+      "emptyReferenceControl": true,
+      "requestParityVerified": true
+    },
+    {
+      "id": "FH-20261109-C04",
+      "category": "contract-rag",
+      "expected": {
+        "activeModule": "contract",
+        "noActions": true,
+        "noCalculation": true,
+        "emptyQuestions": false,
+        "retrievalStatus": "matched",
+        "expectedExcerptIds": [
+          "LC22"
+        ],
+        "humanReview": {
+          "should": [
+            "说明当前信息不足，不能算出应支付的具体金额。",
+            "引用LC22或对应第二十二条，说明适用前提及培训费用和未履行服务期分摊部分的限制。",
+            "补问或列明必要资料：专项专业技术培训及实际支出证据、服务期约定与起止/已履行时长，以及违约金约定或对方计算依据。"
+          ],
+          "shouldNot": [
+            "虚构培训费、服务期长度或离职时间进行计算。",
+            "直接断定用户一定无需支付、一定全额返还或给出确定数额。",
+            "把普通入职培训当然当成已满足专项专业技术培训的条件。",
+            "生成可直接应用的合同或金额动作。"
+          ],
+          "actionsAllowed": false,
+          "followUpQuestionsAllowed": true,
+          "requiredInformationState": "培训支出与服务期事实未知；允许解释规则，具体金额不可计算。"
+        }
+      },
+      "humanReview": {
+        "should": [
+          "说明当前信息不足，不能算出应支付的具体金额。",
+          "引用LC22或对应第二十二条，说明适用前提及培训费用和未履行服务期分摊部分的限制。",
+          "补问或列明必要资料：专项专业技术培训及实际支出证据、服务期约定与起止/已履行时长，以及违约金约定或对方计算依据。"
+        ],
+        "shouldNot": [
+          "虚构培训费、服务期长度或离职时间进行计算。",
+          "直接断定用户一定无需支付、一定全额返还或给出确定数额。",
+          "把普通入职培训当然当成已满足专项专业技术培训的条件。",
+          "生成可直接应用的合同或金额动作。"
+        ],
+        "actionsAllowed": false,
+        "followUpQuestionsAllowed": true,
+        "requiredInformationState": "培训支出与服务期事实未知；允许解释规则，具体金额不可计算。"
+      },
+      "retrieval": {
+        "corpusId": "labor-contract-2012-v1",
+        "status": "matched",
+        "query": "公司说我离开要按专项技术培训的服务期协议退钱，但协议和培训账单我都暂时找不到，也记不清服务期从哪天到哪天。只用现有资料说明现在能不能算出我该退多少，缺什么就问，不要替我填表。",
+        "message": "检索自已核验的官方条文摘录。请结合完整原文与实际情况理解。",
+        "excerpts": [
+          {
+            "id": "LC22",
+            "article": "第二十二条",
+            "title": "专项培训服务期与费用",
+            "text": "用人单位为劳动者提供专项培训费用，对其进行专业技术培训的，可以与该劳动者订立协议，约定服务期。\n劳动者违反服务期约定的，应当按照约定向用人单位支付违约金。违约金的数额不得超过用人单位提供的培训费用。用人单位要求劳动者支付的违约金不得超过服务期尚未履行部分所应分摊的培训费用。\n用人单位与劳动者约定服务期的，不影响按照正常的工资调整机制提高劳动者在服务期期间的劳动报酬。",
+            "matchedTerms": [
+              "培训",
+              "服务期"
+            ]
+          }
+        ]
+      },
+      "arms": {
+        "off": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[]}"
+              },
+              {
+                "role": "user",
+                "content": "公司说我离开要按专项技术培训的服务期协议退钱，但协议和培训账单我都暂时找不到，也记不清服务期从哪天到哪天。只用现有资料说明现在能不能算出我该退多少，缺什么就问，不要替我填表。"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "仅凭你现有信息，**算不出应退金额**。一般规则是：专项培训费用按服务期未履行部分比例分摊退还，但需先确认协议和实际支出。\n\n目前至少缺：\n1. 协议是否明确是“专项技术培训”及服务期起止日；\n2. 培训费总额及公司实际支付凭证；\n3. 你已服务多久、离职日；\n4. 协议约定的分摊/退还计算方式；\n5. 培训是否属于岗前培训、一般职业培训等可能不适用服务期情形。\n\n找不到协议和账单时，可先向公司索要复印件和计算明细；不要先按对方口头金额确认。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 186,
+            "completion_tokens": 143,
+            "total_tokens": 329,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 186
+          },
+          "elapsedMs": 1699,
+          "finishReason": "stop"
+        },
+        "on": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[{\"id\":\"LC22\",\"article\":\"第二十二条\",\"title\":\"专项培训服务期与费用\",\"text\":\"用人单位为劳动者提供专项培训费用，对其进行专业技术培训的，可以与该劳动者订立协议，约定服务期。\\n劳动者违反服务期约定的，应当按照约定向用人单位支付违约金。违约金的数额不得超过用人单位提供的培训费用。用人单位要求劳动者支付的违约金不得超过服务期尚未履行部分所应分摊的培训费用。\\n用人单位与劳动者约定服务期的，不影响按照正常的工资调整机制提高劳动者在服务期期间的劳动报酬。\"}]}"
+              },
+              {
+                "role": "user",
+                "content": "公司说我离开要按专项技术培训的服务期协议退钱，但协议和培训账单我都暂时找不到，也记不清服务期从哪天到哪天。只用现有资料说明现在能不能算出我该退多少，缺什么就问，不要替我填表。"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "按现有资料**算不出**你该退多少。资料只给了一般规则：违约金不得超过培训费用，且不得超过服务期尚未履行部分分摊的培训费用（LC22）。要计算，至少需要：协议约定的服务期起止日、培训费用总额、你已履行/未履行的服务期，以及协议约定的违约金计算方式。协议和账单找不到，就不能替你估算或填数。建议先向公司索要协议和费用凭证。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 297,
+            "completion_tokens": 96,
+            "total_tokens": 393,
+            "prompt_tokens_details": {
+              "cached_tokens": 128
+            },
+            "prompt_cache_hit_tokens": 128,
+            "prompt_cache_miss_tokens": 169
+          },
+          "elapsedMs": 1161,
+          "finishReason": "stop"
+        }
+      },
+      "emptyReferenceControl": false,
+      "requestParityVerified": true
+    }
+  ]
+}

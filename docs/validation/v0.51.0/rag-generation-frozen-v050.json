@@ -1,0 +1,689 @@
+{
+  "version": "0.50.0",
+  "benchmarkId": "first-step-frozen-benchmark-v1",
+  "date": "2026-11-14T15:57:42.609Z",
+  "purpose": "Generation-layer controlled probe, NOT production end-to-end RAG ablation",
+  "protocol": {
+    "id": "contract-generation-reference-availability-v1",
+    "scope": "Generation-layer controlled probe, NOT production end-to-end RAG ablation",
+    "system": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。",
+    "parameters": {
+      "temperature": 0.3,
+      "thinking": {
+        "type": "disabled"
+      },
+      "stream": false,
+      "max_tokens": 1600
+    },
+    "variable": "Only referenceExcerpts changes; history, prompt, model and parameters are identical within a pair.",
+    "order": "Sequential within pairs; alternate ON-first/OFF-first by frozen case order.",
+    "scoring": [
+      "Human review against pre-frozen expected/humanReview; do not edit the cases after observing answers.",
+      "Judge direct factual correctness, preservation of unknown facts, relevance and unnecessary follow-up separately.",
+      "Citation availability/support is a separate dimension, not part of a claimed factual accuracy gain.",
+      "No-match or out-of-scope pairs have identical empty references; they are negative controls, not positive RAG-gain cases."
+    ],
+    "limitations": [
+      "One sample per arm/case at temperature .3; no statistical significance claim.",
+      "Raw model output only: production planner/tools/scope refusal and final safety filter are not measured in this probe.",
+      "Internal synthetic cases, not external independent or real-user validation."
+    ]
+  },
+  "protocolSha256": "3a8fff6f7e7546868d7e66b7ec776949d9d7c5b597990f23cb4a2b73b9632316",
+  "fixtureFiles": [
+    {
+      "path": "frozen-evaluation-cases-v1.json",
+      "bytes": 30732,
+      "sha256": "adb1fefd9b52cea9708cac964ee551370da023d8d877a2d7e49170f48ee41d9f"
+    },
+    {
+      "path": "images/FZ-I01.png",
+      "bytes": 120319,
+      "sha256": "44cace7d9909b0a6de26bce3e49d20b042e1bcf6296054554f46712391d2311c"
+    },
+    {
+      "path": "images/FZ-I02.png",
+      "bytes": 76471,
+      "sha256": "694960d53194313b6100c353c3800db337da832d743957b1daf6b9bd2c386012"
+    },
+    {
+      "path": "images/FZ-I03.png",
+      "bytes": 68224,
+      "sha256": "1713c9a22e1de0dda2c8295bd1aee03ac3fb02a79cf231f3c989168ad10ffe10"
+    },
+    {
+      "path": "images/FZ-I04.png",
+      "bytes": 111505,
+      "sha256": "4d3fc5ef148496915e418bf1f34f46908ad054d7353f731e3759ca9d6f513e69"
+    },
+    {
+      "path": "images/FZ-I05.png",
+      "bytes": 2980,
+      "sha256": "ab240da459b18cee36329eeac6bbdbfdd8b5ef2cb605bb2452075ff04eb0a584"
+    },
+    {
+      "path": "images/FZ-I06.png",
+      "bytes": 92310,
+      "sha256": "b0afc2e1b9f2cc62a51aa404fca40ea65477479d85fff552557f68c400b97b59"
+    }
+  ],
+  "fixtureHashesVerified": true,
+  "dataset": "frozen-benchmark-v1",
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "pairs": 5,
+  "errors": 0,
+  "grading": "Pending explicit human review; no automatic accuracy or RAG improvement claim",
+  "results": [
+    {
+      "id": "FZ-C01",
+      "category": "contract",
+      "expected": {
+        "activeModule": "contract",
+        "status": "ready",
+        "actionKind": "apply-contract",
+        "contractInput": {
+          "contractMonths": 24,
+          "probationMonths": 3,
+          "fullTimeConfirmed": true
+        },
+        "expectedAttentionIds": [
+          "probation",
+          "location",
+          "penalty"
+        ],
+        "retrievalStatus": "matched",
+        "unknownBoundary": "仅定位条款并对照固定期限24个月对应试用期2个月上限及第22/23/25条违约金限定情形，不直接裁定整份合同无效，需核实是否另有专项培训或竞业协议。"
+      },
+      "retrieval": {
+        "corpusId": "labor-contract-2012-v1",
+        "status": "matched",
+        "query": "我签的是全日制劳动合同，帮我核对这段原文：一、本合同期限为24个月，其中试用期为3个月。二、乙方担任前端开发，工作地点由甲方根据项目需要全国调配。三、乙方在合同期内因个人原因辞职，须向甲方支付违约金5000元。",
+        "message": "检索自已核验的官方条文摘录。请结合完整原文与实际情况理解。",
+        "excerpts": [
+          {
+            "id": "LC19-1",
+            "article": "第十九条第一款",
+            "title": "试用期与合同期限的区间",
+            "text": "劳动合同期限三个月以上不满一年的，试用期不得超过一个月；劳动合同期限一年以上不满三年的，试用期不得超过二个月；三年以上固定期限和无固定期限的劳动合同，试用期不得超过六个月。",
+            "matchedTerms": [
+              "试用期",
+              "试用",
+              "合同期限",
+              "合同期"
+            ]
+          },
+          {
+            "id": "LC17",
+            "article": "第十七条",
+            "title": "合同应写明哪些事项",
+            "text": "劳动合同应当具备以下条款：\n（一）用人单位的名称、住所和法定代表人或者主要负责人；\n（二）劳动者的姓名、住址和居民身份证或者其他有效身份证件号码；\n（三）劳动合同期限；\n（四）工作内容和工作地点；\n（五）工作时间和休息休假；\n（六）劳动报酬；\n（七）社会保险；\n（八）劳动保护、劳动条件和职业危害防护；\n（九）法律、法规规定应当纳入劳动合同的其他事项。\n劳动合同除前款规定的必备条款外，用人单位与劳动者可以约定试用期、培训、保守秘密、补充保险和福利待遇等其他事项。",
+            "matchedTerms": [
+              "合同",
+              "劳动合同",
+              "地点"
+            ]
+          }
+        ]
+      },
+      "arms": {
+        "on": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[{\"id\":\"LC19-1\",\"article\":\"第十九条第一款\",\"title\":\"试用期与合同期限的区间\",\"text\":\"劳动合同期限三个月以上不满一年的，试用期不得超过一个月；劳动合同期限一年以上不满三年的，试用期不得超过二个月；三年以上固定期限和无固定期限的劳动合同，试用期不得超过六个月。\"},{\"id\":\"LC17\",\"article\":\"第十七条\",\"title\":\"合同应写明哪些事项\",\"text\":\"劳动合同应当具备以下条款：\\n（一）用人单位的名称、住所和法定代表人或者主要负责人；\\n（二）劳动者的姓名、住址和居民身份证或者其他有效身份证件号码；\\n（三）劳动合同期限；\\n（四）工作内容和工作地点；\\n（五）工作时间和休息休假；\\n（六）劳动报酬；\\n（七）社会保险；\\n（八）劳动保护、劳动条件和职业危害防护；\\n（九）法律、法规规定应当纳入劳动合同的其他事项。\\n劳动合同除前款规定的必备条款外，用人单位与劳动者可以约定试用期、培训、保守秘密、补充保险和福利待遇等其他事项。\"}]}"
+              },
+              {
+                "role": "user",
+                "content": "我签的是全日制劳动合同，帮我核对这段原文：一、本合同期限为24个月，其中试用期为3个月。二、乙方担任前端开发，工作地点由甲方根据项目需要全国调配。三、乙方在合同期内因个人原因辞职，须向甲方支付违约金5000元。"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "核对如下（仅就一般规则）：\n\n1. **期限24个月、试用期3个月**：24个月属“一年以上不满三年”，试用期不得超过2个月。约定3个月超出上限，超出部分不合法（依据LC19-1）。\n\n2. **工作地点“全国调配”**：工作地点是必备条款（LC17）。约定过于宽泛，可能被认定不明确；是否有效需结合具体岗位、实际履行判断，不能仅凭这句话下结论。\n\n3. **个人原因辞职付违约金5000元**：一般规则下，用人单位只能在专项培训服务期、竞业限制等法定情形约定违约金；普通“个人辞职”约定违约金通常无效。但你的合同是否另有培训等事实，需看全文，不能替你断定。\n\n建议保留合同原文，就第1、3点向当地劳动保障部门咨询或申请调解。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 425,
+            "completion_tokens": 183,
+            "total_tokens": 608,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 425
+          },
+          "elapsedMs": 2146,
+          "finishReason": "stop"
+        },
+        "off": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[]}"
+              },
+              {
+                "role": "user",
+                "content": "我签的是全日制劳动合同，帮我核对这段原文：一、本合同期限为24个月，其中试用期为3个月。二、乙方担任前端开发，工作地点由甲方根据项目需要全国调配。三、乙方在合同期内因个人原因辞职，须向甲方支付违约金5000元。"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "这段合同有三处需要重点核对：\n\n1. **试用期**：合同期24个月（2年），试用期3个月。一般规则下，2年期合同试用期不得超过2个月；3个月试用期通常不合法。但需确认合同期限是否确为24个月、是否包含续签等特殊情形。\n\n2. **工作地点全国调配**：约定过于宽泛，可能被认定为用人单位单方变更工作地点，实际履行中易生争议。建议明确调配范围、程序及补偿。\n\n3. **辞职违约金5000元**：一般规则下，仅两种情形可约定劳动者违约金——服务期（用人单位提供专项培训费用）和竞业限制。普通“个人原因辞职”约定违约金，通常缺乏法律依据，该条款很可能无效。\n\n以上为一般规则分析，具体结论需结合合同全文及实际履行情况，建议咨询当地劳动仲裁或律师。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 194,
+            "completion_tokens": 188,
+            "total_tokens": 382,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 194
+          },
+          "elapsedMs": 1695,
+          "finishReason": "stop"
+        }
+      },
+      "emptyReferenceControl": false,
+      "requestParityVerified": true
+    },
+    {
+      "id": "FZ-C02",
+      "category": "contract",
+      "expected": {
+        "activeModule": "contract",
+        "status": "needs-info",
+        "noContractAction": true,
+        "unknownBoundary": "未知是否为全日制劳动合同及合同总期限时，禁止从“试用期二个月”倒推合同期限或直接调用review_contract下合规结论。"
+      },
+      "retrieval": {
+        "corpusId": "labor-contract-2012-v1",
+        "status": "matched",
+        "query": "合同上只看到“试用期二个月，月薪6500元”，我还不知道是不是全日制，合同签几年那页也没发我。帮我直接核对试用期合不合法。",
+        "message": "检索自已核验的官方条文摘录。请结合完整原文与实际情况理解。",
+        "excerpts": [
+          {
+            "id": "LC19-3",
+            "article": "第十九条第三款",
+            "title": "短期或任务期限合同的试用期",
+            "text": "以完成一定工作任务为期限的劳动合同或者劳动合同期限不满三个月的，不得约定试用期。",
+            "matchedTerms": [
+              "试用期",
+              "试用",
+              "明确的短期合同期限"
+            ]
+          }
+        ]
+      },
+      "arms": {
+        "off": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[]}"
+              },
+              {
+                "role": "user",
+                "content": "合同上只看到“试用期二个月，月薪6500元”，我还不知道是不是全日制，合同签几年那页也没发我。帮我直接核对试用期合不合法。"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "仅凭“试用期2个月、月薪6500元”，**无法直接判定是否合法**，关键缺两项：\n\n1. **合同期限**：试用期长短须与合同期限匹配。一般规则：合同3个月以上不满1年，试用期不超1个月；1年以上不满3年，不超2个月；3年以上或无固定期限，不超6个月。若你合同是1年以上不满3年，2个月试用期才可能合法。\n2. **是否全日制**：非全日制用工不得约定试用期。若属非全日制，约定2个月试用期本身就不合法。\n\n所以：先确认合同期限和用工形式。若合同期限为1年以上不满3年且属全日制，2个月试用期一般合法；否则可能不合法。月薪6500元本身不直接决定试用期合法性，但试用期工资不得低于约定工资的80%且不低于当地最低工资。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 171,
+            "completion_tokens": 194,
+            "total_tokens": 365,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 171
+          },
+          "elapsedMs": 1738,
+          "finishReason": "stop"
+        },
+        "on": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[{\"id\":\"LC19-3\",\"article\":\"第十九条第三款\",\"title\":\"短期或任务期限合同的试用期\",\"text\":\"以完成一定工作任务为期限的劳动合同或者劳动合同期限不满三个月的，不得约定试用期。\"}]}"
+              },
+              {
+                "role": "user",
+                "content": "合同上只看到“试用期二个月，月薪6500元”，我还不知道是不是全日制，合同签几年那页也没发我。帮我直接核对试用期合不合法。"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "仅凭“试用期2个月、月薪6500元”，无法直接判定是否合法，关键信息缺失：\n\n1. **合同期限**：若合同不满3个月，不得约定试用期（资料LC19-3）；若3个月以上不满1年，试用期不得超过1个月；1年以上不满3年，不得超过2个月；3年以上或无固定期限，不得超过6个月。\n2. **是否全日制**：非全日制用工不得约定试用期。\n3. **同一单位同一岗位**：只能约定一次试用期。\n\n请补充合同期限和用工形式，才能给出结论。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 218,
+            "completion_tokens": 124,
+            "total_tokens": 342,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 218
+          },
+          "elapsedMs": 1135,
+          "finishReason": "stop"
+        }
+      },
+      "emptyReferenceControl": false,
+      "requestParityVerified": true
+    },
+    {
+      "id": "FZ-C04",
+      "category": "contract",
+      "expected": {
+        "activeModule": "contract",
+        "status": "ready",
+        "retrievalStatus": "matched",
+        "expectedTopExcerptId": "LC19-2",
+        "prohibitedReplyPatterns": [
+          "实际履行",
+          "考核目标",
+          "培训期"
+        ],
+        "unknownBoundary": "最新更正为全日制后正常检索第十九条第二款“同一用人单位与同一劳动者只能约定一次试用期”，不擅自附加“实际履行过”条件，提示先核实此前是否已约定过试用期。"
+      },
+      "retrieval": {
+        "corpusId": "labor-contract-2012-v1",
+        "status": "matched",
+        "query": "更正一下，刚才说错了，我签的是全日制劳动合同。现在在同一用人单位内部调岗，HR说要再约定第二次试用期，劳动合同法是怎么规定的？",
+        "message": "检索自已核验的官方条文摘录。请结合完整原文与实际情况理解。",
+        "excerpts": [
+          {
+            "id": "LC19-2",
+            "article": "第十九条第二款",
+            "title": "同一单位只能约定一次试用期",
+            "text": "同一用人单位与同一劳动者只能约定一次试用期。",
+            "matchedTerms": [
+              "试用期",
+              "试用",
+              "二次",
+              "第二次",
+              "同一用人单位",
+              "调岗"
+            ]
+          }
+        ]
+      },
+      "arms": {
+        "on": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[{\"id\":\"LC19-2\",\"article\":\"第十九条第二款\",\"title\":\"同一单位只能约定一次试用期\",\"text\":\"同一用人单位与同一劳动者只能约定一次试用期。\"}]}"
+              },
+              {
+                "role": "user",
+                "content": "我签的是实习协议，想问试用期规定。"
+              },
+              {
+                "role": "assistant",
+                "content": "这份资料库只整理中国内地全日制劳动合同，实习协议暂不套用这里的条文。"
+              },
+              {
+                "role": "user",
+                "content": "更正一下，刚才说错了，我签的是全日制劳动合同。现在在同一用人单位内部调岗，HR说要再约定第二次试用期，劳动合同法是怎么规定的？"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "《劳动合同法》第十九条第二款：同一用人单位与同一劳动者只能约定一次试用期。你已在同一单位约定过试用期，调岗不能再约定第二次试用期。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 237,
+            "completion_tokens": 37,
+            "total_tokens": 274,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 237
+          },
+          "elapsedMs": 647,
+          "finishReason": "stop"
+        },
+        "off": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[]}"
+              },
+              {
+                "role": "user",
+                "content": "我签的是实习协议，想问试用期规定。"
+              },
+              {
+                "role": "assistant",
+                "content": "这份资料库只整理中国内地全日制劳动合同，实习协议暂不套用这里的条文。"
+              },
+              {
+                "role": "user",
+                "content": "更正一下，刚才说错了，我签的是全日制劳动合同。现在在同一用人单位内部调岗，HR说要再约定第二次试用期，劳动合同法是怎么规定的？"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "同一用人单位与同一劳动者只能约定一次试用期。你已在职，内部调岗不能再约定第二次试用期；HR的要求不符合《劳动合同法》第十九条。若单位以此为由延长或重新计算试用期，你可提出异议，并保留调岗通知、沟通记录等证据。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 199,
+            "completion_tokens": 60,
+            "total_tokens": 259,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 199
+          },
+          "elapsedMs": 1015,
+          "finishReason": "stop"
+        }
+      },
+      "emptyReferenceControl": false,
+      "requestParityVerified": true
+    },
+    {
+      "id": "FZ-C05",
+      "category": "contract",
+      "expected": {
+        "status": "out-of-scope",
+        "retrievalStatus": "out-of-scope",
+        "noActions": true,
+        "unknownBoundary": "明确说明资料库仅整理中国内地全日制劳动合同且未收录解除赔偿金计算，严禁套用全日制试用期条文或编造赔偿金数额。"
+      },
+      "retrieval": {
+        "corpusId": "labor-contract-2012-v1",
+        "status": "out-of-scope",
+        "query": "我签的是非全日制用工合同，每天工作3小时，请问试用期可以约定多久？如果被辞退赔偿金怎么算？",
+        "message": "这份资料库只整理中国内地全日制劳动合同。你提到的地区或用工情形需要另查适用依据，暂不套用这里的条文。",
+        "excerpts": []
+      },
+      "arms": {
+        "off": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[]}"
+              },
+              {
+                "role": "user",
+                "content": "我签的是非全日制用工合同，每天工作3小时，请问试用期可以约定多久？如果被辞退赔偿金怎么算？"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "非全日制用工不得约定试用期（《劳动合同法》第七十条）。因此合同中若写了试用期，该约定不合法。\n\n辞退补偿：非全日制用工双方可随时通知终止用工，用人单位无需支付经济补偿（第七十一条）。但若存在拖欠工资、未缴工伤保险等情形，可另行主张。具体以你合同和实际履行情况为准。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 161,
+            "completion_tokens": 76,
+            "total_tokens": 237,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 161
+          },
+          "elapsedMs": 1310,
+          "finishReason": "stop"
+        },
+        "on": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[]}"
+              },
+              {
+                "role": "user",
+                "content": "我签的是非全日制用工合同，每天工作3小时，请问试用期可以约定多久？如果被辞退赔偿金怎么算？"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "非全日制用工不得约定试用期（《劳动合同法》第70条）。被辞退时，非全日制用工双方可随时终止用工，用人单位无需支付经济补偿（第71条）；但若存在拖欠工资、未缴工伤保险等情形，可另行主张。具体以你合同和实际履行情况为准。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 161,
+            "completion_tokens": 66,
+            "total_tokens": 227,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 161
+          },
+          "elapsedMs": 701,
+          "finishReason": "stop"
+        }
+      },
+      "emptyReferenceControl": true,
+      "requestParityVerified": true
+    },
+    {
+      "id": "FZ-C06",
+      "category": "contract",
+      "expected": {
+        "activeModule": "contract",
+        "status": "ready",
+        "retrievalStatus": "matched",
+        "expectedExcerptIds": [
+          "LC19-4"
+        ],
+        "unknownBoundary": "准确命中第十九条第四款（试用期包含在劳动合同期限内；仅约定试用期的，试用期不成立，该期限为劳动合同期限），不替用户直接武断认定总期限为12或15个月。"
+      },
+      "retrieval": {
+        "corpusId": "labor-contract-2012-v1",
+        "status": "matched",
+        "query": "全日制劳动合同，HR说先单独签一份3个月的试用合同，这3个月不计入正式劳动合同期限，合格后再签一年。请问劳动合同法对这种仅约定试用期、不计入合同期限的做法是怎么规定的？",
+        "message": "检索自已核验的官方条文摘录。请结合完整原文与实际情况理解。",
+        "excerpts": [
+          {
+            "id": "LC19-4",
+            "article": "第十九条第四款",
+            "title": "试用期包含在合同期限内",
+            "text": "试用期包含在劳动合同期限内。劳动合同仅约定试用期的，试用期不成立，该期限为劳动合同期限。",
+            "matchedTerms": [
+              "试用期",
+              "试用",
+              "单独",
+              "仅约定",
+              "不计入",
+              "试用合同"
+            ]
+          },
+          {
+            "id": "LC19-1",
+            "article": "第十九条第一款",
+            "title": "试用期与合同期限的区间",
+            "text": "劳动合同期限三个月以上不满一年的，试用期不得超过一个月；劳动合同期限一年以上不满三年的，试用期不得超过二个月；三年以上固定期限和无固定期限的劳动合同，试用期不得超过六个月。",
+            "matchedTerms": [
+              "试用期",
+              "试用",
+              "一年",
+              "合同期限",
+              "合同期"
+            ]
+          }
+        ]
+      },
+      "arms": {
+        "on": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[{\"id\":\"LC19-4\",\"article\":\"第十九条第四款\",\"title\":\"试用期包含在合同期限内\",\"text\":\"试用期包含在劳动合同期限内。劳动合同仅约定试用期的，试用期不成立，该期限为劳动合同期限。\"},{\"id\":\"LC19-1\",\"article\":\"第十九条第一款\",\"title\":\"试用期与合同期限的区间\",\"text\":\"劳动合同期限三个月以上不满一年的，试用期不得超过一个月；劳动合同期限一年以上不满三年的，试用期不得超过二个月；三年以上固定期限和无固定期限的劳动合同，试用期不得超过六个月。\"}]}"
+              },
+              {
+                "role": "user",
+                "content": "全日制劳动合同，HR说先单独签一份3个月的试用合同，这3个月不计入正式劳动合同期限，合格后再签一年。请问劳动合同法对这种仅约定试用期、不计入合同期限的做法是怎么规定的？"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "这种做法不符合《劳动合同法》第十九条第四款：试用期包含在劳动合同期限内；劳动合同仅约定试用期的，试用期不成立，该期限即为劳动合同期限（资料LC19-4）。\n\n也就是说，单独签的3个月“试用合同”很可能被认定为一份3个月的劳动合同，而不是“不计入期限的试用期”。另外，一年期合同试用期不得超过二个月（资料LC19-1），3个月试用本身也超限。建议要求直接签一年期正式合同，把试用期约定在合同内。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 293,
+            "completion_tokens": 111,
+            "total_tokens": 404,
+            "prompt_tokens_details": {
+              "cached_tokens": 128
+            },
+            "prompt_cache_hit_tokens": 128,
+            "prompt_cache_miss_tokens": 165
+          },
+          "elapsedMs": 1419,
+          "finishReason": "stop"
+        },
+        "off": {
+          "request": {
+            "model": "deepseek-flash",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是帮助刚毕业用户理解办事问题的助手。直接、简短回答当前问题，通常不超过200字。你可以使用有把握的一般知识，并参考随后提供的资料。资料为空时也可以回答有把握的部分，无法确定就明确说缺什么；不要编造事实、金额、期限或假装已检索。合同问题须区分一般规则与个人合同结论，未知条件不能替用户填入。只有提供的资料中确有对应内容时才引用其中的编号；不要编造链接或条文出处。范围外或证据不足时说明边界，不为给结论而猜测。"
+              },
+              {
+                "role": "system",
+                "content": "{\"referenceExcerpts\":[]}"
+              },
+              {
+                "role": "user",
+                "content": "全日制劳动合同，HR说先单独签一份3个月的试用合同，这3个月不计入正式劳动合同期限，合格后再签一年。请问劳动合同法对这种仅约定试用期、不计入合同期限的做法是怎么规定的？"
+              }
+            ],
+            "temperature": 0.3,
+            "thinking": {
+              "type": "disabled"
+            },
+            "stream": false,
+            "max_tokens": 1600
+          },
+          "rawReply": "这种做法不合法。按《劳动合同法》：\n\n1. **试用期包含在劳动合同期限内**，不能单独签“试用合同”。\n2. **劳动合同仅约定试用期的，试用期不成立，该期限就是劳动合同期限**。所以这3个月会被视为正式合同期，不是“不计入”。\n3. 同一用人单位与同一劳动者**只能约定一次试用期**；试用期长短还受合同期限限制（如1年合同试用期最长2个月）。\n\n建议：要求直接签正式劳动合同，把试用期写进合同期限内；不要签“试用期不计入合同期限”的单独协议。具体条款可再核对合同文本。",
+          "model": "deepseek-flash",
+          "usage": {
+            "prompt_tokens": 177,
+            "completion_tokens": 137,
+            "total_tokens": 314,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 177
+          },
+          "elapsedMs": 1823,
+          "finishReason": "stop"
+        }
+      },
+      "emptyReferenceControl": false,
+      "requestParityVerified": true
+    }
+  ]
+}

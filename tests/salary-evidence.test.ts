@@ -5,6 +5,21 @@ import {salaryOutcome,salaryQuestionText} from '../src/lib/salary-review.ts';
 import {salaryQuestion,isQuestionEvidence,sameQuestion,questionExport} from '../src/lib/checklist.ts';
 import type {SalaryField} from '../src/lib/salary-evidence.ts';
 
+test('explicit spoken amounts and unit abbreviations work without guessing ranges or omitted units',()=>{
+ for(const [phrase,value] of [['八千五百元',8500],['一千零五元',1005],['一百二十三元',123],['一万零三元',10003],['一万二千元',12000],['零点八元',.8],['8.5k',8500],['0.7千元',700],['.85万元',8500],['1.00001千元',1000.01],['10.01元',10.01],['180元不变',180],['一百八十元不变',180]] as const){
+  assert.equal(salaryFact('应发'+phrase,'gross').value,value,phrase);
+  assert.equal(salaryValueGrounded(value,'应发'+phrase,'gross'),true,phrase);
+ }
+ for(const phrase of ['八千五','一百二','一万二千五','一万二','八五元','8000元到9000元','8千至9千','8000~9000元','8000元以上','8000元起','1.234元','-10元','1e4元','0.000001千元']){
+  assert.equal(salaryFact('应发'+phrase,'gross').value,null,phrase);
+ }
+ const text='应发八千五百元，社保七百元，公积金五百元，个税八十元，其他扣款没有，实际到账七千二百二十元。';
+ assert.equal(salaryFact(text,'received').value,7220);
+ assert.equal(salaryFact(text+'\n应发不知道，撤回原数','gross').value,null);
+ assert.equal(salaryFact(text+'\n应发8000元到9000元','gross').value,null);
+ assert.equal(salaryFact('公司社保七百元','insurance').value,null);
+});
+
 test('task mentions and unchanged references cannot replace a confirmed salary fact',()=>{
   assert.equal(salaryFact('银行卡实际到账8600元。帮我核对实发和差额。','received').value,8600);
   assert.equal(salaryValueGrounded(8600,'银行卡实际到账8600元。帮我核对实发和差额。','received'),true);

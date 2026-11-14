@@ -1,10 +1,10 @@
 {
-  "version": "0.50.0",
-  "recordedAt": "2026-11-14T13:17:36.874Z",
+  "version": "0.51.0",
+  "recordedAt": "2026-11-14T16:31:48.834Z",
   "workState": "reviewed_internally",
-  "validationVersion": "0.50.0",
+  "validationVersion": "0.51.0",
   "textNormalisation": "LF",
-  "sourceDigest": "f6787489d86822687effe6b7bda5109fdbf028599dbcfe84679360d51f2ef898",
+  "sourceDigest": "9d690f3c5fa8dffa2f3a8625f414d8d57a732ae27cb0c65fcc2829f39f1d8ae8",
   "files": [
     {
       "path": ".env.example",
@@ -24,23 +24,23 @@
     },
     {
       "path": "docs/memory/DECISIONS.md",
-      "sha256": "2bf163bd4d9df13863c550b1a9d7a9a8cf6c1a4ec0fff12d5a6364ba409930fd"
+      "sha256": "d78d8b6e0d34b4d741f3ff389a5cc7734db406c204e148a0d9e266e38f4a8059"
     },
     {
       "path": "docs/memory/SESSIONS.md",
-      "sha256": "dad181061f3f0be3492df612ae5f49be4ea2f6dff3646c059d06e934fd5154e3"
+      "sha256": "7bd062464b2ccad1dbe03a8efe9ed20c13f25046a4737ba33d479acd681a85af"
     },
     {
       "path": "docs/memory/progress.json",
-      "sha256": "f5e24621305efb7290cee9ca6322df494de045c53fe4b6b13101b59d82342c72"
+      "sha256": "98f736f4b6bdd6468b2e505a7fd405d0438cb15f687d7cf0c4d0decc8c45c693"
     },
     {
       "path": "package-lock.json",
-      "sha256": "f9a27ad9c498331e664f6ed9c931c7a72edc6b93bbaac9138102b4e06ad8f10b"
+      "sha256": "90e1572138d1f5037b3d48949d129c59a665f64112f587459c5f8526c1507132"
     },
     {
       "path": "package.json",
-      "sha256": "0ba768b0a9be896faef43f6bff88f0174fa279d73f3554337a75ade70043fb64"
+      "sha256": "87e242ab488f2a1e799b310ee86476d65c77ccb46104ad0a2295931d9bba0ec7"
     },
     {
       "path": "public/artwork/rhine-ascent.png",
@@ -1120,7 +1120,7 @@
     },
     {
       "path": "src/lib/contract-knowledge.ts",
-      "sha256": "9d287c7e5321623e8ab6b707da4f5f5531a5033c9b44098d7b4f17c9d8ebd8a3"
+      "sha256": "f00cd2215e5b6e240b41b6e5dbe5d49a4f89c5acf2082166c33d473b80c69d32"
     },
     {
       "path": "src/lib/contracts.ts",
@@ -1128,7 +1128,7 @@
     },
     {
       "path": "src/lib/conversation-tone.ts",
-      "sha256": "1efce5fa4d46fdd264c2601ae742c5556161eb0eb00b446f64d5ffa8aad61b0a"
+      "sha256": "6f7a55b8d180aede0ce4e7ccc07fd287a563bc5b8b810d080ac8d1881edfb9c9"
     },
     {
       "path": "src/lib/download.ts",
@@ -1141,6 +1141,10 @@
     {
       "path": "src/lib/eight-tools.ts",
       "sha256": "ee7ed9fef2561e099555cfddc0eb1828516fc112221521fe6f304f0ec7b86110"
+    },
+    {
+      "path": "src/lib/explicit-money.ts",
+      "sha256": "a49ba6be345e3aa9c562f8fad8fbe797ae62f7b699d76058c64cde6ebdb3eca3"
     },
     {
       "path": "src/lib/offer-summary.ts",
@@ -1172,7 +1176,7 @@
     },
     {
       "path": "src/lib/salary-evidence.ts",
-      "sha256": "8e8d3ed541ff892a9cbe9faf6552cf547f30a95f3b4f8b6809e217e89865b091"
+      "sha256": "f286b5c64ed26c13539839b67ee43ab61e102c1b28a976a46ee564bcef7f1311"
     },
     {
       "path": "src/lib/salary-review.ts",
@@ -1412,7 +1416,7 @@
     },
     {
       "path": "tests/assistant-guidance.test.mjs",
-      "sha256": "5429d9f2aea999e18598e3be23ca8ea9541edf136e786f3ce319acbcdc6f74ce"
+      "sha256": "b399243119b2b9b879bb0cba33de5ba2c95f3621c88db1cf760982583e25795a"
     },
     {
       "path": "tests/assistant.test.mjs",
@@ -1424,7 +1428,7 @@
     },
     {
       "path": "tests/contract-knowledge.test.mjs",
-      "sha256": "03fd42ed34c02948dc37d361334ebb7b62c97252ae0e5d79b637455c0a398de4"
+      "sha256": "5b0fab204ac27b80bd9f248a09adfd19673e25733ce3cf3d87791153e12ca51a"
     },
     {
       "path": "tests/domain.test.ts",
@@ -1441,6 +1445,14 @@
     {
       "path": "tests/entry-sequence.test.ts",
       "sha256": "38b25a49393a567baac4d26798c76cbddab91161fbac34349045c260297e2224"
+    },
+    {
+      "path": "tests/fixtures/acceptance-20261114-v1/cases.json",
+      "sha256": "46b6c4ee37f48b43c7c82ba29d13cfc1823ccc683e09e81db1f4aa045e8fda5b"
+    },
+    {
+      "path": "tests/fixtures/acceptance-20261114-v1/freeze-manifest.json",
+      "sha256": "ea92f7e230d6f02fbab35a81d0b7603282b918a70f20f84e65ae828dde30ef63"
     },
     {
       "path": "tests/fixtures/frozen-benchmark-v1/freeze-manifest.json",
@@ -1512,7 +1524,7 @@
     },
     {
       "path": "tests/salary-evidence.test.ts",
-      "sha256": "3572e3c22a148553eccac0a4c3d0e60f5936cef316290b59f8ed93767bb83457"
+      "sha256": "fbd9cd78c545678975a237ce2a67fabfd9a6cc2f2619d4870ce86ead68bb5288"
     },
     {
       "path": "tests/scene-actions.test.ts",
@@ -1552,7 +1564,7 @@
     },
     {
       "path": "tools/assistant-gateway.mjs",
-      "sha256": "5109b21e2f3ff472dfdcd69a58b1b5dccd786760a813d2287a44f4bb64cd54f5"
+      "sha256": "7344393befc78c7a0d4da99e48c3c432678d282042e006922f6943aa1013b6c8"
     },
     {
       "path": "tools/audio-static.mjs",
@@ -1580,7 +1592,11 @@
     },
     {
       "path": "tools/evaluate-frozen-benchmark.mjs",
-      "sha256": "0ccc389cb488fbe22866fa86251b13c6a0cb0d11fb5a2067f998151b8a82d1e3"
+      "sha256": "5c828ceba71d4a556cfbd01a81c9220d5d9263baef192a91402cc9145d97e743"
+    },
+    {
+      "path": "tools/launch-local.mjs",
+      "sha256": "4d1212c2bdea36625caa11963342dc976ad1719b0e5508b26296bf92401a982e"
     },
     {
       "path": "tools/local-services.mjs",
@@ -1589,6 +1605,10 @@
     {
       "path": "tools/music-source.mjs",
       "sha256": "80bf17fa63bdd56d4b6933d7ae056b355363011f155e194a369a89ea580d0c9c"
+    },
+    {
+      "path": "tools/package-submission.py",
+      "sha256": "e7b95ce3308c860996d7b62b562f2cf8760b33ad95c1a492907a07bfe4a63b1d"
     },
     {
       "path": "tools/project-memory.mjs",

@@ -1,0 +1,1226 @@
+{
+  "version": "0.51.0",
+  "benchmarkId": "acceptance-20261114-v1",
+  "date": "2026-11-14T16:30:37.698Z",
+  "purpose": "Reused frozen regression; not a new blind evaluation",
+  "dataset": "acceptance-20261114-v1",
+  "frozenAt": "2026-11-14T16:02:56.540984+00:00",
+  "fixtureFiles": [
+    {
+      "path": "cases.json",
+      "bytes": 7060,
+      "sha256": "46b6c4ee37f48b43c7c82ba29d13cfc1823ccc683e09e81db1f4aa045e8fda5b"
+    }
+  ],
+  "syntheticOnly": true,
+  "fixtureHashesVerified": true,
+  "model": "deepseek-flash",
+  "provider": "DeepSeek",
+  "total": 14,
+  "passed": 14,
+  "apiCalls": 29,
+  "limitations": [
+    "Synthetic tasks only; no real-user accuracy claim.",
+    "Deterministic checks cover stated fields/actions/references, not all prose quality.",
+    "Live policy sources may change independently of code; failures remain in the report."
+  ],
+  "results": [
+    {
+      "id": "AC-CON-01",
+      "category": "contract",
+      "expected": {
+        "module": "contract",
+        "noActions": true,
+        "noQuestions": true,
+        "references": "matched"
+      },
+      "humanReview": "输出可复制短话术，不能变成只贴法条或追问完整合同。",
+      "passed": true,
+      "failures": [],
+      "requests": [
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2862,
+            "completion_tokens": 136,
+            "total_tokens": 2998,
+            "prompt_tokens_details": {
+              "cached_tokens": 2688
+            },
+            "prompt_cache_hit_tokens": 2688,
+            "prompt_cache_miss_tokens": 174
+          }
+        },
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 3115,
+            "completion_tokens": 144,
+            "total_tokens": 3259,
+            "prompt_tokens_details": {
+              "cached_tokens": 2048
+            },
+            "prompt_cache_hit_tokens": 2048,
+            "prompt_cache_miss_tokens": 1067
+          }
+        }
+      ],
+      "elapsedMs": 2207,
+      "result": {
+        "reply": "可以这样发：\n\n“您好，想请教一下合同里‘普通离职需付违约金8000元’这一条。请问这笔违约金具体在哪些情况下适用？是否只针对公司提供了专项培训并约定了服务期，或者涉及竞业限制的情形？如果只是正常提前通知离职，是否也需要支付？另外想确认一下计算依据和适用条件，方便我理解条款，谢谢。”\n\n依据方面：劳动合同法第二十五条（2012年12月28日修正，核验日2026-11-03）规定，除第二十二条、第二十三条规定的情形外，用人单位不得与劳动者约定由劳动者承担违约金。所以先问清这条对应的是哪种情形，是合理的。",
+        "replyOrigin": "model",
+        "actions": [],
+        "steps": [
+          {
+            "id": "1",
+            "name": "plan_tasks",
+            "label": "确认当前事项",
+            "ok": true,
+            "summary": "合同核对"
+          },
+          {
+            "id": "references-1",
+            "name": "search_contract_knowledge",
+            "label": "检索官方合同资料",
+            "ok": true,
+            "summary": "命中 2 段 · 2012年12月28日修正"
+          }
+        ],
+        "guide": {
+          "intent": "guidance",
+          "status": "ready",
+          "tasks": [
+            {
+              "module": "contract",
+              "reason": "用户要就“普通离职需付违约金8000元”这一条拟一段向HR问清适用条件的文字"
+            }
+          ],
+          "activeModule": "contract",
+          "questions": []
+        },
+        "references": {
+          "corpusId": "labor-contract-2012-v1",
+          "status": "matched",
+          "query": "请帮我拟一段给HR的礼貌沟通文字：相关条款写“普通离职需付违约金8000元”。只针对这一项先问清适用条件，不判断整份合同违法，不需要填表或打开工具。",
+          "message": "检索自已核验的官方条文摘录。请结合完整原文与实际情况理解。",
+          "excerpts": [
+            {
+              "id": "LC25",
+              "article": "第二十五条",
+              "title": "劳动者承担违约金的约定范围",
+              "text": "除本法第二十二条和第二十三条规定的情形外，用人单位不得与劳动者约定由劳动者承担违约金。",
+              "matchedTerms": [
+                "违约金",
+                "普通离职",
+                "离职"
+              ]
+            },
+            {
+              "id": "LC17",
+              "article": "第十七条",
+              "title": "合同应写明哪些事项",
+              "text": "劳动合同应当具备以下条款：\n（一）用人单位的名称、住所和法定代表人或者主要负责人；\n（二）劳动者的姓名、住址和居民身份证或者其他有效身份证件号码；\n（三）劳动合同期限；\n（四）工作内容和工作地点；\n（五）工作时间和休息休假；\n（六）劳动报酬；\n（七）社会保险；\n（八）劳动保护、劳动条件和职业危害防护；\n（九）法律、法规规定应当纳入劳动合同的其他事项。\n劳动合同除前款规定的必备条款外，用人单位与劳动者可以约定试用期、培训、保守秘密、补充保险和福利待遇等其他事项。",
+              "matchedTerms": [
+                "合同",
+                "条款"
+              ]
+            }
+          ]
+        },
+        "provider": "DeepSeek",
+        "model": "deepseek-flash"
+      }
+    },
+    {
+      "id": "AC-META-01",
+      "category": "conversation",
+      "expected": {
+        "conversational": true,
+        "noActions": true,
+        "noQuestions": true
+      },
+      "humanReview": "应先自然回应并说明可以自由描述问题，不出现选事项/情况补填表。",
+      "passed": true,
+      "failures": [],
+      "requests": [
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 1260,
+            "completion_tokens": 53,
+            "total_tokens": 1313,
+            "prompt_tokens_details": {
+              "cached_tokens": 1024
+            },
+            "prompt_cache_hit_tokens": 1024,
+            "prompt_cache_miss_tokens": 236
+          }
+        }
+      ],
+      "elapsedMs": 1095,
+      "result": {
+        "reply": "你好，第一次用直接说自己的情况就行，不用按格式填表。我可以帮你对比offer、核对合同、算工资和个税、看社保医保、核对租房、匹配补贴、理离职交接；你用自己的话说，我帮你判断下一步。",
+        "replyOrigin": "model",
+        "actions": [],
+        "steps": [],
+        "provider": "DeepSeek",
+        "model": "deepseek-flash"
+      }
+    },
+    {
+      "id": "AC-META-02",
+      "category": "conversation",
+      "expected": {
+        "conversational": true,
+        "noActions": true,
+        "noQuestions": true
+      },
+      "humanReview": "应说明直接说自己的问题即可，不代编材料或要求先选八类。",
+      "passed": true,
+      "failures": [],
+      "requests": [
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 1266,
+            "completion_tokens": 34,
+            "total_tokens": 1300,
+            "prompt_tokens_details": {
+              "cached_tokens": 1024
+            },
+            "prompt_cache_hit_tokens": 1024,
+            "prompt_cache_miss_tokens": 242
+          }
+        }
+      ],
+      "elapsedMs": 955,
+      "result": {
+        "reply": "你好，直接用自己的话说就行，比如“帮我看看这份合同”“工资到手多少”“这两个offer怎么选”。不用先选模块，也不用按格式填表。",
+        "replyOrigin": "model",
+        "actions": [],
+        "steps": [],
+        "provider": "DeepSeek",
+        "model": "deepseek-flash"
+      }
+    },
+    {
+      "id": "AC-META-03",
+      "category": "conversation",
+      "expected": {
+        "conversational": true,
+        "noActions": true,
+        "noQuestions": true
+      },
+      "humanReview": "允许自由表达，不能继续重复事项表格式追问。",
+      "passed": true,
+      "failures": [],
+      "requests": [
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 1263,
+            "completion_tokens": 18,
+            "total_tokens": 1281,
+            "prompt_tokens_details": {
+              "cached_tokens": 1024
+            },
+            "prompt_cache_hit_tokens": 1024,
+            "prompt_cache_miss_tokens": 239
+          }
+        }
+      ],
+      "elapsedMs": 802,
+      "result": {
+        "reply": "可以，直接说就行。你把情况用自己的话讲清楚，我来帮你判断下一步。",
+        "replyOrigin": "model",
+        "actions": [],
+        "steps": [],
+        "provider": "DeepSeek",
+        "model": "deepseek-flash"
+      }
+    },
+    {
+      "id": "AC-POL-01",
+      "category": "policy",
+      "expected": {
+        "module": "subsidy",
+        "city": "上海",
+        "topic": "overview",
+        "sourceCount": 3
+      },
+      "humanReview": "最新城市更正优先，三类来源均上海，不认定资格。",
+      "passed": true,
+      "failures": [],
+      "requests": [
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2846,
+            "completion_tokens": 176,
+            "total_tokens": 3022,
+            "prompt_tokens_details": {
+              "cached_tokens": 2688
+            },
+            "prompt_cache_hit_tokens": 2688,
+            "prompt_cache_miss_tokens": 158
+          }
+        },
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2843,
+            "completion_tokens": 52,
+            "total_tokens": 2895,
+            "prompt_tokens_details": {
+              "cached_tokens": 2432
+            },
+            "prompt_cache_hit_tokens": 2432,
+            "prompt_cache_miss_tokens": 411
+          }
+        },
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 3373,
+            "completion_tokens": 189,
+            "total_tokens": 3562,
+            "prompt_tokens_details": {
+              "cached_tokens": 2048
+            },
+            "prompt_cache_hit_tokens": 2048,
+            "prompt_cache_miss_tokens": 1325
+          }
+        }
+      ],
+      "elapsedMs": 3531,
+      "result": {
+        "reply": "上海目前有三类已核验的官方资料，但都不是全市统一普惠：\n\n一是困难毕业生一次性求职补贴，面向2026届、有就业创业意愿且符合困难情形的毕业生，每人1000元，需向学校核对困难认定和申领窗口。\n\n二是新就业青年安居支持，现有资料是松江区示例，采用保租房实物配租补贴，按房源区域、备案租金和上限计算，第二年额度退坡，不能理解为全市普发现金。\n\n三是青年驿站，非沪籍、毕业前一年至毕业后两年可申请，单次及全年累计均不超过15天，需有在沪面试或录用等材料，通过“青春上海”“上海12355”或“海聚英才通”申请。\n\n这些资料的核验日是2026年11月14日，公开日期不等于当前申报期，办理前要按具体区、站点和当期规则再核实。",
+        "replyOrigin": "model",
+        "actions": [
+          {
+            "kind": "open-city-policy",
+            "city": "上海",
+            "topic": "overview",
+            "label": "在政策工具查看上海"
+          }
+        ],
+        "steps": [
+          {
+            "id": "1",
+            "name": "plan_tasks",
+            "label": "确认当前事项",
+            "ok": true,
+            "summary": "补贴匹配"
+          },
+          {
+            "id": "2",
+            "name": "search_city_policies",
+            "label": "需要补充信息",
+            "ok": false,
+            "summary": "这一步没有执行"
+          },
+          {
+            "id": "3",
+            "name": "search_city_policies",
+            "label": "查找官方城市政策",
+            "ok": true,
+            "summary": "上海 · 3项资料"
+          }
+        ],
+        "guide": {
+          "status": "ready",
+          "intent": "guidance",
+          "tasks": [
+            {
+              "module": "subsidy",
+              "reason": "想看上海三类官方资料总览，不核定个人资格"
+            }
+          ],
+          "activeModule": "subsidy",
+          "questions": []
+        },
+        "policyReferences": {
+          "city": "上海",
+          "topic": "overview",
+          "status": "matched",
+          "sources": [
+            {
+              "id": "sh-job-support",
+              "city": "上海",
+              "category": "graduate",
+              "title": "2026届困难毕业生一次性求职补贴",
+              "scope": "上海市2026届就业工作通知中的困难毕业生支持，非全体毕业生普惠补贴",
+              "url": "https://www.shanghai.gov.cn/gwk/search/content/519721f4f0a5447fa39a305111871a4a",
+              "text": "2026届就业创业工作通知明确，毕业年度内有就业创业意愿、符合条件的困难毕业生可申请一次性求职补贴，每人1000元。应向学校核对困难情形、材料与申领窗口。该金额不是广州或深圳的标准，也不能仅凭来沪求职认定资格。",
+              "publishedOn": "2026-02-12",
+              "checkedOn": "2026-11-14",
+              "mode": "reviewed",
+              "authority": "上海市人民政府门户 · 沪教委学〔2026〕3号",
+              "note": "毕业年度与困难情形需核实"
+            },
+            {
+              "id": "sh-housing-support",
+              "city": "上海",
+              "category": "settlement",
+              "title": "新就业青年安居支持 · 松江区示例",
+              "scope": "在松江就业，年龄、住房、2026起新就业参保及院校等条件均需核实；不是全市统一现金",
+              "url": "https://www.shanghai.gov.cn/nw17239/20260806/2abd5a718ac645d1961f00757e4d4cfc.html",
+              "text": "2026年松江区说明采用保租房实物配租补贴，按房源区域、备案租金及上限计算，第二年额度退坡，不是直接按一笔现金普发。高水平大学本科及以上且毕业不满3年等需同时满足其他条件；松江大学城/高职应届毕业生另有区内通道。通过随申办或区内窗口核实，不能推广为所有上海毕业生均可领取。",
+              "publishedOn": "2026-08-06",
+              "checkedOn": "2026-11-14",
+              "mode": "reviewed",
+              "authority": "上海市人民政府门户 · 松江区人民政府",
+              "note": "区级安居项目 · 受房源与完整资格限制"
+            },
+            {
+              "id": "sh-youth-stay",
+              "city": "上海",
+              "category": "stay",
+              "title": "上海青年驿站 · 2026年入住说明",
+              "scope": "非沪籍、毕业前一年至毕业后两年；以具体站点审核和当期规则为准",
+              "url": "https://www.shanghai.gov.cn/nw17239/20260714/e77bee37fcbe4dcd941f58f6db84d771.html",
+              "text": "官方2026年说明：符合条件的大学生可申请免费住宿，单次及全年累计均不超过15天，需提供在沪面试或录用等材料。通过“青春上海”“上海12355”或“海聚英才通”的青年驿站板块申请。此条更新了2025目录单次3天的旧说明；不代表当前有床位。",
+              "publishedOn": "2026-07-12",
+              "checkedOn": "2026-11-14",
+              "mode": "reviewed",
+              "authority": "上海市人民政府门户 · 黄浦区人民政府",
+              "applicationUrl": "https://www.shanghai.gov.cn/nw17239/20260714/e77bee37fcbe4dcd941f58f6db84d771.html"
+            }
+          ],
+          "retrievedAt": "2026-11-14T16:30:35.164Z",
+          "message": "以下为已核验并整理的官方资料；公开日期不等于当前申报窗口，办理前请核实现行条件。"
+        },
+        "provider": "DeepSeek",
+        "model": "deepseek-flash"
+      }
+    },
+    {
+      "id": "AC-POL-02",
+      "category": "policy",
+      "expected": {
+        "module": "subsidy",
+        "city": "杭州",
+        "topic": "support",
+        "sourceCount": 2
+      },
+      "humanReview": "只依据两条限定支持资料，保留院校/学历/参保/申请期，不承诺所有人享有。",
+      "passed": true,
+      "failures": [],
+      "requests": [
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2840,
+            "completion_tokens": 172,
+            "total_tokens": 3012,
+            "prompt_tokens_details": {
+              "cached_tokens": 2688
+            },
+            "prompt_cache_hit_tokens": 2688,
+            "prompt_cache_miss_tokens": 152
+          }
+        },
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2830,
+            "completion_tokens": 51,
+            "total_tokens": 2881,
+            "prompt_tokens_details": {
+              "cached_tokens": 2432
+            },
+            "prompt_cache_hit_tokens": 2432,
+            "prompt_cache_miss_tokens": 398
+          }
+        },
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 3145,
+            "completion_tokens": 194,
+            "total_tokens": 3339,
+            "prompt_tokens_details": {
+              "cached_tokens": 2048
+            },
+            "prompt_cache_hit_tokens": 2048,
+            "prompt_cache_miss_tokens": 1097
+          }
+        }
+      ],
+      "elapsedMs": 3758,
+      "result": {
+        "reply": "不是。我现有的杭州资料里，没有“入职就发钱”这种普惠现金补贴，两类都要满足条件：\n\n一是毕业学年一次性求职补贴，3000元。只限杭州市内院校、且属于低保家庭、孤儿、残疾、助学贷款等七类情形之一的毕业生；2026年申请期是8月15日至9月15日，已结束，2027届要看学校通知。\n\n二是新引进应届大学生租房补贴，本科及以上，每户每年1万元、可发3年。要满足在杭无房、未享受租房优惠，还有参保和申请时限要求（首笔需毕业后2年内申请、连续参保6个月等），入口是杭州市民卡人才码或亲清在线。\n\n所以先确认两件事：你毕业院校是否在杭州、家庭是否属于那七类情形；以及你在杭的参保起始时间和名下有无房产。这两项决定你能不能申报，而不是入职本身。",
+        "replyOrigin": "model",
+        "actions": [
+          {
+            "kind": "open-city-policy",
+            "city": "杭州",
+            "topic": "support",
+            "label": "在政策工具查看杭州"
+          }
+        ],
+        "steps": [
+          {
+            "id": "1",
+            "name": "plan_tasks",
+            "label": "确认当前事项",
+            "ok": true,
+            "summary": "补贴匹配"
+          },
+          {
+            "id": "2",
+            "name": "search_city_policies",
+            "label": "需要补充信息",
+            "ok": false,
+            "summary": "这一步没有执行"
+          },
+          {
+            "id": "3",
+            "name": "search_city_policies",
+            "label": "查找官方城市政策",
+            "ok": true,
+            "summary": "杭州 · 2项资料"
+          }
+        ],
+        "guide": {
+          "status": "ready",
+          "intent": "guidance",
+          "tasks": [
+            {
+              "module": "subsidy",
+              "reason": "想了解杭州毕业生现金补贴的覆盖范围"
+            }
+          ],
+          "activeModule": "subsidy",
+          "questions": []
+        },
+        "policyReferences": {
+          "city": "杭州",
+          "topic": "support",
+          "status": "matched",
+          "sources": [
+            {
+              "id": "hz-job-support",
+              "city": "杭州",
+              "category": "graduate",
+              "title": "毕业学年一次性求职补贴 · 2026年校方通知",
+              "scope": "杭州市内院校的符合条件毕业生；杭州师大公开通知，其他学校以本校通知为准",
+              "url": "https://career.hznu.edu.cn/news/view/aid/230608/tag/tzgg",
+              "text": "校方2026年8月14日通知：毕业学年内的杭州院校非定向培养毕业生，需符合低保家庭、孤儿、残疾、助学贷款等七类情形之一。每人3000元，已享受不能重复申请。2026年申请期为8月15日至9月15日，现已结束；2027届后续安排应向学校核实，不能把工作地当学校所在地。",
+              "publishedOn": "2026-08-14",
+              "checkedOn": "2026-11-14",
+              "mode": "reviewed",
+              "authority": "杭州师范大学就业创业服务平台（校方公开通知）",
+              "note": "2026申请期已结束 · 不表示所有毕业生可领"
+            },
+            {
+              "id": "hz-housing-support",
+              "city": "杭州",
+              "category": "settlement",
+              "title": "新引进应届大学生租房补贴 · 官方问答",
+              "scope": "本科及以上应届毕业生，需核实就业、参保、无房及未享受住房优惠等完整条件",
+              "url": "https://ql.hangzhou.gov.cn/col/col1229597836/art/2026/art_8d62018211ba4915b09c78c7d2a7ca13.html",
+              "text": "2026年官方问答介绍：符合条件家庭每户每年1万元，可发放3年，每年分两笔。首笔需毕业后2年内申请，并满足毕业后1年半内连续参保6个月、连续参保首月在毕业后1年内等要求；家庭在杭无房、未享受相关租房优惠。入口为杭州市民卡人才码或亲清在线，不能仅凭本科或工作地认定资格。",
+              "publishedOn": "2026-03-25",
+              "checkedOn": "2026-11-14",
+              "mode": "reviewed",
+              "authority": "杭州市侨联 · 住房保障政策问答",
+              "note": "按家庭、参保与申请时限核实"
+            }
+          ],
+          "retrievedAt": "2026-11-14T16:30:35.614Z",
+          "message": "以下为已核验并整理的官方资料；公开日期不等于当前申报窗口，办理前请核实现行条件。"
+        },
+        "provider": "DeepSeek",
+        "model": "deepseek-flash"
+      }
+    },
+    {
+      "id": "AC-REN-01",
+      "category": "rent",
+      "expected": {
+        "module": "rent",
+        "noActions": true,
+        "noQuestions": true
+      },
+      "humanReview": "给明确可发的短话术，不承诺付款、不编付款法律结论。",
+      "passed": true,
+      "failures": [],
+      "requests": [
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2848,
+            "completion_tokens": 129,
+            "total_tokens": 2977,
+            "prompt_tokens_details": {
+              "cached_tokens": 2688
+            },
+            "prompt_cache_hit_tokens": 2688,
+            "prompt_cache_miss_tokens": 160
+          }
+        },
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2401,
+            "completion_tokens": 90,
+            "total_tokens": 2491,
+            "prompt_tokens_details": {
+              "cached_tokens": 2048
+            },
+            "prompt_cache_hit_tokens": 2048,
+            "prompt_cache_miss_tokens": 353
+          }
+        }
+      ],
+      "elapsedMs": 2332,
+      "result": {
+        "reply": "可以直接发这段：\n\n您好，房子我挺有意向的。方便先把租房合同和费用明细发我看一下吗？想先确认租金、押金、水电燃气和物业费怎么算，以及租期、退租和维修的约定。合同和费用都看清楚了，我再和您确认下一步，谢谢理解。\n\n如果对方催得急，可以补一句“我这边看完尽快回复您”，不用先答应付款。",
+        "replyOrigin": "model",
+        "actions": [],
+        "steps": [
+          {
+            "id": "1",
+            "name": "plan_tasks",
+            "label": "确认当前事项",
+            "ok": true,
+            "summary": "租房核对"
+          }
+        ],
+        "guide": {
+          "status": "ready",
+          "intent": "guidance",
+          "tasks": [
+            {
+              "module": "rent",
+              "reason": "用户要一段微信文字，礼貌索要合同和费用说明，不承诺付款"
+            }
+          ],
+          "activeModule": "rent",
+          "questions": []
+        },
+        "provider": "DeepSeek",
+        "model": "deepseek-flash"
+      }
+    },
+    {
+      "id": "AC-SAL-01",
+      "category": "salary",
+      "expected": {
+        "module": "salary",
+        "net": 7220,
+        "received": 7220
+      },
+      "humanReview": "混合问候和真实计算必须保留工具，已确认没有视为0。",
+      "passed": true,
+      "failures": [],
+      "requests": [
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2851,
+            "completion_tokens": 120,
+            "total_tokens": 2971,
+            "prompt_tokens_details": {
+              "cached_tokens": 2688
+            },
+            "prompt_cache_hit_tokens": 2688,
+            "prompt_cache_miss_tokens": 163
+          }
+        },
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2822,
+            "completion_tokens": 163,
+            "total_tokens": 2985,
+            "prompt_tokens_details": {
+              "cached_tokens": 2688
+            },
+            "prompt_cache_hit_tokens": 2688,
+            "prompt_cache_miss_tokens": 134
+          }
+        },
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2682,
+            "completion_tokens": 83,
+            "total_tokens": 2765,
+            "prompt_tokens_details": {
+              "cached_tokens": 2432
+            },
+            "prompt_cache_hit_tokens": 2432,
+            "prompt_cache_miss_tokens": 250
+          }
+        }
+      ],
+      "elapsedMs": 3191,
+      "result": {
+        "reply": "按你给的数算，扣款合计1280元，应发减扣款正好是7220元，和你说的到账一致，算术上没问题。\n\n不过这只核对了加减关系，社保和公积金的缴费基数、比例是否按当地规定来，这里判断不了。想进一步确认，可以看工资条上的缴费基数和比例，或向HR要一份本期扣款明细。",
+        "replyOrigin": "model",
+        "actions": [
+          {
+            "kind": "apply-salary",
+            "input": {
+              "gross": 8500,
+              "insurance": 700,
+              "fund": 500,
+              "tax": 80,
+              "other": 0,
+              "received": 7220
+            },
+            "label": "在工资工具查看结果"
+          }
+        ],
+        "steps": [
+          {
+            "id": "1",
+            "name": "plan_tasks",
+            "label": "确认当前事项",
+            "ok": true,
+            "summary": "工资明细"
+          },
+          {
+            "id": "2",
+            "name": "calculate_salary",
+            "label": "核对工资金额",
+            "ok": true,
+            "summary": "计算实发 7220.00 元"
+          }
+        ],
+        "guide": {
+          "status": "ready",
+          "intent": "calculate",
+          "tasks": [
+            {
+              "module": "salary",
+              "reason": "用户给出五项扣款并要核对工资"
+            }
+          ],
+          "activeModule": "salary",
+          "questions": []
+        },
+        "provider": "DeepSeek",
+        "model": "deepseek-flash"
+      },
+      "calculation": {
+        "net": 7220,
+        "deductions": 1280,
+        "difference": 0
+      }
+    },
+    {
+      "id": "AC-SAL-02",
+      "category": "salary",
+      "expected": {
+        "module": "salary",
+        "noCalculation": true,
+        "noActions": true,
+        "noQuestions": true
+      },
+      "humanReview": "说明缺三项和取得方式，不反推扣款，不启动计算。",
+      "passed": true,
+      "failures": [],
+      "requests": [
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2861,
+            "completion_tokens": 124,
+            "total_tokens": 2985,
+            "prompt_tokens_details": {
+              "cached_tokens": 2688
+            },
+            "prompt_cache_hit_tokens": 2688,
+            "prompt_cache_miss_tokens": 173
+          }
+        },
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2404,
+            "completion_tokens": 108,
+            "total_tokens": 2512,
+            "prompt_tokens_details": {
+              "cached_tokens": 2048
+            },
+            "prompt_cache_hit_tokens": 2048,
+            "prompt_cache_miss_tokens": 356
+          }
+        }
+      ],
+      "elapsedMs": 1988,
+      "result": {
+        "reply": "缺三项：个人社保扣款、公积金扣款、个税扣款。其他扣款按你说的本月为0，应发7200元已明确。\n\n这三项可以这样查：工资条上通常分列“社保个人部分”“公积金个人部分”“个人所得税”；没有工资条就向HR要本月扣款明细。到账6450元只作对照，不参与计算。\n\n拿到这三项后，就能核对7200减各项扣款是否等于6450，差额也能看出是哪一项对不上。",
+        "replyOrigin": "model",
+        "actions": [],
+        "steps": [
+          {
+            "id": "1",
+            "name": "plan_tasks",
+            "label": "确认当前事项",
+            "ok": true,
+            "summary": "工资明细"
+          }
+        ],
+        "guide": {
+          "intent": "guidance",
+          "status": "ready",
+          "tasks": [
+            {
+              "module": "salary",
+              "reason": "用户要列工资明细还缺哪些项目，先不算"
+            }
+          ],
+          "activeModule": "salary",
+          "questions": []
+        },
+        "provider": "DeepSeek",
+        "model": "deepseek-flash"
+      }
+    },
+    {
+      "id": "AC-SAL-03",
+      "category": "salary",
+      "expected": {
+        "module": "salary",
+        "net": 6534,
+        "received": null
+      },
+      "humanReview": "撤回到账必须保留null，不能回填6534或0。",
+      "passed": true,
+      "failures": [],
+      "requests": [
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2880,
+            "completion_tokens": 136,
+            "total_tokens": 3016,
+            "prompt_tokens_details": {
+              "cached_tokens": 2688
+            },
+            "prompt_cache_hit_tokens": 2688,
+            "prompt_cache_miss_tokens": 192
+          }
+        },
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2883,
+            "completion_tokens": 185,
+            "total_tokens": 3068,
+            "prompt_tokens_details": {
+              "cached_tokens": 2560
+            },
+            "prompt_cache_hit_tokens": 2560,
+            "prompt_cache_miss_tokens": 323
+          }
+        },
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2764,
+            "completion_tokens": 74,
+            "total_tokens": 2838,
+            "prompt_tokens_details": {
+              "cached_tokens": 2048
+            },
+            "prompt_cache_hit_tokens": 2048,
+            "prompt_cache_miss_tokens": 716
+          }
+        }
+      ],
+      "elapsedMs": 2873,
+      "result": {
+        "reply": "理论实发是6534元，扣款合计1466元。这里只核对你给的几项金额之间的算术关系，不判断社保、公积金的缴费基数和比例是否合适。\n\n实际到账后，可以拿工资条上的应发、各项扣款和银行到账记录逐项对一遍，看是否属于同一计薪期间。",
+        "replyOrigin": "model",
+        "actions": [
+          {
+            "kind": "apply-salary",
+            "input": {
+              "gross": 8000,
+              "insurance": 800,
+              "fund": 600,
+              "tax": 66,
+              "other": 0,
+              "received": null
+            },
+            "label": "在工资工具查看结果"
+          }
+        ],
+        "steps": [
+          {
+            "id": "1",
+            "name": "plan_tasks",
+            "label": "确认当前事项",
+            "ok": true,
+            "summary": "工资明细"
+          },
+          {
+            "id": "2",
+            "name": "calculate_salary",
+            "label": "核对工资金额",
+            "ok": true,
+            "summary": "计算实发 6534.00 元"
+          }
+        ],
+        "guide": {
+          "intent": "calculate",
+          "status": "ready",
+          "tasks": [
+            {
+              "module": "salary",
+              "reason": "应发8000、社保800、公积金600、个税66、其他扣款0，只算理论实发"
+            }
+          ],
+          "activeModule": "salary",
+          "questions": []
+        },
+        "provider": "DeepSeek",
+        "model": "deepseek-flash"
+      },
+      "calculation": {
+        "net": 6534,
+        "deductions": 1466,
+        "difference": null
+      }
+    },
+    {
+      "id": "AC-SAL-04",
+      "category": "salary",
+      "expected": {
+        "module": "salary",
+        "net": 7220,
+        "received": 7220
+      },
+      "humanReview": "完整明确中文金额可核对，不接受口语省略的歧义金额。",
+      "passed": true,
+      "failures": [],
+      "requests": [
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2851,
+            "completion_tokens": 129,
+            "total_tokens": 2980,
+            "prompt_tokens_details": {
+              "cached_tokens": 2688
+            },
+            "prompt_cache_hit_tokens": 2688,
+            "prompt_cache_miss_tokens": 163
+          }
+        },
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2840,
+            "completion_tokens": 166,
+            "total_tokens": 3006,
+            "prompt_tokens_details": {
+              "cached_tokens": 2560
+            },
+            "prompt_cache_hit_tokens": 2560,
+            "prompt_cache_miss_tokens": 280
+          }
+        },
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2703,
+            "completion_tokens": 82,
+            "total_tokens": 2785,
+            "prompt_tokens_details": {
+              "cached_tokens": 2048
+            },
+            "prompt_cache_hit_tokens": 2048,
+            "prompt_cache_miss_tokens": 655
+          }
+        }
+      ],
+      "elapsedMs": 3257,
+      "result": {
+        "reply": "按你给的数，扣款合计1280元，应发减扣款正好是7220元，和你说的到账一致，算术上没问题。\n\n这次只核对了这几个数字之间的关系，没有判断社保、公积金的缴费基数和比例对不对。想确认扣得准不准，可以看工资条上的计薪期间和各项明细，或向HR要一份个人扣款明细。",
+        "replyOrigin": "model",
+        "actions": [
+          {
+            "kind": "apply-salary",
+            "input": {
+              "gross": 8500,
+              "insurance": 700,
+              "fund": 500,
+              "tax": 80,
+              "other": 0,
+              "received": 7220
+            },
+            "label": "在工资工具查看结果"
+          }
+        ],
+        "steps": [
+          {
+            "id": "1",
+            "name": "plan_tasks",
+            "label": "确认当前事项",
+            "ok": true,
+            "summary": "工资明细"
+          },
+          {
+            "id": "2",
+            "name": "calculate_salary",
+            "label": "核对工资金额",
+            "ok": true,
+            "summary": "计算实发 7220.00 元"
+          }
+        ],
+        "guide": {
+          "status": "ready",
+          "intent": "calculate",
+          "tasks": [
+            {
+              "module": "salary",
+              "reason": "用户给出应发、社保、公积金、个税、其他扣款0并要求计算"
+            }
+          ],
+          "activeModule": "salary",
+          "questions": []
+        },
+        "provider": "DeepSeek",
+        "model": "deepseek-flash"
+      },
+      "calculation": {
+        "net": 7220,
+        "deductions": 1280,
+        "difference": 0
+      }
+    },
+    {
+      "id": "AC-SAL-05",
+      "category": "salary",
+      "expected": {
+        "module": "salary",
+        "net": 7220,
+        "received": null
+      },
+      "humanReview": "k/千为明确数量单位，需要金额证据守卫支持，不绕过确认。",
+      "passed": true,
+      "failures": [],
+      "requests": [
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2849,
+            "completion_tokens": 137,
+            "total_tokens": 2986,
+            "prompt_tokens_details": {
+              "cached_tokens": 2688
+            },
+            "prompt_cache_hit_tokens": 2688,
+            "prompt_cache_miss_tokens": 161
+          }
+        },
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2854,
+            "completion_tokens": 167,
+            "total_tokens": 3021,
+            "prompt_tokens_details": {
+              "cached_tokens": 2688
+            },
+            "prompt_cache_hit_tokens": 2688,
+            "prompt_cache_miss_tokens": 166
+          }
+        },
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2717,
+            "completion_tokens": 63,
+            "total_tokens": 2780,
+            "prompt_tokens_details": {
+              "cached_tokens": 2560
+            },
+            "prompt_cache_hit_tokens": 2560,
+            "prompt_cache_miss_tokens": 157
+          }
+        }
+      ],
+      "elapsedMs": 3773,
+      "result": {
+        "reply": "按你给的数，实发是 7220 元，扣款合计 1280 元。\n\n这只是按你提供的金额做算术核对，不判断社保、公积金的缴费基数和比例是否正确。建议拿本期工资条核对一下扣款项目和计薪期间，确认没有漏项。",
+        "replyOrigin": "model",
+        "actions": [
+          {
+            "kind": "apply-salary",
+            "input": {
+              "gross": 8500,
+              "insurance": 700,
+              "fund": 500,
+              "tax": 80,
+              "other": 0,
+              "received": null
+            },
+            "label": "在工资工具查看结果"
+          }
+        ],
+        "steps": [
+          {
+            "id": "1",
+            "name": "plan_tasks",
+            "label": "确认当前事项",
+            "ok": true,
+            "summary": "工资明细"
+          },
+          {
+            "id": "2",
+            "name": "calculate_salary",
+            "label": "核对工资金额",
+            "ok": true,
+            "summary": "计算实发 7220.00 元"
+          }
+        ],
+        "guide": {
+          "status": "ready",
+          "intent": "calculate",
+          "tasks": [
+            {
+              "module": "salary",
+              "reason": "用户给出应发8500、社保700、公积金500、个税80、其他扣款0，要算实发"
+            }
+          ],
+          "activeModule": "salary",
+          "questions": []
+        },
+        "provider": "DeepSeek",
+        "model": "deepseek-flash"
+      },
+      "calculation": {
+        "net": 7220,
+        "deductions": 1280,
+        "difference": null
+      }
+    },
+    {
+      "id": "AC-SAL-06",
+      "category": "salary",
+      "expected": {
+        "module": "salary",
+        "noCalculation": true
+      },
+      "humanReview": "八千五有口语省略歧义，需确认完整金额，不能默默按8500或8005。",
+      "passed": true,
+      "failures": [],
+      "requests": [
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2842,
+            "completion_tokens": 136,
+            "total_tokens": 2978,
+            "prompt_tokens_details": {
+              "cached_tokens": 2688
+            },
+            "prompt_cache_hit_tokens": 2688,
+            "prompt_cache_miss_tokens": 154
+          }
+        }
+      ],
+      "elapsedMs": 1083,
+      "result": {
+        "reply": "先向HR要一份本期工资明细，或在工资条中找个人扣款。\n\n应发工资还没确认，先保留未知，不用猜。",
+        "replyOrigin": "guide",
+        "actions": [],
+        "steps": [
+          {
+            "id": "1",
+            "name": "plan_tasks",
+            "label": "确认当前事项",
+            "ok": true,
+            "summary": "工资明细"
+          }
+        ],
+        "guide": {
+          "status": "needs-info",
+          "intent": "calculate",
+          "tasks": [
+            {
+              "module": "salary",
+              "reason": "用户给出应发8500、社保700、公积金500、个税80、其他扣款0，要求算到手"
+            }
+          ],
+          "activeModule": "salary",
+          "questions": [
+            {
+              "label": "应发工资",
+              "hint": "填写已确认金额（元）；不清楚就写“不知道”。"
+            }
+          ]
+        },
+        "provider": "DeepSeek",
+        "model": "deepseek-flash"
+      }
+    },
+    {
+      "id": "AC-SAL-07",
+      "category": "salary",
+      "expected": {
+        "module": "salary",
+        "noCalculation": true
+      },
+      "humanReview": "区间不是本期确认额，禁止截取8000当确定值。",
+      "passed": true,
+      "failures": [],
+      "requests": [
+        {
+          "status": 200,
+          "usage": {
+            "prompt_tokens": 2846,
+            "completion_tokens": 149,
+            "total_tokens": 2995,
+            "prompt_tokens_details": {
+              "cached_tokens": 2688
+            },
+            "prompt_cache_hit_tokens": 2688,
+            "prompt_cache_miss_tokens": 158
+          }
+        }
+      ],
+      "elapsedMs": 1299,
+      "result": {
+        "reply": "先向HR要一份本期工资明细，或在工资条中找个人扣款。\n\n应发工资还没确认，先保留未知，不用猜。",
+        "replyOrigin": "guide",
+        "actions": [],
+        "steps": [
+          {
+            "id": "1",
+            "name": "plan_tasks",
+            "label": "确认当前事项",
+            "ok": true,
+            "summary": "工资明细"
+          }
+        ],
+        "guide": {
+          "status": "needs-info",
+          "intent": "calculate",
+          "tasks": [
+            {
+              "module": "salary",
+              "reason": "用户要核对工资扣款和到手金额"
+            }
+          ],
+          "activeModule": "salary",
+          "questions": [
+            {
+              "label": "应发工资",
+              "hint": "填写已确认金额（元）；不清楚就写“不知道”。"
+            }
+          ]
+        },
+        "provider": "DeepSeek",
+        "model": "deepseek-flash"
+      }
+    }
+  ]
+}

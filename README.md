@@ -1,6 +1,6 @@
 <p align="center"><img src="docs/assets/repository-cover.svg" alt="初程 First Step — 从你眼前的这件事开始" width="100%" /></p>
 <p align="center">
-<a href="https://github.com/wadwd65/-web-/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.50.0-287ead" /></a>
+<a href="https://github.com/wadwd65/-web-/releases"><img alt="Version" src="https://img.shields.io/badge/version-0.51.0-287ead" /></a>
 <a href="https://github.com/wadwd65/-web-/actions/workflows/ci.yml"><img alt="Tests and build" src="https://github.com/wadwd65/-web-/actions/workflows/ci.yml/badge.svg" /></a>
 <img alt="Node.js" src="https://img.shields.io/badge/Node.js-%E2%89%A524.21-458559" />
 <img alt="TypeScript and React" src="https://img.shields.io/badge/TypeScript_%2B_React-3b729e" />
@@ -19,7 +19,7 @@
 
 第九届传智杯 AI Web 参赛作品，团队名「莱茵生命」。浅蓝银色三维终端是界面表达，音乐是辅助；主线始终是**说明情况 → 核对信息 → 确认结果 → 带走清单**。
 
-> 当前 **v0.50.0**（九项易用性改进、PDF本地提取、单项沟通与四城三类目录），仍在完善与验收。未提供已验收的公网地址，腾讯云由维护者后续部署。自检不代表比赛评分、专业意见或奖项保证。
+> 当前 **v0.51.0**（自然新手交流、金额证据与短期合同检索修复，新增可校验的一键运行包），仍在完善与验收。未提供已验收的公网地址，腾讯云由维护者后续部署。自检不代表比赛评分、专业意见或奖项保证。
 
 ## 从一件具体的事开始
 
@@ -168,3 +168,20 @@ docs/           版本、总日志、接口说明与持续开发记忆
 广州、深圳、杭州、上海各有“毕业求职 / 入职安居 / 过渡住宿”三类共12条资料。区级、院校、人才住房、申请期已过和旧目录限制分别标注，上海驿站采用2026年单次最长15天说明，不沿用2025年3天旧目录。不是全市普惠资格判断，也不是全国现金补贴搜索。
 
 验证包括合成中文 PDF 与扫描空页、31页超限、加密失败恢复；真实 DeepSeek 单项话术与上海三类目录检索；独立上下文请求与后台完成的网络检查。桌面1280×720及缩小后的1024×640、853×533可视区域均检查首个输入区，无横向溢出。后两档近似1280×800下125%/150%缩放可用空间，并非真实系统DPI实机测试。完整过程与未完成外部验收见开发总日志。
+
+
+## v0.51.0 录制前质量检查与交付
+
+新手可以把问候、第一次使用和“能帮我什么”连在一句里说，仍由真实模型自然回应；带工资或合同正文的问候继续核对业务证据。工资支持明确的完整中文金额与 k/千/万单位，区间、约数、撤回值和“八千五”这类省略说法保留待确认。“先别算、只说缺什么”不会再次弹出同一组未知字段。短期合同检索同时理解“合同只有七周”和“签七周的劳动合同”，不拿周数自动填合同月份。
+
+评测、失败记录与检索对照的解释见 [验证报告](docs/EVALUATION.md)。内部合成题不代表真实用户准确率，不把对照中的一例改善外推为全局检索增益。
+
+交付参照另一作品的清晰目录组织，但不混用赛道、数据或材料。开发者完成测试与构建、记忆/日志校验后，可运行：
+
+```powershell
+python tools/package-submission.py --output "C:/交付/新的初程目录" --node-dir "C:/工具/node-v24.21.0-win-x64"
+```
+
+输出两个 ZIP 和哈希清单：完整源码与 Windows x64 即用包。后者包含官方 SHA256 核对过的便携 Node、构建产物、本地资源和许可证，全部解压后双击“开始使用.cmd”，无需管理员权限或 npm 安装；启动先校验文件，端口占用会选择另一个本地空闲端口。仅监听本机，命令窗口 Ctrl+C 停止。源码包不含 node_modules、私有配置、账号数据库、真实材料或旧快照。
+
+AI 仍需要网络和服务端比赛接口或右上角自备官方 DeepSeek；包内不含密钥。离线只能使用本地工具及本地资源。介绍正文见 [作品介绍](docs/PROJECT_INTRODUCTION.md)；PDF、PPT、5–8分钟1080p视频和网盘链接仍需最终整理，不把“预备包”当已完成提交。

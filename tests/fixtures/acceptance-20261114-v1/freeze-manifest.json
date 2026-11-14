@@ -1,0 +1,13 @@
+{
+  "datasetId": "acceptance-20261114-v1",
+  "frozenAt": "2026-11-14T16:02:56.540984+00:00",
+  "frozenBeforeCalls": true,
+  "purpose": "Developer-authored synthetic acceptance for current v0.50 behavior and usability; not independent held-out evaluation",
+  "files": [
+    {
+      "path": "cases.json",
+      "bytes": 7060,
+      "sha256": "46b6c4ee37f48b43c7c82ba29d13cfc1823ccc683e09e81db1f4aa045e8fda5b"
+    }
+  ]
+}

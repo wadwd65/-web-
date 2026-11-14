@@ -1,4 +1,5 @@
 /** Ground model-proposed amounts in user words. This never infers rates or missing money. */
+import {explicitMoney} from './explicit-money.ts';
 export const SALARY_LABELS = {
   gross: '(?:应发(?:工资)?|税前(?:工资)?)',
   insurance: '(?:个人)?社保(?:扣款)?',
@@ -63,9 +64,8 @@ function explicitFact(text:string,key:EvidenceField):SalaryFact {
   if(uncertain.test(body)||/(?:不确定|不知道|不清楚|可能|好像|不是|撤回|取消|不一定|大概|估计|大约|差不多)[^，,。；;\n]{0,8}$/u.test(prefix)||/(?:公司|单位|企业)(?:承担|缴纳|缴的|交的)?\s*$/u.test(prefix))return {value:null,state:'unknown',quote};
   if(key in INCOME_LABELS&&/(?:上(?:一|个|一个)?月|上(?:一)?期|去年)/u.test(prefix+body))return {value:null,state:'unknown',quote};
   if(body!==''&&(/没(?:有)?扣(?:除)?\s*$/u.test(prefix)||key==='other'&&/(?:没有|无)\s*$/u.test(prefix)))return {value:null,state:'unknown',quote};
-  // A negative sign or a third decimal must never become a positive/rounded amount.
-  const amount=body.match(/^(?:[:：=\s¥￥]|是|为|应是|应为|更正为|改为|扣了|扣除|扣的|扣|金额|本次|共|合计)*(\d+(?:\.\d{1,2})?)(?=元|块|[\s（(]|$)/u);
-  if(amount)return {value:Number(amount[1]),state:'confirmed',quote};
+  const amount=explicitMoney(body);
+  if(amount!==null)return {value:amount,state:'confirmed',quote};
   // Explicit absence confirms an income item or employee deduction, never gross/receipt.
   const zeroBefore=body===''&&(/没(?:有)?扣(?:除)?\s*$/u.test(prefix)||(key==='other'||key in INCOME_LABELS)&&/(?:没有|无)\s*$/u.test(prefix));
   if((key in INCOME_LABELS||deduction(key as SalaryField))&&(zeroAfter.test(body)||zeroBefore))return {value:0,state:'confirmed',quote};
