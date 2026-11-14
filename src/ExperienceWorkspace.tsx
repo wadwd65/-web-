@@ -1,9 +1,10 @@
 import AISettings from './AISettings.tsx';
+import HelpEntry from './HelpEntry.tsx';
 import {lazy,Suspense,useCallback,useEffect,useLayoutEffect,useRef,useState} from 'react';
 import {version} from '../package.json';
 import PerformanceDiagnostics from './PerformanceDiagnostics.tsx';
 import type {ReactNode} from 'react';
-import {ArrowLeft,ArrowRight,ArrowUpRight,ChevronRight,CircleHelp,Maximize,Play,RotateCcw,SlidersHorizontal,Sparkles,X} from 'lucide-react';
+import {ArrowLeft,ArrowRight,ArrowUpRight,ChevronRight,Maximize,Play,RotateCcw,SlidersHorizontal,Sparkles,X} from 'lucide-react';
 import {EXPERIENCE_MODULES} from './experience-modules.ts';
 import type {ExperiencePage,WorkspacePage} from './experience-modules.ts';
 import {resultAvailable} from './terminal-state.ts';
@@ -38,7 +39,7 @@ function statusFor(index:number,signals:TerminalSignals){
 export default function ExperienceWorkspace({page,go,questionCount,signals,openSources,covered=false,musicOpen,openMusic,closeMusic,onAssistantAction,children,accountQuestions,restoreAccountQuestions,accountEpoch,policyAsk}:{policyAsk?:{id:number;text:string}|null;accountEpoch:number;accountQuestions:SavedQuestion[];restoreAccountQuestions:(items:SavedQuestion[])=>void;page:WorkspacePage;musicOpen:boolean;openMusic:()=>void;closeMusic:()=>void;go:(page:ExperiencePage)=>void;questionCount:number;signals:TerminalSignals;openSources:()=>void;demo:()=>void;onAssistantAction:(action:AssistantAction)=>void;covered?:boolean;children:ReactNode}){
   const modeState=useExperienceMode(),lightweight=modeState.mode==='simple';
   const [selected,setSelected]=useState(()=>(find(page)<0?1:find(page))),[working,setWorking]=useState(page!=='home');
-  const [accountOpen,setAccountOpen]=useState(false),[apiOpen,setApiOpen]=useState(false);
+  const [accountOpen,setAccountOpen]=useState(false),[apiOpen,setApiOpen]=useState(false),[tourOpen,setTourOpen]=useState(false);
   useEffect(()=>{setAssistantOpen(false);setAssistantSeed(null);setHomeQuestion('');},[accountEpoch]);
   const [assistantOpen,setAssistantOpen]=useState(false),[assistantSeed,setAssistantSeed]=useState<AssistantSeed|null>(null),[homeQuestion,setHomeQuestion]=useState('');
   function ask(text=''){setCinema(false);setAssistantSeed(text?{id:Date.now(),text,send:true}:null);setAssistantOpen(true);if(text)setHomeQuestion('');}
@@ -52,7 +53,7 @@ export default function ExperienceWorkspace({page,go,questionCount,signals,openS
   const musicPresent=musicOpen||musicPhase!=='closed';
   const [intro,setIntro]=useState(()=>!lightweight&&!musicOpen&&page==='home'),[introKey,setIntroKey]=useState(0),[introReveal,setIntroReveal]=useState(false),[ready,setReady]=useState(false),[failed,setFailed]=useState(false),[simple,setSimple]=useState(false),[particles,setParticles]=useState(false),[reset,setReset]=useState(0),[cinema,setCinema]=useState(false);
   function changeMode(next:'simple'|'full'){setCinema(false);setFailed(false);if(next==='full'&&lightweight)setReady(false);if(next==='simple')setIntro(false);modeState.change(next);}
-  useEffect(()=>{modeState.setActive(lightweight||intro||assistantOpen||covered||accountOpen||apiOpen||page==='tools'?null:musicPresent?'music':'task');return()=>modeState.setActive(null);},[lightweight,intro,assistantOpen,covered,accountOpen,apiOpen,musicPresent,page,modeState.setActive]);
+  useEffect(()=>{modeState.setActive(lightweight||intro||assistantOpen||covered||accountOpen||apiOpen||tourOpen||page==='tools'?null:musicPresent?'music':'task');return()=>modeState.setActive(null);},[lightweight,intro,assistantOpen,covered,accountOpen,apiOpen,tourOpen,musicPresent,page,modeState.setActive]);
   useEffect(()=>{if(lightweight)setCinema(false);},[lightweight]);
   const root=useRef<HTMLDivElement>(null),overview=useRef<HTMLElement>(null),workspace=useRef<HTMLElement>(null),previousPage=useRef(page);
   const soundtrack=useSoundtrack({working:working&&!musicOpen,entering:intro});
@@ -60,7 +61,8 @@ export default function ExperienceWorkspace({page,go,questionCount,signals,openS
   const [focusRequest,setFocusRequest]=useState<{page:ExperiencePage;view:'material'|'result';detail?:string;serial:number}|null>(null);
   const routeIndex=find(page),task=EXPERIENCE_MODULES[routeIndex>=0?routeIndex:selected],list=page==='list',tools=page==='tools',utility=list||tools;
   const hasResult=!!task&&resultAvailable(task.id,signals);
-  useLayoutEffect(()=>{if(intent.current){if(intent.current.page===page){setWorkView(intent.current.view);intent.current=null;}}else setWorkView(hasResult?'result':'material');},[hasResult,page]);
+  const resultRevision=task?signals.tools[task.id as ToolId]?.revision??0:0;
+  useLayoutEffect(()=>{if(intent.current){if(intent.current.page===page){setWorkView(intent.current.view);intent.current=null;}}else setWorkView(hasResult?'result':'material');},[hasResult,page,resultRevision]);
   useEffect(()=>{
     if(!focusRequest||!working||page!==focusRequest.page||workView!==focusRequest.view)return;
     const timer=setTimeout(()=>{
@@ -116,7 +118,7 @@ export default function ExperienceWorkspace({page,go,questionCount,signals,openS
       <header className="experience-header" inert={cinema}>
         <a className="experience-brand" href="#/home" onClick={()=>{setSelected(1);setWorking(false);setCinema(false);}} aria-label={working?"点击莱茵生命标志返回首页":"初程首页"} title={working?"返回首页，保留本次填写":"初程首页"}><RhineMark/><span>初程<small>{working?'点击标志 · 回到首页':'FIRST STEP'}</small></span></a>
         <div className="experience-team"><span>莱茵生命</span><small>THE NEXT CHAPTER</small></div>
-        <div className="experience-header-actions"><ModeSwitch mode={modeState.mode} onChange={changeMode}/><button hidden={!working} className="assistant-header-entry" onClick={()=>ask()}><Sparkles size={15}/><span>问 AI</span></button><button hidden={!working} onClick={openTools}><span className="experience-menu-mark" aria-hidden="true"><i/><i/></span><span>工具列表</span><small>08</small></button><MusicEntry state={soundtrack} contextKey={`${page}:${musicPresent}`} lightweight={lightweight} onOpen={detail=>{setMusicDetail(detail);setCinema(false);openMusic();}}/><button className="experience-replay-entry" aria-label="重播入场" title="重播入场" hidden={lightweight} onClick={()=>{setCinema(false);setIntroReveal(false);setIntroKey(value=>value+1);setIntro(true);}}><Play size={13}/><span>重播入场</span></button><button className="home-help-entry" onClick={openSources} aria-label="资料与当前能力" title="资料与当前能力"><CircleHelp size={17}/><span>使用说明</span></button><AISettings onVisibility={setApiOpen}/><AccountEntry onVisibility={setAccountOpen} questions={accountQuestions} onRestore={restoreAccountQuestions} onUse={text=>{setAssistantSeed({id:Date.now(),text,send:false});setAssistantOpen(true);}}/></div>
+        <div className="experience-header-actions"><ModeSwitch mode={modeState.mode} onChange={changeMode}/><button hidden={!working} className="assistant-header-entry" onClick={()=>ask()}><Sparkles size={15}/><span>问 AI</span></button><button hidden={!working} onClick={openTools}><span className="experience-menu-mark" aria-hidden="true"><i/><i/></span><span>工具列表</span><small>08</small></button><MusicEntry state={soundtrack} contextKey={`${page}:${musicPresent}`} lightweight={lightweight} onOpen={detail=>{setMusicDetail(detail);setCinema(false);openMusic();}}/><button className="experience-replay-entry" aria-label="重播入场" title="重播入场" hidden={lightweight} onClick={()=>{setCinema(false);setIntroReveal(false);setIntroKey(value=>value+1);setIntro(true);}}><Play size={13}/><span>重播入场</span></button><HelpEntry page={page} view={workView} hasScene={!lightweight&&!failed&&ready} openSources={openSources} onTourVisibility={setTourOpen}/><AISettings onVisibility={setApiOpen}/><AccountEntry onVisibility={setAccountOpen} questions={accountQuestions} onRestore={restoreAccountQuestions} onUse={text=>{setAssistantSeed({id:Date.now(),text,send:false});setAssistantOpen(true);}}/></div>
       </header>
       <main ref={overview} className="experience-overview" id={!working?'experience-content':'scene-content'} tabIndex={-1} inert={working||cinema} aria-hidden={working||cinema}>
         <div className="experience-section-label"><i/><span>初入职场，慢慢弄明白。</span></div>

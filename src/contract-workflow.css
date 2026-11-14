@@ -29,6 +29,39 @@
 .experience-shell.is-working .experience-workspace { bottom:30px!important; }
 .experience-shell[data-module=contract][data-view=result] .contract-image { display:none; }
 .experience-shell[data-module=contract] .review-summary { margin-bottom:0; }
+.experience-shell[data-module=contract] .contract-topline { display:flex; align-items:center; flex-wrap:wrap; gap:4px 18px; margin:10px 0; border-bottom:1px solid #d1e0e9; }
+.experience-shell[data-module=contract] .contract-topline>.terminal-page-heading { order:2; min-height:32px; margin:0; }
+.experience-shell[data-module=contract] .contract-topline .page-heading-copy { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+.experience-shell[data-module=contract] .contract-topline .page-heading-actions>.button { min-height:32px; padding:5px 0; font-size:12px; }
+.experience-shell[data-module=contract] .contract-topline>.draft-controls { flex:1; min-width:250px; margin:0; border:0; }
+.experience-shell[data-module=contract] .contract-entry-hint { margin:0 0 10px; color:#526f84; font-size:13px; line-height:1.7; }
+.experience-shell[data-module=contract] .contract-text { margin-top:0; min-height:160px; height:160px; font-size:14px; line-height:1.85; }
+.experience-shell[data-module=contract] .text-count { margin:4px 0 6px; padding:0; color:#607e92; }
+.experience-shell[data-module=contract] .contract-material-tools { display:flex; flex-wrap:wrap; align-items:flex-start; gap:8px 26px; margin:0 0 14px; border-bottom:1px solid #c6d9e5; padding-bottom:10px; }
+.experience-shell[data-module=contract] .contract-material-tools>.upload-zone { width:auto; min-height:40px; padding:3px 0; gap:9px; flex:1 0 220px; }
+.experience-shell[data-module=contract] .contract-material-tools .upload-port { width:22px; height:28px; }
+.experience-shell[data-module=contract] .contract-material-tools .upload-copy { gap:1px; }
+.experience-shell[data-module=contract] .contract-material-tools>.contract-image { flex:1 0 230px; margin:0; border:0; }
+.experience-shell[data-module=contract] .contract-material-tools>.contract-image summary { padding:3px 0; min-height:40px; }
+.experience-shell[data-module=contract] .contract-material-tools:has(.contract-image[open])>.contract-image { flex-basis:100%; }
+.experience-shell[data-module=contract] .contract-material-tools>.file-preview { flex-basis:100%; }
+.experience-shell[data-module=contract] .contract-material-tools>.document-name { flex-basis:100%; margin:0; }
+.experience-shell[data-module=contract] .document-inner>.confirm-fields { margin:0 0 12px; }
+.experience-shell[data-module=contract] .document-inner>.confirm-fields>.field-label { gap:5px; }
+.route-record-preserved { display:flex; flex-wrap:wrap; align-items:center; gap:4px 18px; padding:10px 0; margin-bottom:12px; border-bottom:1px solid #bdd3e1; color:#46687e; font-size:13px; line-height:1.8; }
+.route-record-preserved>span { flex:1 1 260px; }
+.route-replace-dialog { width:min(540px,calc(100vw - 64px)); padding:32px; border:1px solid #b1cadc; border-radius:16px; color:#284e68; background:#f5fafe; box-shadow:0 24px 90px #153a5c35; }
+.route-replace-dialog::backdrop { background:#153a5c5c; }
+.route-replace-dialog .eyebrow { color:#5b83a1; font:10px var(--mono); letter-spacing:1.5px; }
+.route-replace-dialog h2 { margin:15px 0 12px; font-size:23px; font-weight:600; }
+.route-replace-dialog p { color:#4f6d83; font-size:14px; line-height:1.9; }
+.route-dialog-close { position:absolute; right:16px; top:16px; color:#4f7693; padding:6px; }
+.route-replace-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
+.route-replace-actions .button { display:flex; align-items:center; justify-content:center; gap:8px; min-height:42px; padding:10px 14px; border:1px solid #b6cddd; border-radius:8px; background:#edf5fa; color:#355b76; font-size:13px; transition:background .18s,border-color .18s; }
+.route-replace-actions .button:hover { background:#dfedf6; border-color:#78a5c2; }
+.route-replace-actions .button:nth-child(2) { background:#207fa7; border-color:#207fa7; color:white; }
+.route-replace-actions .button:focus-visible,.route-dialog-close:focus-visible { outline:2px solid #1887b2; outline-offset:3px; }
+.route-replace-actions .primary { flex-basis:100%; background:transparent; }
 @media(prefers-reduced-motion:reduce) { .question-evidence > summary > svg:last-child { transition:none; } }
 
 .experience-shell[data-module=list] .checklist-item.done { opacity:1; }

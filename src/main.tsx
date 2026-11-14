@@ -30,3 +30,4 @@ window.history.scrollRestoration = 'manual';
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><AccountProvider><App /></AccountProvider></React.StrictMode>);
 
 import './ai-settings.css';
+import './help-tour.css';

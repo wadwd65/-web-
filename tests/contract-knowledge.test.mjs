@@ -153,6 +153,19 @@ test('PDF guidance uses a real entry and accurately states preview-only support'
   assert.match(result.reply,/只能.*预览/);assert.equal(result.actions[0].kind,'open-tool');assert.equal(result.references,undefined);
 });
 
+test('source guard fallback answers the one-year/six-month question instead of merely pasting law',async()=>{
+ const content='换个问题：我这里只核对普通全日制劳动合同的这两句原文：“合同期限一年。试用期六个月。”请解释需要核实什么，并给出能对照的官方依据，不要沿用前面的工资信息。';
+ const references=search(content);
+ const fallback=finalizeContractExplanation('公司可以另设培训期。整份合同有效。',references);
+ assert.equal(fallback.replyOrigin,'guide');assert.match(fallback.reply,/一年以上不满三年/);assert.match(fallback.reply,/六个月超过/);assert.match(fallback.reply,/问 HR/);
+ assert.ok(fallback.reply.includes(references.excerpts[0].text));assert.doesNotMatch(fallback.reply,/另设培训期|整份合同有效|已审核通过/);
+ const unknown=finalizeContractExplanation('可以另设考察期。',search('合同期限不知道，试用期六个月'));
+ assert.doesNotMatch(unknown.reply,/六个月超过|一年属于/);assert.match(unknown.reply,/未知/);
+ let count=0;
+ const result=await runAssistant({messages:[{role:'user',content}]},{config:{apiKey:'synthetic'},fetcher:async()=>++count===1?reply({tool_calls:[call(plan)]}):reply({content:'可以约定考核期。'})});
+ assert.equal(result.replyOrigin,'guide');assert.match(result.reply,/六个月超过/);assert.ok(result.steps.some(s=>s.name==='search_contract_knowledge'));
+});
+
 test('unsupported assessment or pay advice falls back to exact source and keeps the missing fact explicit',()=>{
   const references=search('同一用人单位调岗后再次约定试用期');
   const result=finalizeContractExplanation('不能再试用。\n\n如果新岗位需要考察，可以约定考核目标或培训安排，也不应降低工资。',references);

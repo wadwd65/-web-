@@ -15,6 +15,7 @@ import {createStyleWriter} from './scene/style-writer.ts';
 import {createRenderCadence} from './scene/render-cadence.ts';
 import {createTransformWriter} from './scene/transform-writer.ts';
 import {scopeShadowReceiver} from './scene/shadow-receiver.ts';
+import {createLabelOcclusion} from './scene/label-occlusion.ts';
 
 type Props={selected:number;working:boolean;entering:boolean;particles:boolean;paused?:boolean;suspended?:boolean;cinema?:boolean;reset:number;signals:TerminalSignals;view:string;onSelect:(index:number)=>void;onOpen:(index:number)=>void;onAction:SceneInteraction;onReady:()=>void;onFailure:()=>void;onPhase?:(phase:string)=>void;onFrame?:(now:number,eligible:boolean)=>void};
 type Dossier={group:T.Group;texture:T.CanvasTexture;canvas:HTMLCanvasElement;key:string;signal:TerminalSignals|null;active:boolean;hot:SceneAction|null;cover:T.Mesh;layers:T.Group;index:number;samples:Float32Array;meshes:{mesh:T.Mesh;opacity:number}[];bars:T.Mesh[];solid:number;hover:number;outline:T.LineSegments;materialAlpha:number;casts:boolean};
@@ -158,6 +159,7 @@ export default function TaskArrayScene(props:Props){
   const cloudUniforms={uMorph:{value:1},uAmount:{value:0},uMatrix:{value:new T.Matrix4()},uMotion:{value:1},uTime:{value:0}};
   const cloudMaterial=new T.ShaderMaterial({transparent:true,depthWrite:false,uniforms:cloudUniforms,vertexShader:`attribute vec3 aTarget;attribute float aSeed;uniform float uMorph,uAmount,uTime,uMotion;uniform mat4 uMatrix;varying float vAlpha;varying vec3 vColour;void main(){float w=sin(uMorph*3.14159265);vec3 q=(uMatrix*vec4(aTarget,1.)).xyz;vec3 p=mix(position,q,uMorph);p.y+=w*(.8+sin(aSeed*98.)*.32);p.z+=w*sin(aSeed*74.)*.5;p.x+=w*sin(aSeed*42.)*.4;p.y+=sin(uTime*.5+aSeed*80.)*.015*uMotion;vec4 mv=modelViewMatrix*vec4(p,1.);gl_Position=projectionMatrix*mv;gl_PointSize=clamp(2.2*25./max(5.,-mv.z),1.1,4.0);vColour=mix(vec3(.055,.22,.39),vec3(.19,.46,.7),aSeed);vAlpha=uAmount*.8;}`,fragmentShader:pointFragment});const pointCloud=new T.Points(cloudGeometry,cloudMaterial);pointCloud.frustumCulled=false;scene.add(pointCloud);
   const tmp=new T.Vector3(),pos=new T.Vector3(),scale=new T.Vector3(),anchor=new T.Vector3(),anchorDirection=new T.Vector3(),ray=new T.Raycaster(),pointer=new T.Vector2(-9,-9),labelPositions=new Map<number,{x:number;y:number}>();let pinnedIndex=-1;let previousPhase='',overScene=false,lastHot=-1,lastPart=-1,hoverExpires=0,hotAction:SceneAction|null=null;
+  const labelOcclusion=createLabelOcclusion(),labelPanels=dossiers.map(d=>({index:d.index,points:Array.from({length:4},()=>({x:0,y:0,z:0}))}));
   let bounds={left:0,top:0};
   const resize=()=>{const r=el.getBoundingClientRect();bounds={left:r.left,top:r.top};width=r.width;height=r.height;renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix();wake.current();};const observer=new ResizeObserver(resize);observer.observe(el);resize();
   const updatePointer=(e:{clientX:number;clientY:number})=>{pointer.set((e.clientX-bounds.left)/width*2-1,-(e.clientY-bounds.top)/height*2+1);wake.current();};
@@ -220,16 +222,31 @@ export default function TaskArrayScene(props:Props){
    for(const object of moving)writeTransform(object);scene.updateMatrixWorld();
    cloudUniforms.uMorph.value=morph;cloudUniforms.uAmount.value=Math.max(cloud,Math.sin(morph*Math.PI));pointCloud.visible=cloudUniforms.uAmount.value>.003;cloudUniforms.uMatrix.value.copy(dossiers[selected].group.matrixWorld);cloudUniforms.uTime.value=clock;cloudUniforms.uMotion.value=still?0:1;
    // A continuous camera crosses the same world. Working leaves a live dossier on the left, readable controls on the right.
+   // Project the physical board faces after world matrices settle. HTML text and
+   // its leader must both respect these silhouettes, regardless of selection.
+   for(const panel of labelPanels){const d=dossiers[panel.index];for(let n=0;n<4;n++){tmp.set(n===0||n===3?-2.35:2.35,n<2?-1.72:1.72,.25).applyMatrix4(d.group.matrixWorld).project(camera);const p=panel.points[n];p.x=(tmp.x*.5+.5)*width;p.y=(-tmp.y*.5+.5)*height;p.z=tmp.z;}}
    const occupied:{left:number;right:number;top:number;bottom:number}[]=[{left:width*.78,right:width*.97,top:108,bottom:155}];
    const labelOrder=[...dossiers].sort((a,b)=>(a.index===hover?-20:a.index===selected?-10:Math.min((a.index-selected+8)%8,(selected-a.index+8)%8))-(b.index===hover?-20:b.index===selected?-10:Math.min((b.index-selected+8)%8,(selected-b.index+8)%8)));
    for(const d of labelOrder){
     const label=labelRefs.current[d.index];if(!label)continue;tmp.set(0,1.97,.23).applyMatrix4(d.group.matrixWorld).project(camera);
-    const visible=tmp.z>-1&&tmp.z<1&&Math.abs(tmp.x)<1.08&&Math.abs(tmp.y)<1.08&&!s.working&&work<.07&&!s.cinema&&!s.entering&&boot>.65;
-    hide(label,!visible);const leader=leaderRefs.current[d.index];if(leader)style(leader,'visibility',visible?'visible':'hidden');data(label,'selected',String(d.index===selected));data(label,'hot',String(d.index===hover));if(!visible)continue;
-    const expanded=d.index===selected||d.index===hover||label.matches(':focus-within'),w=expanded?168:31,h=62;
-    const originX=T.MathUtils.clamp((tmp.x*.5+.5)*width,99,width-99),base=Math.max(165,(-tmp.y*.5+.5)*height-8);let x=originX,y=base;
-    const fixed=d.index===pinnedIndex?labelPositions.get(d.index):null;const candidates=fixed?[[fixed.x-originX,fixed.y-base]]:LABEL_OFFSETS;
-    for(const [dx,dy] of candidates){const xx=T.MathUtils.clamp(originX+dx,w/2+15,width-w/2-15),yy=base+dy,box={left:xx-w/2-5,right:xx+w/2+5,top:yy-h-5,bottom:yy+4};if(yy<165)continue;if(fixed||!occupied.some(r=>box.left<r.right&&box.right>r.left&&box.top<r.bottom&&box.bottom>r.top)){x=xx;y=yy;occupied.push(box);break;}}
+    const ax=(tmp.x*.5+.5)*width,ay=(-tmp.y*.5+.5)*height,depth=tmp.z;
+    let visible=depth>-1&&depth<1&&Math.abs(tmp.x)<1.08&&Math.abs(tmp.y)<1.08&&!s.working&&work<.07&&!s.cinema&&!s.entering&&boot>.65;
+    if(visible&&labelOcclusion.rectangle({left:ax-2,right:ax+2,top:ay-2,bottom:ay+2},depth,d.index,labelPanels))visible=false;
+    const leader=leaderRefs.current[d.index];data(label,'selected',String(d.index===selected));data(label,'hot',String(d.index===hover));
+    if(!visible){hide(label,true);if(leader)style(leader,'visibility','hidden');continue;}
+    const expanded=d.index===selected||d.index===hover||label.matches(':focus-within'),w=expanded?168:31,h=expanded?62:32;
+    const originX=T.MathUtils.clamp(ax,99,width-99),base=Math.max(165,ay-8);let x=originX,y=base,placed=false,compact=!expanded;
+    const fixed=d.index===pinnedIndex?labelPositions.get(d.index):null;const candidates=fixed?[[fixed.x-originX,fixed.y-base],...LABEL_OFFSETS]:LABEL_OFFSETS;
+    for(const [candidate,[dx,dy]] of candidates.entries()){
+     const pinned=!!fixed&&candidate===0,xx=quarter(pinned&&d.index!==selected?fixed!.x:T.MathUtils.clamp(originX+dx,w/2+15,width-w/2-15)),yy=quarter(base+dy);let box={left:xx-w/2-5,right:xx+w/2+5,top:yy-h-5,bottom:yy+4},small=false;if(yy<165)continue;
+     // Keep an exposed number under the pointer. If its expanded title would
+     // overlap a closer board, retain the compact preview instead of moving it.
+     if((box.left<15||box.right>width-15||labelOcclusion.rectangle(box,depth,d.index,labelPanels))&&pinned&&expanded&&d.index!==selected){box={left:xx-20.5,right:xx+20.5,top:yy-37,bottom:yy+4};small=true;}
+     if(labelOcclusion.rectangle(box,depth,d.index,labelPanels)||labelOcclusion.segment({x:xx,y:yy+2},{x:originX,y:base+17},depth,d.index,labelPanels))continue;
+     if(pinned||!occupied.some(r=>box.left<r.right&&box.right>r.left&&box.top<r.bottom&&box.bottom>r.top)){x=xx;y=yy;occupied.push(box);placed=true;compact=small||!expanded;break;}
+    }
+    data(label,'compact',String(compact));
+    hide(label,!placed);if(leader)style(leader,'visibility',placed?'visible':'hidden');if(!placed)continue;
     x=quarter(x);y=quarter(y);labelPositions.set(d.index,{x,y});style(label,'transform',`translate3d(${x}px,${y}px,0) translate(-50%,-100%)`);style(label,'zIndex',String(d.index===hover?40:d.index===selected?30:20));
     if(leader){attr(leader,'x1',String(x));attr(leader,'y1',String(y+2));attr(leader,'x2',String(quarter(originX)));attr(leader,'y2',String(quarter(base+17)));}
    }

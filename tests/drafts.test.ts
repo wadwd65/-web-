@@ -1,5 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+
+test('route drafts retain the generated case separately from unsaved case changes',()=>{
+ const form={scenario:'medical',city:'广州',target:'上海',insured:'employee'},recordForm={...form,scenario:'first',target:''};
+ const data={form,recordForm,generated:true,done:{verify:true},notes:{verify:'合成记录'}};
+ assert.deepEqual(decodeDraft('social',encodeDraft('social',data)).data,data);
+ assert.throws(()=>encodeDraft('social',{...data,recordForm:{...recordForm,scenario:'invented'}}));
+ assert.throws(()=>encodeDraft('social',{...data,recordForm:{...recordForm,privateKey:'forbidden'}}));
+});
 import {decodeDraft,draftKey,encodeDraft,writeDraft} from '../src/lib/drafts.ts';
 import type {DraftModule} from '../src/lib/drafts.ts';
 

@@ -19,9 +19,9 @@ const checks:Record<DraftModule,Check>={
   subsidy:fields({schoolCity:text(100),inGraduatingYear:oneOf('yes','no','unknown'),supportCondition:oneOf('loan','low_income','disability','none','unknown'),claimedBefore:oneOf('yes','no','unknown')}),
   offer:fields({form:value=>Array.isArray(value)&&value.length>=2&&value.length<=3&&value.every(offer)&&new Set(value.map(item=>item.id)).size===value.length,sample:flag}),
   tax:fields({form:fields({income:text(50),insurance:text(50),additional:text(50),other:text(50),prepaid:text(50),resident:flag,salaryOnly:flag,year:oneOf('2025','2026')}),sample:flag}),
-  social:fields({form:social,generated:flag,done:marks,notes}),
+  social:fields({form:social,generated:flag,done:marks,notes},{recordForm:value=>value===null||social(value)}),
   rent:fields({text:text(30000),fees:fields({monthly:text(50),period:text(50),deposit:text(50),fee:text(50)}),sample:flag}),
-  leaving:fields({form:leaving,generated:flag,done:marks,notes}),
+  leaving:fields({form:leaving,generated:flag,done:marks,notes},{recordForm:value=>value===null||leaving(value)}),
   chat:fields({input:text(6000),turns:value=>Array.isArray(value)&&value.length<=150&&value.every(fields({role:oneOf('user','assistant'),content:text(20000)}))}),
 };
 

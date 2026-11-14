@@ -208,3 +208,29 @@
 @media(prefers-reduced-motion:reduce){.experience-header .experience-brand,.experience-header .experience-brand::before,.experience-header .experience-brand>.rhine-mark,.offer-text-entry > summary > svg:last-child{transition:none}.experience-header .experience-brand:hover>.rhine-mark{transform:none}}
 
 .offer-readouts article > header > span > small { font:12px var(--font); color:#52768e; margin-right:5px; }
+.experience-workspace .offer-overview h2 { font-size:26px; color:#245777; line-height:1.45; }
+.experience-shell[data-module=offer][data-view=result] .offer-overview h2 { font-size:26px; }
+.experience-shell[data-module=offer][data-view=result] .module-offer>.tool-heading { position:absolute; width:1px; height:1px; min-height:0; padding:0; margin:0; overflow:hidden; clip-path:inset(50%); }
+.experience-shell[data-module=offer][data-view=result] .module-offer>.tool-heading>button { display:none; }
+.offer-overview>p { margin:8px 0 0; color:#506f85; font-size:13px; line-height:1.8; }
+.offer-readouts article>p { font-size:12px; color:#57778e; }
+.offer-readouts .offer-benefits.is-compact { margin-top:12px; padding-top:2px; border:0; }
+.offer-readouts .offer-benefits dl { font-size:12px; margin:8px 0; }
+.offer-readouts .offer-benefits dl>div { flex-wrap:wrap; gap:4px 12px; margin:7px 0; }
+.offer-readouts .optional-fields { margin-top:10px; }
+.offer-benefit-note { font-size:12px; line-height:1.8; color:#4c6d84; white-space:pre-wrap; overflow-wrap:anywhere; }
+.offer-next { padding:18px 0 8px; border-top:1px solid #b5cddd; }
+.offer-next>header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px 20px; }
+.offer-next header small { color:#62869d; font:9px var(--mono); letter-spacing:1.2px; }
+.offer-next h3 { font-size:18px; font-weight:550; color:#315a75; margin:5px 0; }
+.offer-next>ol { list-style:none; padding:0; margin:12px 0; }
+.offer-next li { display:flex; align-items:baseline; gap:16px; padding:12px 0; border-bottom:1px solid #c9dbe580; }
+.offer-next li>span { color:#6190ae; font:11px var(--mono); }
+.offer-next li>div { min-width:0; }
+.offer-next li strong { color:#315a75; font-size:14px; font-weight:550; }
+.offer-next li p { margin:6px 0 0; color:#57768a; font-size:12px; line-height:1.8; overflow-wrap:anywhere; }
+.offer-all-questions { margin-top:18px; padding:6px 0; border-top:1px solid #c3d7e3; }
+.offer-all-questions>summary { display:flex; align-items:center; gap:12px; padding:12px 0; cursor:pointer; color:#3c6d8f; font-size:13px; list-style:none; }
+.offer-all-questions>summary>span { margin-left:auto; color:#637f92; font-size:12px; }
+.offer-all-questions>p,.offer-all-questions li { color:#526f84; font-size:12px; line-height:1.9; margin-bottom:10px; overflow-wrap:anywhere; }
+.offer-all-questions>ol { padding-left:20px; }

@@ -8,6 +8,8 @@
 .scene-label-title>span{font-size:13px;color:#4c87af;transition:opacity .25s,transform .3s}
 .scene-dossier-label[data-selected=false][data-hot=false]:not(:focus-within) .scene-label-title>strong{max-width:0;opacity:0}
 .scene-dossier-label[data-selected=false][data-hot=false]:not(:focus-within) .scene-label-title>span{opacity:0;max-width:0;overflow:hidden}
+.scene-dossier-label[data-selected=false][data-compact=true] .scene-label-title>strong{max-width:0;opacity:0}
+.scene-dossier-label[data-selected=false][data-compact=true] .scene-label-title>span{opacity:0;max-width:0;overflow:hidden}
 .scene-dossier-label[data-hot=true] .scene-label-title,.scene-dossier-label:focus-within .scene-label-title{color:#196798;border-bottom-color:#4eadd6}
 .scene-dossier-label[data-hot=true] .scene-label-title>span{transform:translate(2px,-2px)}
 .scene-label-actions{position:absolute;left:50%;bottom:calc(100% + 3px);display:flex;gap:15px;justify-content:center;padding-top:6px;opacity:0;visibility:hidden;transform:translate(-50%,3px);pointer-events:none;transition:opacity .2s,transform .25s,visibility .2s}

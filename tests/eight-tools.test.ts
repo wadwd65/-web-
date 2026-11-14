@@ -3,6 +3,65 @@ import {reviewPartialPay} from '../src/lib/partial-pay.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {amount,compareOffers,estimateAnnualTax,previewAnnualTax,leavingRoute,rentBudget,reviewRent,socialRoute,TAX_BANDS} from '../src/lib/eight-tools.ts';
+import {legacyRouteRecordText,newRouteRecord,routeRecordReducer,sameRouteForm} from '../src/lib/route-record.ts';
+import {offerSummary,priorityOfferQuestions} from '../src/lib/offer-summary.ts';
+
+test('Offer summary compares confirmed cents and never ranks incomplete annual or budget conditions',()=>{
+ const make=(id:string,monthly:string)=>({id,name:id,monthly,months:'',rent:'',commute:'',hours:'',probation:'',employer:'unknown'});
+ const rows=compareOffers([make('机会A','6500.01'),make('机会B','7500.03')]),before=JSON.stringify(rows);
+ const summary=offerSummary(rows,'monthly');assert.equal(summary.difference,100002);assert.match(summary.headline,/1,000.02/);assert.equal(JSON.stringify(rows),before);
+ assert.equal(offerSummary(rows,'annual').difference,null);assert.equal(offerSummary(rows,'budget').difference,null);
+ const three=compareOffers([{...make('A','8000'),months:'12'},{...make('B','9000'),months:'13'},make('C','10000')]);
+ assert.equal(offerSummary(three,'annual').kind,'incomplete');assert.equal(offerSummary(three,'annual').difference,null);
+ assert.equal(offerSummary(compareOffers([make('A','6500'),make('B','6500')]),'monthly').kind,'equal');
+});
+
+test('Offer priorities group at most three concerns and preserve known absence rather than asking it again',()=>{
+ const make=(id:string)=>({id,name:id,monthly:'7000',months:'12',rent:'0',commute:'0',hours:'40',probation:'6000',employer:'direct',socialInsurance:'provided' as const,housingFund:'provided' as const,benefitNotes:'已记录书面条件'});
+ const complete=compareOffers([make('A'),make('B')]);assert.deepEqual(priorityOfferQuestions(complete),[]);
+ const rows=compareOffers([{...make('A'),socialInsurance:'none',housingFund:'after-probation',months:'',probation:'',employer:'unknown',hours:''},{...make('B'),monthly:'8000'}]);
+ const questions=priorityOfferQuestions(rows);assert.equal(questions.length,3);assert.deepEqual(questions.map(q=>q.id),['insurance','pay','employer']);
+ assert.match(questions[0].question,/社保已明确告知不缴/);assert.doesNotMatch(questions[0].question,/是否缴纳/);assert.doesNotMatch(questions[0].question,/B：/);
+ assert.match(questions[1].question,/固定发薪月数/);assert.doesNotMatch(questions[1].question,/B：/);
+ const shared=priorityOfferQuestions(compareOffers([ {...make('A'),months:'',probation:'',socialInsurance:'unknown'}, {...make('B'),months:'',probation:'',socialInsurance:'unknown'} ]));
+ assert.equal((shared[0].question.match(/起始月/g)||[]).length,1,'identical missing conditions are asked once for both offers');assert.match(shared[0].question,/A、B/);
+});
+
+test('old drafts without generated context can back up checkmarks even when there are no notes',()=>{
+ const record=legacyRouteRecordText({notice:true,handover:false},{proof:'合成备注'});
+ assert.match(record,/notice · 已标记完成/);assert.match(record,/handover · 未标记完成/);assert.match(record,/proof · 未标记完成\n备注：合成备注/);assert.match(record,/无法还原原路线/);
+});
+
+test('route records survive identical generation, edits, cancellation and draft restore until explicit replacement',()=>{
+ const first={scenario:'first',city:'',target:'',insured:'unknown'};
+ let state=newRouteRecord(first);
+ state=routeRecordReducer(state,{type:'generate'});
+ state=routeRecordReducer(state,{type:'done',value:{verify:true}});
+ state=routeRecordReducer(state,{type:'notes',value:{verify:'已确认登记月份'}});
+ state=routeRecordReducer(state,{type:'generate'});
+ assert.equal(state.done.verify,true);assert.equal(state.notes.verify,'已确认登记月份');assert.equal(state.confirming,false);
+ state=routeRecordReducer(state,{type:'edit',form:{...first,scenario:'medical',target:'上海'}});
+ assert.equal(state.notes.verify,'已确认登记月份');assert.equal(state.recordForm?.scenario,'first');assert.equal(sameRouteForm(state.recordForm,state.form),false);
+ state=routeRecordReducer(state,{type:'generate'});assert.equal(state.confirming,true);
+ state=routeRecordReducer(state,{type:'cancel'});assert.equal(state.done.verify,true);
+ state=routeRecordReducer(state,{type:'replace'});assert.equal(state.done.verify,true,'replacement cannot run after cancellation');
+ const saved=JSON.parse(JSON.stringify({form:state.form,recordForm:state.recordForm,generated:true,done:state.done,notes:state.notes}));
+ state=routeRecordReducer(newRouteRecord(first),{type:'restore',draft:saved});
+ assert.equal(state.recordForm?.scenario,'first');assert.equal(state.form.scenario,'medical');assert.equal(state.notes.verify,'已确认登记月份');
+ state=routeRecordReducer(state,{type:'undo-edit'});assert.equal(state.form.scenario,'first');assert.equal(state.done.verify,true);
+ state=routeRecordReducer(state,{type:'edit',form:{...first,scenario:'card'}});
+ state=routeRecordReducer(state,{type:'generate'});state=routeRecordReducer(state,{type:'replace'});
+ assert.equal(state.recordForm?.scenario,'card');assert.deepEqual(state.notes,{});assert.deepEqual(state.done,{});
+});
+
+test('legacy leaving drafts preserve records; a fresh case without records can regenerate directly',()=>{
+ const form={lastDay:'',mode:'unknown',probation:'unknown',move:'unknown',relation:'unknown',note:''};
+ let state=routeRecordReducer(newRouteRecord(form),{type:'restore',draft:{form,generated:true,done:{notice:true},notes:{notice:'已向HR确认'}}});
+ state=routeRecordReducer(state,{type:'generate'});assert.equal(state.done.notice,true);assert.equal(state.notes.notice,'已向HR确认');
+ let fresh=routeRecordReducer(newRouteRecord(form),{type:'generate'});
+ fresh=routeRecordReducer(fresh,{type:'edit',form:{...form,move:'cross'}});fresh=routeRecordReducer(fresh,{type:'generate'});
+ assert.equal(fresh.recordForm?.move,'cross');assert.equal(fresh.confirming,false);
+});
 import {EMPTY_SIGNALS,resultAvailable} from '../src/terminal-state.ts';
 const offer={id:'a',name:'A',monthly:'9000.01',months:'13',rent:'2000',commute:'100',hours:'40',probation:'8000',employer:'direct'};
 test('Offer 按分对齐，固定月数与生活预算分别计算，不含到手税额推测',()=>{

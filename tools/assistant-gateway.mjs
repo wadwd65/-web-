@@ -154,8 +154,29 @@ export function guideReply(guide,userText=''){
   return '这件事目前超出本站工具和资料的覆盖范围。你可以继续说明与入职、工资或租房有关的情况。';
 }
 
-/** Keep navigation in real controls. Fall back to exact excerpts if generated file capabilities conflict. */
-export function finalizeContractExplanation(content,references){
+/** A source-limited fallback must still explain what to check, without preserving rejected model claims. */
+function contractExplanationFallback(references,question){
+  const first=references.excerpts[0];
+  if(!first)return '这次没有取得可对照的合同依据，请先说明想核对的具体约定。';
+  const checks={
+    'LC17':'先对照你关心的事项和下面的条款清单。片段中没提到，不代表完整合同一定缺项。可以问 HR：“这项约定写在哪一条？请给我对应的书面内容。”',
+    'LC19-1':'把合同总期限和试用期放在一起，对照下面的期限区间；未知的期限先保留未知。可以问 HR：“请说明这两项期限对应下面哪一档，约定需要调整时，请给我修改后的书面内容。”',
+    'LC19-2':'请先确认你在同一单位此前是否已约定过试用期，签过合同本身不能证明这一点。可以问 HR：“此前合同是否已有试用期约定？这次为什么再次约定？”',
+    'LC19-3':'先对照合同写的是多长时间，还是以完成一定工作任务为期限。不要从试用期倒推合同总期限。可以请 HR 标出合同期限原文，再对照下方规定核实试用期约定。',
+    'LC19-4':'这条规定区分了“试用期包含在合同期限内”和“劳动合同仅约定试用期”两种情况。只约定试用期时，原文说明试用期不成立，该期限为劳动合同期限；不能据此说整份合同不成立。',
+    'LC22':'仅凭条文不能计算个案金额，还需对照实际培训费凭证、协议约定的违约金与服务期、已履行时长和公司计算依据。可以先向单位索取这些材料，不用猜一个赔付金额。',
+    'LC23':'先核对你提供的内容是保密约定还是竞业限制约定，再逐项对照下方原文。可以请 HR 指出适用对象、双方义务及对应的书面条款；仅凭片段不能确认你是否属于适用对象。',
+    'LC25':'先请对方指出要求支付违约金的具体条款和法律依据，再对照下面的约定范围。仅凭“离职要赔钱”这句话，不能确定你应付的金额或完整争议结论。',
+  };
+  let explanation=checks[first.id]||'先对照你提供的约定与下方原文，未提供的事实先保留未知。';
+  if(first.id==='LC19-1'&&confirmedDuration(12,'contractMonths',question)&&confirmedDuration(6,'probationMonths',question)){
+    explanation='按你提供的“一年合同、六个月试用期”，一年属于下方“一年以上不满三年”这一档，原文写明试用期不得超过二个月，六个月超过这一档的上限。可以问 HR：“请对照第十九条第一款说明这两项期限，并给我调整后的书面约定。”这里仅对照这两项期限，不判断整份合同的效力。';
+  }
+  return `${explanation}\n\n对照依据：${first.article}\n${first.text}`;
+}
+
+/** Keep navigation in real controls. Rejected advice is replaced, never softened into an unsupported claim. */
+export function finalizeContractExplanation(content,references,question=references.query||''){
   const reply=content.trim().split(/\n\s*\n/u).filter(paragraph=>!(/^(?:想|需要|如果你|你可以|也可以|有合同|你把|请把|把)/u.test(paragraph)&&/发我|发来|合同文字|照片|图片|PDF|工具|入口/iu.test(paragraph))).join('\n\n');
   const unsupportedAdvice=/考核|考察|降薪|降低工资|降低.{0,5}(?:待遇|报酬|薪资)|随时.{0,5}(?:走|结束|辞退|解除|解雇)|培训期|培训安排|试用期工资|解除条件|合同本身仍然成立|整份合同有效|合同本身有效/u.test(reply)
     ||!references.excerpts.some(excerpt=>excerpt.id==='LC19-2')&&/同一.{0,12}(?:一次|再次|重复)|只能约定一次试用期/u.test(reply)
@@ -164,8 +185,7 @@ export function finalizeContractExplanation(content,references){
     ||!references.excerpts.some(excerpt=>excerpt.id==='LC19-4')&&/(?:仅约定|只约定|只写).{0,12}试用|试用期不成立|视为合同期限/u.test(reply)
     ||/这决定.{0,12}试用期|决定试用期是否/u.test(reply);
   if(!reply||unsupportedAdvice||/PDF.{0,40}(?:识别|OCR)|(?:识别|OCR).{0,40}PDF/iu.test(reply)){
-    const first=references.excerpts[0];
-    return {reply:`本次检索到的相关原文如下。\n\n${first.article}\n${first.text}${first.id==='LC19-2'?'\n\n请先确认你在同一单位此前是否已约定过试用期，签过合同本身不能证明这一点。':first.id==='LC22'?'\n\n仅凭条文不能计算个案金额，还需对照实际培训费凭证、协议约定的违约金与服务期、已履行时长和公司计算依据。':''}`,replyOrigin:'guide'};
+    return {reply:contractExplanationFallback(references,question),replyOrigin:'guide'};
   }
   return {reply,replyOrigin:'model'};
 }
@@ -223,7 +243,7 @@ export async function runAssistant(input,{config,fetcher=fetch,signal,timeoutMs=
           const invented=(numberedProse.match(/\d+(?:\.\d+)?/gu)||[]).some(number=>!evidence.includes(number));
           if(invented||/一定能领|肯定符合|保证(?:通过|获批)|所有毕业生都|已经(?:申请|提交)/u.test(message.content))return {reply:'官方资料已列在下方，请先核对所在区县、毕业阶段和当期办理要求。资料中的标准不代表你已符合或已获批。',replyOrigin:'guide',actions,steps,guide,policyReferences,provider:'DeepSeek',model:config.model||'deepseek-flash'};
         }
-        const explanation=explainingContract?finalizeContractExplanation(message.content,references):{reply:message.content.trim(),replyOrigin:'model'};
+        const explanation=explainingContract?finalizeContractExplanation(message.content,references,contractQueryFromMessages(conversation.messages)):{reply:message.content.trim(),replyOrigin:'model'};
         return {...explanation,actions,steps,guide,references,policyReferences,provider:'DeepSeek',model:config.model||'deepseek-flash'};
       }
       if(conversational)throw new AssistantError('invalid-response','这次回复没有完成，请直接继续说。',502);
