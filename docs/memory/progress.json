@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "updatedAt": "2026-11-14",
   "workingVersion": "0.50.0",
-  "releasedVersion": "0.49.20",
+  "releasedVersion": "0.50.0",
   "workState": "reviewed_internally",
   "objective": "按用户最新授权九项全部完成，录制可后移：界面头部/文案/指针/对话入口、PDF本地提取、单项沟通AI、四城三类官方目录、工具分组、后台对话保持。",
   "latestUserRequest": "九项全部做完，录制时间可以后移。",
@@ -12,14 +12,16 @@
     "version": "0.50.0",
     "url": "http://127.0.0.1:5371/?v=0.50.0#/home",
     "snapshot": "first-step-九项易用性与PDF政策-v0.50.0",
-    "state": "saved_preview_verified_publication_pending",
+    "state": "published_source_ci_and_saved_preview_verified",
     "previousRelease": {
       "url": "http://127.0.0.1:5367/?v=0.49.20#/home",
       "snapshot": "first-step-录制前收尾-v0.49.20",
       "state": "published_source_ci_and_saved_preview_verified",
       "sourceCommit": "9e4240bca9079417abc72d83f18a196f67db0c55",
       "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.49.20"
-    }
+    },
+    "sourceCommit": "d676c22c1d7f2c7d430df2908c99f0774b0aace9",
+    "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.50.0"
   },
   "implemented": {
     "business": "八项限定工具在#/tools，工资/合同规则与询问清单共用；金额快照/来源可编辑、保存与导出，主动草稿及可选账号保留。 49.6三类确证业务修复已迁回，未取回49.1其他扩展或其三维变更。 49.12八工具必填/选填/条件项标注与渐进补填：Offer两份月薪先比较，其余条件收起；工资应发先整理已填/缺项，四扣款齐才给实发；个税四金额与范围确认算税额，预缴选填且未知差额为null。合同期限/租房费用/社保地区/离职情况按需收起，未知不当0；原完整工具、导出及草稿格式保持。 49.13 Offer社保/公积金分别记录未说明、承诺、不缴、转正后、部分，其他福利说明选填；结果新增福利对比视图并随TXT/草稿保留，不折算工资。新增本机保守整段提取→勾选→口径确认→指定机会；旧字段默认保留，未知不补，支持剪贴板按钮/Ctrl+V。 49.19社保/离职将生成时的情况与正在编辑的情况分开：同条件生成保留勾选/备注并回到结果；修改情况先保留旧记录，可下载或撤销修改，有记录时需明确确认才新建清空。草稿可同时保存编辑值与旧清单上下文，旧草稿兼容。 49.20Offer先显示当前维度已知差额；缺年薪/预算/工时时不作整组排名，不把未知当0。最多三个优先沟通主题，相同缺项合并询问；明确不缴保留事实，不再问是否缴纳。完整核实点折叠保留并导出，可将三件事加入询问清单。 0.50九项：三工具标题/草稿/示例、输入示例Badge和当前视图文案；四城三类12资料、工具阶段分组；PDF本机提取后人工带入；单项话术先确认并独立上下文预填、主动发送。",
@@ -134,7 +136,25 @@
     "continuity": "真实聊天后台HTTP200完成，收起与切工具后恢复完整答复；该段无loadingFailed。",
     "limits": "内部GUI与合成数据，不是新人、系统DPI、硬件长测或腾讯云验收。",
     "savedPreview": "5371正常保存版，605个src/tools/tests/public/dist文件与canonical逐字节一致，无.env/node_modules；worker HTTP200正确MJS MIME；两套Scene源与49.20相同。",
-    "repository": "pending v0.50 publication"
+    "repository": "源码树与本地Git完全相同，经GitHub Git Data API force=false快进；普通Git连接重置；源码/标签/Release v0.50.0发布，Windows/Ubuntu两项CI success。",
+    "ci": {
+      "sourceCommit": "d676c22c1d7f2c7d430df2908c99f0774b0aace9",
+      "runId": 43598524453,
+      "url": "https://github.com/wadwd65/-web-/actions/runs/43598524453",
+      "jobs": [
+        {
+          "name": "Node 24 / ubuntu-latest",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Node 24 / windows-latest",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "notHardwareOrNewcomerEvidence": true
+    }
   },
   "nextActions": [
     "用户确认九项改进后的桌面观感与实际材料路径；内部合成验证不替代新人试用。",
@@ -165,11 +185,33 @@
     "branch": "main",
     "sourceRoot": ".",
     "previousPublishedHead": "fd15605fcc4fa73ff72c2459736504d8047a4a4f",
-    "pushStatus": "v050_publication_pending",
+    "pushStatus": "published_and_ci_verified",
     "localWorkingVersion": "0.50.0",
-    "localUnpublishedChanges": true,
+    "localUnpublishedChanges": false,
     "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousReleaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.49.20"
+    "previousReleaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.49.20",
+    "sourceCommit": "d676c22c1d7f2c7d430df2908c99f0774b0aace9",
+    "sourceTag": "v0.50.0",
+    "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.50.0",
+    "publicationReceipt": "outputs/v050-review/source-publication.json",
+    "ci": {
+      "sourceCommit": "d676c22c1d7f2c7d430df2908c99f0774b0aace9",
+      "runId": 43598524453,
+      "url": "https://github.com/wadwd65/-web-/actions/runs/43598524453",
+      "jobs": [
+        {
+          "name": "Node 24 / ubuntu-latest",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Node 24 / windows-latest",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "notHardwareOrNewcomerEvidence": true
+    }
   },
   "sideDeliverables": [
     {

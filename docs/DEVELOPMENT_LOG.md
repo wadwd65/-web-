@@ -805,3 +805,5 @@ GUI：1280×800完整模式，初轮Offer示例首输入框由旧版588.06上移
 证据集中outputs/v050-review，后续复制参赛包对应验证目录。当前未做腾讯云部署、外部新人、独立准确率或低配长时验收，不给官方90分承诺。当前事实及后续只维护progress。
 
 保存版5371回归：605个src/tools/tests/public/dist文件逐字节对应；无.env/node_modules。worker正确text/javascript并与上游哈希一致，两套Scene源与49.20相同。真实可见悬停opacity=.15、中心/sparks隐藏；对话胶囊bottom765，首页底栏top772，底栏仍可见且无重叠。入场/主页/播放器保持原实现。256检查、构建、锁文件校验、audit0与memory/log检查通过。
+
+发布回执：普通Git HTTPS连接重置，改经官方Git Data API创建与本地完全相同的树29d1dd7773871c2e93ad0b6db24c8586e295d3a9、提交d676c22c1d7f2c7d430df2908c99f0774b0aace9，force=false快进指定初程main。标签/Release v0.50.0已建立。Actions 43598524453：Node24 / Ubuntu及Windows均completed/success。未改另一个作品、旧快照、私有配置或Git历史。截图受IAB帧同步影响，最终工具分组图按实际内容命名；DOM/动作/网络证据分别保留，不拿滞后截图当其他页面的验收图。
