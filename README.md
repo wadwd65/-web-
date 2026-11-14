@@ -111,7 +111,7 @@ HTTPS、反向代理和限额见[接口与试用说明](docs/58-api-settings-and
 
 ## 验证与已知限制
 
-- v0.49.20 本地 **251 项自动检查通过**，TypeScript、生产构建通过。离线检查无需模型 Key。[GitHub Actions](https://github.com/wadwd65/-web-/actions/workflows/ci.yml) 在 Windows 与 Ubuntu 上分别执行锁定依赖安装、测试、TypeScript/生产构建与记忆结构检查；[v0.49.16 运行](https://github.com/wadwd65/-web-/actions/runs/43431586350) 两个平台均通过，各237项测试；后续云端状态见上方徽标。
+- v0.49.20 本地 **251 项自动检查通过**，TypeScript、生产构建通过。离线检查无需模型 Key。[GitHub Actions](https://github.com/wadwd65/-web-/actions/workflows/ci.yml) 在 Windows 与 Ubuntu 上分别执行锁定依赖安装、测试、TypeScript/生产构建与记忆结构检查；[v0.49.20 运行](https://github.com/wadwd65/-web-/actions/runs/43587613976) 两个平台的测试、构建与记忆结构检查均通过；后续状态见上方徽标。
 - 覆盖未知/零值/更正、合同原文、城市撤回、身份隔离、取消、个人 Key 过期和自备接口免比赛日额。自动检查不等于独立准确率或真实新人任务完成率。
 - 用户报告原 RTX 3050 笔记本短测约 120 FPS，无该次长时日志。核显与另一台独显是独立记录，不能混作代码提速对照；低功耗和长期稳定性仍待验证。
 - 构建仍有 Three 共享块体积提示。本轮播放器八曲/快速切歌/简易/主页隔离已做桌面浏览器检查，尚无新增背景的低配实机结果；公网 HTTPS、云端持久化与新人任务验证仍待。

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "updatedAt": "2026-11-14",
   "workingVersion": "0.49.20",
-  "releasedVersion": "0.49.16",
+  "releasedVersion": "0.49.20",
   "workState": "reviewed_internally",
   "objective": "录制前收尾：Offer差额/三件优先问题、八工具当前视图定位引导、主线回归与版本同步。",
   "latestUserRequest": "用户要求尽量完成，约一小时后整理并准备录制视频。优先稳定收尾，不再换整体视觉或扩展业务平台。",
@@ -11,7 +11,9 @@
   "release": {
     "url": "http://127.0.0.1:5367/?v=0.49.20#/home",
     "snapshot": "first-step-录制前收尾-v0.49.20",
-    "state": "saved_gui_reviewed_repository_sync_pending"
+    "state": "published_source_ci_and_saved_preview_verified",
+    "sourceCommit": "9e4240bca9079417abc72d83f18a196f67db0c55",
+    "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.49.20"
   },
   "implemented": {
     "business": "八项限定工具在#/tools，工资/合同规则与询问清单共用；金额快照/来源可编辑、保存与导出，主动草稿及可选账号保留。 49.6三类确证业务修复已迁回，未取回49.1其他扩展或其三维变更。 49.12八工具必填/选填/条件项标注与渐进补填：Offer两份月薪先比较，其余条件收起；工资应发先整理已填/缺项，四扣款齐才给实发；个税四金额与范围确认算税额，预缴选填且未知差额为null。合同期限/租房费用/社保地区/离职情况按需收起，未知不当0；原完整工具、导出及草稿格式保持。 49.13 Offer社保/公积金分别记录未说明、承诺、不缴、转正后、部分，其他福利说明选填；结果新增福利对比视图并随TXT/草稿保留，不折算工资。新增本机保守整段提取→勾选→口径确认→指定机会；旧字段默认保留，未知不补，支持剪贴板按钮/Ctrl+V。 49.19社保/离职将生成时的情况与正在编辑的情况分开：同条件生成保留勾选/备注并回到结果；修改情况先保留旧记录，可下载或撤销修改，有记录时需明确确认才新建清空。草稿可同时保存编辑值与旧清单上下文，旧草稿兼容。 49.20Offer先显示当前维度已知差额；缺年薪/预算/工时时不作整组排名，不把未知当0。最多三个优先沟通主题，相同缺项合并询问；明确不缴保留事实，不再问是否缴纳。完整核实点折叠保留并导出，可将三件事加入询问清单。",
@@ -124,11 +126,30 @@
     "realLLM": "一次真实工资请求replyOrigin=model，plan_tasks/calculate_salary，6534与到账一致；显式应用后改到账6300算差额234。",
     "limits": "不是外部新人、独立准确率、长时硬件或腾讯云验收。",
     "music": "真实播放A World Above到112秒、切Ad astra、返回工资页单audio继续，other=0/received=6300保留；不等同连续转场录像或硬件帧率。",
-    "repository": "同步指定仓库中，未部署腾讯云。"
+    "repository": "已通过GitHub Git Data API正常快进到9e4240bca9079417abc72d83f18a196f67db0c55，与本地Git提交和树相同，无强推；49.17—20当前源码统一发布。",
+    "savedPreview": "5367正常保存版；index+5JS/CSS逐字节一致，182个src/tests/tools文件一致；两套三维场景源与49.19相同。",
+    "ci": {
+      "sourceCommit": "9e4240bca9079417abc72d83f18a196f67db0c55",
+      "runId": 43587613976,
+      "url": "https://github.com/wadwd65/-web-/actions/runs/43587613976",
+      "jobs": [
+        {
+          "name": "Node 24 / windows-latest",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Node 24 / ubuntu-latest",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "notHardwareOrNewcomerEvidence": true
+    }
   },
   "nextActions": [
     "以v0.49.20准备录制：顺序与合成数据见README的录制前检查与建议顺序。尽量不再改视觉/功能，录后核对视频、源码与作品包同版。",
-    "核验指定仓库推送/CI回执；用户完成大整理后确认实际视频文件与作品材料。本轮不制作另一作品的PPT/安装包。",
+    "用户完成大整理后录制，以README路线和合成数据演示，核对实际MP4、作品文档、源码与包都为49.20；本轮没有生成视频或另一作品的PPT/安装包。",
     "外部新人真实任务、3050/核显长时回归与独立准确率仍待；原3050短测约120FPS保留，不用内置浏览器代替实机。",
     "腾讯云由用户部署，拿到网址后再验HTTPS/代理/持久目录/身份/额度/重启；本轮不部署。"
   ],
@@ -601,14 +622,8 @@
   },
   "latestImprovement": {
     "date": "2026-11-14",
-    "version": "0.49.19",
-    "auditBasis": "latestAudit为49.18发现的问题，保留原始观察；本轮前三项对应修复",
-    "resolved": [
-      "route-record-overwrite",
-      "contract-answer-fallback",
-      "first-screen-input"
-    ],
-    "sourceEvidence": "outputs/v04919-review",
-    "status": "前三项限定修复与保存版实操完成；其他审查项及外部/云端验收仍待"
+    "version": "0.49.20",
+    "status": "Offer摘要与三件优先问题、八工具定位引导及录制前回归已保存/发布；外部和云部署验收仍待",
+    "evidence": "outputs/v04920-review"
   }
 }
