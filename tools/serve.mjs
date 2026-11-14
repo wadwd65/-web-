@@ -7,7 +7,7 @@ import {audioMiddleware} from './audio-static.mjs';
 import {musicMiddleware} from './music-source.mjs';
 import {createRequestPolicy} from './request-policy.mjs';
 
-const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.woff2':'font/woff2','.mp3':'audio/mpeg','.glb':'model/gltf-binary','.txt':'text/plain; charset=utf-8','.md':'text/markdown; charset=utf-8','.ico':'image/x-icon'};
+const types={'.mjs':'text/javascript; charset=utf-8','.bcmap':'application/octet-stream','.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.woff2':'font/woff2','.mp3':'audio/mpeg','.glb':'model/gltf-binary','.txt':'text/plain; charset=utf-8','.md':'text/markdown; charset=utf-8','.ico':'image/x-icon'};
 export function startPreview({directory=resolve(dirname(fileURLToPath(import.meta.url)),'..'),port=Number(process.env.PORT||5186),host=process.env.FIRST_STEP_HOST||'127.0.0.1',snapshot}={}){
  if(!Number.isInteger(port)||port<1024||port>65535)throw new Error('Invalid local port.');
  if(!['127.0.0.1','0.0.0.0','::1'].includes(host))throw new Error('FIRST_STEP_HOST must be 127.0.0.1, 0.0.0.0 or ::1.');

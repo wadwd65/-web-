@@ -30,7 +30,7 @@ export function stepsFor(page:WorkspacePage,hasScene:boolean,view:'material'|'re
  };
  const detail=(view==='result'?result:input)[page];
  const work:Step[]=[
-  page==='tools'?{id:'work',title:'选一件眼前要办的事',text:'八项工具都在这里，点“开始”就能用。不想先选工具，也可在上面的输入框直接说情况。',hint:'不用先登录，也不用先配置接口',selectors:['.tool-directory-list>button:first-child'],scrollTarget:true,firstTarget:true}:
+  page==='tools'?{id:'work',title:'选一件眼前要办的事',text:'八项工具都在这里，点“开始”就能用。不想先选工具，也可在上面的输入框直接说情况。',hint:'不用先登录，也不用先配置接口',selectors:['.tool-directory-list button:first-of-type'],scrollTarget:true,firstTarget:true}:
   page==='list'?{id:'work',title:'留好要问的事和答复',text:'可以自己添加问题，也能从工具整理过来。每项可以修改、记录答复，再按需导出。',hint:'引导不会清掉已有问题',selectors:['.checklist-item:first-child','.checklist-manual>summary'],scrollTarget:true,firstTarget:true}:
   {id:'work',title:detail?.title??'先填你知道的',text:detail?.text??'只填已知信息，不确定的先留空。',hint:'引导只介绍当前页，不会替你填写或提交',selectors:detail?.selectors,scrollTarget:true,firstTarget:page!=='contract'&&page!=='offer'},
   ...(!['home','tools','list'].includes(page)?[

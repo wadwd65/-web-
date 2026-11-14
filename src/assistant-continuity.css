@@ -19,13 +19,14 @@
 .assistant-next-step form>p{color:#54768b}
 .assistant-context-note{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:9px 30px;background:#e9f2f8;color:#466c84;font-size:10px;line-height:1.7;border-bottom:1px solid #cbdde8}
 .assistant-context-note>button{flex-shrink:0;color:#246a93;min-height:26px}
-.assistant-return{position:fixed;right:7%;bottom:7px;z-index:180;display:flex;align-items:center;gap:10px;background:#f4faffed;border:1px solid #b6cfdf;border-radius:3px;min-height:28px;padding:3px 10px;color:#285c7e;text-align:left;animation:assistant-in .25s ease both}
+.assistant-return{position:fixed;right:7%;bottom:35px;z-index:180;display:flex;align-items:center;gap:10px;background:#f4faffed;border:1px solid #b6cfdf;border-radius:3px;min-height:28px;padding:3px 10px;color:#285c7e;text-align:left;animation:assistant-return-in .2s ease both}
 .assistant-return>span{width:5px;height:5px;border-radius:50%;background:#588da9}
 .assistant-return>strong{font-size:12px;font-weight:550}
 .assistant-return>small{grid-column:2;font-size:10px;color:#53778f}
 .assistant-return>svg{grid-column:3;grid-row:1/3}
 .assistant-return:hover{border-color:#4984a6;background:#fff}
-body:has(.assistant-return) .experience-systemline>div{visibility:hidden}
+
 .assistant-return>.is-busy{animation:assistant-status-pulse 1.6s ease-in-out infinite}
 @keyframes assistant-status-pulse{50%{opacity:.3}}
+@keyframes assistant-return-in{from{opacity:0}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){.assistant-return,.assistant-return>.is-busy{animation:none}}

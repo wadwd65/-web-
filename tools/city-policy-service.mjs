@@ -2,7 +2,7 @@ import {randomUUID} from 'node:crypto';
 import {createRequestPolicy} from './request-policy.mjs';
 import {policyCity,reviewedCityPolicies,POLICY_DIRECTORY} from '../src/lib/city-policies.ts';
 export const DIRECTORY_API='https://jsdxzj.ncss.cn/newsbyssdm?categoryId=2293373225&ssdm=&pageSize=1000&maxTitleLen=200';
-const topicOf=value=>{if(!['support','stay'].includes(value))throw Error('请选择毕业补贴或求职住宿。');return value;};
+const topicOf=value=>{if(!['overview','support','stay'].includes(value))throw Error('请选择毕业补贴或求职住宿。');return value;};
 function plain(html){return html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi,'').replace(/<\/(?:p|li|h\d)>|<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,'').replace(/&nbsp;|&#160;/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/[ \t]+/g,' ').replace(/\n\s*\n/g,'\n').trim();}
 export function parsePolicyArticle(html){const match=html.match(/<div[^>]*class="detail"[^>]*>([\s\S]*?)<div id="dzz"/u);if(!match)throw Error('官方页面结构已变化，暂不解释。');const text=plain(match[1]);if(text.length<20)throw Error('正文未能读取。');return text.slice(0,2800);}
 async function boundedText(response,max=1500000){if(!response.ok)throw Error('官方来源暂不可用。');if(Number(response.headers.get('content-length'))>max)throw Error('来源过大。');const reader=response.body.getReader(),parts=[];let size=0;try{while(true){const {value,done}=await reader.read();if(done)break;size+=value.length;if(size>max)throw Error('来源过大。');parts.push(value);}}finally{await reader.cancel().catch(()=>{});}return Buffer.concat(parts).toString('utf8');}

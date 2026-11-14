@@ -45,3 +45,7 @@ scene/render-cadence.ts在0495使用原生显示回调；刷新率估计只用�
 04915：MusicBackdrop仅mode.present且非lightweight挂载，用实际state.index、固定scene profile和原图片路径；DOM仅保留两层/单timeout，转场途中接续最新requested，不做每帧state。createMusicAtmosphere改用p.current，与背景同一曲目来源。图库reveal/hover仍只预览模型。新样式限定.music-console，未写根主题变量。
 
 04916：music-atmosphere-blend无分配更新from/to/mix，最多两模式并在当前段完成后接最新current；MUSIC_ATMOSPHERE_FADE_MS供DOM和GPU共用。music-atmosphere的w(n)按离散ID取权重，取消uMode编号连续插值；创建时latest.current.current初始化。reduced立即落位。原图片/模型/业务/单audio保持。
+
+050：WorkspaceViewContext让业务页操作文案与当前材料/结果视图一致。DraftControls compact复用同一保存逻辑，三个核心工具仅保留步骤导航+标题工具组+当前操作。PointerFeedback控件态抑制中心点和sparks，保留池化单rAF，不新建常驻动画。AIAssistant在ExperienceWorkspace常驻，状态/用量读取不以对话可见性为取消边界；chat仅显式停止或身份卸载取消。
+
+communication.ts的contextStart标记不发送给API，只切取当前确认条目之后的上下文；同样存入显式聊天草稿以防恢复时重新附带旧对话。CommunicationDraft先编辑并确认，seed.send=false，输入框主动发送才调用模型。PDF.js按需加载，版本锁定6.5.438，worker/CMaps作为本地资源并与上游哈希测试一致；PDF任务取消/结束destroy，文件变化使用pdf前缀key避免与图片key碰撞；原文字仅在人工确认后替换。四城目录增加overview及category，不扩大任意外站访问范围；校方通知仅白名单career.hznu.edu.cn，其他城市实时发现仍限既定官方驿站目录。

@@ -1,26 +1,32 @@
 {
   "schemaVersion": 1,
   "updatedAt": "2026-11-14",
-  "workingVersion": "0.49.20",
+  "workingVersion": "0.50.0",
   "releasedVersion": "0.49.20",
   "workState": "reviewed_internally",
-  "objective": "录制前收尾：Offer差额/三件优先问题、八工具当前视图定位引导、主线回归与版本同步。",
-  "latestUserRequest": "用户要求尽量完成，约一小时后整理并准备录制视频。优先稳定收尾，不再换整体视觉或扩展业务平台。",
+  "objective": "按用户最新授权九项全部完成，录制可后移：界面头部/文案/指针/对话入口、PDF本地提取、单项沟通AI、四城三类官方目录、工具分组、后台对话保持。",
+  "latestUserRequest": "九项全部做完，录制时间可以后移。",
   "platform": "desktop_only",
   "canonicalSource": "work/first-step-experience",
   "release": {
-    "url": "http://127.0.0.1:5367/?v=0.49.20#/home",
-    "snapshot": "first-step-录制前收尾-v0.49.20",
-    "state": "published_source_ci_and_saved_preview_verified",
-    "sourceCommit": "9e4240bca9079417abc72d83f18a196f67db0c55",
-    "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.49.20"
+    "version": "0.50.0",
+    "url": "http://127.0.0.1:5371/?v=0.50.0#/home",
+    "snapshot": "first-step-九项易用性与PDF政策-v0.50.0",
+    "state": "saved_preview_verified_publication_pending",
+    "previousRelease": {
+      "url": "http://127.0.0.1:5367/?v=0.49.20#/home",
+      "snapshot": "first-step-录制前收尾-v0.49.20",
+      "state": "published_source_ci_and_saved_preview_verified",
+      "sourceCommit": "9e4240bca9079417abc72d83f18a196f67db0c55",
+      "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.49.20"
+    }
   },
   "implemented": {
-    "business": "八项限定工具在#/tools，工资/合同规则与询问清单共用；金额快照/来源可编辑、保存与导出，主动草稿及可选账号保留。 49.6三类确证业务修复已迁回，未取回49.1其他扩展或其三维变更。 49.12八工具必填/选填/条件项标注与渐进补填：Offer两份月薪先比较，其余条件收起；工资应发先整理已填/缺项，四扣款齐才给实发；个税四金额与范围确认算税额，预缴选填且未知差额为null。合同期限/租房费用/社保地区/离职情况按需收起，未知不当0；原完整工具、导出及草稿格式保持。 49.13 Offer社保/公积金分别记录未说明、承诺、不缴、转正后、部分，其他福利说明选填；结果新增福利对比视图并随TXT/草稿保留，不折算工资。新增本机保守整段提取→勾选→口径确认→指定机会；旧字段默认保留，未知不补，支持剪贴板按钮/Ctrl+V。 49.19社保/离职将生成时的情况与正在编辑的情况分开：同条件生成保留勾选/备注并回到结果；修改情况先保留旧记录，可下载或撤销修改，有记录时需明确确认才新建清空。草稿可同时保存编辑值与旧清单上下文，旧草稿兼容。 49.20Offer先显示当前维度已知差额；缺年薪/预算/工时时不作整组排名，不把未知当0。最多三个优先沟通主题，相同缺项合并询问；明确不缴保留事实，不再问是否缴纳。完整核实点折叠保留并导出，可将三件事加入询问清单。",
-    "visual": "浅蓝银色主体/播放器及原布局、模型/盘面/材质灯光保持；49.8仅音乐页投影改为更柔和的近似接地效果，首页阴影未改。 49.10仅简易首页将标题/说明/三个入口合为常规流，两栏与提问区分行；完整版布局、字体资源、配色及美术保持。 49.11按新授权突出直接问AI图标/标题，首页提问区增加蓝色标识、浅色渐变及焦点边界；输入16px、导航标题16px/辅助12px，示例/说明/对话辅助12—13px。标题、三维场景与音乐美术不变。 49.13原左上标志略加大，轻蓝背光/边框，悬停或焦点发光，按下缩放，工作页加点击标志回首页提示；无常驻新动画循环。 49.19合同页合并草稿与示例行，粘贴框提前，类型与必填标记同行；文件/PDF预览和单图识别入口保留在下方，仍需显式发送和人工确认。API新手文案同步工具列表。原主页/音乐美术未改。",
+    "business": "八项限定工具在#/tools，工资/合同规则与询问清单共用；金额快照/来源可编辑、保存与导出，主动草稿及可选账号保留。 49.6三类确证业务修复已迁回，未取回49.1其他扩展或其三维变更。 49.12八工具必填/选填/条件项标注与渐进补填：Offer两份月薪先比较，其余条件收起；工资应发先整理已填/缺项，四扣款齐才给实发；个税四金额与范围确认算税额，预缴选填且未知差额为null。合同期限/租房费用/社保地区/离职情况按需收起，未知不当0；原完整工具、导出及草稿格式保持。 49.13 Offer社保/公积金分别记录未说明、承诺、不缴、转正后、部分，其他福利说明选填；结果新增福利对比视图并随TXT/草稿保留，不折算工资。新增本机保守整段提取→勾选→口径确认→指定机会；旧字段默认保留，未知不补，支持剪贴板按钮/Ctrl+V。 49.19社保/离职将生成时的情况与正在编辑的情况分开：同条件生成保留勾选/备注并回到结果；修改情况先保留旧记录，可下载或撤销修改，有记录时需明确确认才新建清空。草稿可同时保存编辑值与旧清单上下文，旧草稿兼容。 49.20Offer先显示当前维度已知差额；缺年薪/预算/工时时不作整组排名，不把未知当0。最多三个优先沟通主题，相同缺项合并询问；明确不缴保留事实，不再问是否缴纳。完整核实点折叠保留并导出，可将三件事加入询问清单。 0.50九项：三工具标题/草稿/示例、输入示例Badge和当前视图文案；四城三类12资料、工具阶段分组；PDF本机提取后人工带入；单项话术先确认并独立上下文预填、主动发送。",
+    "visual": "浅蓝银色主体/播放器及原布局、模型/盘面/材质灯光保持；49.8仅音乐页投影改为更柔和的近似接地效果，首页阴影未改。 49.10仅简易首页将标题/说明/三个入口合为常规流，两栏与提问区分行；完整版布局、字体资源、配色及美术保持。 49.11按新授权突出直接问AI图标/标题，首页提问区增加蓝色标识、浅色渐变及焦点边界；输入16px、导航标题16px/辅助12px，示例/说明/对话辅助12—13px。标题、三维场景与音乐美术不变。 49.13原左上标志略加大，轻蓝背光/边框，悬停或焦点发光，按下缩放，工作页加点击标志回首页提示；无常驻新动画循环。 49.19合同页合并草稿与示例行，粘贴框提前，类型与必填标记同行；文件/PDF预览和单图识别入口保留在下方，仍需显式发送和人工确认。API新手文案同步工具列表。原主页/音乐美术未改。 0.50圆环控件态.15/中心与sparks隐藏，胶囊上移28并恢复底栏；标题减负，桌面短视口可用。",
     "interaction": "同pointer/物体/子区域、稳定前景、画布内及≤6px总位移才执行；后排预览。首页切歌就地播放，播放器才跳音乐界面。 49.9音乐列表与详情均可左键轻拖单张唱片：独立目标/阻尼姿态，按下期间固定镜头与邻片悬停波形；同一主pointer且总位移≤6px、同唱片画布内松手才打开，拖动/取消/切换不触发详情。 49.12工作区顶部返回首页、对话返回页面、播放器返回来源页强化为同系文字按钮；收起的无效选填项提交时自动展开定位。返回保留本次填写。 49.13按最新用户要求撤掉工具顶部及左侧返回首页按钮，沿用原logo链接返回；对话返回页面及音乐返回来源页保留。用户报告的新按钮模型异常没有宣称已根治或重写三维。 49.17首页DOM标签按实际变换后板面的投影及NDC深度判遮挡，编号锚点、文字区域与引线全部检查；没有安全位置则同时隐藏，后排露出的编号仍能预览。悬停固定中心，展开标题被挡/超边界时留紧凑编号，前景子选项与原严格点击手势保持。 49.18问号改为两项菜单：查看引导/你能做什么；后者仍打开原资料与当前能力。引导仅主动打开，首页完整6步、简易/无三维5步，工作页按当前页5步不改路由/表单；原位高亮、上一/下一/完成、Esc/关闭/空白退出，关闭归还问号焦点。三维在引导下仍运行，观察器只在引导开启时挂载，不发送材料或调用模型。 49.20可选引导细化八工具输入/结果位置，生成/下载及视图导航；打开时最小滚动定位、关闭恢复原滚动，不改填写/路由/选曲。仅打开期间监听布局/转场，600ms单次补测后无常驻轮询。",
     "music": "八曲/单audio/旋转保留；活动整匣同层级绘制，静置阵列合批。49.4对整匣各层使用同像素覆盖遮罩、保留原深度遮挡，避免普通透明叠加露出后排裸盘；旧唱片按真实透视退后并留到新匣遮住，取消缩至0的空档。忙碌时只接续最后意图。 49.8取消音乐页PCF阴影深度图，阴影按同帧整匣姿态投到原地面；转场仍先淡出投影、到位后淡入，拖动不再等100ms更新。 49.9列表中八张唱片各自保留轻拖角度，进入/退出详情时从实际整匣姿态接续并归零手动偏角，不把偏角加两次；单audio、播放转盘与49.8同帧投影保留。 49.15完整播放器复用既有五张非角色场景，八曲各自环境色；背景跟实际当前曲目，不跟hover或未播放预览。850ms淡入，最多两层并只接续最新连切；原GPU粒子也改跟current曲目。关闭卸载背景，简易不挂载，单audio/唱片旋转/模型转场不改。 49.16 GPU粒子不再对主题编号做连续插值，旧/新两个模式按同一850ms过渡，途中只接最后当前曲目；初次打开直接用实际current初始化，减弱动态直接完成。保留单audio与49.15背景/布局。",
-    "ai": "真实DeepSeek规划与有限工具：导航、工资、合同、问题清单及城市政策。非ready安全补问，guide/model区分；未知不猜、最新更正优先，显式应用，材料不自动发送。 49.6恢复金额任务动词/不变引用过滤、期限时间状语过滤与局部图片缺项说明过滤；标题/样张不作为合同条款引用。 49.7修正固定五项明确收入合计/共享零值/金额更正、专项培训费用误路由、只解释时多余工具入口；回复审查覆盖review标签与部分未命中条文/效力/待遇扩展，安全回退标明guide。 49.13 Offer整段输入仅点发给AI才发送到现有DeepSeek对话，本机提取明确标为本机整理，不冒充AI；真实合成待遇问题已跑通，解释和清单需主动应用。 49.14普通问候/致谢/使用方式询问走一次真实模型，无规划/工具/guide；混合实际办事保持原证据规划。泛clarify不再展示按项补充表，业务必需补问仍保留。 49.19合同回答保留原证据审查，拦截不受支持的扩展后，按命中条文给核实步骤/问HR的话与对应原文；明确一年/六个月时可按既有第十九条第一款对照。guide仍明确标记，不把兜底当模型回答。",
+    "ai": "真实DeepSeek规划与有限工具：导航、工资、合同、问题清单及城市政策。非ready安全补问，guide/model区分；未知不猜、最新更正优先，显式应用，材料不自动发送。 49.6恢复金额任务动词/不变引用过滤、期限时间状语过滤与局部图片缺项说明过滤；标题/样张不作为合同条款引用。 49.7修正固定五项明确收入合计/共享零值/金额更正、专项培训费用误路由、只解释时多余工具入口；回复审查覆盖review标签与部分未命中条文/效力/待遇扩展，安全回退标明guide。 49.13 Offer整段输入仅点发给AI才发送到现有DeepSeek对话，本机提取明确标为本机整理，不冒充AI；真实合成待遇问题已跑通，解释和清单需主动应用。 49.14普通问候/致谢/使用方式询问走一次真实模型，无规划/工具/guide；混合实际办事保持原证据规划。泛clarify不再展示按项补充表，业务必需补问仍保留。 49.19合同回答保留原证据审查，拦截不受支持的扩展后，按命中条文给核实步骤/问HR的话与对应原文；明确一年/六个月时可按既有第十九条第一款对照。guide仍明确标记，不把兜底当模型回答。 0.50单项沟通独立上下文与草稿边界，后台请求跨收起/工具切换持续；状态与用量读取不因收起取消，显式停止/身份变更仍取消。四城overview提供3类资料，真实上海检索已证实。",
     "image": "单张PNG/JPEG明确发送、原图对照/编辑/人工确认后填入原工具，不保存原图；PDF仅预览。",
     "retrieval": "小范围官方合同摘录及口语/单主题短追问；四城有限资料，其他求职住宿从固定官方目录发现并读正文，不是全国现金检索；范围/核验日/来源随结果导出保留。 49.7补短周数合同的第三款召回、单主题“单独写那段”追问承接、租赁边界；撤回旧城市不再混入新城市，未知/多城仍阻断。",
     "api": "同源Node网关，开发/预览/保存版共用local-services。取消/超时/Host-Origin/证据校验；游客/账号/网络/全站日额与分钟/短租约在工程外SQLite。 49.14服务端根据已验证绑定身份的自备会话usageMode免个人/网络/全站日额，聊天与识图共用；保留minute/concurrency/lease。默认额度耗尽不阻自备，切回不清零，body不能伪造模式。 本轮从目标仓库既有f627544同步托管Host别名修复到唯一源码，继续严格核对配置Origin，增加后缀伪造/无Origin写入拒绝回归；没有部署。",
@@ -36,7 +42,7 @@
     },
     {
       "id": "contract",
-      "scope": "TXT/MD/粘贴文字规则核对；单张PNG/JPEG识别后人工校对；PDF仅预览。",
+      "scope": "文字规则/单张图片确认；数字PDF本机提取后校对带入，8MB/30页，不提供整份扫描OCR。",
       "status": "local_tool"
     },
     {
@@ -61,7 +67,7 @@
     },
     {
       "id": "subsidy",
-      "scope": "广州/深圳有限补贴、杭州西湖区/上海住宿、其他城市官方住宿目录发现；广州原核对保留，其余现金未覆盖",
+      "scope": "广州/深圳/杭州/上海各3类共12项有限资料；地区/学校/日期限制，其他城市求职住宿仍限官方目录发现。",
       "status": "bounded_official_policy_tool"
     },
     {
@@ -117,41 +123,24 @@
     }
   ],
   "validation": {
-    "version": "0.49.20",
-    "automatedTests": 251,
+    "version": "0.50.0",
+    "automatedTests": 256,
     "typescript": "passed",
     "productionBuild": "passed; shared Three chunk warning remains",
-    "evidence": "outputs/v04920-review",
-    "gui": "Offer差额/未知年薪/3问题入清单/真实TXT，八工具填写定位（合同曾漏位后加转场补测，明确复测通过）；保存版已验Offer填写与Esc恢复，合同/个税/租房/离职/社保/工资/政策结果引导命中正确区域。广州资料含官方来源与范围。",
-    "realLLM": "一次真实工资请求replyOrigin=model，plan_tasks/calculate_salary，6534与到账一致；显式应用后改到账6300算差额234。",
-    "limits": "不是外部新人、独立准确率、长时硬件或腾讯云验收。",
-    "music": "真实播放A World Above到112秒、切Ad astra、返回工资页单audio继续，other=0/received=6300保留；不等同连续转场录像或硬件帧率。",
-    "repository": "已通过GitHub Git Data API正常快进到9e4240bca9079417abc72d83f18a196f67db0c55，与本地Git提交和树相同，无强推；49.17—20当前源码统一发布。",
-    "savedPreview": "5367正常保存版；index+5JS/CSS逐字节一致，182个src/tests/tools文件一致；两套三维场景源与49.19相同。",
-    "ci": {
-      "sourceCommit": "9e4240bca9079417abc72d83f18a196f67db0c55",
-      "runId": 43587613976,
-      "url": "https://github.com/wadwd65/-web-/actions/runs/43587613976",
-      "jobs": [
-        {
-          "name": "Node 24 / windows-latest",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "name": "Node 24 / ubuntu-latest",
-          "status": "completed",
-          "conclusion": "success"
-        }
-      ],
-      "notHardwareOrNewcomerEvidence": true
-    }
+    "evidence": "outputs/v050-review",
+    "gui": "三工具首输入区在1280×720/1024×640/853×533可见，无横向溢出；四城各3类，合同/租房/Offer话术确认与预填。 保存版控件圆环实际opacity .15，中心与sparks隐藏；胶囊bottom765、底栏top772，无遮挡且底栏visibility=visible。",
+    "realLLM": "话术model、仅1选中消息不附带旧QA标记；上海overview调用plan_tasks/search_city_policies、3来源。",
+    "pdf": "开发/生产中文提取58字符、确认后应用；扫描/31页/加密失败保留原填写，最终1实例、同源GET worker。",
+    "continuity": "真实聊天后台HTTP200完成，收起与切工具后恢复完整答复；该段无loadingFailed。",
+    "limits": "内部GUI与合成数据，不是新人、系统DPI、硬件长测或腾讯云验收。",
+    "savedPreview": "5371正常保存版，605个src/tools/tests/public/dist文件与canonical逐字节一致，无.env/node_modules；worker HTTP200正确MJS MIME；两套Scene源与49.20相同。",
+    "repository": "pending v0.50 publication"
   },
   "nextActions": [
-    "以v0.49.20准备录制：顺序与合成数据见README的录制前检查与建议顺序。尽量不再改视觉/功能，录后核对视频、源码与作品包同版。",
-    "用户完成大整理后录制，以README路线和合成数据演示，核对实际MP4、作品文档、源码与包都为49.20；本轮没有生成视频或另一作品的PPT/安装包。",
-    "外部新人真实任务、3050/核显长时回归与独立准确率仍待；原3050短测约120FPS保留，不用内置浏览器代替实机。",
-    "腾讯云由用户部署，拿到网址后再验HTTPS/代理/持久目录/身份/额度/重启；本轮不部署。"
+    "用户确认九项改进后的桌面观感与实际材料路径；内部合成验证不替代新人试用。",
+    "做外部新人完整任务与目标电脑长时验证，记录成功/耗时/错误；此前3050约120FPS仅短测。",
+    "用户提供腾讯云网址后验HTTPS/代理/身份/重启与配额；本轮不部署。",
+    "录制前按README路径再走一次，说明有限RAG、城市范围、人工确认和第三方来源，之后做视频与作品文档。"
   ],
   "visualSources": [
     {
@@ -175,47 +164,12 @@
     "url": "https://github.com/wadwd65/-web-",
     "branch": "main",
     "sourceRoot": ".",
-    "baseline": "c4791cf2108155011574416612a4ca670b3d32e5",
-    "pushStatus": "local_changes_not_published",
-    "sourceCommit": "0ab4e2c7457347941243837d03c4d0fd3b89a11a",
-    "verifiedAt": "2026-11-13",
-    "protectedRepository": "https://github.com/wadwd65/campus-insight",
-    "previousPublishedHead": "f6275442cca7fe7ac66f760eb0dec34f67c5936f",
-    "publicationReceipt": "outputs/v04916-review/source-publication.json",
-    "localChanges": "49.17遮挡修复与49.18可选问号引导本地保存，远端仍49.16。",
-    "localWorkingVersion": "0.49.18",
+    "previousPublishedHead": "fd15605fcc4fa73ff72c2459736504d8047a4a4f",
+    "pushStatus": "v050_publication_pending",
+    "localWorkingVersion": "0.50.0",
     "localUnpublishedChanges": true,
-    "localDocumentationUpdatesOnly": false,
-    "sourceTag": "v0.49.16",
-    "releaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.49.16",
-    "ci": {
-      "workflow": ".github/workflows/ci.yml",
-      "url": "https://github.com/wadwd65/-web-/actions/workflows/ci.yml",
-      "state": "success",
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "permission": "contents: read",
-      "secretNeeded": false,
-      "scopeVerified": true,
-      "persistentCredentialsChanged": false,
-      "runId": 43431586350,
-      "runUrl": "https://github.com/wadwd65/-web-/actions/runs/43431586350",
-      "commit": "0ab4e2c7457347941243837d03c4d0fd3b89a11a",
-      "testsEach": 237,
-      "checks": [
-        "npm ci",
-        "npm test",
-        "npm run build",
-        "npm run memory:check"
-      ],
-      "validatedAt": "2026-11-13",
-      "evidence": "outputs/v04916-review/ci.json",
-      "lastVerifiedAppVersion": "0.49.16"
-    },
-    "auditVerifiedHead": "06eff3dc4a6e5b2e0273824efb4e134f5f6f51ba",
-    "auditVerification": "2026-11-13 public GitHub commit API; 49.16, not 49.18; Git ls-remote reset but API verified"
+    "protectedRepository": "https://github.com/wadwd65/campus-insight",
+    "previousReleaseUrl": "https://github.com/wadwd65/-web-/releases/tag/v0.49.20"
   },
   "sideDeliverables": [
     {

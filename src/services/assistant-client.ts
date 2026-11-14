@@ -14,7 +14,7 @@ export class AssistantClientError extends Error{
 }
 function validAction(value:unknown):value is AssistantAction{
  if(!object(value)||!text(value.label,100))return false;
- if(value.kind==='open-city-policy'){try{return policyCity(value.city)===value.city&&['support','stay'].includes(String(value.topic));}catch{return false;}}
+ if(value.kind==='open-city-policy'){try{return policyCity(value.city)===value.city&&['overview','support','stay'].includes(String(value.topic));}catch{return false;}}
  if(value.kind==='open-tool')return moduleId(value.module);
  if(value.kind==='add-questions')return Array.isArray(value.items)&&value.items.length>0&&value.items.length<=5&&value.items.every(item=>object(item)&&text(item.text,500)&&text(item.category,50));
  if(!object(value.input))return false;

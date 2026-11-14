@@ -22,7 +22,7 @@ const checks:Record<DraftModule,Check>={
   social:fields({form:social,generated:flag,done:marks,notes},{recordForm:value=>value===null||social(value)}),
   rent:fields({text:text(30000),fees:fields({monthly:text(50),period:text(50),deposit:text(50),fee:text(50)}),sample:flag}),
   leaving:fields({form:leaving,generated:flag,done:marks,notes},{recordForm:value=>value===null||leaving(value)}),
-  chat:fields({input:text(6000),turns:value=>Array.isArray(value)&&value.length<=150&&value.every(fields({role:oneOf('user','assistant'),content:text(20000)}))}),
+  chat:fields({input:text(6000),turns:value=>Array.isArray(value)&&value.length<=150&&value.every(fields({role:oneOf('user','assistant'),content:text(20000)},{contextStart:flag}))},{inputIsolated:flag}),
 };
 
 export function draftKey(owner:string,module:DraftModule):string {

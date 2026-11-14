@@ -1,3 +1,4 @@
+import {isolatedContext} from './lib/communication.ts';
 import AISettings from './AISettings.tsx';
 import AIUsageHint from './AIUsageHint.tsx';
 import DraftControls from './DraftControls.tsx';
@@ -15,11 +16,12 @@ import AssistantEvidence,{evidenceForCopy} from './AssistantEvidence.tsx';
 import {assistantClient,AssistantClientError} from './services/assistant-client.ts';
 import type {AssistantAction,AssistantMessage,AssistantReply,AssistantStatus,AssistantProgress} from './services/assistant-types.ts';
 
-type Turn=AssistantMessage&{id:number;result?:AssistantReply};
-export type AssistantSeed={id:number;text:string;send:boolean};
+type Turn=AssistantMessage&{id:number;result?:AssistantReply;contextStart?:boolean};
+export type AssistantSeed={id:number;text:string;send:boolean;isolated?:boolean};
 export default function AIAssistant({open,onClose,module,seed,onAction,onTools,modeSwitch,onResume}:{open:boolean;onClose:()=>void;module:string;seed:AssistantSeed|null;onAction:(action:AssistantAction)=>void;onTools:()=>void;modeSwitch?:ReactNode;onResume:()=>void}){
  const dialog=useRef<HTMLDialogElement>(null),field=useRef<HTMLTextAreaElement>(null),bottom=useRef<HTMLDivElement>(null),lastTurn=useRef<HTMLElement>(null),request=useRef<AbortController|null>(null),serial=useRef(0),usedSeed=useRef(0),turnsRef=useRef<Turn[]>([]);
  const [turns,setTurns]=useState<Turn[]>([]),[input,setInput]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[status,setStatus]=useState<AssistantStatus|null>(null),[applied,setApplied]=useState<string[]>([]);
+ const [inputIsolated,setInputIsolated]=useState(false);
  const [stage,setStage]=useState<AssistantProgress|null>(null),[contextFolded,setContextFolded]=useState(false);
  const [copied,setCopied]=useState<number|null>(null),[copyError,setCopyError]=useState('');
  turnsRef.current=turns;
@@ -29,10 +31,10 @@ export default function AIAssistant({open,onClose,module,seed,onAction,onTools,m
   const value=text.trim();if(request.current||!value)return;
   if(value.length>6000){setError('问题最多6000字，请缩短后再发送。');return;}
   const previous=turnsRef.current;
-  const next=retry?previous:[...previous,{id:Date.now(),role:'user' as const,content:value}];
-  let context;try{context=buildAssistantContext(next);}catch(cause){setError(cause instanceof Error?cause.message:'请缩短材料后重试。');return;}
+  const next=retry?previous:[...previous,{id:Date.now(),role:'user' as const,content:value,...(inputIsolated?{contextStart:true}:{})}];
+  let context;try{context=buildAssistantContext(isolatedContext(next));}catch(cause){setError(cause instanceof Error?cause.message:'请缩短材料后重试。');return;}
   setContextFolded(context.folded);
-  const controller=new AbortController(),id=++serial.current;request.current=controller;setTurns(next);setInput(current=>current.trim()===value?'':current);setError('');setBusy(true);setStage(null);
+  const controller=new AbortController(),id=++serial.current;request.current=controller;setTurns(next);setInput(current=>current.trim()===value?'':current);setInputIsolated(false);setError('');setBusy(true);setStage(null);
   try{
    const result=await assistantClient.chat(context.messages,module,controller.signal,value=>{if(serial.current===id)setStage(value);});
    if(serial.current!==id)return;
@@ -41,25 +43,29 @@ export default function AIAssistant({open,onClose,module,seed,onAction,onTools,m
   finally{if(serial.current===id){request.current=null;setBusy(false);setStage(null);if(dialog.current?.open)field.current?.focus({preventScroll:true});}}
  }
  const sendRef=useRef(send);sendRef.current=send;
- useEffect(()=>{
-  if(open){if(!dialog.current?.open)dialog.current?.showModal();field.current?.focus();const controller=new AbortController();void assistantClient.status(controller.signal).then(setStatus).catch(()=>setStatus(null));return()=>controller.abort();}
-  if(dialog.current?.open)dialog.current.close();
- },[open]);
- useEffect(()=>{if(!open||!seed||seed.id===usedSeed.current)return;usedSeed.current=seed.id;if(seed.send&&!request.current)void sendRef.current(seed.text);else setInput(seed.text);},[open,seed]);
+ const openRef=useRef(open);openRef.current=open;
+ useEffect(()=>{if(open){if(!dialog.current?.open)dialog.current?.showModal();field.current?.focus();}else if(dialog.current?.open)dialog.current.close();},[open]);
+ useEffect(()=>{const controller=new AbortController();let pending=false;
+  const refresh=()=>{if(pending)return;pending=true;void assistantClient.status(controller.signal).then(value=>{if(!controller.signal.aborted)setStatus(value);}).catch(()=>{if(!controller.signal.aborted)setStatus(null);}).finally(()=>{pending=false;});};
+  const onOpen=()=>{if(openRef.current)refresh();};window.addEventListener('first-step-ai-settings-changed',refresh);window.addEventListener('first-step-assistant-open',onOpen);
+  return()=>{controller.abort();window.removeEventListener('first-step-ai-settings-changed',refresh);window.removeEventListener('first-step-assistant-open',onOpen);};
+ },[]);
+ useEffect(()=>{if(open)window.dispatchEvent(new Event('first-step-assistant-open'));},[open]);
+ useEffect(()=>{if(!open||!seed||seed.id===usedSeed.current)return;usedSeed.current=seed.id;if(seed.send&&!seed.isolated&&!request.current)void sendRef.current(seed.text);else {setInput(seed.text);setInputIsolated(!!seed.isolated);}},[open,seed]);
  useEffect(()=>{if(!open)return;if(!busy&&turns.at(-1)?.role==='assistant'&&!error)lastTurn.current?.scrollIntoView({block:'start',behavior:'instant'});else bottom.current?.scrollIntoView({block:'end',behavior:'instant'});},[turns,busy,error,open]);
- useEffect(()=>{const controller=new AbortController();const refresh=()=>{if(open)void assistantClient.status(controller.signal).then(setStatus).catch(()=>setStatus(null));};window.addEventListener('first-step-ai-settings-changed',refresh);return()=>{controller.abort();window.removeEventListener('first-step-ai-settings-changed',refresh);};},[open]);
+
  useEffect(()=>()=>{serial.current++;request.current?.abort();},[]);
  useEffect(()=>{if(copied===null)return;const timer=setTimeout(()=>setCopied(null),1800);return()=>clearTimeout(timer);},[copied]);
  async function copyReply(turn:Turn){try{const evidence=turn.result?evidenceForCopy(turn.result.actions):'';await navigator.clipboard.writeText([evidence,turn.content,turn.result?.references?.status==='matched'?contractSourcesForCopy(turn.result.references):'',turn.result?.policyReferences?policySourcesForCopy(turn.result.policyReferences):''].filter(Boolean).join('\n\n'));setCopied(turn.id);setCopyError('');}catch{setCopyError('复制没有成功，可以选中文字复制。');}}
  function apply(action:AssistantAction,id:string){if(applied.includes(id))return;setApplied(values=>[...values,id]);onAction(action);if(action.kind!=='add-questions')close();}
  const last=turns.at(-1);
- const draftTurns=useMemo(()=>turns.map(turn=>({role:turn.role,content:[turn.result?evidenceForCopy(turn.result.actions):'',turn.content,turn.result?.references?.status==='matched'?contractSourcesForCopy(turn.result.references):'',turn.result?.policyReferences?policySourcesForCopy(turn.result.policyReferences):''].filter(Boolean).join('\n\n')})),[turns]);
+ const draftTurns=useMemo(()=>turns.map(turn=>({role:turn.role,...(turn.contextStart?{contextStart:true}:{}),content:[turn.result?evidenceForCopy(turn.result.actions):'',turn.content,turn.result?.references?.status==='matched'?contractSourcesForCopy(turn.result.references):'',turn.result?.policyReferences?policySourcesForCopy(turn.result.policyReferences):''].filter(Boolean).join('\n\n')})),[turns]);
  async function copyConversation(){try{await navigator.clipboard.writeText(turns.map(turn=>`${turn.role==='user'?'你':'初程'}：${turn.content}${turn.result?.references?.status==='matched'?'\n\n'+contractSourcesForCopy(turn.result.references):''}${turn.result?.policyReferences?'\n\n'+policySourcesForCopy(turn.result.policyReferences):''}`).join('\n\n'));setCopyError('对话已复制。');}catch{setCopyError('复制没有成功，可以选中文字复制。');}}
  return <><dialog ref={dialog} className="assistant-dialog" data-busy={busy} data-has-messages={turns.length>0} aria-labelledby="assistant-title" onCancel={event=>{event.preventDefault();close();}} onClick={event=>{if(event.target===event.currentTarget)close();}}>
   <div className="assistant-dialog-inner">
    <header>
     <div className="assistant-heading"><button className="assistant-back" onClick={close} aria-label="收起AI助手" title="返回页面，正在处理的回复会继续"><ArrowLeft size={17}/>返回页面</button><span className="assistant-mark"><RhineMark/></span><h2 id="assistant-title">初程</h2><small className="assistant-connection"><i/>{status?.connection==='expired'?'自备接口已失效':status?.configured?status.connection==='personal'?'自备接口可提问':'比赛接口可提问':status?.configured===false?'尚未连接':'连接待确认'}</small></div>
-    <div className="assistant-top-actions"><AISettings disabled={busy}/><details className="assistant-draft-menu"><summary><FolderOpen size={15}/>草稿</summary><DraftControls module="chat" disabled={busy} value={{input,turns:draftTurns}} onRestore={saved=>{setTurns(saved.turns.map((turn,index)=>({...turn,id:-(index+1)})));setInput(saved.input);setApplied([]);setError('');setCopyError('');setContextFolded(false);}}/></details><button onClick={()=>{close();onTools();}}><FolderOpen size={15}/>工具</button>{turns.length>0&&<button onClick={()=>{stop();setTurns([]);setApplied([]);setInput('');setError('');setCopyError('');setContextFolded(false);field.current?.focus();}} disabled={busy}><Plus size={16}/>新对话</button>}<details className="assistant-view-options"><summary aria-label="显示设置" title="显示设置"><SlidersHorizontal size={16}/></summary><div>{modeSwitch}</div></details></div>
+    <div className="assistant-top-actions"><AISettings disabled={busy}/><details className="assistant-draft-menu"><summary><FolderOpen size={15}/>草稿</summary><DraftControls module="chat" disabled={busy} value={{input,inputIsolated,turns:draftTurns}} onRestore={saved=>{setTurns(saved.turns.map((turn,index)=>({...turn,id:-(index+1)})));setInput(saved.input);setInputIsolated(!!saved.inputIsolated);setApplied([]);setError('');setCopyError('');setContextFolded(false);}}/></details><button onClick={()=>{close();onTools();}}><FolderOpen size={15}/>工具</button>{turns.length>0&&<button onClick={()=>{stop();setTurns([]);setApplied([]);setInput('');setInputIsolated(false);setError('');setCopyError('');setContextFolded(false);field.current?.focus();}} disabled={busy}><Plus size={16}/>新对话</button>}<details className="assistant-view-options"><summary aria-label="显示设置" title="显示设置"><SlidersHorizontal size={16}/></summary><div>{modeSwitch}</div></details></div>
    </header>
    {contextFolded&&<div className="assistant-context-note">较早解释已折叠发送，用户原话与更正仍按顺序保留。<button onClick={()=>void copyConversation()}>复制对话</button></div>}
    <div className="assistant-messages" role="log" aria-label="对话记录" aria-busy={busy}>
@@ -75,8 +81,9 @@ export default function AIAssistant({open,onClose,module,seed,onAction,onTools,m
     {error&&<div className="assistant-error" role="alert"><p>{error}</p>{last?.role==='user'&&!busy&&<button onClick={()=>void send(last.content,true)}>重试这条问题<ArrowUpRight size={13}/></button>}{!!turns.length&&<button onClick={()=>void copyConversation()}>复制现有对话<Copy size={13}/></button>}</div>}
     <div ref={bottom}/>
    </div>
+   {inputIsolated&&<div className="assistant-isolated-note" role="status">仅发送这次确认的条目，旧对话不会一起发送。可在下方修改后发送。</div>}
    <form className="assistant-composer" onSubmit={event=>{event.preventDefault();void send(input);}}>
-    <label htmlFor="assistant-input" className="sr-only">向AI说明问题</label><textarea id="assistant-input" ref={field} aria-describedby="assistant-input-help" rows={2} value={input} maxLength={6000} onChange={event=>setInput(event.target.value)} placeholder="比如，刚收到合同，有些地方没看懂…" onKeyDown={event=>{if(event.key==='Enter'&&!event.shiftKey&&!event.nativeEvent.isComposing){event.preventDefault();if(!busy)void send(input);}}}/>
+    <label htmlFor="assistant-input" className="sr-only">向AI说明问题</label><textarea id="assistant-input" ref={field} aria-describedby="assistant-input-help" rows={2} value={input} maxLength={6000} onChange={event=>{setInput(event.target.value);if(!event.target.value.trim())setInputIsolated(false);}} placeholder="比如，刚收到合同，有些地方没看懂…" onKeyDown={event=>{if(event.key==='Enter'&&!event.shiftKey&&!event.nativeEvent.isComposing){event.preventDefault();if(!busy)void send(input);}}}/>
     {busy?<button className="assistant-stop" type="button" onClick={stop} aria-label="停止AI回复"><Square size={13}/><span>停止</span></button>:<button className="assistant-send" type="submit" disabled={!input.trim()} aria-label="发送问题"><ArrowUp size={21}/></button>}
    </form>
    <footer>

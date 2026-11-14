@@ -12,7 +12,7 @@ const copy={
  social:{title:'弄清社保怎么办',description:'按当前情况找办理路线'},
  rent:{title:'看看租房约定',description:'核对押金、费用与合同文字'},
  subsidy:{title:'查城市政策与补贴',description:'分城市看官方补贴与求职住宿资料'},
- leaving:{title:'整理离职交接',description:'记好交接事项与办理进度'},
+ leaving:{title:'整理离职交接',description:'实习转正换岗 / 第一份工作变动时备用'},
 };
 
 export default function ToolDirectory({go,onAsk}:{go:(page:ExperiencePage)=>void;onAsk:(text?:string)=>void}){
@@ -25,9 +25,9 @@ export default function ToolDirectory({go,onAsk}:{go:(page:ExperiencePage)=>void
    <button type="submit" disabled={!question.trim()} aria-label="发送工具页问题"><span>问一问</span><ArrowUp size={17}/></button>
   </form>
   <nav className="tool-directory-list" aria-label="八项办事工具">
-   {EXPERIENCE_MODULES.map((item,index)=>{const Icon=icons[index];const entry=copy[item.id];return <button key={item.id} onClick={()=>go(item.id)} aria-label={`打开${item.label}`}>
+   {[{title:'看清约定',range:'01–02',start:0,end:2},{title:'理解工作',range:'03–05',start:2,end:5},{title:'安顿生活',range:'06–08',start:5,end:8}].map(group=><section className="tool-directory-group" key={group.start} aria-label={group.title}><h2><small>{group.range}</small>{group.title}</h2><div>{EXPERIENCE_MODULES.slice(group.start,group.end).map((item,offset)=>{const Icon=icons[group.start+offset];const entry=copy[item.id];return <button key={item.id} onClick={()=>go(item.id)} aria-label={`打开${item.label}`}>
     <span className="tool-directory-icon"><Icon size={21}/></span><span className="tool-directory-copy"><strong>{entry.title}</strong><span>{entry.description}</span></span><span className="tool-directory-open">开始<ArrowUpRight size={15}/></span>
-   </button>;})}
+   </button>;})}</div></section>)}
   </nav>
  </div>;
 }

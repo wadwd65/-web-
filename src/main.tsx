@@ -31,3 +31,4 @@ ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><
 
 import './ai-settings.css';
 import './help-tour.css';
+import './workspace-polish.css';

@@ -1,3 +1,4 @@
+import {useWorkspaceView} from './WorkspaceView.tsx';
 import {FieldMark,FormStart,OptionalFields} from './FormGuidance.tsx';
 import {reviewPartialPay} from './lib/partial-pay.ts';
 import DraftControls from './DraftControls.tsx';
@@ -52,6 +53,7 @@ export default function Salary({ addQuestions, onSignal,applyRequest }: { addQue
   const [demo, setDemo] = useState(false);
   const resultPanel = useRef<HTMLElement>(null);
   const review=useRef({id:'',at:''});
+  const view=useWorkspaceView();
   const confirmedInput:PayslipInput|null=result?{gross:Number(form.gross),insurance:Number(form.insurance),fund:Number(form.fund),tax:Number(form.tax),other:Number(form.other),received:form.received===''?null:Number(form.received)}:null;
   const amountInputs=useRef<Partial<Record<keyof PayForm,HTMLInputElement|null>>>({});
   useEffect(()=>{if(!applyRequest)return;const values=Object.fromEntries(Object.entries(applyRequest.input).map(([key,value])=>[key,value===null?'':String(value)])) as PayForm;setForm(values);setDemo(false);calculate(values);},[applyRequest]);
@@ -96,19 +98,19 @@ export default function Salary({ addQuestions, onSignal,applyRequest }: { addQue
   }
   function renderField(field:typeof FIELDS[number],i:number){return <div key={field.key} className={`field-label pay-field ${field.key==='gross'?'gross-field':''}`}>
             <label htmlFor={`salary-${field.key}`}>
-              <span className="pay-field-title"><span>{field.label}</span><FieldMark kind={field.key==='gross'?'required':field.key==='received'?'optional':'conditional'}>{field.key==='gross'?'必填':field.key==='received'?'选填':'算实发需填'}</FieldMark></span>
+              <span className="pay-field-title"><span>{field.label}</span>{demo&&field.key==='gross'&&<span className="sample-badge">合成示例</span>}<FieldMark kind={field.key==='gross'?'required':field.key==='received'?'optional':'conditional'}>{field.key==='gross'?'必填':field.key==='received'?'选填':'算实发需填'}</FieldMark></span>
               <div className="currency-input"><span>¥</span><input id={`salary-${field.key}`} ref={node=>{amountInputs.current[field.key]=node;}} type="number" required={field.key==='gross'} min="0" step="0.01" placeholder={field.key==='received'?'可不填':'请输入金额'} value={form[field.key]} onChange={e=>updateAmount(field.key,e.target.value)} aria-label={field.label}/><b aria-hidden="true"/></div>
             </label>
             <div className="pay-field-help"><small>{field.hint}</small>{i>0&&i<5&&form[field.key]===''&&<button type="button" aria-label={`${field.label}确认没有，填0`} onClick={()=>{updateAmount(field.key,'0');amountInputs.current[field.key]?.focus();}}>没有？填 0</button>}</div>
           </div>;}
   return <div className="salary-workbench">
-    <header className="page-heading terminal-page-heading"><div className="page-heading-stamp" aria-hidden="true"><strong>03</strong><i/><small>MODULE</small></div><div className="page-heading-copy"><div className="eyebrow">PAYSLIP EXPLAINER</div><h1>算清到手工资</h1><p>按工资条填写已知金额，核对扣款和实际到账。</p></div><div className="page-heading-actions"><button className="button secondary" onClick={loadDemo}><SalaryControl label="用示例填一遍" icon={<FileText size={16}/>} code="DEMO"/></button></div></header>
-    <DraftControls module="salary" value={{form,demo}} onRestore={saved=>{setForm(saved.form);setDemo(saved.demo);setResult(null);setPartial(null);setError('');}}/>
-    <div className="task-action-strip"><div><strong>{result?'算好了，可修改金额重算，也可下载结果':'先看已填部分，不用一次填完'}</strong><span>不清楚的先留空，确认没有的扣款再填 0。</span></div><button className="button primary machine-submit salary-calculate-top" type="submit" form="salary-form"><SalaryControl label={calculateLabel} icon={<ArrowRight size={18}/>} code="CALC"/></button>{result&&<button className="button primary machine-submit salary-export" onClick={exportPay}><SalaryControl label="下载工资计算结果" icon={<Download size={18}/>} code="TXT"/></button>}{error&&<p className="task-action-message" role="alert">{error}</p>}</div>
+    <header className="page-heading terminal-page-heading"><div className="page-heading-stamp" aria-hidden="true"><strong>03</strong><i/><small>MODULE</small></div><div className="page-heading-copy"><div className="eyebrow">PAYSLIP EXPLAINER</div><h1>算清到手工资</h1><p>按工资条填写已知金额，核对扣款和实际到账。</p></div><div className="page-heading-actions"><button className="button secondary" onClick={loadDemo}><SalaryControl label="用示例填一遍" icon={<FileText size={16}/>} code="DEMO"/></button><DraftControls compact module="salary" value={{form,demo}} onRestore={saved=>{setForm(saved.form);setDemo(saved.demo);setResult(null);setPartial(null);setError('');}}/></div></header>
+
+    <div className="task-action-strip"><div><strong>{result?(view==='material'?'已生成核对结果；修改下方金额后可重新计算':'算好了，可查看并下载结果'):'先看已填部分，不用一次填完'}</strong><span>不清楚的先留空，确认没有的扣款再填 0。</span></div><button className="button primary machine-submit salary-calculate-top" type="submit" form="salary-form"><SalaryControl label={calculateLabel} icon={<ArrowRight size={18}/>} code="CALC"/></button>{result&&<button className="button primary machine-submit salary-export" onClick={exportPay}><SalaryControl label="下载工资计算结果" icon={<Download size={18}/>} code="TXT"/></button>}{error&&<p className="task-action-message" role="alert">{error}</p>}</div>
     <div className="salary-machine">
       <section className="panel input-machine" aria-label="工资条金额">
         <form id="salary-form" className="panel-body" onSubmit={e => { e.preventDefault(); calculate(form); }}>
-          <div className="input-status" hidden={!demo}><span className="tag green">合成示例</span><span>换成自己的金额后，再核对实际工资。</span></div>
+
           <FormStart><strong>先填应发工资，就能整理已知金额。</strong> 补齐四项扣款后算实发，实际到账选填。</FormStart>
           <div className="form-grid">{FIELDS.slice(0,1).map(renderField)}</div>
           <OptionalFields title="补充扣款和到账" hint="算实发需确认四项扣款；到账选填"><div className="form-grid">{FIELDS.slice(1).map((field,i)=>renderField(field,i+1))}</div></OptionalFields>

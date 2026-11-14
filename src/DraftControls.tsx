@@ -4,7 +4,7 @@ import {useAccount} from './Account.tsx';
 import {decodeDraft,draftKey,encodeDraft,writeDraft} from './lib/drafts.ts';
 import type {DraftModule} from './lib/drafts.ts';
 
-export default function DraftControls<T>({module,value,onRestore,disabled=false}:{module:DraftModule;value:T;onRestore:(data:T)=>void;disabled?:boolean}){
+export default function DraftControls<T>({module,value,onRestore,disabled=false,compact=false}:{module:DraftModule;value:T;onRestore:(data:T)=>void;disabled?:boolean;compact?:boolean}){
   const {user,ready}=useAccount();
   const key=ready?draftKey(user?.id??'guest',module):null;
   const [slot,setSlot]=useState<{key:string;raw:string|null}|null>(null),[message,setMessage]=useState(''),[failed,setFailed]=useState(false);
@@ -35,8 +35,8 @@ export default function DraftControls<T>({module,value,onRestore,disabled=false}
       const saved=decodeDraft(module,raw);before.current={key,value:structuredClone(value)};onRestore(saved.data as T);setFailed(false);setMessage(module==='chat'?'已恢复历史文字，可继续提问重新核对。':module==='contract'?'已恢复文字与填写，图片和PDF需重新选择。请重新核对。':'已恢复填写，请检查后重新处理。');
     }catch(cause){setFailed(true);setMessage(cause instanceof Error?cause.message:'草稿未能恢复。');}
   }
-  return <div className="draft-controls" data-module={module}>
-    <div className="draft-caption"><FileClock size={15}/><span>本页草稿<small>{!ready?'正在确认保存空间…':savedAt?`保存于 ${savedAt}`:raw?'已有草稿，需重新核实':'只存在当前浏览器 · 点击后保存'}</small></span></div>
+  return <div className={`draft-controls${compact?' is-compact':''}`} data-module={module}>
+    <div className="draft-caption" title={savedAt?`保存于 ${savedAt}`:"只存在当前浏览器，点击保存后才会记住"}><FileClock size={15}/><span>本页草稿<small>{!ready?'正在确认保存空间…':savedAt?`保存于 ${savedAt}`:raw?'已有草稿，需重新核实':'只存在当前浏览器 · 点击后保存'}</small></span></div>
     <div className="draft-actions">
       <button disabled={disabled||!key||slot?.key!==key} aria-label="保存本页草稿" onClick={save}><Save size={13}/>保存</button>
       <button disabled={disabled||!raw} aria-label="恢复本页草稿" onClick={restore}><RotateCcw size={13}/>恢复</button>
